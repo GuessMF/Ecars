@@ -44,6 +44,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^5.0.0"
+    "gh-pages": "^5.0.0",
+    "sass": "^1.62.1",
+    "typescript-plugin-css-modules": "^5.0.1"
   }
 }
