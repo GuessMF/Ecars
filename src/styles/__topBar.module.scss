@@ -1,0 +1,129 @@
+@import "__var.scss";
+.topBar {
+  background-color: $darkBG1;
+
+  padding: 10px $padding108;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .topBar_left {
+    display: flex;
+    flex-direction: row;
+    .facebook_logo {
+      fill: red;
+      margin-right: 16px;
+    }
+    .twitter_logo {
+      margin: 0;
+      margin-right: 16px;
+    }
+    .youtube_logo {
+      margin: 0;
+      margin-right: 16px;
+    }
+    .instagram_logo {
+      margin: 0;
+      margin-right: 16px;
+    }
+    .whatsup_logo {
+      margin: 0;
+      margin-right: 8px;
+    }
+    .number {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-right: 16px;
+    }
+    .mail_logo {
+      margin: 0;
+      margin-right: 8px;
+    }
+    .email {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+  .topBar_right {
+    display: flex;
+    flex-direction: row;
+
+    .map_logo {
+      margin: 0;
+      margin-right: 6px;
+    }
+    .shipTo {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .shipTo_container {
+      display: flex;
+      flex-direction: row;
+      // background-color: red;
+      justify-content: center;
+      // align-items: center;
+      // align-content: center;
+      width: fit-content;
+      .flag_canada {
+        margin: 0 6px;
+        width: 20px;
+        height: 20px;
+      }
+      .countryName {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 16px;
+        color: #ffffff;
+        margin-right: 24px;
+      }
+    }
+    .currency {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-right: 6px;
+    }
+    .currencySelected {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      color: #ffffff;
+      margin-right: 24px;
+    }
+    .question_logo {
+      margin: 0;
+      margin-right: 6px;
+    }
+    .help {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 16px;
+      /* identical to box height, or 123% */
+
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
