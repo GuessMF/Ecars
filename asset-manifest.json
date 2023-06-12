@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.ae466706.css",
-    "main.js": "/Ecars/static/js/main.0652c579.js",
+    "main.css": "/Ecars/static/css/main.25d5cebd.css",
+    "main.js": "/Ecars/static/js/main.92151460.js",
+    "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
     "index.html": "/Ecars/index.html",
-    "main.ae466706.css.map": "/Ecars/static/css/main.ae466706.css.map",
-    "main.0652c579.js.map": "/Ecars/static/js/main.0652c579.js.map"
+    "main.25d5cebd.css.map": "/Ecars/static/css/main.25d5cebd.css.map",
+    "main.92151460.js.map": "/Ecars/static/js/main.92151460.js.map"
   },
   "entrypoints": [
-    "static/css/main.ae466706.css",
-    "static/js/main.0652c579.js"
+    "static/css/main.25d5cebd.css",
+    "static/js/main.92151460.js"
   ]
 }
