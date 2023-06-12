@@ -1,0 +1,105 @@
+@import "./../../../styles/__var.scss";
+
+.hero {
+  height: 600px;
+  background-image: url("../../../assets/images/hero.webp");
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+    width: 600px;
+    // border: black 1px solid;
+    padding-left: $padding108;
+    padding-top: 120px;
+    .content__title {
+      //   border: black 1px solid;
+      height: fit-content;
+      h1 {
+        font-family: "Inter Tight";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 60px;
+        line-height: 115%;
+        color: $gray900;
+        margin: 0;
+      }
+    }
+    .content__subtitle {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0px;
+      gap: 32px;
+      //  border: black 1px solid;
+      color: black;
+    }
+  }
+  .hero__benefits {
+    position: relative;
+    z-index: 10;
+    background-color: $white;
+    box-shadow: 0px 1px 2px rgba(28, 30, 34, 0.04),
+      0px 12px 32px rgba(28, 30, 34, 0.08);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: row;
+    padding: 40px;
+    gap: 40px;
+    margin-left: $padding108;
+    margin-right: $padding108;
+    margin-top: 125px;
+    div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0px;
+      gap: 16px;
+    }
+    .benefits__circut {
+      background-color: $secondary500;
+
+      border-radius: 100px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      gap: 10px;
+    }
+    .benefits__content {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      padding: 0px;
+      gap: 8px;
+      width: 280px;
+      h6 {
+        color: $gray900;
+        font-family: "Inter";
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        margin: 0;
+      }
+      p {
+        color: $gray900;
+        margin: 0;
+        font-family: "Inter";
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+      }
+    }
+    .benefits__first {
+      background-color: $white;
+    }
+    .benefits__second {
+      background-color: $white;
+    }
+    .benefits__third {
+      background-color: $white;
+    }
+  }
+}

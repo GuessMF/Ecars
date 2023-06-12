@@ -1,0 +1,18 @@
+@import "./../../../styles/__var.scss";
+
+.mobile {
+  display: flex;
+  flex-direction: row;
+  .mobile__logo {
+    margin: 0;
+    margin-right: 8px;
+  }
+  .mobile__data {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

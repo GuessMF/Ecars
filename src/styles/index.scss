@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 body {
   margin: 0;
   background-color: rgb(65, 64, 64);
@@ -6,9 +7,11 @@ body {
   //     sans-serif;
   //   -webkit-font-smoothing: antialiased;
   //   -moz-osx-font-smoothing: grayscale;
+  // font-family: "Inter", sans-serif;
 }
 
-// code {
-//   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-//     monospace;
-// }
+code {
+  //  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  //    monospace;
+  font-family: "Inter", sans-serif;
+}

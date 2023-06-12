@@ -1,0 +1,44 @@
+@import "./../../../styles/__var.scss";
+
+.specialOffers {
+  position: relative;
+  height: 670px;
+  background-color: $white;
+  z-index: 9;
+  .specialOffers__content {
+    margin-top: 170px;
+    border: black 1px solid;
+    padding-left: $padding108;
+    padding-right: $padding108;
+    .specialOffers__header {
+      border: black 1px solid;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      //   align-items: baseline;
+      align-items: center;
+      padding: 0px;
+      gap: 12px;
+      h2 {
+        font-family: "Inter Tight";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 38px;
+        line-height: 115%;
+        color: $gray900;
+        margin: 0;
+      }
+      .specialOffers__navigation {
+        border: black 1px solid;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0px;
+        gap: 40px;
+      }
+    }
+  }
+  .specialOffers__corousel {
+    background-color: orange;
+  }
+}

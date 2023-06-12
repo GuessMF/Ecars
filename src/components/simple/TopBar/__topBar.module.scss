@@ -1,4 +1,4 @@
-@import "__var.scss";
+@import "./../../../styles/__var.scss";
 .topBar {
   background-color: $darkBG1;
 
@@ -11,47 +11,7 @@
   .topBar_left {
     display: flex;
     flex-direction: row;
-    .facebook_logo {
-      fill: red;
-      margin-right: 16px;
-    }
-    .twitter_logo {
-      margin: 0;
-      margin-right: 16px;
-    }
-    .youtube_logo {
-      margin: 0;
-      margin-right: 16px;
-    }
-    .instagram_logo {
-      margin: 0;
-      margin-right: 16px;
-    }
-    .whatsup_logo {
-      margin: 0;
-      margin-right: 8px;
-    }
-    .number {
-      font-family: "Inter";
-      font-style: normal;
-      font-weight: 500;
-      font-size: 13px;
-      line-height: 16px;
-      color: rgba(255, 255, 255, 0.7);
-      margin-right: 16px;
-    }
-    .mail_logo {
-      margin: 0;
-      margin-right: 8px;
-    }
-    .email {
-      font-family: "Inter";
-      font-style: normal;
-      font-weight: 500;
-      font-size: 13px;
-      line-height: 16px;
-      color: rgba(255, 255, 255, 0.7);
-    }
+    gap: 16px;
   }
   .topBar_right {
     display: flex;
@@ -73,10 +33,7 @@
     .shipTo_container {
       display: flex;
       flex-direction: row;
-      // background-color: red;
       justify-content: center;
-      // align-items: center;
-      // align-content: center;
       width: fit-content;
       .flag_canada {
         margin: 0 6px;
