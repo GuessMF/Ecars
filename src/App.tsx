@@ -9,6 +9,8 @@ import SpecialOffers from "./components/simple/SpecialOffers/SpecialOffers";
 import BrowseByBrand from "./components/simple/BrowseByBrand/BrowseByBrand";
 import MiddleCTA from "./components/simple/MiddleCTA/MiddleCTA";
 import HowItWorks from "./components/simple/HowItWorks/HowItWorks";
+import WhyChooseUs from "./components/simple/WhyChooseUs/WhyChooseUs";
+import Reviews from "./components/simple/Reviews/Reviews";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <BrowseByBrand />
       <MiddleCTA />
       <HowItWorks />
+      <WhyChooseUs />
+      <Reviews />
     </div>
   );
 }

@@ -1,0 +1,121 @@
+@import "./../../../styles/__var.scss";
+
+.whyChooseUs {
+  // background-color: aquamarine;
+  height: 992px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 96px 108px;
+  gap: 24px;
+  border-top: 2px solid $outline2;
+  .whyChooseUs__image {
+    width: 50%;
+    height: 800px;
+    border-radius: 16px;
+  }
+  .whyChooseUs__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-items: center;
+    padding: 0px 104px;
+    gap: 48px;
+    width: 50%;
+    //height: 632px;
+    // border: black 1px solid;
+
+    .whyChooseUs__topContent {
+      // border: black 1px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 24px;
+      width: 392px;
+      // height: 332px;
+      height: fit-content;
+      h2 {
+        color: $gray900;
+        font-family: "Inter Tight";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 38px;
+        line-height: 115%;
+        margin: 0;
+      }
+      span {
+        color: $gray900;
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        p {
+        }
+      }
+    }
+    .whyChooseUs__bottomContent {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 24px;
+
+      width: 392px;
+      // height: 252px;
+      //  border: black 1px solid;
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 16px;
+      }
+      //   .bottomContent__first {
+      //     border: black 1px solid;
+      //   }
+      //   .bottomContent__second {
+      //     border: black 1px solid;
+      //   }
+      //   .bottomContent__third {
+      //     border: black 1px solid;
+      //   }
+      .bottomContent__left {
+        // border: black 1px solid;
+        hr {
+          //   width: 100%;
+          width: 16px;
+          border: $secondary500 1px solid;
+        }
+      }
+      .bottomContent__right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 8px;
+        //  border: black 1px solid;
+
+        span {
+          // background-color: antiquewhite;
+          font-family: "Inter";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          color: $gray900;
+        }
+        p {
+          margin: 0;
+          font-family: "Inter";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          color: $gray900;
+        }
+      }
+    }
+  }
+}

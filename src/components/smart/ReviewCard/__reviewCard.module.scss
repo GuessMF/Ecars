@@ -1,0 +1,79 @@
+@import "./../../../styles/__var.scss";
+.reviewCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px;
+  width: 392px;
+  // height: 344px;
+  background: $white;
+  box-shadow: 0px 1px 2px rgba(28, 30, 34, 0.08),
+    0px 8px 16px rgba(28, 30, 34, 0.08);
+  border-radius: 8px;
+
+  .reviewCard__content {
+    //  border: black 1px solid;
+    // background-color: bisque;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    .reviewCard__header {
+      //  border: black 1px solid;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0px;
+      //   gap: 24px;
+      .reviewCard__block {
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+        img {
+          border-radius: 100px;
+          width: 40px;
+          height: 40px;
+        }
+        .reviewCard_info {
+          //  border: black 1px solid;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 0px;
+          .reviewCard_name {
+            //  border: black 1px solid;
+            font-family: "Inter";
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 20px;
+            color: $gray900;
+          }
+          .reviewCard_car {
+            //  border: black 1px solid;
+            font-family: "Inter";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 16px;
+            color: $gray500;
+          }
+        }
+      }
+
+      //   .reviewCard__stars {
+      //     border: black 1px solid;
+      //   }
+    }
+    .reviewCard__text {
+      //  border: black 1px solid;
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: $gray900;
+    }
+  }
+}
