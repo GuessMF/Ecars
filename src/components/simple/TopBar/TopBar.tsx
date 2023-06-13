@@ -4,6 +4,8 @@ import Mobile from "../../ui/Mobile/Mobile";
 
 import style from "./__topBar.module.scss";
 
+const white: string = "#FFFFFFB2";
+
 export default function TopBar() {
   return (
     <div className={style.topBar}>
@@ -64,8 +66,8 @@ export default function TopBar() {
             fill-opacity="0.7"
           />
         </svg>
-        <Mobile />
-        <Email />
+        <Mobile color={white} />
+        <Email color={white} />
       </div>
       <div className={style.topBar_right}>
         <svg

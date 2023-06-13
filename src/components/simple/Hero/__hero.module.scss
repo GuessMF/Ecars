@@ -74,7 +74,8 @@
       align-items: start;
       padding: 0px;
       gap: 8px;
-      width: 280px;
+
+      width: fit-content;
       h6 {
         color: $gray900;
         font-family: "Inter";

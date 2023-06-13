@@ -4,6 +4,12 @@ import GetAquote from "../../ui/GetAquote/GetAquote";
 import Mobile from "../../ui/Mobile/Mobile";
 import style from "./__hero.module.scss";
 
+// interface Props {
+//   color: string;
+//   data: string;
+// }
+const black: string = "#1A1A1A";
+
 export default function Hero() {
   return (
     <div className={style.hero}>
@@ -13,8 +19,8 @@ export default function Hero() {
         </div>
         <div className={style.content__subtitle}>
           <GetAquote />
-          <Mobile />
-          <Email />
+          <Mobile color={black} />
+          <Email color={black} />
         </div>
       </div>
       <div className={style.hero__benefits}>

@@ -1,0 +1,47 @@
+@import "./../../../styles/__var.scss";
+
+.browseByBrand {
+  // background-color: rgb(233, 243, 240);
+  background-color: $lightBG;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: fit-content;
+  // padding: 96px 108px;
+  // gap: 48px;
+
+  // height: 464px;
+  .browseByBrand__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 96px 108px;
+    gap: 48px;
+    h2 {
+      // border: black 1px solid;
+      font-family: "Inter Tight";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 115%;
+      margin: 0;
+      color: $gray900;
+    }
+    .browseByBrand__favoritesBrands {
+      //  border: black 1px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 16px;
+      .browseByBrand__row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+      }
+    }
+  }
+}

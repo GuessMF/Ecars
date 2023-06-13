@@ -6,6 +6,8 @@ import GetAquote from "./components/ui/GetAquote/GetAquote";
 import Header from "./components/ordinary/Header/Header";
 import Hero from "./components/simple/Hero/Hero";
 import SpecialOffers from "./components/simple/SpecialOffers/SpecialOffers";
+import BrowseByBrand from "./components/simple/BrowseByBrand/BrowseByBrand";
+
 function App() {
   return (
     <div className={style.app}>
@@ -13,6 +15,7 @@ function App() {
       <Header />
       <Hero />
       <SpecialOffers />
+      <BrowseByBrand />
     </div>
   );
 }

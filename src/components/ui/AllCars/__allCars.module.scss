@@ -1,0 +1,16 @@
+@import "./../../../styles/__var.scss";
+
+.allCars {
+  // border: black 1px solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 4px;
+
+  color: $primary500;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+}

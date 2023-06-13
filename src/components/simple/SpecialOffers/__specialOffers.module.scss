@@ -2,16 +2,15 @@
 
 .specialOffers {
   position: relative;
-  height: 670px;
+
   background-color: $white;
   z-index: 9;
+  // border: black 1px solid;
+  padding-bottom: 96px;
+  padding: 170px $padding108 96px;
   .specialOffers__content {
-    margin-top: 170px;
-    border: black 1px solid;
-    padding-left: $padding108;
-    padding-right: $padding108;
     .specialOffers__header {
-      border: black 1px solid;
+      //  border: black 1px solid;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -29,7 +28,7 @@
         margin: 0;
       }
       .specialOffers__navigation {
-        border: black 1px solid;
+        //    border: black 1px solid;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -39,6 +38,12 @@
     }
   }
   .specialOffers__corousel {
-    background-color: orange;
+    margin-top: 48px;
+    // background-color: orange;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 24px;
   }
 }
