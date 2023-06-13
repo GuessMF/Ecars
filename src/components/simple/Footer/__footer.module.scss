@@ -1,0 +1,61 @@
+@import "./../../../styles/__var.scss";
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 80px 108px;
+  gap: 60px;
+  background-color: $lightBG;
+  .footer__content {
+    border: black 1px solid;
+    .footer__top {
+      width: 1224px;
+      background-color: aquamarine;
+
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 128px;
+      .footer__first {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+      }
+      .footer__second {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+      }
+      .footer__third {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+      }
+      .footer__fourth {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 24px;
+      }
+    }
+    .footer__bottom {
+      width: 1224px;
+      background-color: aquamarine;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 515px;
+    }
+  }
+}
