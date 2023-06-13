@@ -1,22 +1,25 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.1a15ef00.css",
-    "main.js": "/Ecars/static/js/main.4ea06c85.js",
+    "main.css": "/Ecars/static/css/main.d4531cfb.css",
+    "main.js": "/Ecars/static/js/main.4a4006b1.js",
     "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
+    "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/2021_Genesis_GV80_2.5T.webp": "/Ecars/static/media/2021_Genesis_GV80_2.5T.980a2f5df298d3f7a7ef.webp",
     "static/media/fordIcon.webp": "/Ecars/static/media/fordIcon.03bb2b28e6484169b3b0.webp",
+    "static/media/RobertFox.webp": "/Ecars/static/media/RobertFox.c5f24a57c9db37c484a4.webp",
     "static/media/likeIcon.svg": "/Ecars/static/media/likeIcon.bd0ebfa37c6d2787b84e05099e0d95c4.svg",
     "index.html": "/Ecars/index.html",
+    "static/media/star.svg": "/Ecars/static/media/star.a52433fe7f8828668113e50b66c2cb4d.svg",
     "static/media/allCarsIcon.svg": "/Ecars/static/media/allCarsIcon.b4fd1dc9fc58474b703728852252e165.svg",
     "static/media/datailsArrowIcon.svg": "/Ecars/static/media/datailsArrowIcon.03f6994b958709337f1a7ad1e593d521.svg",
     "static/media/rightArrow.svg": "/Ecars/static/media/rightArrow.ecde3442511891da65d689a8a89cc842.svg",
     "static/media/leftArrow.svg": "/Ecars/static/media/leftArrow.51aaf212a9d4a46b5e03368731c75957.svg",
     "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.a41abdfe52afd667142842d38cb5ff44.svg",
-    "main.1a15ef00.css.map": "/Ecars/static/css/main.1a15ef00.css.map",
-    "main.4ea06c85.js.map": "/Ecars/static/js/main.4ea06c85.js.map"
+    "main.d4531cfb.css.map": "/Ecars/static/css/main.d4531cfb.css.map",
+    "main.4a4006b1.js.map": "/Ecars/static/js/main.4a4006b1.js.map"
   },
   "entrypoints": [
-    "static/css/main.1a15ef00.css",
-    "static/js/main.4ea06c85.js"
+    "static/css/main.d4531cfb.css",
+    "static/js/main.4a4006b1.js"
   ]
 }
