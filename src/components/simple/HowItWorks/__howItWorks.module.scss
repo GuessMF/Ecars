@@ -1,0 +1,155 @@
+@import "./../../../styles/__var.scss";
+
+.howItWorks {
+  height: 500px;
+  // background-color: rgb(221, 231, 228);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 96px 108px;
+
+  .howItWorks__content {
+    // border: black 1px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 48px;
+
+    .howItWorks__top {
+      //   border: black 1px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0px;
+      gap: 24px;
+      width: 600px;
+      h3 {
+        font-family: "Inter Tight";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 38px;
+        line-height: 115%;
+        /* identical to box height, or 44px */
+
+        text-align: center;
+        color: $gray900;
+        margin: 0;
+      }
+      p {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        /* or 150% */
+
+        text-align: center;
+        color: $gray700;
+        margin: 0;
+      }
+    }
+    .howItWorks__bottom {
+      //  border: black 1px solid;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 24px;
+      isolation: isolate;
+
+      position: relative;
+      .hr {
+        width: 880px;
+        left: calc(50% - 880px / 2);
+        height: 1px;
+        margin: 5px 0;
+        background-image: linear-gradient(to right, #fff 40%, $gray100 40%);
+        background-size: 15px 1px;
+        background-repeat: repeat-x;
+        position: absolute;
+        top: 22px;
+      }
+
+      .howItWorks__card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+        width: 288px;
+        height: 174px;
+        .card__content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 24px;
+          // border: black 1px solid;
+          position: relative;
+
+          .card__circutBox {
+            //   border: black 1px solid;
+            z-index: 5;
+            position: relative;
+            background-color: $white;
+
+            .card__circut {
+              background-color: $secondary500;
+              padding: 0 20px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 16px;
+              margin-right: 30px;
+              margin-left: 30px;
+              gap: 10px;
+              width: 24px;
+              height: 24px;
+              border-radius: 100px;
+              font-family: "Inter Tight";
+              font-style: normal;
+              font-weight: 600;
+              font-size: 18px;
+              line-height: 24px;
+              text-align: center;
+              color: $gray900;
+            }
+          }
+
+          .card__text {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 94px;
+
+            h6 {
+              font-family: "Inter Tight";
+              font-style: normal;
+              font-weight: 600;
+              font-size: 18px;
+              line-height: 120%;
+              text-align: center;
+              color: $gray900;
+              margin: 0;
+            }
+            p {
+              width: 224px;
+              //  border: black 1px solid;
+              font-family: "Inter";
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 20px;
+              /* or 143% */
+
+              text-align: center;
+              color: $gray900;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

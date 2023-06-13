@@ -9,6 +9,7 @@ import style from "./__hero.module.scss";
 //   data: string;
 // }
 const black: string = "#1A1A1A";
+const version: string = "little";
 
 export default function Hero() {
   return (
@@ -18,7 +19,7 @@ export default function Hero() {
           <h1>Car import services with delivery to your doorstep.</h1>
         </div>
         <div className={style.content__subtitle}>
-          <GetAquote />
+          <GetAquote version={version} />
           <Mobile color={black} />
           <Email color={black} />
         </div>

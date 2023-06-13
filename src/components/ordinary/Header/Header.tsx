@@ -5,6 +5,8 @@ import Profile from "../../ui/Profile/Profile";
 import Search from "../../ui/Search/Search";
 import style from "./__header.module.scss";
 
+const version: string = "little";
+
 export default function Header() {
   return (
     <div className={style.header}>
@@ -50,7 +52,7 @@ export default function Header() {
           <Profile />
         </div>
 
-        <GetAquote />
+        <GetAquote version={version} />
       </div>
     </div>
   );

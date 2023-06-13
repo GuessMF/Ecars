@@ -7,6 +7,8 @@ import Header from "./components/ordinary/Header/Header";
 import Hero from "./components/simple/Hero/Hero";
 import SpecialOffers from "./components/simple/SpecialOffers/SpecialOffers";
 import BrowseByBrand from "./components/simple/BrowseByBrand/BrowseByBrand";
+import MiddleCTA from "./components/simple/MiddleCTA/MiddleCTA";
+import HowItWorks from "./components/simple/HowItWorks/HowItWorks";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <Hero />
       <SpecialOffers />
       <BrowseByBrand />
+      <MiddleCTA />
+      <HowItWorks />
     </div>
   );
 }
