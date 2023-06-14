@@ -2,16 +2,9 @@ import React from "react";
 
 import style from "./styles/__app.module.scss";
 import TopBar from "./components/simple/TopBar/TopBar";
-// import GetAquote from "./components/ui/GetAquote/GetAquote";
 import Header from "./components/ordinary/Header/Header";
-import Hero from "./components/simple/Hero/Hero";
-import SpecialOffers from "./components/simple/SpecialOffers/SpecialOffers";
-import BrowseByBrand from "./components/simple/BrowseByBrand/BrowseByBrand";
-import MiddleCTA from "./components/simple/MiddleCTA/MiddleCTA";
-import HowItWorks from "./components/simple/HowItWorks/HowItWorks";
-import WhyChooseUs from "./components/simple/WhyChooseUs/WhyChooseUs";
-import Reviews from "./components/simple/Reviews/Reviews";
-import BottomCTA from "./components/simple/BottomCTA/BottomCTA";
+import Homepage from "./pages/Homepage/Homepage";
+import Catalog from "./pages/Catalog/Catalog";
 import Footer from "./components/simple/Footer/Footer";
 
 function App() {
@@ -19,14 +12,8 @@ function App() {
     <div className={style.app}>
       <TopBar />
       <Header />
-      <Hero />
-      <SpecialOffers />
-      <BrowseByBrand />
-      <MiddleCTA />
-      <HowItWorks />
-      <WhyChooseUs />
-      <Reviews />
-      <BottomCTA />
+      {/* <Homepage /> */}
+      <Catalog />
       <Footer />
     </div>
   );
