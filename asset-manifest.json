@@ -1,20 +1,35 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.4627ff77.css",
-    "main.js": "/Ecars/static/js/main.d7297e18.js",
+    "main.css": "/Ecars/static/css/main.9b9acf11.css",
+    "main.js": "/Ecars/static/js/main.d4aad9a1.js",
+    "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
+    "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
+    "static/media/2021_Genesis_GV80_2.5T.webp": "/Ecars/static/media/2021_Genesis_GV80_2.5T.980a2f5df298d3f7a7ef.webp",
+    "static/media/Toyota_Land_Cruiser_300.webp": "/Ecars/static/media/Toyota_Land_Cruiser_300.1948aff074fb3b3b3ba7.webp",
     "static/media/Logo.svg": "/Ecars/static/media/Logo.e39f0d0df8db57ab1515b09f467c66f8.svg",
+    "static/media/question.svg": "/Ecars/static/media/question.51b1d93e7e701fecac33cbd44332824c.svg",
     "static/media/instagram.svg": "/Ecars/static/media/instagram.fdc59a867cbafc897537a9f9d2aa3466.svg",
+    "static/media/fordIcon.webp": "/Ecars/static/media/fordIcon.03bb2b28e6484169b3b0.webp",
     "static/media/twitter.svg": "/Ecars/static/media/twitter.82377022860a52eae0b60e449c9a703c.svg",
+    "static/media/RobertFox.webp": "/Ecars/static/media/RobertFox.c5f24a57c9db37c484a4.webp",
+    "static/media/likeIcon.svg": "/Ecars/static/media/likeIcon.e183459f11c83d7f1e42a6ab4553530c.svg",
+    "static/media/mail.svg": "/Ecars/static/media/mail.b6c7e251c43bc938b356ebd14815dff8.svg",
     "static/media/youtube.svg": "/Ecars/static/media/youtube.04d809fc0a18ca93e161b0e9f4d2e9ee.svg",
     "index.html": "/Ecars/index.html",
     "static/media/facebook.svg": "/Ecars/static/media/facebook.0c1fd87c1e80c2af21c5d8749fbc72e7.svg",
     "static/media/close.svg": "/Ecars/static/media/close.f84535e4c8f4bf54420455f34b20b345.svg",
+    "static/media/star.svg": "/Ecars/static/media/star.041c45793a3fc261d278d72ce0c4f66b.svg",
+    "static/media/allCarsIcon.svg": "/Ecars/static/media/allCarsIcon.982dae679e89852d55e55c3e86cf22a7.svg",
+    "static/media/datailsArrowIcon.svg": "/Ecars/static/media/datailsArrowIcon.e853c2e909606400969e520213178f6f.svg",
+    "static/media/rightArrow.svg": "/Ecars/static/media/rightArrow.84cc3fea3cd103a4bba92f3a18557072.svg",
+    "static/media/leftArrow.svg": "/Ecars/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/downArrow.svg": "/Ecars/static/media/downArrow.5fedfac9e7e2315a97452724782c4e1d.svg",
-    "main.4627ff77.css.map": "/Ecars/static/css/main.4627ff77.css.map",
-    "main.d7297e18.js.map": "/Ecars/static/js/main.d7297e18.js.map"
+    "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
+    "main.9b9acf11.css.map": "/Ecars/static/css/main.9b9acf11.css.map",
+    "main.d4aad9a1.js.map": "/Ecars/static/js/main.d4aad9a1.js.map"
   },
   "entrypoints": [
-    "static/css/main.4627ff77.css",
-    "static/js/main.d7297e18.js"
+    "static/css/main.9b9acf11.css",
+    "static/js/main.d4aad9a1.js"
   ]
 }
