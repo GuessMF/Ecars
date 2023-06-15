@@ -1,0 +1,329 @@
+@import "./../../../styles/__var.scss";
+
+.filters {
+  background-color: $white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px;
+  gap: 16px;
+  border: 1px solid $outline2;
+  border-radius: 8px;
+  width: 288px;
+  // height: 1082px;
+  height: fit-content;
+
+  .filters__label {
+    // width: 256px;
+    width: 100%;
+    // height: 20px;
+
+    //  border: black 1px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    gap: 82px;
+    h6 {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      color: $gray900;
+      margin: 0;
+    }
+    span {
+      width: 46px;
+      height: 16px;
+
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      color: $gray500;
+    }
+  }
+
+  .filters__check_list {
+    //  background-color: red;
+    list-style: none;
+    // display: block;
+    //  border: black 1px solid;
+    padding: 0;
+    width: 100%;
+    height: 192px;
+    //overflow: scroll;
+    overflow-y: scroll;
+    //  margin-top: 0;
+    margin-top: 12px;
+    margin-bottom: 0;
+
+    // &:-webkit-scrollbar {
+    //   width: 20px;
+    // }
+    // scrollbar-color: #6969dd #e0e0e0;
+    // scrollbar-width: thin;
+
+    // &:-webkit-scrollbar {
+    //   width: 10px;
+    //   height: 10px;
+    // }
+    li {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 6px 0px;
+      gap: 8px;
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      color: $gray900;
+    }
+  }
+
+  .filters__brand {
+    // border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    input {
+      width: 92%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 10px 8px 10px 12px;
+      gap: 8px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
+  }
+  .filters__model {
+    // border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    input {
+      width: 92%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 10px 8px 10px 12px;
+      gap: 8px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
+  }
+  .filters__vehicle_type {
+    width: 100%;
+    // border: black 1px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    //  gap: 12px;
+  }
+  .filters__mileage {
+    // border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+  }
+  .filters__min_max {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    input {
+      width: 124px;
+      height: 40px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+      //  padding: 10px 12px;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      // gap: 4px;
+      padding-left: 10px;
+    }
+  }
+  .filters__year {
+    // border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+  }
+  .filters__price {
+    // border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+  }
+  .filters__country {
+    //border: black 1px solid;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+    input {
+      width: 92%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 10px 8px 10px 12px;
+      gap: 8px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
+  }
+  .filters__city {
+    width: 100%;
+    //  border: black 1px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+  }
+
+  .checkbox {
+    position: absolute;
+    opacity: 0;
+
+    // Text
+    & + label {
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      // line-height: 20px;
+      padding-left: 30px;
+      //  font-size: 18px;
+      // font-family: sans-serif;
+      // color: #666; // Label colour
+
+      // Checkbox
+      &:before {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: 0;
+        content: "";
+        background: transparent;
+        width: 20px;
+        height: 20px;
+
+        box-shadow: inset 0 0 0 1px $outline1;
+
+        border-radius: 4px;
+        transition: 200ms ease-in-out all;
+      }
+
+      // Tick
+      &:after {
+        position: absolute;
+        display: block;
+        top: 3px;
+        left: 7.5px;
+
+        content: "";
+        // width: 3px;
+        // height: 9px;
+        width: 4px;
+        height: 9px;
+        border-right: 2px solid transparent;
+        border-bottom: 2px solid transparent;
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+
+        transform: rotate(45deg);
+        // transform: rotate(240deg);
+        transition: 200ms ease-in-out all;
+      }
+    }
+
+    // Hover
+    & + label:hover {
+      color: #333;
+    }
+
+    // Focus
+    & + label:focus {
+      outline: none;
+    }
+
+    // Checked
+    &:checked {
+      & + label {
+        &:before {
+          background: white;
+        }
+        &:after {
+          border-color: $primary500;
+          // border: 2px solid $primary500;
+        }
+      }
+    }
+
+    // Disabled
+    &:disabled {
+      & + label {
+        &:before {
+          background: #f2f2f2; // Disabled colour
+          box-shadow: none;
+        }
+        &:after {
+          border-color: transparent;
+        }
+      }
+    }
+
+    // Disabled Checked
+    &:checked:disabled {
+      & + label {
+        &:before {
+          background: #f2f2f2;
+          box-shadow: none;
+        }
+        &:after {
+          border-color: #cecece;
+        }
+      }
+    }
+  }
+  .form-checkbox {
+    position: relative;
+    display: block;
+    //  margin: 0 0 15px;
+    // margin: 0;
+  }
+}
+//
+//
+//
+//
+//
+//
+//

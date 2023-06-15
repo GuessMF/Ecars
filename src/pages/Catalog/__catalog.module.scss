@@ -1,0 +1,25 @@
+@import "../../styles/_var";
+.catalog {
+  //  background-color: rgb(237, 202, 202);
+  // width: 100%;
+  height: fit-content;
+  padding: 0 212px;
+  border-top: 1px solid $outline2;
+  h3 {
+    font-family: "Inter Tight";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 115%;
+    color: $gray900;
+    margin: 0;
+    margin-bottom: 30px;
+    margin-top: 54px;
+    border: black 1px solid;
+  }
+  .catalog__content {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+}
