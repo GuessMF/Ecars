@@ -24,6 +24,10 @@ export default function Sorted() {
         <SelectedFilter />
         <SelectedFilter />
         <SelectedFilter />
+        <SelectedFilter />
+        <SelectedFilter />
+        <SelectedFilter />
+        <SelectedFilter />
 
         <ResetAll />
       </div>

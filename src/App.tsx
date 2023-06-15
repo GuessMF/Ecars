@@ -1,4 +1,5 @@
 import React from "react";
+import {Routes, Route} from "react-router-dom";
 
 import style from "./styles/__app.module.scss";
 import TopBar from "./components/simple/TopBar/TopBar";
@@ -12,8 +13,10 @@ function App() {
     <div className={style.app}>
       <TopBar />
       <Header />
-      {/* <Homepage /> */}
-      <Catalog />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/catalog" element={<Catalog />} />
+      </Routes>
       <Footer />
     </div>
   );

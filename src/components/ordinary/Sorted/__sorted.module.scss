@@ -1,7 +1,7 @@
 @import "../../../styles/_var";
 
 .sorted {
-  border: black 1px solid;
+  // border: black 1px solid;
   height: fit-content;
   width: 100%;
   display: flex;
@@ -13,7 +13,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    border: black 1px solid;
+    // border: black 1px solid;
     .total__found {
       width: fit-content;
       display: flex;
@@ -66,15 +66,15 @@
     }
   }
   .sorted__bottom {
-    border: black 1px solid;
+    //border: black 1px solid;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     flex-wrap: wrap;
     padding: 0px;
     gap: 4px;
-    span {
-      // background-color: aquamarine;
-    }
+    // span {
+    //   // background-color: aquamarine;
+    // }
   }
 }

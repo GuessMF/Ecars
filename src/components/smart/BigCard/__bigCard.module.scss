@@ -1,0 +1,113 @@
+@import "../../../styles/_var";
+
+.bigCard {
+  // border: black 1px solid;
+  width: 704px;
+  //   height: 225px;
+  height: fit-content;
+  //height: 225px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  // background-color: antiquewhite;
+  box-shadow: 0px 1px 2px rgba(28, 30, 34, 0.08),
+    0px 8px 16px rgba(28, 30, 34, 0.08);
+  border-radius: 8px;
+
+  .bigCard__image {
+    // border: black 1px solid;
+    background: url("../../../assets/images/BigCard/Toyota_Land_Cruiser_300.webp");
+    height: 100%;
+    height: 225px;
+    width: 325px;
+    // width: 50%;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    .image__badge {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 4px 8px;
+      gap: 10px;
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      color: #000000;
+      background-color: $yellow500;
+      border-radius: 0px 8px 8px 0px;
+      width: fit-content;
+      margin-top: 8px;
+    }
+  }
+  .bigCard__information {
+    //  border: black 1px solid;
+    //  width: 57%;
+    width: 400px;
+    // width: 50%;
+    //  background-color: aqua;
+    // height: 100%;
+    height: 190px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px;
+    // gap: 12px;
+    .information__top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 8px;
+      // border: black 1px solid;
+      .information__name {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        color: $gray900;
+      }
+      .information__state {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: $gray700;
+      }
+      .information__description {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        color: $gray900;
+        height: 63px;
+        overflow: hidden;
+      }
+    }
+    .information__bottom {
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      padding: 0px;
+      gap: 6px;
+      // border: black 1px solid;
+      width: 100%;
+      justify-content: space-between;
+      span {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 20px;
+        color: $gray900;
+      }
+    }
+  }
+}
