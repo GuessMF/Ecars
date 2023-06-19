@@ -201,7 +201,7 @@
   }
   .filters__city {
     width: 100%;
-    //  border: black 1px solid;
+    //border: black 1px solid;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -319,7 +319,61 @@
     //  margin: 0 0 15px;
     // margin: 0;
   }
+
+  .more__filters {
+    // background-color: antiquewhite;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: all 1s ease;
+    h4 {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 12px;
+      line-height: 16px;
+      margin: 0;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .filters__fuel_type {
+      height: fit-content;
+      // border: black 1px solid;
+      .filters__check_list {
+        //   border: black 1px solid;
+        height: fit-content;
+        overflow-y: hidden;
+      }
+    }
+    .filters__transmission {
+      .filters__check_list {
+        //   border: black 1px solid;
+        height: fit-content;
+        overflow-y: hidden;
+      }
+    }
+  }
+
+  .alert-enter {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  .alert-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 300ms, transform 300ms;
+  }
+  .alert-exit {
+    opacity: 1;
+  }
+  .alert-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+  }
 }
+
 //
 //
 //

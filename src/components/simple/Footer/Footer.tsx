@@ -7,9 +7,12 @@ import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtub
 import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
 import Mobile from "../../ui/Mobile/Mobile";
 import Email from "../../ui/Email/Email";
+import SocialIcons from "../../ui/SocialIcons/SocialIcons";
 
 const white: string = "#FFFFFFB2";
 const black: string = "#1A1A1A";
+const color: string = "#767676";
+const opacity: string = "0.7";
 
 export default function Footer() {
   return (
@@ -22,11 +25,13 @@ export default function Footer() {
               Nullam non nisi est sit amet. Arcu vitae elementum curabitur vitae
               nunc. Ut tellus elementum sagittis vitae et leo duis.
             </p>
+
             <div>
-              <FaceBookIcon />
-              <TwitterIcon />
-              <YouTubeIcon />
-              <InstagramIcon />
+              {/* <FaceBookIcon /> */}
+              {/* <TwitterIcon /> */}
+              {/* <YouTubeIcon />
+              <InstagramIcon /> */}
+              <SocialIcons color={color} opacity={opacity} />
             </div>
           </div>
           <div className={style.footer__second}>

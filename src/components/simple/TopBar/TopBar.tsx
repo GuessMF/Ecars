@@ -7,17 +7,23 @@ import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtub
 import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
 
 import style from "./__topBar.module.scss";
+import SocialIcons from "../../ui/SocialIcons/SocialIcons";
 
 const white: string = "#FFFFFFB2";
+const color: string = "rgba(255, 255, 255, 0.7)";
+const opacity: string = "1";
 
 export default function TopBar() {
   return (
     <div className={style.topBar}>
       <div className={style.topBar_left}>
-        <FaceBookIcon />
+        {/* <FaceBookIcon />
         <TwitterIcon />
         <YouTubeIcon />
-        <InstagramIcon />
+        <InstagramIcon /> */}
+        <div>
+          <SocialIcons color={color} opacity={opacity} />
+        </div>
 
         <Mobile color={white} />
         <Email color={white} />

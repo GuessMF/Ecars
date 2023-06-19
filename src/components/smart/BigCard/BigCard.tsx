@@ -1,17 +1,32 @@
 import React from "react";
 import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
+import {cars} from "../../../helpers/carList";
 
-export default function BigCard() {
+interface Props {
+  brand: string;
+  model: string;
+  price: string;
+  imageURL: string;
+}
+
+export default function BigCard({brand, model, price, imageURL}: Props) {
   return (
     <div className={style.bigCard}>
-      <div className={style.bigCard__image}>
+      <div
+        className={style.bigCard__image}
+        // style={{ background: "black" }}
+        style={{
+          backgroundImage: "url(" + imageURL + ")",
+        }}
+      >
         <div className={style.image__badge}>Premium</div>
       </div>
       <div className={style.bigCard__information}>
         <div className={style.information__top}>
           <div className={style.information__name}>
-            Toyota Land Cruiser 300 VXR+ V6 3.3L Diesel Twin Turbo AT
+            <span> {brand}</span>
+            <span> {model}</span>
           </div>
           <div className={style.information__state}>
             Milwaukee • NEW • 0 km • Gasoline
@@ -23,7 +38,7 @@ export default function BigCard() {
         </div>
 
         <div className={style.information__bottom}>
-          <span>$45,995</span>
+          <span>${price}</span>
           <Details />
         </div>
       </div>
