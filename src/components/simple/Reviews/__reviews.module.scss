@@ -40,7 +40,7 @@
         margin: 0;
       }
       .reviews__navigation {
-        border: black 1px solid;
+        //border: black 1px solid;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -49,6 +49,12 @@
 
         // width: 56px;
         // height: 20px;
+        .arrow {
+          // border: black 1px solid;
+          //height: 20px;
+          width: 20px;
+          padding: 10px 0;
+        }
       }
     }
     .reviews__corousel {

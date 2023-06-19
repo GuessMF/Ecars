@@ -23,6 +23,17 @@
       font-weight: 600;
       font-size: 14px;
       line-height: 24px;
+      text-decoration: none;
+    }
+    .navLink {
+      list-style: none;
+      color: $gray900;
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 24px;
+      text-decoration: none;
     }
   }
   .header__formGroup {

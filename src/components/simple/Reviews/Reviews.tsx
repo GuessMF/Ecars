@@ -11,8 +11,8 @@ export default function Reviews() {
         <div className={style.reviews__header}>
           <h2>Our happy clients say about us</h2>
           <div className={style.reviews__navigation}>
-            <LeftArrow />
-            <RightArrow />
+            <LeftArrow className={style.arrow} />
+            <RightArrow className={style.arrow} />
           </div>
         </div>
         <div className={style.reviews__corousel}>

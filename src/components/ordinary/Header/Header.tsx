@@ -44,7 +44,9 @@ export default function Header() {
         </NavLink>
 
         <li>
-          <NavLink to="/catalog">All Cars</NavLink>
+          <NavLink to="/catalog" className={style.navLink}>
+            All Cars
+          </NavLink>
         </li>
 
         <li>About Us</li>
@@ -57,7 +59,6 @@ export default function Header() {
           <Liked />
           <Profile />
         </div>
-
         <GetAquote version={version} />
       </div>
     </div>
