@@ -7,6 +7,10 @@ import MoreFilters from "../../ui/MoreFilters/MoreFilters";
 //import RangeSlider from "../../ui/RangeSlider/RangeSlider";
 //import RangeSliderInput from "react-range-slider-input";
 import {Slider, RangeSlider} from "rsuite";
+
+import "./slider.scss";
+import "./style.css";
+
 export default function Filters() {
   const [value, setValue] = React.useState(0);
 
