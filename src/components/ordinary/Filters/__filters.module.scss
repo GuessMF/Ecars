@@ -1,5 +1,6 @@
 @import "./../../../styles/__var.scss";
 //@import "rsuite/dist/rsuite.css";
+@import "rsuite/dist/rsuite.css";
 
 .filters {
   background-color: $white;
@@ -143,8 +144,31 @@
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
-    .filters__slider {
+
+    .miliage__slider {
+      //background-color: red;
       width: 100%;
+      margin-top: 10px;
+      div {
+        div {
+          // &:hover &::before {
+          //   box-shadow: #3c7d46;
+          //   // border: 2px solid red;
+          // }
+          &::before {
+            border: #3c7d46 3px solid;
+            // box-shadow: #3c7d46;
+          }
+          div {
+            background: #3c7d46;
+            &::before {
+            }
+            &::after {
+              border-top-color: #3c7d46;
+            }
+          }
+        }
+      }
     }
   }
   .filters__min_max {
@@ -174,6 +198,10 @@
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
+    .test {
+      border: black 1px solid;
+      background-color: red;
+    }
   }
   .filters__price {
     // border: black 1px solid;
@@ -183,6 +211,32 @@
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
+
+    .price__slider {
+      //background-color: red;
+      width: 100%;
+      margin-top: 10px;
+      div {
+        div {
+          // &:hover &::before {
+          //   box-shadow: #3c7d46;
+          //   // border: 2px solid red;
+          // }
+          &::before {
+            border: #3c7d46 3px solid;
+            // box-shadow: #3c7d46;
+          }
+          div {
+            background: #3c7d46;
+            &::before {
+            }
+            &::after {
+              border-top-color: #3c7d46;
+            }
+          }
+        }
+      }
+    }
   }
   .filters__country {
     //border: black 1px solid;

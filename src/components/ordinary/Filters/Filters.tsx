@@ -2,14 +2,9 @@ import React from "react";
 import {CSSTransition} from "react-transition-group";
 import style from "./__filters.module.scss";
 import MoreFilters from "../../ui/MoreFilters/MoreFilters";
-//import {RangeSlider} from "rsuite";
-//import {Slider} from "rsuite";
-//import RangeSlider from "../../ui/RangeSlider/RangeSlider";
-//import RangeSliderInput from "react-range-slider-input";
-import {Slider, RangeSlider} from "rsuite";
 
-import "./slider.scss";
-import "./style.css";
+import {RangeSlider} from "rsuite";
+import "rsuite/dist/rsuite.css";
 
 export default function Filters() {
   const [value, setValue] = React.useState(0);
@@ -98,17 +93,12 @@ export default function Filters() {
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
         </div>
-        <div className={style.filters__sli}>
-          <RangeSlider
-            defaultValue={[10, 50]}
-            className="eeeeeee"
-            barClassName="eeeeeee"
-            handleClassName="eeeeeee"
-          />
+        <div className={style.miliage__slider}>
+          <RangeSlider defaultValue={[0, 999999]} max={999999} />
         </div>
       </div>
 
-      <div className={style.filters__city}>
+      <div className={style.filters__year}>
         <div className={style.filters__label}>
           <h6>Year</h6>
           <span>Reset</span>
@@ -116,6 +106,9 @@ export default function Filters() {
         <div className={style.filters__min_max}>
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
+        </div>
+        <div className={style.test2}>
+          <span>test2</span>
         </div>
       </div>
 
@@ -128,7 +121,9 @@ export default function Filters() {
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
         </div>
-        <div className={style.filters__slider}></div>
+        <div className={style.price__slider}>
+          <RangeSlider defaultValue={[0, 999999]} max={999999} />
+        </div>
       </div>
 
       <div className={style.filters__country}>
