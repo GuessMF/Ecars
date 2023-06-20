@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.b1954ba0.css",
-    "main.js": "/Ecars/static/js/main.b8fe4dcf.js",
+    "main.css": "/Ecars/static/css/main.eb2c5070.css",
+    "main.js": "/Ecars/static/js/main.fc2c510b.js",
     "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/2021_Genesis_GV80_2.5T.webp": "/Ecars/static/media/2021_Genesis_GV80_2.5T.980a2f5df298d3f7a7ef.webp",
@@ -17,7 +17,6 @@
     "static/media/Toyota_Hiace.webp": "/Ecars/static/media/Toyota_Hiace.f18e9817bfc6c88b49db.webp",
     "static/media/Toyota_Prado_white.webp": "/Ecars/static/media/Toyota_Prado_white.5633a2c619ed17736dc2.webp",
     "static/media/question.svg": "/Ecars/static/media/question.51b1d93e7e701fecac33cbd44332824c.svg",
-    "static/media/fordIcon.webp": "/Ecars/static/media/fordIcon.03bb2b28e6484169b3b0.webp",
     "static/media/RobertFox.webp": "/Ecars/static/media/RobertFox.c5f24a57c9db37c484a4.webp",
     "static/media/likeIcon.svg": "/Ecars/static/media/likeIcon.e183459f11c83d7f1e42a6ab4553530c.svg",
     "static/media/mail.svg": "/Ecars/static/media/mail.b6c7e251c43bc938b356ebd14815dff8.svg",
@@ -31,11 +30,11 @@
     "static/media/leftArrow.svg": "/Ecars/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/upArrow.svg": "/Ecars/static/media/upArrow.4085127fc93ab9f18d558230bcf7c7f5.svg",
     "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
-    "main.b1954ba0.css.map": "/Ecars/static/css/main.b1954ba0.css.map",
-    "main.b8fe4dcf.js.map": "/Ecars/static/js/main.b8fe4dcf.js.map"
+    "main.eb2c5070.css.map": "/Ecars/static/css/main.eb2c5070.css.map",
+    "main.fc2c510b.js.map": "/Ecars/static/js/main.fc2c510b.js.map"
   },
   "entrypoints": [
-    "static/css/main.b1954ba0.css",
-    "static/js/main.b8fe4dcf.js"
+    "static/css/main.eb2c5070.css",
+    "static/js/main.fc2c510b.js"
   ]
 }
