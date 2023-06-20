@@ -3,7 +3,7 @@ import React from "react";
 import style from "./__moreFilters.module.scss";
 import {ReactComponent as DownArrow} from "./downArrow.svg";
 import {ReactComponent as UpArrow} from "./upArrow.svg";
-import {log} from "console";
+
 interface Props {
   onclick: () => void;
   visible: boolean;

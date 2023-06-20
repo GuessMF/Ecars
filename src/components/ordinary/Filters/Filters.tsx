@@ -2,8 +2,17 @@ import React from "react";
 import {CSSTransition} from "react-transition-group";
 import style from "./__filters.module.scss";
 import MoreFilters from "../../ui/MoreFilters/MoreFilters";
-
+//import {RangeSlider} from "rsuite";
+//import {Slider} from "rsuite";
+//import RangeSlider from "../../ui/RangeSlider/RangeSlider";
+//import RangeSliderInput from "react-range-slider-input";
+import {Slider, RangeSlider} from "rsuite";
 export default function Filters() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (newValue: number) => {
+    setValue(newValue);
+  };
   const [visible, setVisible] = React.useState(false);
   const handleClick = () => {
     setVisible(!visible);
@@ -11,6 +20,7 @@ export default function Filters() {
 
   return (
     <div className={style.filters}>
+      <RangeSlider defaultValue={[10, 50]} />
       <div className={style.filters__brand}>
         <div className={style.filters__label}>
           <h6>Brand</h6>
@@ -85,7 +95,7 @@ export default function Filters() {
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
         </div>
-        <div className={style.filters__slider}>slider</div>
+        <div className={style.filters__slider}></div>
       </div>
 
       <div className={style.filters__city}>
@@ -108,7 +118,7 @@ export default function Filters() {
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
         </div>
-        <div className={style.filters__slider}>slider</div>
+        <div className={style.filters__slider}></div>
       </div>
 
       <div className={style.filters__country}>

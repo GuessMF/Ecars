@@ -1,7 +1,6 @@
 import React from "react";
 import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
-import {cars} from "../../../helpers/carList";
 
 interface Props {
   brand: string;

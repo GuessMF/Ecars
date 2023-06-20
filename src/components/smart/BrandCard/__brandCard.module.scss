@@ -14,14 +14,20 @@
 
   align-items: center;
   background-color: $white;
+  // background-color: aquamarine;
+  cursor: pointer;
 
   .brandCard_content {
-    // border: black 1px solid;
+    //  border: black 1px solid;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 16px;
     gap: 12px;
+    img {
+      // border: black 1px solid;
+      height: 76px;
+    }
     span {
       font-family: "Inter";
       font-style: normal;
