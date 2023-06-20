@@ -24,7 +24,6 @@ export default function Filters() {
 
   return (
     <div className={style.filters}>
-      <RangeSlider defaultValue={[10, 50]} />
       <div className={style.filters__brand}>
         <div className={style.filters__label}>
           <h6>Brand</h6>
@@ -99,7 +98,14 @@ export default function Filters() {
           <input type="text" placeholder="Min" />
           <input type="text" placeholder="Max" />
         </div>
-        <div className={style.filters__slider}></div>
+        <div className={style.filters__sli}>
+          <RangeSlider
+            defaultValue={[10, 50]}
+            className="eeeeeee"
+            barClassName="eeeeeee"
+            handleClassName="eeeeeee"
+          />
+        </div>
       </div>
 
       <div className={style.filters__city}>
