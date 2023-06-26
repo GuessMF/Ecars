@@ -43,7 +43,10 @@
       height: 68px;
 
       .littleCard__name {
-        //border: black 1px solid;
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        // border: black 1px solid;
         color: $gray900;
         font-family: "Inter";
         font-style: normal;

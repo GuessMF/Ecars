@@ -1,0 +1,199 @@
+@import "../../styles/_var";
+.aboutUS {
+  // background-color: antiquewhite;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+  padding: 96px 216px;
+  // border: black 1px solid;
+
+  .aboutUS__first {
+    display: flex;
+    //  width: 1440px;
+    // padding: 0px 216px;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    // background-color: antiquewhite;
+    // margin-top: 96px;
+    // border: black 1px solid;
+    h1 {
+      /* Desktop/H1 */
+      font-size: 44px;
+      font-family: Inter Tight;
+      font-weight: 600;
+      line-height: 115%;
+      color: $gray900;
+      // border: black 1px solid;
+      margin: 0;
+      text-align: left;
+      width: 100%;
+    }
+    span {
+      /* Desktop/Body Medium */
+      font-size: 16px;
+      font-family: Inter;
+      line-height: 24px;
+      color: $gray900;
+    }
+  }
+  .aboutUS__benefits_content {
+    display: flex;
+    // padding: 0px 216px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+
+    h3 {
+      font-size: 32px;
+      font-family: Inter Tight;
+      font-weight: 600;
+      line-height: 115%;
+      color: $gray900;
+      //  border: black 1px solid;
+      margin: 0;
+    }
+
+    .aboutUS__benefits_text {
+      // background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      align-self: stretch;
+      gap: 24px;
+      span {
+        font-size: 16px;
+        font-family: Inter;
+        line-height: 24px;
+        color: $gray900;
+      }
+    }
+    .aboutUS__benefits {
+      position: relative;
+      z-index: 10;
+      background-color: $white;
+
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+
+      gap: 24px;
+
+      margin-top: 65px;
+      div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+        gap: 16px;
+      }
+      .benefits__circut {
+        background-color: $secondary500;
+
+        border-radius: 100px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        gap: 10px;
+      }
+      .benefits__content {
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+        padding: 0px;
+        gap: 8px;
+
+        width: fit-content;
+        h6 {
+          color: $gray900;
+          font-family: "Inter";
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 20px;
+          margin: 0;
+        }
+        p {
+          color: $gray900;
+          margin: 0;
+          font-family: "Inter";
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 20px;
+          text-align: center;
+        }
+      }
+      .benefits__first {
+        background-color: $white;
+      }
+      .benefits__second {
+        background-color: $white;
+      }
+      .benefits__third {
+        background-color: $white;
+      }
+    }
+  }
+  .aboutUS__ourMission {
+    display: flex;
+
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    // border: black 1px solid;
+
+    .ourMission__leftBlock {
+      //background-color: antiquewhite;
+      display: flex;
+      width: 496px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      flex-shrink: 0;
+      h3 {
+        font-size: 32px;
+        font-family: Inter Tight;
+        font-weight: 600;
+        line-height: 115%;
+        margin: 0;
+        color: $gray900;
+      }
+      span {
+        font-size: 16px;
+        font-family: Inter;
+        line-height: 24px;
+        color: $gray900;
+      }
+    }
+    .ourMission__rightBlock {
+      // width: 50%;
+      background-color: rgb(172, 107, 23);
+      //  border: black 1px solid;
+    }
+  }
+  .aboutUs__carImports {
+    display: flex;
+    //width: 1016px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    h3 {
+      // border: black 1px solid;
+      font-size: 32px;
+      font-family: Inter Tight;
+      font-weight: 600;
+      line-height: 115%;
+      color: $gray900;
+    }
+    span {
+      //  border: black 1px solid;
+      font-size: 16px;
+      font-family: Inter;
+      line-height: 24px;
+      color: $gray900;
+    }
+  }
+}

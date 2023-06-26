@@ -5,19 +5,26 @@ import style from "./__catalogPagination.module.scss";
 import BigCard from "../../smart/BigCard/BigCard";
 import {cars} from "../../../helpers/carList";
 
-export default function CatalogPagination() {
+interface Props {
+  currentItems: any;
+}
+
+export default function CatalogPagination({currentItems}: Props) {
   return (
     <div className={style.catalogPagination}>
-      {cars.map((car) => {
-        return (
-          <BigCard
-            brand={car.brand}
-            model={car.model}
-            price={car.price}
-            imageURL={car.imageURL}
-          />
-        );
-      })}
+      {currentItems &&
+        currentItems.map((item: any) => {
+          return (
+            <>
+              <BigCard
+                brand={item.brand}
+                model={item.model}
+                price={item.price}
+                imageURL={item.imageURL}
+              ></BigCard>
+            </>
+          );
+        })}
     </div>
   );
 }

@@ -1,0 +1,22 @@
+@import "./../../../styles/__var.scss";
+
+.contactUsBig {
+  background-color: antiquewhite;
+  width: 100%;
+  display: flex;
+  width: 1016px;
+  padding: 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  background-color: $lightBG;
+  border-radius: 8px;
+
+  span {
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 600;
+    line-height: 20px;
+    color: $gray900;
+  }
+}

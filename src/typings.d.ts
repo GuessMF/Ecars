@@ -6,10 +6,14 @@ declare module "*.module.scss";
 //   export default path;
 // }
 
-// declare module "*.svg" {
-//   const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
-//   export default content;
-// }
+declare module "*.svg" {
+  const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  export default content;
+}
+declare module "*.jpg" {
+  const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  export default content;
+}
 declare module "*.webp" {
   const value: any;
   export default value;

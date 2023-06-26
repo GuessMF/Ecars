@@ -15,6 +15,7 @@ interface Car {
   brand: string;
   model: string;
   price: string;
+  special: boolean;
   imageURL: string;
 }
 const cars: Car[] = [
@@ -22,66 +23,77 @@ const cars: Car[] = [
     brand: "Toyota",
     model: "Land Cruiser",
     price: "47,831",
+    special: true,
     imageURL: Toyota_landcruiser,
   },
   {
     brand: "Toyota",
     model: "Prado",
     price: "45,995",
+    special: false,
     imageURL: Toyota_prado_white,
   },
   {
     brand: "Toyota",
     model: "FJ Cruiser",
     price: "45,995",
+    special: false,
     imageURL: Toyota_fjcruiser,
   },
   {
     brand: "Toyota",
     model: "Corolla",
     price: "45,995",
+    special: true,
     imageURL: Toyota_corolla,
   },
   {
     brand: "Toyota",
     model: "Camry sport",
     price: "45,995",
+    special: true,
     imageURL: Toyota_camry,
   },
   {
     brand: "Toyota",
     model: "Highlander",
     price: "45,995",
+    special: false,
     imageURL: Toyota_highlander,
   },
   {
     brand: "Toyota",
     model: "Hiace",
     price: "45,995",
+    special: true,
     imageURL: Toyota_hiace,
   },
   {
     brand: "Toyota",
     model: "Tundra",
     price: "45,995",
+    special: false,
     imageURL: Toyota_tundra,
   },
   {
     brand: "Toyota",
     model: "Hilux",
     price: "45,995",
+    special: false,
     imageURL: Toyota_hilux,
   },
   {
     brand: "Toyota",
     model: "Land Cruiser",
     price: "45,995",
+    special: false,
     imageURL: Toyota_landcruiser,
   },
   {
     brand: "Toyota",
     model: "Prado black",
     price: "45,995",
+    special: false,
     imageURL: Toyota_prado_black,
   },
 ];

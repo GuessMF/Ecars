@@ -7,6 +7,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px $padding108;
+  border-bottom: 1px solid $outline2;
+  // border-left: 1px solid $outline2;
+  // border-right: 1px solid $outline2;
 
   .header__nav {
     display: flex;
