@@ -25,14 +25,15 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     imageURL:
-      "https://lh3.googleusercontent.com/pw/AJFCJaWi-4f7izW532zCvDrVZwtzooTMJ56DECD-S3gizLGdPjipl68oqssLkF_KQwtRO1TcoW2eAoqop1grhr7zoK893vTK0zmeJYzpXnHnD73-sSLTpP-Cacsg1rWhKjkCooOwoVe3V90M5J0rzXJW1g7G2HIv8EHJfVXY9xkIPb02u4DcdPr4y7dW1F5t_B9AB0gMI73d4N9z0mS6bp5Z_rSGGLwzcwSbCvQSaM1NPTFMj1nxMg_oG733R56ozEAUKEkQQwKHadJySbORs8Nx-MlTAdNfp9Qx5lHefGz5h4vDMEAHE_cqVANxnA-jx0BcIZmx431qRihcUA_jqvem7EYl5dSHmC7iejfnKGmE2xch6EGFQNGYvwun4JvZcIkPzZnNnIF7EnB1wWkpIF5GsaJg-AOh-M2kjCuqMg99y_9kX_UmdX3vj66fTcKy6r31iZ02X1-tCN15kQMhOMRsTSvDRbtoJ9G4BLRFmo-FqTgnDAFRZ3HasqG1cecjJ9VtU1SqD8hMiXUFzABCVmfMr2-jnO6C6Yi3I0jb89jzEc9Mo6sgnUrdF9dg9qscw2Sed_V6GCUD72R46g5bvZThZynH5zXHGLliBa9Hx3lcY5P50EhGTr5GlOqSkQN-BFqunwGEg4c87_3VQco9er7oJxCVbRJd9_dykElq7GQo4kpfFMIBxHPSF404OcqFnWHWNzIsIETL8FSBkn5ZStZBs0OqY_7AZWhMUq2ZaDNaoLm0CCRGWRaYGFA4ncAmAn1o5dsrpd_ySueGZn8mBn0rVX7zEgnZ24tXLNcyDX53hxzhLPxqYeMjXVzommnesMKZrz9PYmdCDcgLiLFCpZukvDsUjE06k2CAAmkuj-dZ6cq2Pw5HFh26_lvND1N3Iy2t0wIRcLTX3J9zN2CxV-88RSdQ=w300-h225-s-no?authuser=0",
+      "https://drive.google.com/uc?export=view&id=1J0uzIzF3RnSsI1ThP1uS3CHeBu5vg-zB",
   },
   {
-    brand: "Toyota",
-    model: "Land Cruiser",
+    brand: "Acura",
+    model: "TLX BLue",
     price: "47,831",
     special: true,
-    imageURL: Toyota_landcruiser,
+    imageURL:
+      "https://drive.google.com/uc?export=view&id=1scexrpd4inlsgirsRTdztWRkEbZIF765",
   },
   {
     brand: "Toyota",
