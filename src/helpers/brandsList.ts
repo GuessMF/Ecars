@@ -60,26 +60,26 @@ const brands: Brand[] = [
     name: "BMW",
     brandIMG: Bwm_logo,
   },
-  {
-    name: "Chevrolet",
-    brandIMG: Chevrolet_logo,
-  },
+  // {
+  //   name: "Chevrolet",
+  //   brandIMG: Chevrolet_logo,
+  // },
   {
     name: "Ferrari",
     brandIMG: Ferrari_logo,
   },
-  {
-    name: "Fiat",
-    brandIMG: Fiat_logo,
-  },
+  // {
+  //   name: "Fiat",
+  //   brandIMG: Fiat_logo,
+  // },
   {
     name: "Ford",
     brandIMG: Ford_logo,
   },
-  {
-    name: "Honda",
-    brandIMG: Honda_logo,
-  },
+  // {
+  //   name: "Honda",
+  //   brandIMG: Honda_logo,
+  // },
   {
     name: "Infiniti",
     brandIMG: Infiniti_logo,
@@ -104,46 +104,46 @@ const brands: Brand[] = [
     name: "Maybach",
     brandIMG: Maybach_logo,
   },
-  {
-    name: "Mazda",
-    brandIMG: Mazda_logo,
-  },
+  // {
+  //   name: "Mazda",
+  //   brandIMG: Mazda_logo,
+  // },
   {
     name: "Mercedes Benz",
     brandIMG: Mercedes_benz_logo,
   },
-  {
-    name: "Mitsubishi",
-    brandIMG: Mitsubishi_logo,
-  },
+  // {
+  //   name: "Mitsubishi",
+  //   brandIMG: Mitsubishi_logo,
+  // },
   {
     name: "Nissan",
     brandIMG: Nissan_logo,
   },
-  {
-    name: "Opel",
-    brandIMG: Opel_logo,
-  },
+  // {
+  //   name: "Opel",
+  //   brandIMG: Opel_logo,
+  // },
   {
     name: "Porsche",
     brandIMG: Porsche_logo,
   },
-  {
-    name: "Renault",
-    brandIMG: Renault_logo,
-  },
+  // {
+  //   name: "Renault",
+  //   brandIMG: Renault_logo,
+  // },
   {
     name: "Rolls Royce",
     brandIMG: Rolls_royce_logo,
   },
-  {
-    name: "Seat",
-    brandIMG: Seat_logo,
-  },
-  {
-    name: "Skoda",
-    brandIMG: Skoda_logo,
-  },
+  // {
+  //   name: "Seat",
+  //   brandIMG: Seat_logo,
+  // },
+  // {
+  //   name: "Skoda",
+  //   brandIMG: Skoda_logo,
+  // },
   {
     name: "Tesla",
     brandIMG: Tesla_logo,
