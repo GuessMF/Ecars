@@ -1,0 +1,22 @@
+.mySwiper {
+  height: 400px;
+  /* border: black 1px solid; */
+  width: 1330px;
+}
+.swiper-wrapper {
+  /* background-color: aqua; */
+  /* height: 300px; */
+
+  width: fit-content;
+  width: 1000px;
+  /* border: black 1px solid; */
+}
+.swiper-button-prev {
+  display: none;
+}
+.swiper-button-next {
+  display: none;
+}
+.slide-test {
+  /* background-color: aqua; */
+}

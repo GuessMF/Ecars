@@ -1,0 +1,15 @@
+@import "./../../../styles/__var.scss";
+
+.contactUsBlock {
+  display: flex;
+  width: 808px;
+  padding: 16px;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 8px;
+  background-color: aliceblue;
+
+  box-shadow: 0px 8px 16px 0px rgba(28, 30, 34, 0.08),
+    0px 1px 2px 0px rgba(28, 30, 34, 0.08);
+}

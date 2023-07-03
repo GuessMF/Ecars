@@ -17,6 +17,7 @@ export default function CatalogPagination({currentItems}: Props) {
           return (
             <>
               <BigCard
+                index={item.index}
                 brand={item.brand}
                 model={item.model}
                 price={item.price}

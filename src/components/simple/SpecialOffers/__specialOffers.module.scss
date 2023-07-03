@@ -34,6 +34,10 @@
         align-items: center;
         padding: 0px;
         gap: 40px;
+        .nav__button {
+          background-color: none;
+          background: none;
+        }
       }
     }
   }
