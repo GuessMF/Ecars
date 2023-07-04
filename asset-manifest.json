@@ -1,17 +1,20 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.86b99d5d.css",
-    "main.js": "/Ecars/static/js/main.1fddc21a.js",
+    "main.css": "/Ecars/static/css/main.0e01ee17.css",
+    "main.js": "/Ecars/static/js/main.cb01d9f0.js",
     "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/ourMission.webp": "/Ecars/static/media/ourMission.45895a59560716c96771.webp",
     "static/media/Logo.svg": "/Ecars/static/media/Logo.e39f0d0df8db57ab1515b09f467c66f8.svg",
-    "static/media/question.svg": "/Ecars/static/media/question.51b1d93e7e701fecac33cbd44332824c.svg",
-    "static/media/RobertFox.webp": "/Ecars/static/media/RobertFox.c5f24a57c9db37c484a4.webp",
     "static/media/likeIcon.svg": "/Ecars/static/media/likeIcon.e183459f11c83d7f1e42a6ab4553530c.svg",
+    "static/media/question.svg": "/Ecars/static/media/question.51b1d93e7e701fecac33cbd44332824c.svg",
+    "static/media/shareIcon.svg": "/Ecars/static/media/shareIcon.44fbe89a1c871408544fb1fd95bb00f2.svg",
+    "static/media/downloadIcon.svg": "/Ecars/static/media/downloadIcon.3f5d67e97e07fa4c2027d75d8804166e.svg",
+    "static/media/RobertFox.webp": "/Ecars/static/media/RobertFox.c5f24a57c9db37c484a4.webp",
     "static/media/mail.svg": "/Ecars/static/media/mail.b6c7e251c43bc938b356ebd14815dff8.svg",
     "static/media/mail_icon_green.svg": "/Ecars/static/media/mail_icon_green.338000c553d9ddacc0b40a97224c219e.svg",
     "index.html": "/Ecars/index.html",
+    "static/media/checkMarkDetails.svg": "/Ecars/static/media/checkMarkDetails.d1c98a331c7a053f5b867e2d9a0521e2.svg",
     "static/media/checkMark.svg": "/Ecars/static/media/checkMark.3177b04207d802a13885.svg",
     "static/media/close.svg": "/Ecars/static/media/close.77226dd752c97ec0e5aa927c2cf8e804.svg",
     "static/media/star.svg": "/Ecars/static/media/star.041c45793a3fc261d278d72ce0c4f66b.svg",
@@ -22,11 +25,11 @@
     "static/media/upArrow.svg": "/Ecars/static/media/upArrow.ff007fb10a384ecaf7860cfdc5d07393.svg",
     "static/media/leftArrow.svg": "/Ecars/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
-    "main.86b99d5d.css.map": "/Ecars/static/css/main.86b99d5d.css.map",
-    "main.1fddc21a.js.map": "/Ecars/static/js/main.1fddc21a.js.map"
+    "main.0e01ee17.css.map": "/Ecars/static/css/main.0e01ee17.css.map",
+    "main.cb01d9f0.js.map": "/Ecars/static/js/main.cb01d9f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.86b99d5d.css",
-    "static/js/main.1fddc21a.js"
+    "static/css/main.0e01ee17.css",
+    "static/js/main.cb01d9f0.js"
   ]
 }
