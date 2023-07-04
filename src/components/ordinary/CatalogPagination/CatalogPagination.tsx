@@ -21,7 +21,7 @@ export default function CatalogPagination({currentItems}: Props) {
                 brand={item.brand}
                 model={item.model}
                 price={item.price}
-                imageURL={item.imageURL}
+                previewIMG={item.previewIMG}
               ></BigCard>
             </>
           );

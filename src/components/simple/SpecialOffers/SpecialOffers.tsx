@@ -74,7 +74,7 @@ export default function SpecialOffers() {
                     model={car.model}
                     price={car.price}
                     //special={car.special}
-                    imageURL={car.imageURL}
+                    previewIMG={car.previewIMG}
                   />
                 </SwiperSlide>
               ) : null;

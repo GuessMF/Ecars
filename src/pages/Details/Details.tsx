@@ -8,7 +8,10 @@ import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rig
 import ContactUsBlock from "../../components/simple/ContactUsBlock/ContactUsBlock";
 import Email from "../../components/ui/Email/Email";
 import Mobile from "../../components/ui/Mobile/Mobile";
-
+import {ReactComponent as CheckMarkDetails} from "../../assets/icons/checkMarkDetails.svg";
+import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.svg";
+import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
+import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
 interface RouteParams {
   id: string;
   [key: string]: string | undefined;
@@ -38,17 +41,16 @@ export default function Details() {
         <div className={style.content}>
           <div className={style.content__pictures}>
             <div className={style.bigPicture}>
-              <img src={carDetails?.imageURL} alt="pic" />
+              <img src={carDetails?.images[0]} alt="pic" />
             </div>
             <div className={style.littlePictures}>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
-              <div className={style.little_preview}></div>
+              {carDetails?.images.map((image) => {
+                return (
+                  <div className={style.little_preview}>
+                    <img src={image}></img>
+                  </div>
+                );
+              })}
             </div>
             <div>Show all pictures</div>
           </div>
@@ -163,13 +165,35 @@ export default function Details() {
             </div>
           </div>
           <ContactUsBlock />
+          <div className={style.content__quick_links}>
+            <h5>Quick links</h5>
+            <div className={style.links}>
+              <a href="">Toyota Land Cruiser for sale in Dubai</a>
+              <a href="">Toyota Land Cruiser 2017</a>
+              <a href="">Toyota for sale in Dubai</a>
+              <a href="">All cars for sale in Dubai</a>
+            </div>
+          </div>
+          <div className={style.content__similar_cars}>
+            <h5>Similar Cars</h5>
+          </div>
         </div>
         <div className={style.CTA}>
           <div className={style.CTA__info}>
             <div className={style.info__top}>
               <div className={style.saveAndShare}>
-                <span>Save</span>
-                <span>Share</span>
+                <span>
+                  <i>
+                    <LikeIcon />
+                  </i>
+                  Save
+                </span>
+                <span>
+                  <i>
+                    <ShareIcon />
+                  </i>
+                  Share
+                </span>
               </div>
               <h5>
                 Toyota Land Cruiser 2017 ZX-G Frontier Face-Lifted Petrol 4.6L
@@ -204,17 +228,26 @@ export default function Details() {
                 Contact us and our manager will give you all the information you
                 need.
               </p>
-              <button>Check availability</button>
+              <button className={style.checkAvail}>Check availability</button>
               <div className={style.contacts}>
-                <Email color={black} />
-                <Mobile color={black} />
+                <button>
+                  <Mobile color={black} />
+                </button>
+                <button>
+                  <Email color={black} />
+                </button>
               </div>
             </div>
           </div>
           <div className={style.CTA__inspection}>
             <div className={style.inspection__top}>
               <h5>Vehicle inspection</h5>
-              <div className={style.inspected__label}>inspected</div>
+              <div className={style.inspected__label}>
+                <i>
+                  <CheckMarkDetails />
+                </i>
+                inspected
+              </div>
             </div>
             <div className={style.inspection__report}>
               <table>
@@ -235,7 +268,12 @@ export default function Details() {
                   <td>Passed</td>
                 </tr>
               </table>
-              <div className={style.download}>Download the basic report</div>
+              <div className={style.download}>
+                <i>
+                  <DownloadIcon />
+                </i>
+                <span> Download the basic report</span>
+              </div>
             </div>
             <div className={style.full_inspection}>
               <span>Full Inspection</span>
@@ -248,7 +286,11 @@ export default function Details() {
               <a href="">Learn more about the full inspection</a>
             </div>
           </div>
-          <div className={style.CTA__added}>Added: Jan 6, 2023 • Views: 38</div>
+          <div className={style.CTA__added}>
+            <span>Added:</span>
+            <b>Jan 6, 2023</b>
+            <span>• Views:</span> <b>38</b>
+          </div>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@ export default function Catalog() {
     brand: string;
     model: string;
     price: string;
-    imageURL: string;
+    previewIMG: string;
   }
 
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);

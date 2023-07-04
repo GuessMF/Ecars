@@ -28,7 +28,7 @@
     gap: 24px;
   }
   .content {
-    border: black 1px solid;
+    //border: black 1px solid;
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -38,10 +38,14 @@
       flex-direction: column;
       gap: 16px;
       .bigPicture {
-        width: 808px;
-        height: 606px;
-        border-radius: 8px;
-        background-color: bisque;
+        // width: 808px;
+        // height: 606px;
+
+        // background-color: bisque;
+        img {
+          width: 808px;
+          border-radius: 8px;
+        }
       }
       .littlePictures {
         height: 70px;
@@ -53,7 +57,12 @@
           background-color: blanchedalmond;
           border-radius: 8px;
           width: 94px;
-          height: 70px;
+          height: fit-content;
+          // height: 70px;
+          img {
+            width: 94px;
+            border-radius: 8px;
+          }
         }
       }
     }
@@ -185,7 +194,13 @@
             font-weight: 600;
             line-height: 20px;
           }
+          ul {
+            // border: black 1px solid;
+            padding-left: 15px;
+            margin-top: 6px;
+          }
           li {
+            // border: black 1px solid;
             list-style-image: url("../../assets/icons/checkMark.svg");
             font-size: 14px;
             font-family: Inter;
@@ -208,7 +223,10 @@
             font-weight: 600;
             line-height: 20px;
           }
-
+          ul {
+            padding-left: 15px;
+            margin-top: 6px;
+          }
           li {
             list-style-image: url("../../assets/icons/checkMark.svg");
             font-size: 14px;
@@ -221,6 +239,47 @@
           }
         }
       }
+    }
+    .content__quick_links {
+      // border: black 1px solid;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      h5 {
+        color: $gray900;
+
+        font-size: 22px;
+        font-family: Inter Tight;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%;
+      }
+      .links {
+        //  border: black 1px solid;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 8px;
+        height: 50px;
+        a {
+          color: $primary500;
+          text-decoration: none;
+          font-size: 14px;
+          font-family: Inter;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+    }
+    .content__similar_cars {
+      background-color: aliceblue;
+      display: flex;
+      width: 100%;
+      padding: 96px 108px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
     }
   }
   .CTA {
@@ -251,6 +310,24 @@
           display: flex;
           flex-direction: row;
           justify-content: space-between;
+          span {
+            // border: black 1px solid;
+            display: flex;
+            flex-direction: row;
+            gap: 2px;
+            font-size: 14px;
+            font-family: Inter;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
+            color: $gray500;
+            i {
+              //  border: black 1px solid;
+              display: flex;
+              flex-direction: column;
+              justify-content: end;
+            }
+          }
         }
         h5 {
           color: $gray900;
@@ -299,6 +376,7 @@
         align-self: stretch;
         background-color: $lightBG;
         gap: 8px;
+        border-top: 1px solid $outline2;
         span {
           color: $gray900;
           font-size: 14px;
@@ -310,7 +388,7 @@
         span:first-child {
           font-weight: 600;
         }
-        button {
+        .checkAvail {
           display: flex;
           padding: 12px 24px;
           justify-content: center;
@@ -321,18 +399,34 @@
           border-radius: 8px;
           width: 100%;
           margin-top: 8px;
+          color: $white;
+          font-size: 16px;
+          font-family: Inter;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 24px;
         }
         .contacts {
-          margin-top: 4px;
           width: 100%;
-          border-radius: 8px;
-          background-color: $white;
-          padding: 15px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          border: $outline1 1px solid;
+          button {
+            width: 100%;
+            border: $outline1 1px solid;
+            padding: 14px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: $white;
+          }
+          button:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            border-bottom: none;
+          }
+          button:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+          }
         }
       }
     }
@@ -368,10 +462,23 @@
           line-height: 16px;
           background-color: $secondary500;
           border-radius: 8px;
+          padding: 4px 8px;
+          gap: 2px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          i {
+            // border: black 1px solid;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+          }
         }
       }
       .inspection__report {
-        background-color: aliceblue;
+        // background-color: aliceblue;
         width: 100%;
         table {
           width: 100%;
@@ -395,12 +502,26 @@
         .download {
           margin-top: 12px;
           margin-left: 8px;
-          font-size: 14px;
-          font-family: Inter;
-          font-style: normal;
-          font-weight: 600;
-          line-height: 20px;
-          color: $primary500;
+
+          display: flex;
+          flex-direction: row;
+          gap: 4px;
+          i {
+            // border: black 1px solid;
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            width: fit-content;
+          }
+          span {
+            // border: black 1px solid;
+            font-size: 14px;
+            font-family: Inter;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 20px;
+            color: $primary500;
+          }
         }
       }
       span {
@@ -456,7 +577,18 @@
       }
     }
     .CTA__added {
-      border: black 1px solid;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 5px;
+      // border: black 1px solid;
+      width: 100%;
+      span {
+        color: $gray300;
+      }
+      b {
+        color: $gray500;
+      }
     }
   }
 }

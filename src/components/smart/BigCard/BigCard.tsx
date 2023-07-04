@@ -8,10 +8,16 @@ interface Props {
   brand: string;
   model: string;
   price: string;
-  imageURL: string;
+  previewIMG: string;
 }
 
-export default function BigCard({index, brand, model, price, imageURL}: Props) {
+export default function BigCard({
+  index,
+  brand,
+  model,
+  price,
+  previewIMG,
+}: Props) {
   return (
     <NavLink to={`/details/${index}`}>
       <div className={style.bigCard}>
@@ -19,7 +25,7 @@ export default function BigCard({index, brand, model, price, imageURL}: Props) {
           className={style.bigCard__image}
           // style={{ background: "black" }}
           style={{
-            backgroundImage: "url(" + imageURL + ")",
+            backgroundImage: "url(" + previewIMG + ")",
           }}
         >
           <div className={style.image__badge}>Premium</div>

@@ -9,21 +9,23 @@ interface Props {
   model: string;
   price: string;
   // special: boolean;
-  imageURL: string;
+  previewIMG: string;
 }
 export default function LittleCard({
   brand,
   model,
   price,
   // special,
-  imageURL,
+  previewIMG,
 }: Props) {
   return (
     <div className={style.littleCard}>
       <div
         className={style.littleCard__previewImg}
-        style={{backgroundImage: `url(${imageURL})`}}
+
+        // style={{backgroundImage: `url(${previewIMG})`}}
       >
+        <img src={previewIMG}></img>
         <Like />
       </div>
       <div className={style.littleCard__content}>

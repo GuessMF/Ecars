@@ -8,8 +8,38 @@
   align-items: flex-start;
   gap: 12px;
   border-radius: 8px;
-  background-color: aliceblue;
+  // background-color: aliceblue;
 
   box-shadow: 0px 8px 16px 0px rgba(28, 30, 34, 0.08),
     0px 1px 2px 0px rgba(28, 30, 34, 0.08);
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    h5 {
+      //   border: black 1px solid;
+      color: $gray900;
+      font-size: 22px;
+      font-family: Inter Tight;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 120%;
+    }
+    p {
+      color: $gray900;
+      font-size: 14px;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+  .button {
+    // border: black 1px solid;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(176, 240, 176);
+  }
 }
