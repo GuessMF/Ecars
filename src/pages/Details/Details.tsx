@@ -12,6 +12,8 @@ import {ReactComponent as CheckMarkDetails} from "../../assets/icons/checkMarkDe
 import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.svg";
 import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
 import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
+
+import Skeleton from "../../components/ui/Skeleton/Skeleton";
 interface RouteParams {
   id: string;
   [key: string]: string | undefined;
@@ -292,6 +294,9 @@ export default function Details() {
             <span>• Views:</span> <b>38</b>
           </div>
         </div>
+      </div>
+      <div className={style.testGAPI}>
+        <Skeleton />
       </div>
     </div>
   );
