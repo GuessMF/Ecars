@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/Ecars/static/css/main.0e01ee17.css",
-    "main.js": "/Ecars/static/js/main.cb01d9f0.js",
+    "main.css": "/Ecars/static/css/main.d5a8aaa3.css",
+    "main.js": "/Ecars/static/js/main.36090203.js",
     "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/ourMission.webp": "/Ecars/static/media/ourMission.45895a59560716c96771.webp",
@@ -25,11 +25,11 @@
     "static/media/upArrow.svg": "/Ecars/static/media/upArrow.ff007fb10a384ecaf7860cfdc5d07393.svg",
     "static/media/leftArrow.svg": "/Ecars/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
-    "main.0e01ee17.css.map": "/Ecars/static/css/main.0e01ee17.css.map",
-    "main.cb01d9f0.js.map": "/Ecars/static/js/main.cb01d9f0.js.map"
+    "main.d5a8aaa3.css.map": "/Ecars/static/css/main.d5a8aaa3.css.map",
+    "main.36090203.js.map": "/Ecars/static/js/main.36090203.js.map"
   },
   "entrypoints": [
-    "static/css/main.0e01ee17.css",
-    "static/js/main.cb01d9f0.js"
+    "static/css/main.d5a8aaa3.css",
+    "static/js/main.36090203.js"
   ]
 }
