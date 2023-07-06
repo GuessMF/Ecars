@@ -7,6 +7,8 @@ import {cars} from "../../../helpers/carList";
 import Skeleton from "../../ui/Skeleton/Skeleton";
 import {log} from "console";
 
+import ScrollToTopPagination from "../../../utils/scrollToTopPagination";
+
 interface Props {
   currentItems: any;
 }

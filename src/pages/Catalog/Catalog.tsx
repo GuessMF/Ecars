@@ -7,16 +7,11 @@ import CatalogPagination from "../../components/ordinary/CatalogPagination/Catal
 import ReactPaginate from "react-paginate";
 
 import {cars} from "../../helpers/carList";
+import ScrollToTopPagination from "../../utils/scrollToTopPagination";
+import {log} from "console";
 export default function Catalog() {
-  // const [itemOffset, setItemOffset] = React.useState(0);
   const itemsPerPage = 8;
-  // const endOffset = itemOffset + itemsPerPage;
-  // const currentItems = cars.slice(itemOffset, endOffset);
-  // const pageCount = Math.ceil(cars.length / itemsPerPage);
-  // const handlePageClick = (event: any) => {
-  //   const newOffset = (event.selected * itemsPerPage) % cars.length;
-  //   setItemOffset(newOffset);
-  // };
+
   interface Car {
     brand: string;
     model: string;
@@ -26,8 +21,8 @@ export default function Catalog() {
 
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
   const [pageCount, setPageCount] = React.useState(0);
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
+  const [currentPage, setCurrentPage] = React.useState(1);
+
   const [itemOffset, setItemOffset] = React.useState(0);
 
   React.useEffect(() => {
@@ -36,13 +31,16 @@ export default function Catalog() {
     setPageCount(Math.ceil(cars.length / itemsPerPage));
   }, [itemOffset, itemsPerPage]);
 
-  // Invoke when user click to request another page.
   const handlePageClick = (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % cars.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+    const catalog = document.getElementById("catalogList");
+
+    catalog?.scrollIntoView({behavior: "smooth"});
     setItemOffset(newOffset);
+    console.log(pageCount);
+
+    setCurrentPage(currentPage);
+    console.log(currentPage);
   };
 
   return (
@@ -50,7 +48,7 @@ export default function Catalog() {
       <h3>Find cars to fit your criteria</h3>
       <div className={style.catalog__content}>
         <Filters />
-        <div className={style.catalog__left}>
+        <div id="catalogList" className={style.catalog__left}>
           <Sorted />
           <CatalogPagination currentItems={currentItems} />
           <ReactPaginate
@@ -73,6 +71,7 @@ export default function Catalog() {
             containerClassName="pagination"
             activeClassName="active"
             renderOnZeroPageCount={null}
+            initialPage={currentPage}
           />
         </div>
       </div>

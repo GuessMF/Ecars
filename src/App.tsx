@@ -1,6 +1,8 @@
 import React from "react";
 import {Routes, Route} from "react-router-dom";
 
+import ScrollToTop from "./utils/scrollToTop";
+
 import style from "./styles/__app.module.scss";
 import TopBar from "./components/simple/TopBar/TopBar";
 import Header from "./components/ordinary/Header/Header";
@@ -13,6 +15,7 @@ import Details from "./pages/Details/Details";
 function App() {
   return (
     <div className={style.app}>
+      <ScrollToTop />
       <TopBar />
       <Header />
       <Routes>
