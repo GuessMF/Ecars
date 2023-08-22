@@ -63,9 +63,10 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+
         <div className={style.footer__bottom}>
           <div className={style.footer__left}>
-            <span>eCars © 2022. All rights reserved.</span>
+            <span>eCars © 2023. All rights reserved.</span>
           </div>
           <div className={style.footer__right}>
             <span>Privacy Policy</span>

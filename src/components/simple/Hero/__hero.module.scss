@@ -4,6 +4,12 @@
   height: 600px;
   background-image: url("../../../assets/images/hero.webp");
 
+  @media (max-width: 768px) {
+    background-image: url("../../../assets/images/hero-tablet.webp");
+    background-repeat: no-repeat;
+    height: fit-content;
+  }
+
   .hero__content {
     display: flex;
     flex-direction: column;
@@ -11,8 +17,15 @@
     gap: 32px;
     width: 600px;
     // border: black 1px solid;
+
     padding-left: $padding108;
     padding-top: 120px;
+    @media (max-width: 768px) {
+      padding-left: 32px;
+      padding-top: 66px;
+      width: 50%;
+      height: fit-content;
+    }
     .content__title {
       //   border: black 1px solid;
       height: fit-content;
@@ -25,6 +38,17 @@
         color: $gray900;
         margin: 0;
       }
+      @media (max-width: 768px) {
+        h1 {
+          /* Mobile/Title */
+
+          font-size: 42px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 115%; /* 48.3px */
+          //  width: 50%;
+        }
+      }
     }
     .content__subtitle {
       display: flex;
@@ -34,6 +58,14 @@
       gap: 32px;
       //  border: black 1px solid;
       color: black;
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-self: start;
+        div {
+          display: flex;
+          flex-direction: row;
+        }
+      }
     }
   }
   .hero__benefits {
@@ -51,6 +83,23 @@
     margin-right: $padding108;
     //margin-top: 125px;
     margin-top: 65px;
+
+    @media (max-width: 768px) {
+      display: flex;
+      width: 768px;
+      padding: 40px 32px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 24px;
+      margin: 0;
+      margin-top: 65px;
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid $outline2;
+      position: inherit;
+      width: 100%;
+    }
     div {
       display: flex;
       flex-direction: row;

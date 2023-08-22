@@ -7,6 +7,9 @@
   align-items: flex-start;
   padding: 96px 108px;
   gap: 10px;
+  @media (max-width: 768px) {
+    padding: 40px 32px;
+  }
   .bottomCTA__content {
     display: flex;
     flex-direction: row;
@@ -19,6 +22,9 @@
     height: 316px;
     // border: white 1px solid;
     position: relative;
+    @media (max-width: 768px) {
+      height: fit-content;
+    }
 
     .vl {
       // border-left: 6px solid green;
@@ -38,6 +44,9 @@
       align-items: flex-start;
       padding: 0px;
       gap: 24px;
+      @media (max-width: 768px) {
+        flex-direction: row;
+      }
       h5 {
         font-family: "Inter Tight";
         font-style: normal;
@@ -46,17 +55,21 @@
         line-height: 120%;
         color: $white;
         margin: 0;
-      }
-      p {
-        font-family: "Inter";
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 24px;
-        color: $white;
-        margin: 0;
+        @media (max-width: 768px) {
+          font-size: 19px;
+        }
       }
     }
+    p {
+      font-family: "Inter";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: $white;
+      margin: 0;
+    }
+
     // .bottomCTA__footer {
     //   // background-color: chartreuse;
     //   border: white 1px solid;
@@ -73,6 +86,12 @@
       // width: 600px;
       height: 316px;
       // background-color: brown;
+      @media (max-width: 768px) {
+        padding: 0;
+        width: 100%;
+        gap: 16px;
+        height: fit-content;
+      }
     }
     .bottomCTA__right {
       // border: white 1px solid;
@@ -85,6 +104,12 @@
 
       // width: 600px;
       height: 316px;
+      @media (max-width: 768px) {
+        padding: 0;
+        width: 100%;
+        gap: 16px;
+        height: fit-content;
+      }
     }
   }
 }

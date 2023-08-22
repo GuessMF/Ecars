@@ -10,6 +10,13 @@
   gap: 24px;
   background-color: $darkBG1;
   // height: 500px;
+  @media (max-width: 768px) {
+    display: flex;
+    padding: 40px 32px;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+  }
   .middleCTA__content {
     // border: rgb(241, 233, 233) 1px solid;
     display: flex;
@@ -19,6 +26,11 @@
     gap: 200px;
     height: 148px;
     width: 808px;
+    @media (max-width: 768px) {
+      width: auto;
+      height: auto;
+      gap: 32px;
+    }
     .middleCTA__text {
       // border: rgb(188, 129, 129) 1px solid;
       display: flex;
@@ -34,6 +46,12 @@
         font-size: 22px;
         line-height: 120%;
         color: $white;
+        @media (max-width: 768px) {
+          font-size: 19px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 120%; /* 22.8px */
+        }
       }
       .middleCTA__subtitle {
         // border: rgb(184, 114, 114) 1px solid;
@@ -43,6 +61,8 @@
         font-size: 16px;
         line-height: 24px;
         color: $white;
+        @media (max-width: 768px) {
+        }
       }
     }
   }

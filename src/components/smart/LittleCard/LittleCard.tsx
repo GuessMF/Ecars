@@ -22,10 +22,8 @@ export default function LittleCard({
     <div className={style.littleCard}>
       <div
         className={style.littleCard__previewImg}
-
-        // style={{backgroundImage: `url(${previewIMG})`}}
+        style={{backgroundImage: `url(${previewIMG})`}}
       >
-        <img src={previewIMG}></img>
         <Like />
       </div>
       <div className={style.littleCard__content}>

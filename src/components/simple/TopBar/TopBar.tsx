@@ -21,12 +21,14 @@ export default function TopBar() {
         <TwitterIcon />
         <YouTubeIcon />
         <InstagramIcon /> */}
-        <div>
+        <div className={style.logos}>
           <SocialIcons color={color} opacity={opacity} />
         </div>
 
         <Mobile color={white} />
-        <Email color={white} />
+        <div className={style.logos}>
+          <Email color={white} />
+        </div>
       </div>
       <div className={style.topBar_right}>
         <svg

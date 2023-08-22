@@ -27,25 +27,26 @@ export default function BrowseByBrand() {
                 );
               }
             })}
-
-            <CSSTransition
-              in={visible}
-              timeout={300}
-              classNames={style.alert}
-              unmountOnExit
-            >
-              <div className={style.allBrands}>
-                {brands.map((brand, i) => {
-                  console.log(i);
-                  if (i > 5) {
-                    return (
-                      <BrandCard brand={brand.name} brandIMG={brand.brandIMG} />
-                    );
-                  }
-                })}
-              </div>
-            </CSSTransition>
           </div>
+
+          <CSSTransition
+            in={visible}
+            timeout={300}
+            classNames={style.alert}
+            unmountOnExit
+          >
+            <div className={style.allBrands}>
+              {brands.map((brand, i) => {
+                console.log(i);
+                if (i > 5) {
+                  return (
+                    <BrandCard brand={brand.name} brandIMG={brand.brandIMG} />
+                  );
+                }
+              })}
+            </div>
+          </CSSTransition>
+
           <ShowAllBrands visible={visible} onclick={handleClick} />
         </div>
       </div>

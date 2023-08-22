@@ -5,6 +5,7 @@ import Liked from "../../ui/Liked/Liked";
 import Profile from "../../ui/Profile/Profile";
 import Search from "../../ui/Search/Search";
 import style from "./__header.module.scss";
+import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-line.svg";
 
 const version: string = "little";
 
@@ -12,6 +13,9 @@ export default function Header() {
   return (
     <div className={style.header}>
       <nav className={style.header__nav}>
+        <div className={style.menu}>
+          <MenuLines />
+        </div>
         <NavLink to="/">
           <svg
             width="85"
@@ -43,19 +47,21 @@ export default function Header() {
           </svg>
         </NavLink>
 
-        <li>
-          <NavLink to="/catalog" className={style.navLink}>
-            All Cars
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink to="/aboutUs" className={style.navLink}>
-            About Us
-          </NavLink>
-        </li>
-        <li>Blog</li>
-        <li>Contact</li>
+        <div className={style.links}>
+          {" "}
+          <li>
+            <NavLink to="/catalog" className={style.navLink}>
+              All Cars
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/aboutUs" className={style.navLink}>
+              About Us
+            </NavLink>
+          </li>
+          <li>Blog</li>
+          <li>Contact</li>
+        </div>
       </nav>
       <div className={style.header__formGroup}>
         <div className={style.formGroup__icons}>
@@ -63,7 +69,9 @@ export default function Header() {
           <Liked />
           <Profile />
         </div>
-        <GetAquote version={version} />
+        <NavLink to="/login">
+          <GetAquote version={version} />
+        </NavLink>
       </div>
     </div>
   );

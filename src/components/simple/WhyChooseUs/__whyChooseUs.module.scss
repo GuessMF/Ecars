@@ -2,17 +2,27 @@
 
 .whyChooseUs {
   // background-color: aquamarine;
-  height: 992px;
+  height: fit-content;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 96px 108px;
   gap: 24px;
   border-top: 2px solid $outline2;
+  @media (max-width: 768px) {
+    padding: 40px 32px;
+  }
   .whyChooseUs__image {
     width: 50%;
     height: 800px;
     border-radius: 16px;
+    // border: black 1px solid;
+    background-image: url("../../../assets/images/manAndWoman.webp");
+    @media (max-width: 768px) {
+      height: 372px;
+      background-image: url("../../../assets/images/manAndWoman-tablet.webp");
+      background-repeat: no-repeat;
+    }
   }
   .whyChooseUs__content {
     display: flex;
@@ -24,6 +34,11 @@
     width: 50%;
     //height: 632px;
     // border: black 1px solid;
+    @media (max-width: 768px) {
+      padding: 0;
+      width: fit-content;
+      width: 50%;
+    }
 
     .whyChooseUs__topContent {
       // border: black 1px solid;
@@ -35,6 +50,9 @@
       width: 392px;
       // height: 332px;
       height: fit-content;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
       h2 {
         color: $gray900;
         font-family: "Inter Tight";
@@ -43,6 +61,9 @@
         font-size: 38px;
         line-height: 115%;
         margin: 0;
+        @media (max-width: 768px) {
+          font-size: 30px;
+        }
       }
       span {
         color: $gray900;
@@ -65,6 +86,10 @@
       width: 392px;
       // height: 252px;
       //  border: black 1px solid;
+      @media (max-width: 768px) {
+        gap: 16px;
+        width: 100%;
+      }
       div {
         display: flex;
         flex-direction: row;

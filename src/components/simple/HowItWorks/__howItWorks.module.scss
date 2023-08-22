@@ -7,6 +7,10 @@
   flex-direction: column;
   align-items: center;
   padding: 96px 108px;
+  @media (max-width: 768px) {
+    padding: 40px 32px;
+    height: fit-content;
+  }
 
   .howItWorks__content {
     // border: black 1px solid;
@@ -15,6 +19,7 @@
     align-items: center;
 
     gap: 48px;
+    width: 100%;
 
     .howItWorks__top {
       //   border: black 1px solid;
@@ -24,6 +29,9 @@
       padding: 0px;
       gap: 24px;
       width: 600px;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
       h3 {
         font-family: "Inter Tight";
         font-style: normal;
@@ -35,6 +43,9 @@
         text-align: center;
         color: $gray900;
         margin: 0;
+        @media (max-width: 768px) {
+          font-size: 30px;
+        }
       }
       p {
         font-family: "Inter";
@@ -59,6 +70,11 @@
       isolation: isolate;
 
       position: relative;
+      @media (max-width: 768px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        width: 100%;
+      }
       .hr {
         width: 880px;
         left: calc(50% - 880px / 2);
@@ -69,6 +85,9 @@
         background-repeat: repeat-x;
         position: absolute;
         top: 22px;
+        @media (max-width: 768px) {
+          display: none;
+        }
       }
 
       .howItWorks__card {
@@ -78,6 +97,9 @@
         padding: 0px;
         width: 288px;
         height: 174px;
+        @media (max-width: 768px) {
+          width: auto;
+        }
         .card__content {
           display: flex;
           flex-direction: column;
@@ -113,6 +135,10 @@
               line-height: 24px;
               text-align: center;
               color: $gray900;
+              @media (max-width: 768px) {
+                width: 48px;
+                height: 48px;
+              }
             }
           }
 
@@ -122,6 +148,10 @@
             justify-content: space-between;
             align-items: center;
             height: 94px;
+            @media (max-width: 768px) {
+              height: auto;
+              gap: 8px;
+            }
 
             h6 {
               font-family: "Inter Tight";
@@ -132,6 +162,9 @@
               text-align: center;
               color: $gray900;
               margin: 0;
+              @media (max-width: 768px) {
+                font-size: 17px;
+              }
             }
             p {
               width: 224px;
@@ -146,6 +179,9 @@
               text-align: center;
               color: $gray900;
               margin: 0;
+              @media (max-width: 768px) {
+                width: auto;
+              }
             }
           }
         }

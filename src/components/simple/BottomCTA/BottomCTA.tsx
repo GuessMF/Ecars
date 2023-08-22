@@ -16,11 +16,12 @@ export default function BottomCTA() {
             <h5>
               Send an inquiry and our managers will offer you the best deals.
             </h5>
-            <p>
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
-            </p>
           </div>
+          <p>
+            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
+            sint. Velit officia consequat duis enim velit mollit.
+          </p>
+
           <div
           //    className={style.bottomCTA__footer}
           >
@@ -32,11 +33,12 @@ export default function BottomCTA() {
           <div className={style.bottomCTA__header}>
             <Question />
             <h5>Do you still have questions? Contact us for answers.</h5>
-            <p>
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit officia consequat duis enim velit mollit.
-            </p>
           </div>
+          <p>
+            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
+            sint. Velit officia consequat duis enim velit mollit.
+          </p>
+
           <div
           //    className={style.bottomCTA__footer}
           >

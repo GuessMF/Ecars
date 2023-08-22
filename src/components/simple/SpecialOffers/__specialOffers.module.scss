@@ -8,6 +8,10 @@
   // border: black 1px solid;
   padding-bottom: 96px;
   padding: 170px $padding108 96px;
+  @media (max-width: 768px) {
+    // padding: 140px 32px 0 32px;
+    padding: 40px 32px;
+  }
   .specialOffers__content {
     .specialOffers__header {
       //  border: black 1px solid;
@@ -26,6 +30,12 @@
         line-height: 115%;
         color: $gray900;
         margin: 0;
+        @media (max-width: 768px) {
+          font-size: 30px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 115%; /* 34.5px */
+        }
       }
       .specialOffers__navigation {
         //    border: black 1px solid;

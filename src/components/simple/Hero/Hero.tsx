@@ -20,8 +20,10 @@ export default function Hero() {
         </div>
         <div className={style.content__subtitle}>
           <GetAquote version={version} />
-          <Mobile color={black} />
-          <Email color={black} />
+          <div>
+            <Mobile color={black} />
+            <Email color={black} />
+          </div>
         </div>
       </div>
       <div className={style.hero__benefits}>

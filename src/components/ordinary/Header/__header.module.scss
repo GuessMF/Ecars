@@ -11,10 +11,38 @@
   // border-left: 1px solid $outline2;
   // border-right: 1px solid $outline2;
 
+  .links {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    padding: 12px 32px;
+    justify-content: space-between;
+    align-items: center;
+    .links {
+      display: none;
+    }
+    .menu {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+  }
+  // .menu {
+  //   display: none;
+  // }
   .header__nav {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     padding: 0px;
     gap: 40px;
 

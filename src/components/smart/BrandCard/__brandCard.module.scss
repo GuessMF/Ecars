@@ -3,6 +3,7 @@
 .brandCard {
   display: flex;
   flex-direction: column;
+  // flex: 1;
   // align-items: flex-start;
   padding: 0px;
 
@@ -16,6 +17,9 @@
   background-color: $white;
   // background-color: aquamarine;
   cursor: pointer;
+  @media (max-width: 768px) {
+    width: auto;
+  }
 
   .brandCard_content {
     //  border: black 1px solid;

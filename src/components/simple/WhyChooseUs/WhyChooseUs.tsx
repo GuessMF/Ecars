@@ -7,7 +7,7 @@ export default function WhyChooseUs() {
     <div className={style.whyChooseUs}>
       <div
         className={style.whyChooseUs__image}
-        style={{backgroundImage: `url(${img})`}}
+        // style={{backgroundImage: `url(${img})`}}
       ></div>
       <div className={style.whyChooseUs__content}>
         <div className={style.whyChooseUs__topContent}>

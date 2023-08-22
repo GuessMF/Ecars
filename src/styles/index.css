@@ -2,8 +2,12 @@
 body {
   margin: 0;
   background-color: rgb(65, 64, 64);
+  overflow-x: hidden;
+}
+html {
+  overflow-x: hidden;
 }
 
 code {
   font-family: "Inter", sans-serif;
-}/*# sourceMappingURL=index.css.map */
+} /*# sourceMappingURL=index.css.map */

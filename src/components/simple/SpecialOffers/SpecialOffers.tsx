@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import LittleCard from "../../smart/LittleCard/LittleCard";
 import style, {specialOffers} from "./__specialOffers.module.scss";
 import {ReactComponent as LeftArrow} from "../../../assets/icons/specialOffers/leftArrow.svg";
@@ -25,6 +25,22 @@ import "./styles.css";
 export default function SpecialOffers() {
   const swiperRef = React.useRef<SwiperCore>();
 
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  const screenWidth = windowWidth;
+  let numberOfCarts = 4;
+  if (windowWidth <= 768) {
+    numberOfCarts = 2;
+  }
   return (
     <div className={style.specialOffers}>
       <div className={style.specialOffers__content}>
@@ -59,7 +75,7 @@ export default function SpecialOffers() {
             navigation={true}
             autoplay={{delay: 2500, disableOnInteraction: false}}
             modules={[Autoplay, Pagination, Navigation, Virtual]}
-            slidesPerView={4}
+            slidesPerView={numberOfCarts}
             virtual
             className="mySwiper"
             onBeforeInit={(swiper) => {
