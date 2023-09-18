@@ -1,32 +1,25 @@
 import React, {useState} from "react";
-import GetAquote from "../../ui/GetAquote/GetAquote";
 import {NavLink} from "react-router-dom";
-import Liked from "../../ui/Liked/Liked";
-import Profile from "../../ui/Profile/Profile";
-import Search from "../../ui/Search/Search";
-import style from "./__header.module.scss";
-import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-line.svg";
-import Sidebar from "../Sidebar/Sidebar";
+import styles from "./__sidebar_mobile.module.scss";
 
-const version: string = "little";
+interface SidebarProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
-export default function Header() {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+export default function Sidebar({isOpen, setIsOpen}: SidebarProps) {
+  const handleClick = () => {
+    setIsOpen(false);
   };
-
   return (
-    <div className={style.header}>
-      <nav className={style.header__nav}>
-        <div className={style.menu}>
-          <MenuLines onClick={toggleSidebar} />
-
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-
-          {/* <Sidebar /> */}
-        </div>
+    // <div className={styles.sidebar_menu}>
+    // <div
+    //   className={`${styles.sidebar_menu} ${
+    //     isOpen ? styles.open : styles.closed
+    //   }`}
+    // >
+    <div className={`${styles.sidebar_menu} ${isOpen ? styles.open : ""}`}>
+      <div className={styles.top}>
         <NavLink to="/">
           <svg
             width="85"
@@ -57,32 +50,30 @@ export default function Header() {
             />
           </svg>
         </NavLink>
-
-        <div className={style.links}>
-          {" "}
-          <li>
-            <NavLink to="/catalog" className={style.navLink}>
-              All Cars
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/aboutUs" className={style.navLink}>
-              About Us
-            </NavLink>
-          </li>
-          <li>Blog</li>
-          <li>Contact</li>
-        </div>
-      </nav>
-      <div className={style.header__formGroup}>
-        <div className={style.formGroup__icons}>
-          <Search />
-          <Liked />
-          <Profile />
-        </div>
-        <NavLink to="/login">
-          <GetAquote version={version} />
-        </NavLink>
+        <button onClick={handleClick}>X</button>
+      </div>
+      <div className={styles.links}>
+        {" "}
+        <li>
+          <NavLink to="/catalog" className={styles.navLink}>
+            All Cars
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/aboutUs" className={styles.navLink}>
+            About Us
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/" className={styles.navLink}>
+            Blog
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/" className={styles.navLink}>
+            Contact
+          </NavLink>
+        </li>
       </div>
     </div>
   );

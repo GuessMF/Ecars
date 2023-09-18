@@ -1,0 +1,55 @@
+@import "./../../../styles/__var.scss";
+.sidebar_menu {
+  // width: 85vw;
+  // height: 100vh;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // background-color: aliceblue;
+  // opacity: 0.9;
+
+  /* Ваши стили для элемента .sidebar_menu */
+  width: 85vw;
+  height: 100%;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateX(-85vw); /* Начальное состояние - сдвиг вправо */
+  will-change: transform; /* Добавьте это свойство */
+  transition: transform 0.5s ease-in-out; /* Плавная анимация сдвига */
+
+  .top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 16px;
+    button {
+      width: 50px;
+      height: 50px;
+      background-color: rgb(222, 220, 220);
+      // background-color: #fff;
+      border-radius: 15px;
+    }
+  }
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px;
+  }
+  .navLink {
+    list-style: none;
+    color: $gray900;
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    text-decoration: none;
+  }
+}
+
+.sidebar_menu.open {
+  transform: translateX(0vw); /* Сдвиг влево, чтобы элемент появился */
+}
