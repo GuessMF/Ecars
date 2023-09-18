@@ -17,6 +17,7 @@
     align-items: center;
     gap: 24px;
   }
+
   .middleCTA__content {
     // border: rgb(241, 233, 233) 1px solid;
     display: flex;
@@ -31,6 +32,12 @@
       height: auto;
       gap: 32px;
     }
+    @media (max-width: 420px) {
+      flex-direction: column;
+      button {
+        width: 100%;
+      }
+    }
     .middleCTA__text {
       // border: rgb(188, 129, 129) 1px solid;
       display: flex;
@@ -38,6 +45,7 @@
       align-items: flex-start;
       padding: 0px;
       gap: 24px;
+
       .middleCTA__title {
         // border: rgb(177, 107, 107) 1px solid;
         font-family: "Inter Tight";

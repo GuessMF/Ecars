@@ -27,6 +27,9 @@
       @media (max-width: 768px) {
         flex-wrap: wrap;
       }
+      @media (max-width: 420px) {
+        gap: 24px;
+      }
       li {
         list-style: none;
         white-space: nowrap;
@@ -97,6 +100,9 @@
         padding: 0px;
         gap: 24px;
         //width: 184px;
+        @media (max-width: 420px) {
+          width: 100%;
+        }
       }
       .footer__third {
         display: flex;
@@ -105,6 +111,9 @@
         padding: 0px;
         gap: 24px;
         // width: 184px;
+        @media (max-width: 420px) {
+          width: 100%;
+        }
       }
       .footer__fourth {
         display: flex;
@@ -113,6 +122,9 @@
         padding: 0px;
         gap: 24px;
         //  width: 184px;
+        @media (max-width: 420px) {
+          width: 100%;
+        }
       }
     }
     .footer__bottom {
@@ -129,6 +141,10 @@
       @media (max-width: 768px) {
         gap: inherit;
         margin-top: 40px;
+      }
+      @media (max-width: 420px) {
+        flex-direction: column;
+        gap: 10px;
       }
       .footer__left {
         span {

@@ -80,6 +80,14 @@
       align-items: center;
       padding: 0px;
       gap: 16px;
+      @media (max-width: 420px) {
+        div:nth-child(2) {
+          display: none;
+        }
+        div:nth-child(3) {
+          display: none;
+        }
+      }
     }
   }
 }

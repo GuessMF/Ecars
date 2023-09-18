@@ -25,6 +25,9 @@
     @media (max-width: 768px) {
       height: fit-content;
     }
+    @media (max-width: 420px) {
+      flex-direction: column;
+    }
 
     .vl {
       // border-left: 6px solid green;
@@ -35,6 +38,9 @@
       left: 50%;
       margin-left: -1px;
       top: 0;
+      @media (max-width: 420px) {
+        display: none;
+      }
     }
 
     .bottomCTA__header {
@@ -92,6 +98,11 @@
         gap: 16px;
         height: fit-content;
       }
+      @media (max-width: 420px) {
+        :last-child {
+          width: 100%;
+        }
+      }
     }
     .bottomCTA__right {
       // border: white 1px solid;
@@ -109,6 +120,11 @@
         width: 100%;
         gap: 16px;
         height: fit-content;
+      }
+      @media (max-width: 420px) {
+        :last-child {
+          width: 100%;
+        }
       }
     }
   }

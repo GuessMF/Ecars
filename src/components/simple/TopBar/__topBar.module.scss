@@ -15,6 +15,9 @@
       display: none !important;
     }
   }
+
+  @media (max-width: 420px) {
+  }
   .topBar_left {
     display: flex;
     flex-direction: row;
@@ -30,6 +33,11 @@
       flex-direction: row;
       align-items: center;
       padding: 0px;
+    }
+    @media (max-width: 420px) {
+      div {
+        gap: 1px;
+      }
     }
   }
   .topBar_right {
@@ -100,6 +108,27 @@
       /* identical to box height, or 123% */
 
       color: rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .shipTo {
+      display: none;
+    }
+    .map_logo {
+      display: none;
+    }
+    .flag_canada {
+      display: none;
+    }
+    .countryName {
+      display: none;
+    }
+    .currency {
+      display: none;
+    }
+    .currencySelected {
+      display: none;
     }
   }
 }

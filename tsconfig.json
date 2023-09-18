@@ -15,6 +15,7 @@
     "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx",
+    "types": ["react-router-dom"],
     "plugins": [
       {
         "name": "typescript-plugin-css-modules"

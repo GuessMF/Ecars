@@ -96,6 +96,9 @@
         grid-template-columns: repeat(2, 1fr);
         padding: 0 32px;
       }
+      @media (max-width: 420px) {
+        grid-template-columns: repeat(1, 1fr);
+      }
     }
   }
 }

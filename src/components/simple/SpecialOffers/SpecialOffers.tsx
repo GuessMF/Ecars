@@ -41,6 +41,9 @@ export default function SpecialOffers() {
   if (windowWidth <= 768) {
     numberOfCarts = 2;
   }
+  if (windowWidth <= 420) {
+    numberOfCarts = 1;
+  }
   return (
     <div className={style.specialOffers}>
       <div className={style.specialOffers__content}>
@@ -97,6 +100,28 @@ export default function SpecialOffers() {
             })}
           </Swiper>
         </div>
+      </div>
+      <div className={style.specialOffers__navigation_mobile}>
+        {/* <LeftArrow />
+      <RightArrow /> */}
+        <div className={style.navigation_mobile_btns}>
+          <button
+            className={style.nav__button}
+            onClick={() => swiperRef.current?.slidePrev()}
+          >
+            <LeftArrow />
+          </button>
+          <button
+            className={style.nav__button}
+            onClick={() => swiperRef.current?.slideNext()}
+          >
+            <RightArrow />
+          </button>
+        </div>
+
+        <NavLink to="/catalog">
+          <AllCars />
+        </NavLink>
       </div>
     </div>
   );
