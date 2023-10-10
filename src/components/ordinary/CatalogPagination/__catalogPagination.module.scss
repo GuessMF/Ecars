@@ -8,4 +8,7 @@
   align-items: flex-start;
   padding: 0px;
   gap: 16px;
+  @media (max-width: 450px) {
+    align-items: center;
+  }
 }

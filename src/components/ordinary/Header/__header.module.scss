@@ -13,7 +13,11 @@
   position: fixed;
   top: 30px;
   z-index: 9999;
+  max-width: 1440px;
   width: 100%;
+  @media (max-width: 768px) {
+    // width: 100%;
+  }
   .links {
     display: flex;
     flex-direction: row;

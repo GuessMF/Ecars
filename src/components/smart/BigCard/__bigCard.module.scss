@@ -14,17 +14,30 @@
   box-shadow: 0px 1px 2px rgba(28, 30, 34, 0.08),
     0px 8px 16px rgba(28, 30, 34, 0.08);
   border-radius: 8px;
+  @media (max-width: 450px) {
+    flex-direction: column;
+    width: 100%;
+  }
 
   .bigCard__image {
     // border: black 1px solid;
     //background: url("../../../assets/images/BigCard/Toyota_Land_Cruiser_300.webp");
     // height: 100%;
-    height: 225px;
+    // height: 225px;
     // width: 325px;
-    width: 300px;
+    // width: 300px;
+    width: 100%;
+    height: 225px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     // width: 50%;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    @media (max-width: 450px) {
+      height: 250px;
+      border-radius: 8px;
+    }
     .image__badge {
       display: flex;
       flex-direction: row;
@@ -47,6 +60,7 @@
     //  border: black 1px solid;
     //  width: 57%;
     width: 400px;
+    width: 100%;
     // width: 50%;
     //  background-color: aqua;
     // height: 100%;
@@ -57,6 +71,8 @@
     justify-content: space-between;
     align-items: flex-start;
     padding: 16px;
+    @media (screen) {
+    }
     // gap: 12px;
     .information__top {
       display: flex;

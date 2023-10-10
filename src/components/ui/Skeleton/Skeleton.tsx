@@ -1,9 +1,8 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
-
 const Skeleton = () => (
   <ContentLoader
-    speed={2}
+    speed={1}
     width={704}
     height={225}
     viewBox="0 0 704 225"

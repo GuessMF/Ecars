@@ -16,27 +16,6 @@ interface Props {
 export default function CatalogPagination({currentItems}: Props) {
   const [loaded, setLoaded] = useState(false);
 
-  // useEffect(() => {
-  //   const loadIMG = async (url: string) => {
-  //     const img = new Image();
-  //     img.src = url;
-  //     await img.decode();
-  //     return img;
-  //   };
-
-  //   const loading = async () => {
-  //     const urls: string[] = [];
-  //     currentItems.map((item: any) => {
-  //       urls.push(item.previewIMG);
-  //     });
-
-  //     const images = await Promise.all(urls.map(loadIMG));
-  //     setLoaded(true);
-  //   };
-  //   loading();
-  // }, []);
-
-  // console.log(loaded);
   setTimeout(() => {
     setLoaded(true);
   }, 1000);

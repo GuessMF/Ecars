@@ -2,9 +2,33 @@
 //@import "rsuite/dist/rsuite.css";
 @import "rsuite/dist/rsuite.css";
 
+.filtersWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: rgba(248, 247, 247, 0.95);
+  width: 100%;
+  position: absolute;
+  transform: translateX(100%);
+  top: -80px;
+  right: 0;
+  z-index: 9999;
+  transition: transform 0.5s ease-in-out;
+  .filters__closeBtn {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    font-size: 30px;
+  }
+}
+.openFilters {
+  transform: translateX(0%);
+}
+.closedFilters {
+}
+
 .filters {
   background-color: $white;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -15,12 +39,6 @@
   width: 288px;
   // height: 1082px;
   height: fit-content;
-  @media (max-width: 768px) {
-    position: absolute;
-    transform: translateX(150%);
-    top: 0;
-    z-index: 9999;
-  }
 
   .filters__label {
     // width: 256px;
@@ -440,39 +458,3 @@
     width: 100%;
   }
 }
-
-// .custom-slider {
-//   margin-top: 18px;
-
-//   .rs-slider-handle {
-//     top: -6px;
-//     background-color: #3498ff;
-//     text-align: center;
-//     padding: 3px;
-//     margin-left: -16px;
-//     cursor: pointer;
-//     transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
-
-//     &:hover {
-//       box-shadow: 0 0 0 8px rgb(52 152 255 / 25%);
-//     }
-
-//     &::before {
-//       display: none;
-//     }
-//   }
-
-//   &.rs-slider-dragging .rs-slider-handle,
-//   &.rs-slider-dragging .rs-slider-handle:hover {
-//     box-shadow: none;
-//     transform: scale(1.2);
-//   }
-// }
-
-//
-//
-//
-//
-//
-//
-//

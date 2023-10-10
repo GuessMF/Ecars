@@ -11,6 +11,7 @@
   position: fixed;
   top: 0;
   width: 100%;
+  max-width: 1440px;
   z-index: 9999;
   @media (max-width: 768px) {
     padding: 8px 32px;
