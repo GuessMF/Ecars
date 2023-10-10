@@ -2,6 +2,8 @@
 
 .hero {
   height: 600px;
+  margin-top: 90px;
+
   background-image: url("../../../assets/images/hero.webp");
 
   @media (max-width: 768px) {
@@ -9,7 +11,7 @@
     background-repeat: no-repeat;
     height: fit-content;
   }
-  @media (max-width: 420px) {
+  @media (max-width: 450px) {
     background-image: url("../../../assets/images/hero-mobile.webp");
     background-size: contain;
   }
@@ -31,7 +33,7 @@
       height: fit-content;
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 450px) {
       width: 100%;
       padding: 0;
       padding-top: 250px;
@@ -40,7 +42,7 @@
     .content__title {
       //   border: black 1px solid;
       height: fit-content;
-      @media (max-width: 420px) {
+      @media (max-width: 450px) {
         padding: 16px;
       }
       h1 {
@@ -81,7 +83,7 @@
         }
       }
 
-      @media (max-width: 420px) {
+      @media (max-width: 450px) {
         margin: 0 auto;
         width: 90%;
         button {

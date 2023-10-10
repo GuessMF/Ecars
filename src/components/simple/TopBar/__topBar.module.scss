@@ -7,6 +7,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
   @media (max-width: 768px) {
     padding: 8px 32px;
     justify-content: space-between;
@@ -16,7 +21,7 @@
     }
   }
 
-  @media (max-width: 420px) {
+  @media (max-width: 450px) {
   }
   .topBar_left {
     display: flex;
@@ -34,7 +39,7 @@
       align-items: center;
       padding: 0px;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 450px) {
       div {
         gap: 1px;
       }
@@ -111,7 +116,7 @@
     }
   }
 
-  @media (max-width: 420px) {
+  @media (max-width: 450px) {
     .shipTo {
       display: none;
     }

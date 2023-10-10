@@ -10,13 +10,18 @@
   border-bottom: 1px solid $outline2;
   // border-left: 1px solid $outline2;
   // border-right: 1px solid $outline2;
-
+  position: fixed;
+  top: 30px;
+  z-index: 9999;
+  width: 100%;
   .links {
     display: flex;
     flex-direction: row;
     gap: 32px;
   }
-
+  .menu {
+    display: none;
+  }
   @media (max-width: 768px) {
     display: flex;
     padding: 12px 32px;
@@ -35,9 +40,7 @@
       cursor: pointer;
     }
   }
-  // .menu {
-  //   display: none;
-  // }
+
   .header__nav {
     display: flex;
     flex-direction: row;
@@ -80,7 +83,7 @@
       align-items: center;
       padding: 0px;
       gap: 16px;
-      @media (max-width: 420px) {
+      @media (max-width: 450px) {
         div:nth-child(2) {
           display: none;
         }

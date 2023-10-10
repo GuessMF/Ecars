@@ -48,7 +48,7 @@
           background-color: none;
           background: none;
         }
-        @media (max-width: 420px) {
+        @media (max-width: 450px) {
           display: none;
         }
       }
@@ -56,6 +56,7 @@
   }
   .specialOffers__corousel {
     margin-top: 48px;
+    margin-bottom: 48px;
     // background-color: orange;
     display: flex;
     flex-direction: row;
@@ -67,7 +68,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    @media (min-width: 420px) {
+    @media (min-width: 450px) {
       display: none;
     }
     .navigation_mobile_btns {

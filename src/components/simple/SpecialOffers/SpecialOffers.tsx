@@ -41,7 +41,7 @@ export default function SpecialOffers() {
   if (windowWidth <= 768) {
     numberOfCarts = 2;
   }
-  if (windowWidth <= 420) {
+  if (windowWidth <= 450) {
     numberOfCarts = 1;
   }
   return (
@@ -77,6 +77,8 @@ export default function SpecialOffers() {
             // pagination={{clickable: true}}
             navigation={true}
             autoplay={{delay: 2500, disableOnInteraction: false}}
+            // autoplay={false}
+            spaceBetween={20}
             modules={[Autoplay, Pagination, Navigation, Virtual]}
             slidesPerView={numberOfCarts}
             virtual

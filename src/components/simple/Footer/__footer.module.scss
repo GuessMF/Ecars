@@ -27,7 +27,7 @@
       @media (max-width: 768px) {
         flex-wrap: wrap;
       }
-      @media (max-width: 420px) {
+      @media (max-width: 450px) {
         gap: 24px;
       }
       li {
@@ -100,7 +100,7 @@
         padding: 0px;
         gap: 24px;
         //width: 184px;
-        @media (max-width: 420px) {
+        @media (max-width: 450px) {
           width: 100%;
         }
       }
@@ -111,7 +111,7 @@
         padding: 0px;
         gap: 24px;
         // width: 184px;
-        @media (max-width: 420px) {
+        @media (max-width: 450px) {
           width: 100%;
         }
       }
@@ -122,7 +122,7 @@
         padding: 0px;
         gap: 24px;
         //  width: 184px;
-        @media (max-width: 420px) {
+        @media (max-width: 450px) {
           width: 100%;
         }
       }
@@ -142,7 +142,7 @@
         gap: inherit;
         margin-top: 40px;
       }
-      @media (max-width: 420px) {
+      @media (max-width: 450px) {
         flex-direction: column;
         gap: 10px;
       }

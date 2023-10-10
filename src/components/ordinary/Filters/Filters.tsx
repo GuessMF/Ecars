@@ -6,7 +6,15 @@ import MoreFilters from "../../ui/MoreFilters/MoreFilters";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
 
-export default function Filters() {
+interface FiltersProps {
+  isFiltersOpen: boolean;
+  setIsFiltersOpen: (isFiltersOpen: boolean) => void;
+}
+
+export default function Filters({
+  isFiltersOpen,
+  setIsFiltersOpen,
+}: FiltersProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (newValue: number) => {
@@ -18,7 +26,7 @@ export default function Filters() {
   };
 
   return (
-    <div className={style.filters}>
+    <div className={`${style.filters} ${isFiltersOpen ? style.open : ""}`}>
       <div className={style.filters__brand}>
         <div className={style.filters__label}>
           <h6>Brand</h6>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import style from "./__catalog.module.scss";
 import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
@@ -43,13 +43,25 @@ export default function Catalog() {
     console.log(currentPage);
   };
 
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const toggleFilters = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   return (
     <div className={style.catalog}>
       <h3>Find cars to fit your criteria</h3>
       <div className={style.catalog__content}>
-        <Filters />
+        <Filters
+          isFiltersOpen={isFiltersOpen}
+          setIsFiltersOpen={setIsFiltersOpen}
+        />
+
         <div id="catalogList" className={style.catalog__left}>
-          <Sorted />
+          <Sorted
+            isFiltersOpen={isFiltersOpen}
+            setIsFiltersOpen={setIsFiltersOpen}
+          />
           <CatalogPagination currentItems={currentItems} />
           <ReactPaginate
             className={style.paginateBar}

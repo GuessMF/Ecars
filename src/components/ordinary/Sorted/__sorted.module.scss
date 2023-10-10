@@ -65,6 +65,22 @@
       }
     }
   }
+  .filters__btn {
+    // width: 150px;
+    width: fit-content;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    color: $gray900;
+    padding: 6px 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 8px;
+    gap: 8px;
+  }
   .sorted__bottom {
     //border: black 1px solid;
     display: flex;

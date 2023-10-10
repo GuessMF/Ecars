@@ -12,7 +12,7 @@
   @media (max-width: 768px) {
     padding: 40px 32px;
   }
-  @media (max-width: 420px) {
+  @media (max-width: 450px) {
     flex-direction: column;
   }
   .whyChooseUs__image {
@@ -26,7 +26,7 @@
       background-image: url("../../../assets/images/manAndWoman-tablet.webp");
       background-repeat: no-repeat;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 450px) {
       width: 100%;
       background-image: url("../../../assets/images/manAndWoman-mobile.webp");
       // background-size: contain;
@@ -47,7 +47,7 @@
       width: fit-content;
       width: 50%;
     }
-    @media (max-width: 420px) {
+    @media (max-width: 450px) {
       width: 100%;
     }
 

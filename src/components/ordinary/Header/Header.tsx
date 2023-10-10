@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import {NavLink} from "react-router-dom";
 import Liked from "../../ui/Liked/Liked";
@@ -11,7 +11,8 @@ import Sidebar from "../Sidebar/Sidebar";
 const version: string = "little";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -22,10 +23,7 @@ export default function Header() {
       <nav className={style.header__nav}>
         <div className={style.menu}>
           <MenuLines onClick={toggleSidebar} />
-
           <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-
-          {/* <Sidebar /> */}
         </div>
         <NavLink to="/">
           <svg
