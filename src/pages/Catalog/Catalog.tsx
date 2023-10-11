@@ -30,11 +30,11 @@ export default function Catalog() {
     setCurrentItems(cars.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(cars.length / itemsPerPage));
 
-    if (window.innerWidth <= 450) {
-      setPageCount(Math.ceil(cars.length / itemsPerPage) / 2);
-    } else {
-      setPageCount(Math.ceil(cars.length / itemsPerPage));
-    }
+    // if (window.innerWidth <= 450) {
+    //   setPageCount(Math.ceil(cars.length / itemsPerPage) / 2);
+    // } else {
+    //   setPageCount(Math.ceil(cars.length / itemsPerPage));
+    // }
   }, [itemOffset, itemsPerPage]);
 
   const handlePageClick = (event: any) => {

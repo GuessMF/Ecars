@@ -11,6 +11,13 @@
   gap: 32px;
   background-color: $lightBG;
   border-radius: 8px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 450px) {
+    flex-direction: column;
+    gap: 16px;
+  }
 
   span {
     font-size: 14px;

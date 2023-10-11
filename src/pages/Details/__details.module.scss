@@ -66,6 +66,10 @@
         display: flex;
         flex-direction: row;
         gap: 8px;
+        @media (max-width: 450px) {
+          overflow-x: scroll;
+          height: fit-content;
+        }
         .little_preview {
           background-color: blanchedalmond;
           border-radius: 8px;

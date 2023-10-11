@@ -8,13 +8,16 @@
   gap: 40px;
   border-radius: 16px;
   background: $white;
-
-  /* Cards 1 */
   box-shadow: 0px 8px 16px 0px rgba(28, 30, 34, 0.08),
     0px 1px 2px 0px rgba(28, 30, 34, 0.08);
-  //   .getAquoteBig__icon {
-  //     border: black 1px solid;
-  //   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 450px) {
+    flex-direction: column;
+    gap: 16px;
+  }
   .getAquoteBig__content {
     display: flex;
     flex-direction: column;
@@ -28,12 +31,18 @@
       font-weight: 600;
       line-height: 120%;
       color: $gray900;
+      @media (max-width: 450px) {
+        text-align: center;
+      }
     }
     span {
       font-size: 16px;
       font-family: Inter;
       line-height: 24px;
       color: $gray900;
+      @media (max-width: 450px) {
+        text-align: center;
+      }
     }
   }
 }

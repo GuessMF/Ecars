@@ -21,19 +21,16 @@ export default function CatalogPagination({currentItems}: Props) {
   }, 1000);
   return (
     <div className={style.catalogPagination}>
-      {currentItems.map((item: any) =>
-        loaded ? (
-          <BigCard
-            index={item.index}
-            brand={item.brand}
-            model={item.model}
-            price={item.price}
-            previewIMG={item.previewIMG}
-          />
-        ) : (
-          <Skeleton />
-        )
-      )}
+      {currentItems.map((item: any) => (
+        <BigCard
+          index={item.index}
+          brand={item.brand}
+          model={item.model}
+          price={item.price}
+          previewIMG={item.previewIMG}
+        />
+      ))}
+      {/* <Skeleton /> */}
     </div>
   );
 }
