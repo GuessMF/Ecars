@@ -90,13 +90,15 @@ export default function SpecialOffers() {
             {cars.map((car, i) => {
               return car.special ? (
                 <SwiperSlide key={car.price} virtualIndex={i}>
-                  <LittleCard
-                    brand={car.brand}
-                    model={car.model}
-                    price={car.price}
-                    //special={car.special}
-                    previewIMG={car.previewIMG}
-                  />
+                  <NavLink to={`/details/${car.index}`}>
+                    <LittleCard
+                      brand={car.brand}
+                      model={car.model}
+                      price={car.price}
+                      //special={car.special}
+                      previewIMG={car.previewIMG}
+                    />
+                  </NavLink>
                 </SwiperSlide>
               ) : null;
             })}

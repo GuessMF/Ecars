@@ -12,6 +12,11 @@
     // padding: 140px 32px 0 32px;
     padding: 40px 32px;
   }
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
   .specialOffers__content {
     .specialOffers__header {
       //  border: black 1px solid;

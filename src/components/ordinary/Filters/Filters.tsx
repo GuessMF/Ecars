@@ -2,18 +2,23 @@ import React from "react";
 import {CSSTransition} from "react-transition-group";
 import style from "./__filters.module.scss";
 import MoreFilters from "../../ui/MoreFilters/MoreFilters";
-
+import {useState} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
+// import {cars} from "../../helpers/carList";
 
 interface FiltersProps {
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
+  onBrandFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onModelFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Filters({
   isFiltersOpen,
   setIsFiltersOpen,
+  onBrandFilterChange,
+  onModelFilterChange,
 }: FiltersProps) {
   const [value, setValue] = React.useState(0);
 
@@ -28,6 +33,9 @@ export default function Filters({
   const closeFilters = () => {
     setIsFiltersOpen(false);
   };
+
+  // const [brandFilter, setBrandFilter] = useState<string>("");
+  // const filteredBrands = items.filter(())
 
   return (
     <div
@@ -44,14 +52,18 @@ export default function Filters({
             <h6>Brand</h6>
             <span>Reset</span>
           </div>
-          <input type="text" placeholder="Toyota" />
+          <input
+            type="text"
+            placeholder="Brand"
+            onChange={onBrandFilterChange}
+          />
         </div>
         <div className={style.filters__model}>
           <div className={style.filters__label}>
             <h6>Model</h6>
             <span>Reset</span>
           </div>
-          <input type="text" placeholder="All" />
+          <input type="text" placeholder="All" onChange={onModelFilterChange} />
         </div>
 
         <div className={style.filters__vehicle_type}>
@@ -163,9 +175,9 @@ export default function Filters({
             <input type="text" placeholder="Min" />
             <input type="text" placeholder="Max" />
           </div>
-          <div className={style.test2}>
+          {/* <div className={style.test2}>
             <span>test2</span>
-          </div>
+          </div> */}
         </div>
 
         <div className={style.filters__price}>

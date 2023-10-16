@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function MoreFilters({onclick, visible}: Props) {
-  console.log(visible + "in comp");
+  // console.log(visible + "in comp");
   return (
     <div className={style.moreFilters} onClick={onclick}>
       {visible ? <span>Less filters</span> : <span>More filters</span>}

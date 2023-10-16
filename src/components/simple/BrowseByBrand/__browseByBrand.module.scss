@@ -9,7 +9,12 @@
   height: fit-content;
   // padding: 96px 108px;
   // gap: 48px;
-
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
+  }
   // height: 464px;
   .browseByBrand__content {
     display: flex;
