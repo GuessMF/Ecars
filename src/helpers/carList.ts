@@ -29,7 +29,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1J0uzIzF3RnSsI1ThP1uS3CHeBu5vg-zB",
+      "https://drive.google.com/uc?export=view&id=1vTzKi-oekLTWDU4tqWe2t9Yc3x23aR-m",
 
     images: [
       "https://drive.google.com/uc?export=view&id=1vTzKi-oekLTWDU4tqWe2t9Yc3x23aR-m",
@@ -47,7 +47,7 @@ const cars: Car[] = [
     price: "47,831",
     special: true,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1scexrpd4inlsgirsRTdztWRkEbZIF765",
+      "https://drive.google.com/uc?export=view&id=19QToxZgjYI3qXpEygnebrEVCPEBwjuDh",
     images: [
       "https://drive.google.com/uc?export=view&id=19QToxZgjYI3qXpEygnebrEVCPEBwjuDh",
       "https://drive.google.com/uc?export=view&id=1awKvvbNba_6uu2Mg47vi-T5Pi9pGJCWy",
@@ -64,7 +64,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1-sl4I08SvNDy4leVJyDGVj4c-ud975eW",
+      "https://drive.google.com/uc?export=view&id=1nEzhYe2XID4_RZ7Gunmi6n5jxMVNN6IO",
     images: [
       "https://drive.google.com/uc?export=view&id=1nEzhYe2XID4_RZ7Gunmi6n5jxMVNN6IO",
       "https://drive.google.com/uc?export=view&id=1oDAzQPD9oEWFtgzqbfB3iKU8ahjaSRdv",
@@ -82,7 +82,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=11RvcxC3xb1wKvxbIkfIvbvweqBePlB-7",
+      "https://drive.google.com/uc?export=view&id=1zsFSGKP7ZAmRntFndhy-0FVvZjqYqz8b",
     images: [
       "https://drive.google.com/uc?export=view&id=1zsFSGKP7ZAmRntFndhy-0FVvZjqYqz8b",
       "https://drive.google.com/uc?export=view&id=1FseQAZYF85XIzood0B9BODQMeOVq6FC4",
@@ -99,7 +99,7 @@ const cars: Car[] = [
     price: "45,995",
     special: true,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1rSyB6xdr2b7GybVTNBxmY9dCZw1aPJvL",
+      "https://drive.google.com/uc?export=view&id=1A1m1vKxfr-KuQ25WiqLKE_NMzDObuQPP",
     images: [
       "https://drive.google.com/uc?export=view&id=1A1m1vKxfr-KuQ25WiqLKE_NMzDObuQPP",
       "https://drive.google.com/uc?export=view&id=1H--ajWtb3XkugLxZ1m0uG8tlFfIHQTV9",
@@ -116,7 +116,7 @@ const cars: Car[] = [
     price: "45,995",
     special: true,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1QnVkjEGpDNfYL1mqPRvYtaPz5PFYaPMP",
+      "https://drive.google.com/uc?export=view&id=1AuJPIkyDN5K6s3eKDiY9npDLXvaZZdqi",
     images: [
       "https://drive.google.com/uc?export=view&id=1AuJPIkyDN5K6s3eKDiY9npDLXvaZZdqi",
       "https://drive.google.com/uc?export=view&id=1HGmJJcXsMOIqz-Ki4OxgwlfJaXwJxZWq",
@@ -134,7 +134,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1YdIkp6z3mKctdBgnryY2vfYVWAG5XD8V",
+      "https://drive.google.com/uc?export=view&id=15I0TFK17fDYTgftLKgfcnU97CQLIXiyx",
     images: [
       "https://drive.google.com/uc?export=view&id=15I0TFK17fDYTgftLKgfcnU97CQLIXiyx",
       "https://drive.google.com/uc?export=view&id=1t86E1xVb0o5X6LMdTSVHYXHONK8LSTUz",
@@ -152,7 +152,7 @@ const cars: Car[] = [
     price: "45,995",
     special: true,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1c3lIzadkMEqtVyg17mCStR0bkMCOxfiQ",
+      "https://drive.google.com/uc?export=view&id=1EAAsT_9Yk6novS380xjbCd0npGV79BgM",
     images: [
       "https://drive.google.com/uc?export=view&id=1EAAsT_9Yk6novS380xjbCd0npGV79BgM",
       "https://drive.google.com/uc?export=view&id=1nkhJwMuPWMEWqTbYbTPBiEk7Ya3SqvSt",
@@ -170,7 +170,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1EKyFHHjRA0Ou8SZFiIV3J7oIV58_Lmd7",
+      "https://drive.google.com/uc?export=view&id=1oKb-KcNWgltmC1JRh8NpaGjWoyMJ8eNP",
 
     images: [
       "https://drive.google.com/uc?export=view&id=1oKb-KcNWgltmC1JRh8NpaGjWoyMJ8eNP",
@@ -187,7 +187,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1KM9jJAGnDx2_PaCSzrBXTBh3m7UniMA1",
+      "https://drive.google.com/uc?export=view&id=1byd96oIJ_bnLxNqzp7ZrmfCe7l6dtlDU",
 
     images: [
       "https://drive.google.com/uc?export=view&id=1byd96oIJ_bnLxNqzp7ZrmfCe7l6dtlDU",
@@ -206,7 +206,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1xLef1jnXWWBnDgT-dIumohe3OQCMt4Lq",
+      "https://drive.google.com/uc?export=view&id=1adk6QePVxIyOJkOy4Ef6vSZkdXez3ahx",
     images: [
       "https://drive.google.com/uc?export=view&id=1adk6QePVxIyOJkOy4Ef6vSZkdXez3ahx",
       "https://drive.google.com/uc?export=view&id=1RiFGgEFex_jpUsQ2f9j1DuDol6gsYYXx",
@@ -224,7 +224,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1dJl9_kD4kNpfKE5Js30sbJUNVD1qjQtr",
+      "https://drive.google.com/uc?export=view&id=1BSdF57ZTPrF2eMhfBvSYKlCMlRpPfir3",
     images: [
       "https://drive.google.com/uc?export=view&id=1BSdF57ZTPrF2eMhfBvSYKlCMlRpPfir3",
       "https://drive.google.com/uc?export=view&id=1xNICBEzR3J8Bk0Ht3ORg5_9MtK8TaF0b",
@@ -243,7 +243,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1qmyXNe2nuj2KXGbAaPpu6h4xiWasN1HK",
+      "https://drive.google.com/uc?export=view&id=1E23hSwEQKmLIrW-BNF1Zo5AA9n2o2ZRF",
     images: [
       "https://drive.google.com/uc?export=view&id=1E23hSwEQKmLIrW-BNF1Zo5AA9n2o2ZRF",
       "https://drive.google.com/uc?export=view&id=1kQjt2HRgitsKrC6JaBAyQx3mjnm-eRDB",
@@ -262,7 +262,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1fciaONDocXBk1SoU0RJqgk6vp00Bw5AS",
+      "https://drive.google.com/uc?export=view&id=19VYLIeh_dURnrucL4iCyCZ0cWVnHZxJx",
     images: [
       "https://drive.google.com/uc?export=view&id=19VYLIeh_dURnrucL4iCyCZ0cWVnHZxJx",
       "https://drive.google.com/uc?export=view&id=17TWWWLvaukWIgSZLV14lclg20n2EWaDs",
@@ -279,7 +279,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1K_CFgXMgidDUU7_lz4_Mvcf4hewXcIB0",
+      "https://drive.google.com/uc?export=view&id=11XsmLU9ICOWEfSel_BNLWZZXHkLTpU_R",
     images: [
       "https://drive.google.com/uc?export=view&id=11XsmLU9ICOWEfSel_BNLWZZXHkLTpU_R",
       "https://drive.google.com/uc?export=view&id=1EGCr2idXKQNHLd4U_dNBytKO7VYZQFIa",
@@ -299,7 +299,7 @@ const cars: Car[] = [
     price: "45,995",
     special: false,
     previewIMG:
-      "https://drive.google.com/uc?export=view&id=1HgKjfO9lT-8Ij5_aYjyV4IZROU0H63fG",
+      "https://drive.google.com/uc?export=view&id=1XISXhcyPdIQNUVEr9864s5XagXnea4wa",
     images: [
       "https://drive.google.com/uc?export=view&id=1XISXhcyPdIQNUVEr9864s5XagXnea4wa",
       "https://drive.google.com/uc?export=view&id=1dTChYo3QxC1RgnIn12EyTzZE112uCtqz",
