@@ -1,15 +1,53 @@
-//import toyota_camry from "../assets/images/BigCard/Toyota_camry.png";
-//import toyota_high from "../assets/images/BigCard/Toyota_Land_Cruiser_300.webp";
-// import Toyota_camry from "../assets/images/BigCard/Toyota/Toyota_Camry.webp";
-// import Toyota_corolla from "../assets/images/BigCard/Toyota/Toyota_Corolla.webp";
-// import Toyota_fjcruiser from "../assets/images/BigCard/Toyota/Toyota_FJcruiser.webp";
-// import Toyota_hiace from "../assets/images/BigCard/Toyota/Toyota_Hiace.webp";
-// import Toyota_highlander from "../assets/images/BigCard/Toyota/Toyota_Highlander.webp";
-// import Toyota_hilux from "../assets/images/BigCard/Toyota/Toyota_Hilux.webp";
-// import Toyota_landcruiser from "../assets/images/BigCard/Toyota/Toyota_Landcruiser.webp";
-// import Toyota_prado_black from "../assets/images/BigCard/Toyota/Toyota_Prado_black.webp";
-// import Toyota_prado_white from "../assets/images/BigCard/Toyota/Toyota_Prado_white.webp";
-// import Toyota_tundra from "../assets/images/BigCard/Toyota/Toyota_Tundra.webp";
+import {
+  google, // The top level object used to access services
+  drive_v3, // For every service client, there is an exported namespace
+  Auth, // Namespace for auth related types
+  Common, // General types used throughout the library
+} from "googleapis";
+
+// Note: using explicit types like `Auth.GoogleAuth` are only here for
+// demonstration purposes.  Generally with TypeScript, these types would
+// be inferred.
+//const auth: Auth.GoogleAuth = new google.auth.GoogleAuth();
+// const drive: drive_v3.Drive = google.drive({
+//   version: "v3",
+//   auth,
+// });
+
+// import {google} from "googleapis";
+// const auth = new google.auth.GoogleAuth({
+//   keyFile: "./googleAPI.json",
+//   scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+// });
+
+// const drive = google.drive({version: "v3", auth});
+
+// async function getDriveFiles() {
+//   try {
+//     const response = await drive.files.list({
+//       q: "'папка_id' in parents", // Укажите ID папки, в которой хранятся ваши фотографии
+//     });
+
+//     const files = response.data.files;
+//     const imageLinks: string[] = [];
+
+//     if (files && files.length) {
+//       files.forEach((file) => {
+//         const fileId = file.id;
+//         const imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+//         imageLinks.push(imageUrl);
+//       });
+//     }
+
+//     // Теперь у вас есть массив imageLinks с URL-адресами изображений
+//     console.log(imageLinks);
+//   } catch (error) {
+//     console.error("Ошибка получения данных из Google Drive:", error);
+//   }
+// }
+
+// Вызовите функцию для получения данных из Google Drive
+//
 
 interface Car {
   index: number;
@@ -20,6 +58,7 @@ interface Car {
   previewIMG: string;
   images: Array<string>;
 }
+console.log("hello");
 const cars: Car[] = [
   {
     // id: "1",
