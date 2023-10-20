@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Ecars/static/css/main.258e43e8.css",
-    "main.js": "/Ecars/static/js/main.fd445728.js",
+    "main.js": "/Ecars/static/js/main.38369205.js",
     "static/media/hero.webp": "/Ecars/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/Ecars/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/manAndWoman-mobile.webp": "/Ecars/static/media/manAndWoman-mobile.f3007c55a8afd85edccd.webp",
@@ -33,10 +33,10 @@
     "static/media/menu-line.svg": "/Ecars/static/media/menu-line.dc8c488b38f535410871a9df621b732d.svg",
     "static/media/downArrowIcon.svg": "/Ecars/static/media/downArrowIcon.a41abdfe52afd667142842d38cb5ff44.svg",
     "main.258e43e8.css.map": "/Ecars/static/css/main.258e43e8.css.map",
-    "main.fd445728.js.map": "/Ecars/static/js/main.fd445728.js.map"
+    "main.38369205.js.map": "/Ecars/static/js/main.38369205.js.map"
   },
   "entrypoints": [
     "static/css/main.258e43e8.css",
-    "static/js/main.fd445728.js"
+    "static/js/main.38369205.js"
   ]
 }
