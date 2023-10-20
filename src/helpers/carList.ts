@@ -1,10 +1,18 @@
-import {
-  google, // The top level object used to access services
-  drive_v3, // For every service client, there is an exported namespace
-  Auth, // Namespace for auth related types
-  Common, // General types used throughout the library
-} from "googleapis";
+// import {getStorage, ref} from "firebase/storage";
 
+// // Create a reference with an initial file path and name
+// const storage = getStorage();
+// const pathReference = ref(storage, "images/stars.jpg");
+
+// // Create a reference from a Google Cloud Storage URI
+// const gsReference = ref(storage, "gs://bucket/images/stars.jpg");
+
+// // Create a reference from an HTTPS URL
+// // Note that in the URL, characters are URL escaped!
+// const httpsReference = ref(
+//   storage,
+//   "https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg"
+// );
 // Note: using explicit types like `Auth.GoogleAuth` are only here for
 // demonstration purposes.  Generally with TypeScript, these types would
 // be inferred.

@@ -16,6 +16,7 @@
     "@types/react-transition-group": "^4.4.6",
     "agent-base": "^7.1.0",
     "buffer": "^6.0.3",
+    "firebase": "^10.5.0",
     "googleapis": "^127.0.0",
     "http2": "^3.3.7",
     "https-browserify": "^1.0.0",

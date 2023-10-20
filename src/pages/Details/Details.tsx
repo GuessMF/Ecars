@@ -1,7 +1,10 @@
 import React from "react";
+import {useState, useEffect} from "react";
 import style from "./__details.module.scss";
 import {useParams} from "react-router-dom";
-import {cars} from "../../helpers/carList";
+// import {cars} from '../../helpers/cars.json'
+// import {cars} from "../../helpers/carList";
+import jsonData from "../../helpers/cars.json";
 
 // import {ReactComponent as RightArrow} from "../../../assets/icons/specialOffers/rightArrow.svg";
 import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rightArrow.svg";
@@ -15,14 +18,50 @@ import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
 
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
-interface RouteParams {
-  id: string;
-  [key: string]: string | undefined;
+import {log} from "console";
+// interface RouteParams {
+//   id: string;
+//   [key: string]: string | undefined;
+// }
+// interface Car {
+//   id: string;
+//   brand: string;
+//   model: string;
+//   price?: string;
+//   year?: string;
+// }
+interface DataItem {
+  id: number;
+  brand: string;
+  model: string;
+  year: number;
+  price: number;
+
+  // Добавьте другие свойства объекта данных, если необходимо
 }
 export default function Details() {
   const black: string = "#1A1A1A";
-  const {id} = useParams<RouteParams>();
-  const carDetails = id ? cars[parseInt(id)] : undefined;
+  const {id} = useParams<{id?: string}>(); // Тип id может быть строкой или undefined
+  if (id === undefined) {
+    return <div>Параметр id не определен</div>;
+  }
+  const filteredData: DataItem[] = jsonData.filter(
+    (item: DataItem) => item.id === parseInt(id)
+  );
+  if (filteredData.length === 0) {
+    return <div>Объект с id {id} не найден</div>;
+  }
+  const {brand, model, year, price} = filteredData[0];
+  console.log(brand);
+
+  //<img src={carDetails?.images[0]} alt="pic" />
+  // {carDetails?.images.map((image) => {
+  //   return (
+  //     <div className={style.little_preview}>
+  //       <img src={image}></img>
+  //     </div>
+  //   );
+  // })}
   return (
     <div className={style.details}>
       <div className={style.topNavigation}>
@@ -43,17 +82,10 @@ export default function Details() {
       <div className={style.details__main}>
         <div className={style.content}>
           <div className={style.content__pictures}>
-            <div className={style.bigPicture}>
-              <img src={carDetails?.images[0]} alt="pic" />
-            </div>
+            <div className={style.bigPicture}>// img</div>
             <div className={style.littlePictures}>
-              {carDetails?.images.map((image) => {
-                return (
-                  <div className={style.little_preview}>
-                    <img src={image}></img>
-                  </div>
-                );
-              })}
+              //carDetails
+              <h2>кк</h2>
             </div>
             <div>Show all pictures</div>
           </div>
@@ -63,13 +95,13 @@ export default function Details() {
           <div className={style.content__mainInformation}>
             <div className={style.left__information}>
               <div>
-                <span>Make</span> <span>{carDetails?.brand}</span>
+                <span>Make</span> <span>{brand}</span>
               </div>
               <div>
-                <span>Model</span> <span>{carDetails?.model}</span>
+                <span>Model</span> <span>{model}</span>
               </div>
               <div>
-                <span>Year</span> <span>2017</span>
+                <span>Year</span> <span>{year}</span>
               </div>
               <div>
                 <span>Wheels</span> <span>18</span>
