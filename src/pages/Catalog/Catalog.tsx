@@ -7,20 +7,18 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 // import CatalogPagination from "../../components/ordinary/CatalogPagination/CatalogPagination";
 import BigCard from "../../components/smart/BigCard/BigCard";
-
+import Skeleton from "../../components/ui/Skeleton/Skeleton";
 import ReactPaginate from "react-paginate";
 
 import {cars} from "../../helpers/carList";
 //import ScrollToTopPagination from "../../utils/scrollToTopPagination";
-//import {log} from "console";
+
 // import {initializeApp} from "firebase/app";
 import {initializeApp} from "firebase/app";
 import {getStorage, ref, listAll} from "firebase/storage";
-// import firebase from "firebase/app";
 
 import {getDownloadURL} from "firebase/storage";
 import {getFirestore} from "firebase/firestore";
-//import {collection, getDocs} from "firebase/firestore/lite";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
@@ -47,11 +45,24 @@ export default function Catalog() {
       imageUrl: string;
     }[]
   >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState<boolean[]>(
+    Array(carsWithImages.length).fill(false)
+  );
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages((prevLoadedImages) => {
+      const updatedLoadedImages = [...prevLoadedImages];
+      updatedLoadedImages[index] = true;
+      return updatedLoadedImages;
+    });
+  };
 
   useEffect(() => {
     const fetchCarImages = async () => {
       const carData = require("../../helpers/cars.json"); // Подгружаем данные о машинах из JSON
       const carsWithImagesArray: {
+        id: number;
         brand: string;
         model: string;
         price: string;
@@ -69,6 +80,7 @@ export default function Catalog() {
             const imageUrl = await getDownloadURL(carImages.items[0]);
             carsWithImagesArray.push({
               brand: car.brand,
+              id: car.id,
               model: car.model,
               price: car.price,
               year: car.year,
@@ -84,6 +96,7 @@ export default function Catalog() {
         }
       }
       setCarsWithImages(carsWithImagesArray);
+      setIsLoading(false);
     };
 
     fetchCarImages();
@@ -99,33 +112,34 @@ export default function Catalog() {
   const brandParam = searchParams.get("brand") || "";
 
   interface Car {
+    id: number;
     brand: string;
     model: string;
     price: string;
-    previewIMG: string;
+    year: number;
+    mileage: number;
+    imageUrl: string;
   }
-
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
   const [pageCount, setPageCount] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(0);
-
   const [itemOffset, setItemOffset] = React.useState(0);
-
   const [brandFilter, setBrandFilter] = useState<string>(brandParam);
   const [modelFilter, setModelFilter] = useState<string>("");
+  const [filteredCars, setFilteredCars] = useState(carsWithImages);
 
   React.useEffect(() => {
-    const filteredItems = cars.filter(
+    const filteredItems = carsWithImages.filter(
       (item) =>
         item.brand.toLowerCase().startsWith(brandFilter.toLowerCase()) &&
         item.model.toLowerCase().startsWith(modelFilter.toLowerCase())
     );
-    //console.log(filteredItems);
 
     const endOffset = itemOffset + itemsPerPage;
     setCurrentItems(filteredItems.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(filteredItems.length / itemsPerPage));
-  }, [brandFilter, modelFilter, itemOffset, itemsPerPage]);
+    setFilteredCars(filteredItems);
+  }, [brandFilter, modelFilter, itemOffset, itemsPerPage, carsWithImages]);
 
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -148,43 +162,17 @@ export default function Catalog() {
 
     catalog?.scrollIntoView({behavior: "smooth"});
     setItemOffset(newOffset);
-    //console.log(pageCount);
-
     setCurrentPage(currentPage);
-    //console.log(currentPage);
   };
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const toggleFilters = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
-  // {carsWithImages.map((car, index) => (
-  //   <div key={index}>
-  //     <img src={car.imageUrl} alt={`Car ${index + 1}`} />
-  //     <h1>{car.brand}</h1>
-  //     <p>Model: {car.model}</p>
-  //     <p>Price: ${car.price}</p>
-  //     <p>Year: {car.year}</p>
-  //     <p>Mileage: {car.mileage} miles</p>
-  //   </div>
-  // ))}
-  // {currentItems.length > 0 ? (
-  //   currentItems.map((item: any) => (
-  //     <BigCard
-  //       index={item.index}
-  //       brand={item.brand}
-  //       model={item.model}
-  //       price={item.price}
-  //       previewIMG={item.previewIMG}
-  //     />
-  //   ))
-  // ) : (
-  //   <h1>No cars yet</h1>
-  // )}
+
   return (
     <div className={style.catalog}>
       <h3>Find cars to fit your criteria</h3>
-
       <div className={style.catalog__content}>
         <Filters
           isFiltersOpen={isFiltersOpen}
@@ -200,17 +188,25 @@ export default function Catalog() {
           />
 
           <div className={style.catalogPagination}>
-            {carsWithImages.map((car, index) => (
-              <BigCard
-                index={index}
-                brand={car.brand}
-                model={car.model}
-                price={car.price}
-                previewIMG={car.imageUrl}
-              />
-            ))}
-
-            {/* <Skeleton /> */}
+            {isLoading ? (
+              [...new Array(6)].map(() => <Skeleton />)
+            ) : filteredCars.length > 0 ? (
+              filteredCars.map((car, index) => (
+                <BigCard
+                  key={index}
+                  id={car.id}
+                  index={index}
+                  brand={car.brand}
+                  model={car.model}
+                  price={car.price}
+                  previewIMG={car.imageUrl}
+                  onLoad={() => setIsLoading(false)}
+                  onClick={() => console.log(index)}
+                />
+              ))
+            ) : (
+              <h2>No cars</h2>
+            )}
           </div>
           {/* <CatalogPagination currentItems={currentItems} /> */}
 

@@ -18,7 +18,14 @@ import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
 
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
+
+import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {log} from "console";
+// import { listAll, getDownloadURL } from 'firebase/storage';
+import {getDocs} from "firebase/firestore/lite";
+import {initializeApp} from "firebase/app";
+import {getFirestore} from "firebase/firestore";
+
 // interface RouteParams {
 //   id: string;
 //   [key: string]: string | undefined;
@@ -39,9 +46,45 @@ interface DataItem {
 
   // Добавьте другие свойства объекта данных, если необходимо
 }
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
+  authDomain: "ecars-de7bc.firebaseapp.com",
+  projectId: "ecars-de7bc",
+  storageBucket: "ecars-de7bc.appspot.com",
+  messagingSenderId: "110000528537",
+  appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
+  measurementId: "G-XDXHPB18TW",
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 export default function Details() {
   const black: string = "#1A1A1A";
+  const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>(); // Тип id может быть строкой или undefined
+  const [selectedPhoto, setSelectedPhoto] = useState(0);
+  useEffect(() => {
+    const loadPhotosFromFirebase = async (currentIndex?: string) => {
+      const folderRef = ref(storage, `cars/${currentIndex}`);
+      try {
+        const photoList = await listAll(folderRef);
+        const urls = await Promise.all(
+          photoList.items.map(async (photo) => {
+            return await getDownloadURL(photo);
+          })
+        );
+        setPhotoURLs(urls);
+        console.log(photoURLs);
+      } catch (error) {
+        console.error("Error loading photos from Firebase:", error);
+      }
+    };
+
+    const currentIndex = id; // Ваш текущий индекс
+    loadPhotosFromFirebase(currentIndex);
+  }, [id]);
+
   if (id === undefined) {
     return <div>Параметр id не определен</div>;
   }
@@ -52,16 +95,7 @@ export default function Details() {
     return <div>Объект с id {id} не найден</div>;
   }
   const {brand, model, year, price} = filteredData[0];
-  console.log(brand);
 
-  //<img src={carDetails?.images[0]} alt="pic" />
-  // {carDetails?.images.map((image) => {
-  //   return (
-  //     <div className={style.little_preview}>
-  //       <img src={image}></img>
-  //     </div>
-  //   );
-  // })}
   return (
     <div className={style.details}>
       <div className={style.topNavigation}>
@@ -82,12 +116,19 @@ export default function Details() {
       <div className={style.details__main}>
         <div className={style.content}>
           <div className={style.content__pictures}>
-            <div className={style.bigPicture}>// img</div>
-            <div className={style.littlePictures}>
-              //carDetails
-              <h2>кк</h2>
+            <div className={style.bigPicture}>
+              <img src={photoURLs?.[selectedPhoto]} alt="pic" />
             </div>
-            <div>Show all pictures</div>
+            <div className={style.littlePictures}>
+              {photoURLs.map((img, index) => (
+                <img
+                  className={style.little_preview}
+                  src={img}
+                  onClick={() => setSelectedPhoto(index)}
+                />
+              ))}
+            </div>
+            <div></div>
           </div>
 
           {window.innerWidth <= 768 && <DetailsCTA />}

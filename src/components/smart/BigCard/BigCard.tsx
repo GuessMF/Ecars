@@ -5,19 +5,27 @@ import {NavLink} from "react-router-dom";
 
 interface Props {
   index: number;
+  id: number;
   brand: string;
   model: string;
   price: string;
   previewIMG: string;
+  onLoad: () => void;
+  onClick: () => void;
 }
 
 export default function BigCard({
   index,
+  id,
   brand,
   model,
   price,
   previewIMG,
+  onLoad,
+  onClick,
 }: Props) {
+  console.log(index);
+
   return (
     <NavLink to={`/details/${index}`}>
       <div className={style.bigCard}>

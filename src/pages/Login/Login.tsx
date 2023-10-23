@@ -1,7 +1,6 @@
 import React, {useRef, useEffect} from "react";
 import style from "./__login.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
-
 import {NavLink} from "react-router-dom";
 
 export default function Login() {

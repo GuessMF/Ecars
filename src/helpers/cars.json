@@ -40,5 +40,12 @@
     "model": "Модель",
     "year": 2023,
     "price": 25000
+  },
+  {
+    "id": 521,
+    "brand": "7",
+    "model": "TEst id",
+    "year": 2023,
+    "price": 25000
   }
 ]

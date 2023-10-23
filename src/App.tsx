@@ -14,6 +14,7 @@ import Details from "./pages/Details/Details";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import PersonalPage from "./pages/PersonalPage/PersonalPage";
 
 function App() {
   // const headerRef = useRef<HTMLElement | null>(null);
@@ -36,6 +37,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/personal-page" element={<PersonalPage />} />
       </Routes>
       <Footer />
     </div>
