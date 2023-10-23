@@ -1,50 +1,57 @@
 [
   {
-    "id": 0,
+    "id": "0",
     "brand": "Acura",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 1,
+    "id": "1",
     "brand": "Bmw",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 2,
+    "id": "2",
     "brand": "Lada",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 3,
+    "id": "3",
     "brand": "4",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 4,
+    "id": "4",
     "brand": "5",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 5,
+    "id": "5",
     "brand": "6",
     "model": "Модель",
     "year": 2023,
     "price": 25000
   },
   {
-    "id": 521,
+    "id": "521",
     "brand": "7",
     "model": "TEst id",
+    "year": 2023,
+    "price": 25000
+  },
+  {
+    "id": "e9a702a1-c338-409d-a826-9ed49cb60edf",
+    "brand": "8",
+    "model": "Test random id",
     "year": 2023,
     "price": 25000
   }

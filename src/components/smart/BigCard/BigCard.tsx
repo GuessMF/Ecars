@@ -4,8 +4,8 @@ import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
 
 interface Props {
+  id: string;
   index: number;
-  id: number;
   brand: string;
   model: string;
   price: string;
@@ -15,8 +15,8 @@ interface Props {
 }
 
 export default function BigCard({
-  index,
   id,
+  index,
   brand,
   model,
   price,
@@ -24,10 +24,10 @@ export default function BigCard({
   onLoad,
   onClick,
 }: Props) {
-  console.log(index);
+  // console.log(id + " ID");
 
   return (
-    <NavLink to={`/details/${index}`}>
+    <NavLink to={`/details/${id}`}>
       <div className={style.bigCard}>
         <div
           className={style.bigCard__image}

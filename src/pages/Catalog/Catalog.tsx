@@ -37,6 +37,7 @@ const storage = getStorage(app);
 export default function Catalog() {
   const [carsWithImages, setCarsWithImages] = useState<
     {
+      id: string;
       brand: string;
       model: string;
       price: string;
@@ -62,7 +63,7 @@ export default function Catalog() {
     const fetchCarImages = async () => {
       const carData = require("../../helpers/cars.json"); // Подгружаем данные о машинах из JSON
       const carsWithImagesArray: {
-        id: number;
+        id: string;
         brand: string;
         model: string;
         price: string;
@@ -79,8 +80,8 @@ export default function Catalog() {
           if (carImages.items.length > 0) {
             const imageUrl = await getDownloadURL(carImages.items[0]);
             carsWithImagesArray.push({
-              brand: car.brand,
               id: car.id,
+              brand: car.brand,
               model: car.model,
               price: car.price,
               year: car.year,
@@ -112,7 +113,7 @@ export default function Catalog() {
   const brandParam = searchParams.get("brand") || "";
 
   interface Car {
-    id: number;
+    id: string;
     brand: string;
     model: string;
     price: string;

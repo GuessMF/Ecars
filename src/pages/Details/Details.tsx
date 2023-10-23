@@ -38,7 +38,7 @@ import {getFirestore} from "firebase/firestore";
 //   year?: string;
 // }
 interface DataItem {
-  id: number;
+  id: string;
   brand: string;
   model: string;
   year: number;
@@ -89,7 +89,7 @@ export default function Details() {
     return <div>Параметр id не определен</div>;
   }
   const filteredData: DataItem[] = jsonData.filter(
-    (item: DataItem) => item.id === parseInt(id)
+    (item: DataItem) => item.id.toString() === id
   );
   if (filteredData.length === 0) {
     return <div>Объект с id {id} не найден</div>;
