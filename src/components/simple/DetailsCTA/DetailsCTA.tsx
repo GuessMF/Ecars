@@ -7,8 +7,36 @@ import {ReactComponent as ShareIcon} from "../../../assets/icons/shareIcon.svg";
 
 import Email from "../../../components/ui/Email/Email";
 import Mobile from "../../../components/ui/Mobile/Mobile";
-export default function DetailsCTA() {
+
+interface Props {
+  brand: string;
+  model: string;
+  price: number;
+  year: number;
+  location: string;
+  exportStatus: string;
+  mileage: number;
+}
+
+export default function DetailsCTA({
+  brand,
+  model,
+  price,
+  year,
+  location,
+  exportStatus,
+  mileage,
+}: Props) {
   const black: string = "#1A1A1A";
+
+  const formattedPrice: string = price
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
+  const formattedMileage: string = mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
   return (
     <div
       className={`${style.CTA} ${window.innerWidth <= 768 ? style.mobile : ""}`}
@@ -30,26 +58,27 @@ export default function DetailsCTA() {
             </span>
           </div>
           <h5>
-            Toyota Land Cruiser 2017 ZX-G Frontier Face-Lifted Petrol 4.6L
-            Sunroof 4WD
+            {brand}
+            <br />
+            {model}
           </h5>
-          <h4>$45,995</h4>
+          <h4>${formattedPrice}</h4>
           <table>
             <tr>
               <td>Year</td>
-              <td>2017</td>
+              <td>{year}</td>
             </tr>
             <tr>
               <td>Kilometers</td>
-              <td>15,000</td>
+              <td>{formattedMileage}</td>
             </tr>
             <tr>
               <td>Location</td>
-              <td>Dubai</td>
+              <td>{location}</td>
             </tr>
             <tr>
               <td>Export status</td>
-              <td>Can be exported</td>
+              <td>{exportStatus}</td>
             </tr>
           </table>
         </div>

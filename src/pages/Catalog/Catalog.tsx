@@ -42,6 +42,9 @@ export default function Catalog() {
       model: string;
       price: string;
       year: number;
+      fuel: string;
+      location: string;
+      description: string;
       mileage: number;
       imageUrl: string;
     }[]
@@ -59,53 +62,110 @@ export default function Catalog() {
     });
   };
 
+  const [itemsCars, setItemsCars] = useState([]);
+  //   useEffect(() => {
+  //     const fetchCarImages = async () => {
+  // try{
+
+  // }
+
+  //       const carData = require("../../helpers/cars.json"); // Подгружаем данные о машинах из JSON
+
+  //       const carsWithImagesArray: {
+  //         id: string;
+  //         brand: string;
+  //         model: string;
+  //         price: string;
+  //         year: number;
+  //         mileage: number;
+  //         imageUrl: string;
+  //       }[] = [];
+
+  //       for (const car of carData) {
+  //         const folderRef = ref(storage, `cars/${car.id}`);
+
+  //         try {
+  //           const carImages = await listAll(folderRef);
+  //           if (carImages.items.length > 0) {
+  //             const imageUrl = await getDownloadURL(carImages.items[0]);
+  //             carsWithImagesArray.push({
+  //               id: car.id,
+  //               brand: car.brand,
+  //               model: car.model,
+  //               price: car.price,
+  //               year: car.year,
+  //               mileage: car.mileage,
+  //               imageUrl: imageUrl,
+  //             });
+  //           }
+  //         } catch (error) {
+  //           console.error(
+  //             `Error fetching images for car with ID ${car.id}:`,
+  //             error
+  //           );
+  //         }
+  //       }
+  //       setCarsWithImages(carsWithImagesArray);
+  //       setIsLoading(false);
+  //     };
+
+  //     fetchCarImages();
+  //   }, []);
+
+  //
+  //
+  //
+
   useEffect(() => {
     const fetchCarImages = async () => {
-      const carData = require("../../helpers/cars.json"); // Подгружаем данные о машинах из JSON
-      const carsWithImagesArray: {
-        id: string;
-        brand: string;
-        model: string;
-        price: string;
-        year: number;
-        mileage: number;
-        imageUrl: string;
-      }[] = [];
-
-      for (const car of carData) {
-        const folderRef = ref(storage, `cars/${car.id}`);
-
-        try {
-          const carImages = await listAll(folderRef);
-          if (carImages.items.length > 0) {
-            const imageUrl = await getDownloadURL(carImages.items[0]);
-            carsWithImagesArray.push({
-              id: car.id,
-              brand: car.brand,
-              model: car.model,
-              price: car.price,
-              year: car.year,
-              mileage: car.mileage,
-              imageUrl: imageUrl,
-            });
+      try {
+        const response = await fetch(
+          "https://65378b85bb226bb85dd365a6.mockapi.io/cars"
+        );
+        if (response.ok) {
+          const carData = await response.json();
+          const carsWithImagesArray = [];
+          for (const car of carData) {
+            const folderRef = ref(storage, `cars/${car.id}`);
+            try {
+              const carImages = await listAll(folderRef);
+              if (carImages.items.length > 0) {
+                const imageUrl = await getDownloadURL(carImages.items[0]);
+                carsWithImagesArray.push({
+                  id: car.id.toString(),
+                  brand: car.brand,
+                  model: car.model,
+                  price: car.price.toString(),
+                  year: car.year,
+                  fuel: car.fuel,
+                  location: car.location,
+                  description: car.description,
+                  mileage: car.mileage,
+                  imageUrl: imageUrl,
+                });
+              }
+            } catch (error) {
+              console.error(
+                `Error fetching images for car with ID ${car.id}:`,
+                error
+              );
+            }
           }
-        } catch (error) {
-          console.error(
-            `Error fetching images for car with ID ${car.id}:`,
-            error
-          );
+          setCarsWithImages(carsWithImagesArray);
+          setIsLoading(false);
+        } else {
+          console.error("Failed to fetch car data");
+          setIsLoading(false);
         }
+      } catch (error) {
+        console.error("Error fetching car data: ", error);
+        setIsLoading(false);
       }
-      setCarsWithImages(carsWithImagesArray);
-      setIsLoading(false);
     };
 
     fetchCarImages();
   }, []);
 
-  //
-  //
-  //
   const itemsPerPage = 8;
   // const {brandName} = useParams();
   const location = useLocation();
@@ -118,6 +178,7 @@ export default function Catalog() {
     model: string;
     price: string;
     year: number;
+    description: string;
     mileage: number;
     imageUrl: string;
   }
@@ -200,9 +261,12 @@ export default function Catalog() {
                   brand={car.brand}
                   model={car.model}
                   price={car.price}
+                  fuel={car.fuel}
+                  location={car.location}
+                  mileage={car.mileage}
+                  description={car.description}
                   previewIMG={car.imageUrl}
                   onLoad={() => setIsLoading(false)}
-                  onClick={() => console.log(index)}
                 />
               ))
             ) : (

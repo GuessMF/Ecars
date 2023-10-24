@@ -78,7 +78,7 @@ export default function Header() {
           <Liked />
           <Profile />
         </div>
-        <NavLink to="/login">
+        <NavLink to="/per">
           <GetAquote version={version} />
         </NavLink>
       </div>

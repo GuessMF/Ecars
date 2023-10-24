@@ -9,9 +9,12 @@ interface Props {
   brand: string;
   model: string;
   price: string;
+  fuel: string;
+  location: string;
+  mileage: number;
+  description: string;
   previewIMG: string;
   onLoad: () => void;
-  onClick: () => void;
 }
 
 export default function BigCard({
@@ -20,41 +23,41 @@ export default function BigCard({
   brand,
   model,
   price,
+  fuel,
+  location,
+  mileage,
+  description,
   previewIMG,
   onLoad,
-  onClick,
 }: Props) {
   // console.log(id + " ID");
+  const formattedPrice: string = price
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   return (
     <NavLink to={`/details/${id}`}>
       <div className={style.bigCard}>
-        <div
-          className={style.bigCard__image}
-          // style={{ background: "black" }}
-          style={{
-            backgroundImage: "url(" + previewIMG + ")",
-          }}
-        >
-          <div className={style.image__badge}>Premium</div>
+        <div className={style.bigCard__image}>
+          <img className={style.bigCard__img} src={previewIMG} />
+
+          {/* <div className={style.image__badge}>Premium</div> */}
         </div>
         <div className={style.bigCard__information}>
           <div className={style.information__top}>
             <div className={style.information__name}>
-              <span> {brand}</span>
-              <span> {model}</span>
+              <span>{brand}</span>
+              <span>{model}</span>
             </div>
             <div className={style.information__state}>
-              Milwaukee • NEW • 0 km • Gasoline
+              {location} • {mileage < 20 ? "Brand NEW" : "Used"} • {mileage} km
+              • {fuel}
             </div>
-            <div className={style.information__description}>
-              2022 Land Cruiser, panoramic roof, black interior, LED headlights
-              and automatic gearbox. A brand new car with GCC specifications.
-            </div>
+            <div className={style.information__description}>{description}</div>
           </div>
 
           <div className={style.information__bottom}>
-            <span>${price}</span>
+            <span>${formattedPrice}</span>
             <Details />
           </div>
         </div>

@@ -8,7 +8,8 @@
   flex-direction: row;
   justify-content: center;
   margin-top: 40px;
-  margin-top: 200px;
+  margin-top: 150px;
+  margin-bottom: 50px;
 
   @media (max-width: 768px) {
     padding: 32px;
@@ -60,25 +61,6 @@
       font-weight: 400;
       line-height: 20px; /* 142.857% */
       gap: 8px;
-      input {
-        display: flex;
-        padding: 14px 12px;
-        align-items: flex-start;
-        gap: 4px;
-        align-self: stretch;
-        border-radius: 8px;
-        border: 1px solid $outline1;
-        color: $gray300;
-        /* Desktop/Body Small */
-        font-family: Inter;
-        font-size: 14px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 20px; /* 142.857% */
-        &:focus {
-          outline: none;
-        }
-      }
     }
     .password {
       display: flex;
@@ -204,5 +186,103 @@
   }
   .navLink {
     text-decoration: none;
+  }
+}
+// input {
+//   display: flex;
+//   padding: 14px 12px;
+//   align-items: flex-start;
+//   gap: 4px;
+//   align-self: stretch;
+//   border-radius: 8px;
+//   border: 1px solid $outline1;
+//   color: $gray300;
+//   /* Desktop/Body Small */
+//   font-family: Inter;
+//   font-size: 14px;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 20px; /* 142.857% */
+//   &:focus {
+//     outline: none;
+//   }
+// }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 40%;
+  .photos {
+    flex-direction: column;
+    height: fit-content;
+  }
+  .preview__photos {
+    padding: 0;
+    border: none;
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  div {
+    border: black 1px solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+
+    padding: 14px 12px;
+
+    gap: 4px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px solid $outline1;
+    color: $gray300;
+    /* Desktop/Body Small */
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    &:focus {
+      outline: none;
+    }
+
+    label {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      span {
+        width: 50%;
+      }
+      input {
+        width: 50%;
+        height: 100%;
+      }
+      select {
+        width: 50%;
+      }
+    }
+  }
+  button {
+    background-color: $primary500;
+    color: #fff;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+    padding: 12px 24px;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 8px;
   }
 }

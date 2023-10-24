@@ -4,7 +4,7 @@ import style from "./__details.module.scss";
 import {useParams} from "react-router-dom";
 // import {cars} from '../../helpers/cars.json'
 // import {cars} from "../../helpers/carList";
-import jsonData from "../../helpers/cars.json";
+// import jsonData from "../../helpers/cars.json";
 
 // import {ReactComponent as RightArrow} from "../../../assets/icons/specialOffers/rightArrow.svg";
 import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rightArrow.svg";
@@ -59,11 +59,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
 export default function Details() {
   const black: string = "#1A1A1A";
+  const [carData, setCarData] = useState(null);
+
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>(); // Тип id может быть строкой или undefined
+
   const [selectedPhoto, setSelectedPhoto] = useState(0);
+
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
       const folderRef = ref(storage, `cars/${currentIndex}`);
@@ -75,7 +80,7 @@ export default function Details() {
           })
         );
         setPhotoURLs(urls);
-        console.log(photoURLs);
+        // console.log(photoURLs);
       } catch (error) {
         console.error("Error loading photos from Firebase:", error);
       }
@@ -85,16 +90,69 @@ export default function Details() {
     loadPhotosFromFirebase(currentIndex);
   }, [id]);
 
-  if (id === undefined) {
-    return <div>Параметр id не определен</div>;
-  }
-  const filteredData: DataItem[] = jsonData.filter(
-    (item: DataItem) => item.id.toString() === id
-  );
-  if (filteredData.length === 0) {
-    return <div>Объект с id {id} не найден</div>;
-  }
-  const {brand, model, year, price} = filteredData[0];
+  const [currentCar, setCurrentCar] = useState<{
+    brand: string;
+    model: string;
+    price: number;
+    year: number;
+    mileage: number;
+    gearbox: string;
+    fuel: string;
+    wheels: number;
+    vehicleType: string;
+    engineCapacity: number;
+    seats: number;
+    interior: string;
+    location: string;
+    exportStatus: string;
+    description: string;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars")
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        const foundObject = json.find((item: {id: string}) => item.id === id);
+        if (foundObject) {
+          // console.log("Найденный объект:", foundObject);
+          setCurrentCar({
+            brand: foundObject.brand,
+            model: foundObject.model,
+            price: foundObject.price,
+            year: foundObject.year,
+            gearbox: foundObject.gearbox,
+
+            fuel: foundObject.fuel,
+            wheels: foundObject.wheels,
+            vehicleType: foundObject.vehicleType,
+            engineCapacity: foundObject.engineCapacity,
+            seats: foundObject.seats,
+            interior: foundObject.interior,
+            location: foundObject.location,
+            exportStatus: foundObject.exportStatus,
+
+            mileage: foundObject.mileage,
+            description: foundObject.description,
+          });
+        } else {
+          console.log("Объект с id", id, "не найден.");
+        }
+      })
+      .catch((error) => {
+        console.error("Произошла ошибка при получении данных:", error);
+      });
+  }, []);
+
+  // if (filteredData.length === 0) {
+  //   return <div>Объект с id {id} не найден</div>;
+  // }
+  // const {brand, model, year, price} = filteredData[0];
+
+  let mileage: string | undefined = currentCar?.mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   return (
     <div className={style.details}>
@@ -113,153 +171,169 @@ export default function Details() {
         </i>
         <span>Toyota Land Cruiser</span>
       </div>
-      <div className={style.details__main}>
-        <div className={style.content}>
-          <div className={style.content__pictures}>
-            <div className={style.bigPicture}>
-              <img src={photoURLs?.[selectedPhoto]} alt="pic" />
+      {currentCar !== null ? (
+        <div className={style.details__main}>
+          <div className={style.content}>
+            <div className={style.content__pictures}>
+              <div className={style.bigPicture}>
+                <img src={photoURLs?.[selectedPhoto]} alt="pic" />
+              </div>
+              <div className={style.littlePictures}>
+                {photoURLs.map((img, index) => (
+                  <img
+                    className={style.little_preview}
+                    src={img}
+                    onClick={() => setSelectedPhoto(index)}
+                  />
+                ))}
+              </div>
+              <div></div>
             </div>
-            <div className={style.littlePictures}>
-              {photoURLs.map((img, index) => (
-                <img
-                  className={style.little_preview}
-                  src={img}
-                  onClick={() => setSelectedPhoto(index)}
-                />
-              ))}
-            </div>
-            <div></div>
-          </div>
 
-          {window.innerWidth <= 768 && <DetailsCTA />}
+            {window.innerWidth <= 768 && (
+              <DetailsCTA
+                brand={currentCar.brand}
+                model={currentCar.model}
+                price={currentCar.price}
+                location={currentCar.location}
+                exportStatus={currentCar.exportStatus}
+                year={currentCar.year}
+                mileage={currentCar.mileage}
+              />
+            )}
 
-          <div className={style.content__mainInformation}>
-            <div className={style.left__information}>
-              <div>
-                <span>Make</span> <span>{brand}</span>
+            <div className={style.content__mainInformation}>
+              <div className={style.left__information}>
+                <div>
+                  <span>Make</span> <span>{currentCar.brand}</span>
+                </div>
+                <div>
+                  <span>Model</span> <span>{currentCar.model}</span>
+                </div>
+                <div>
+                  <span>Year</span> <span>{currentCar.year}</span>
+                </div>
+                <div>
+                  <span>Wheels</span> <span>{currentCar.wheels}</span>
+                </div>
+                <div>
+                  <span>Vehicle type</span>{" "}
+                  <span>{currentCar.vehicleType}</span>
+                </div>
+                <div>
+                  <span>Kilometers</span> <span>{mileage}</span>
+                </div>
               </div>
-              <div>
-                <span>Model</span> <span>{model}</span>
-              </div>
-              <div>
-                <span>Year</span> <span>{year}</span>
-              </div>
-              <div>
-                <span>Wheels</span> <span>18</span>
-              </div>
-              <div>
-                <span>Vehicle type</span> <span>SUV/Crossover</span>
-              </div>
-              <div>
-                <span>Kilometers</span> <span>15,000</span>
+              <div className={style.right__information}>
+                <div>
+                  <span>Gearbox</span> <span>{currentCar.gearbox}</span>
+                </div>
+                <div>
+                  <span>Fuel</span> <span>{currentCar.fuel}</span>
+                </div>
+                <div>
+                  <span>Seats</span> <span>{currentCar.seats}</span>
+                </div>
+                <div>
+                  <span>Engine Volume</span>{" "}
+                  <span>{currentCar.engineCapacity}</span>
+                </div>
+                <div>
+                  <span>Interior</span> <span>{currentCar.interior}</span>
+                </div>
+                <div>
+                  <span>Location</span> <span>{currentCar.location}</span>
+                </div>
+                <div>
+                  <span>Export status</span>{" "}
+                  <span>{currentCar.exportStatus}</span>
+                </div>
               </div>
             </div>
-            <div className={style.right__information}>
-              <div>
-                <span>Gearbox</span> <span>Automatic</span>
-              </div>
-              <div>
-                <span>Fuel</span> <span>LGasoline</span>
-              </div>
-              <div>
-                <span>Seats</span> <span>8</span>
-              </div>
-              <div>
-                <span>Cylinders</span> <span>8</span>
-              </div>
-              <div>
-                <span>Interior</span> <span>Black</span>
-              </div>
-              <div>
-                <span>Location</span> <span>Dubai</span>
-              </div>
-              <div>
-                <span>Export status</span> <span>Can be exported</span>
-              </div>
+            <div className={style.content__description}>
+              <h5>Description</h5>
+              <div className={style.description}>{currentCar.description}</div>
+              <div>MORE</div>
             </div>
-          </div>
-          <div className={style.content__description}>
-            <h5>Description</h5>
-            <div className={style.description}>
-              Toyota Land Cruiser 2017 ZX-G Frontier Face-Lifted Petrol 4.6L
-              Sunroof 4WD AT 7 Electric Leather Seats [RHD Japan Import] Premium
-              Condition.
-              ----------------------------------------------------------------------------------------------------------------------
-              Quis blandit turpis cursus in hac. In hendrerit gravida rutrum
-              quisque. Pellentesque habitant morbi tristique senectus et. Eget
-              gravida cum sociis natoque. Pharetra diam sit amet nisl suscipit
-              adipiscing bibendum. Porttitor massa id neque aliquam. In
-              fermentum posuere urna nec. Rhoncus aenean vel elit scelerisque
-              mauris pellentesque. Nullam ac tortor vitae purus faucibus ornare
-              suspendisse sed nisi. Consequat id porta nibh venenatis cras sed.
-            </div>
-            <div>MORE</div>
-          </div>
-          <div className={style.content__features}>
-            <h5>Features</h5>
-            <div className={style.features}>
-              {" "}
-              <div className={style.features_left}>
+            <div className={style.content__features}>
+              <h5>Features</h5>
+              <div className={style.features}>
                 {" "}
-                <span>Interior</span>
-                <ul>
-                  <li>Air conditioning</li>
-                  <li>Bluetooth system</li>
-                  <li>Climate control</li>
-                  <li>Cooled front seats</li>
-                  <li>Cruise control</li>
-                  <li>Heated seats</li>
-                  <li>Leather seats</li>
-                  <li>Sunroof</li>
-                  <li>Navigation system</li>
-                  <li>Power locks</li>
-                  <li>Power seats</li>
-                  <li>Power windows</li>
-                  <li>Premium sound system</li>
-                  <li>Tuner/radio</li>
-                  <li>Rear camera</li>
-                </ul>
-              </div>
-              <div className={style.features_right}>
-                <span>Exterior</span>
-                <ul>
-                  <li>Rear camera</li>
-                  <li>Keyless go</li>
-                  <li>Performance tyres</li>
-                  <li>Premium paint</li>
-                </ul>
-                <span>Security & Environment</span>
-                <ul>
-                  <li>4WD</li>
-                  <li>ABS</li>
-                  <li>Adaptive lighting</li>
-                  <li>Airbags (front and side)</li>
-                  <li>Tinted windows</li>
-                  <li>All wheel drive</li>
-                  <li>Adaptive cruise control</li>
-                  <li>Traction control</li>
-                  <li>Differential lock</li>
-                </ul>
+                <div className={style.features_left}>
+                  {" "}
+                  <span>Interior</span>
+                  <ul>
+                    <li>Air conditioning</li>
+                    <li>Bluetooth system</li>
+                    <li>Climate control</li>
+                    <li>Cooled front seats</li>
+                    <li>Cruise control</li>
+                    <li>Heated seats</li>
+                    <li>Leather seats</li>
+                    <li>Sunroof</li>
+                    <li>Navigation system</li>
+                    <li>Power locks</li>
+                    <li>Power seats</li>
+                    <li>Power windows</li>
+                    <li>Premium sound system</li>
+                    <li>Tuner/radio</li>
+                    <li>Rear camera</li>
+                  </ul>
+                </div>
+                <div className={style.features_right}>
+                  <span>Exterior</span>
+                  <ul>
+                    <li>Rear camera</li>
+                    <li>Keyless go</li>
+                    <li>Performance tyres</li>
+                    <li>Premium paint</li>
+                  </ul>
+                  <span>Security & Environment</span>
+                  <ul>
+                    <li>4WD</li>
+                    <li>ABS</li>
+                    <li>Adaptive lighting</li>
+                    <li>Airbags (front and side)</li>
+                    <li>Tinted windows</li>
+                    <li>All wheel drive</li>
+                    <li>Adaptive cruise control</li>
+                    <li>Traction control</li>
+                    <li>Differential lock</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <ContactUsBlock />
-          <div className={style.content__quick_links}>
-            <h5>Quick links</h5>
-            <div className={style.links}>
-              <a href="">Toyota Land Cruiser for sale in Dubai</a>
-              <a href="">Toyota Land Cruiser 2017</a>
-              <a href="">Toyota for sale in Dubai</a>
-              <a href="">All cars for sale in Dubai</a>
+            <ContactUsBlock />
+            <div className={style.content__quick_links}>
+              <h5>Quick links</h5>
+              <div className={style.links}>
+                <a href="">Toyota Land Cruiser for sale in Dubai</a>
+                <a href="">Toyota Land Cruiser 2017</a>
+                <a href="">Toyota for sale in Dubai</a>
+                <a href="">All cars for sale in Dubai</a>
+              </div>
+            </div>
+            <div className={style.content__similar_cars}>
+              <h5>Similar Cars</h5>
             </div>
           </div>
-          <div className={style.content__similar_cars}>
-            <h5>Similar Cars</h5>
-          </div>
-        </div>
 
-        {window.innerWidth > 768 && <DetailsCTA />}
-      </div>
+          {window.innerWidth > 768 && (
+            <DetailsCTA
+              brand={currentCar.brand}
+              model={currentCar.model}
+              price={currentCar.price}
+              location={currentCar.location}
+              exportStatus={currentCar.exportStatus}
+              year={currentCar.year}
+              mileage={currentCar.mileage}
+            />
+          )}
+        </div>
+      ) : (
+        <p>Данные не загружены</p>
+      )}
+
       {/* <div className={style.testGAPI}>
         <Skeleton />
       </div> */}
