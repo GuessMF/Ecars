@@ -1,22 +1,16 @@
 import React, {useState} from "react";
-import {useParams} from "react-router-dom";
+
 import {useEffect} from "react";
 import {useLocation} from "react-router-dom";
 import style from "./__catalog.module.scss";
 import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
-// import CatalogPagination from "../../components/ordinary/CatalogPagination/CatalogPagination";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
+import SkeletonMobile from "../../components/ui/SkeletonMobile/SkeletonMobile";
 import ReactPaginate from "react-paginate";
-
-import {cars} from "../../helpers/carList";
-//import ScrollToTopPagination from "../../utils/scrollToTopPagination";
-
-// import {initializeApp} from "firebase/app";
 import {initializeApp} from "firebase/app";
 import {getStorage, ref, listAll} from "firebase/storage";
-
 import {getDownloadURL} from "firebase/storage";
 import {getFirestore} from "firebase/firestore";
 
@@ -43,6 +37,7 @@ export default function Catalog() {
       price: string;
       year: number;
       fuel: string;
+      vehicleType: string;
       location: string;
       description: string;
       mileage: number;
@@ -50,71 +45,6 @@ export default function Catalog() {
     }[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [loadedImages, setLoadedImages] = useState<boolean[]>(
-    Array(carsWithImages.length).fill(false)
-  );
-
-  const handleImageLoad = (index: number) => {
-    setLoadedImages((prevLoadedImages) => {
-      const updatedLoadedImages = [...prevLoadedImages];
-      updatedLoadedImages[index] = true;
-      return updatedLoadedImages;
-    });
-  };
-
-  const [itemsCars, setItemsCars] = useState([]);
-  //   useEffect(() => {
-  //     const fetchCarImages = async () => {
-  // try{
-
-  // }
-
-  //       const carData = require("../../helpers/cars.json"); // Подгружаем данные о машинах из JSON
-
-  //       const carsWithImagesArray: {
-  //         id: string;
-  //         brand: string;
-  //         model: string;
-  //         price: string;
-  //         year: number;
-  //         mileage: number;
-  //         imageUrl: string;
-  //       }[] = [];
-
-  //       for (const car of carData) {
-  //         const folderRef = ref(storage, `cars/${car.id}`);
-
-  //         try {
-  //           const carImages = await listAll(folderRef);
-  //           if (carImages.items.length > 0) {
-  //             const imageUrl = await getDownloadURL(carImages.items[0]);
-  //             carsWithImagesArray.push({
-  //               id: car.id,
-  //               brand: car.brand,
-  //               model: car.model,
-  //               price: car.price,
-  //               year: car.year,
-  //               mileage: car.mileage,
-  //               imageUrl: imageUrl,
-  //             });
-  //           }
-  //         } catch (error) {
-  //           console.error(
-  //             `Error fetching images for car with ID ${car.id}:`,
-  //             error
-  //           );
-  //         }
-  //       }
-  //       setCarsWithImages(carsWithImagesArray);
-  //       setIsLoading(false);
-  //     };
-
-  //     fetchCarImages();
-  //   }, []);
-
-  //
-  //
-  //
 
   useEffect(() => {
     const fetchCarImages = async () => {
@@ -139,6 +69,7 @@ export default function Catalog() {
                   year: car.year,
                   fuel: car.fuel,
                   location: car.location,
+                  vehicleType: car.vehicleType,
                   description: car.description,
                   mileage: car.mileage,
                   imageUrl: imageUrl,
@@ -151,6 +82,7 @@ export default function Catalog() {
               );
             }
           }
+
           setCarsWithImages(carsWithImagesArray);
           setIsLoading(false);
         } else {
@@ -167,7 +99,6 @@ export default function Catalog() {
   }, []);
 
   const itemsPerPage = 8;
-  // const {brandName} = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
@@ -177,10 +108,21 @@ export default function Catalog() {
     brand: string;
     model: string;
     price: string;
+    fuel: string;
+    location: string;
+    vehicleType: string;
     year: number;
     description: string;
     mileage: number;
     imageUrl: string;
+  }
+  interface CheckboxState {
+    SUV: boolean;
+    Sedan: boolean;
+    PickUp: boolean;
+    Convertible: boolean;
+    Coupe: boolean;
+    Hatchback: boolean;
   }
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
   const [pageCount, setPageCount] = React.useState(0);
@@ -188,20 +130,82 @@ export default function Catalog() {
   const [itemOffset, setItemOffset] = React.useState(0);
   const [brandFilter, setBrandFilter] = useState<string>(brandParam);
   const [modelFilter, setModelFilter] = useState<string>("");
+  const [vechicleTypeCheckboxes, setVechicleTypeCheckboxes] = useState({
+    SUV: false,
+    Sedan: false,
+    PickUp: false,
+    Convertible: false,
+    Coupe: false,
+    Hatchback: false,
+    Van: false,
+    StationWagon: false,
+  });
+
+  const clearFiltersArg = () => {
+    setBrandFilter("");
+    setModelFilter("");
+    setVechicleTypeCheckboxes({
+      SUV: false,
+      Sedan: false,
+      PickUp: false,
+      Convertible: false,
+      Coupe: false,
+      Hatchback: false,
+      Van: false,
+      StationWagon: false,
+    });
+    console.log(vechicleTypeCheckboxes);
+  };
+
   const [filteredCars, setFilteredCars] = useState(carsWithImages);
 
   React.useEffect(() => {
-    const filteredItems = carsWithImages.filter(
-      (item) =>
-        item.brand.toLowerCase().startsWith(brandFilter.toLowerCase()) &&
-        item.model.toLowerCase().startsWith(modelFilter.toLowerCase())
-    );
+    // const filteredItems = carsWithImages.filter(
+    //   (item) =>
+    //     item.brand.toLowerCase().startsWith(brandFilter.toLowerCase()) &&
+    //     item.model.toLowerCase().startsWith(modelFilter.toLowerCase())
+    // );
+    const filteredItems = carsWithImages.filter((item) => {
+      const isBrandMatch = item.brand
+        .toLowerCase()
+        .startsWith(brandFilter.toLowerCase());
+      const isModelMatch = item.model
+        .toLowerCase()
+        .startsWith(modelFilter.toLowerCase());
+      const isTypeMatch =
+        (vechicleTypeCheckboxes.SUV && item.vehicleType === "SUV") ||
+        (vechicleTypeCheckboxes.Sedan && item.vehicleType === "Sedan") ||
+        (vechicleTypeCheckboxes.PickUp && item.vehicleType === "Pick Up") ||
+        (vechicleTypeCheckboxes.Convertible &&
+          item.vehicleType === "Convertible") ||
+        (vechicleTypeCheckboxes.Coupe && item.vehicleType === "Coupe") ||
+        (vechicleTypeCheckboxes.Hatchback &&
+          item.vehicleType === "Hatchback") ||
+        (vechicleTypeCheckboxes.Van && item.vehicleType === "Van") ||
+        (vechicleTypeCheckboxes.StationWagon &&
+          item.vehicleType === "Station Wagon");
 
+      return (
+        isBrandMatch &&
+        isModelMatch &&
+        (isTypeMatch ||
+          Object.values(vechicleTypeCheckboxes).every((value) => !value))
+      );
+    });
     const endOffset = itemOffset + itemsPerPage;
+
     setCurrentItems(filteredItems.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(filteredItems.length / itemsPerPage));
+    setCurrentPage(0);
     setFilteredCars(filteredItems);
-  }, [brandFilter, modelFilter, itemOffset, itemsPerPage, carsWithImages]);
+  }, [
+    brandFilter,
+    modelFilter,
+    vechicleTypeCheckboxes,
+    itemOffset,
+    itemsPerPage,
+    carsWithImages,
+  ]);
 
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -209,6 +213,7 @@ export default function Catalog() {
     setBrandFilter(event.target.value);
     setItemOffset(0);
     setCurrentPage(1);
+    //поменять на текущую стр
   };
   const handleModelFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -217,20 +222,38 @@ export default function Catalog() {
     setItemOffset(0);
     setCurrentPage(1);
   };
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof CheckboxState;
+    setVechicleTypeCheckboxes((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
 
   const handlePageClick = (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % cars.length;
+    const selectedPage = event.selected;
+    const newOffset = selectedPage * itemsPerPage;
+    const maxItemsPerPage = Math.min(
+      newOffset + itemsPerPage,
+      filteredCars.length
+    );
     const catalog = document.getElementById("catalogList");
-
     catalog?.scrollIntoView({behavior: "smooth"});
     setItemOffset(newOffset);
-    setCurrentPage(currentPage);
+    setCurrentItems(filteredCars.slice(newOffset, maxItemsPerPage));
+    setCurrentPage(selectedPage);
   };
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const toggleFilters = () => {
     setIsFiltersOpen(!isFiltersOpen);
   };
+
+  const handleVechicleChange = (event: any) => {
+    // console.log(event.target.id);
+  };
+
+  // console.log(vechicleTypeCheckboxes);
 
   return (
     <div className={style.catalog}>
@@ -241,19 +264,30 @@ export default function Catalog() {
           setIsFiltersOpen={setIsFiltersOpen}
           onBrandFilterChange={handleBrandFilterChange}
           onModelFilterChange={handleModelFilterChange}
+          onCheckboxChange={handleCheckboxChange}
+          brandFilterValue={brandFilter}
+          modelFilterValue={modelFilter}
+          checkBoxes1={vechicleTypeCheckboxes}
         />
 
         <div id="catalogList" className={style.catalog__left}>
           <Sorted
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
+            brand={brandFilter}
+            model={modelFilter}
+            type={vechicleTypeCheckboxes}
+            founted={filteredCars.length}
+            clearFilterArg={clearFiltersArg}
           />
 
           <div className={style.catalogPagination}>
             {isLoading ? (
-              [...new Array(6)].map(() => <Skeleton />)
+              [...new Array(6)].map(() =>
+                window.innerWidth > 450 ? <Skeleton /> : <SkeletonMobile />
+              )
             ) : filteredCars.length > 0 ? (
-              filteredCars.map((car, index) => (
+              currentItems.map((car, index) => (
                 <BigCard
                   key={index}
                   id={car.id}
@@ -273,7 +307,6 @@ export default function Catalog() {
               <h2>No cars</h2>
             )}
           </div>
-          {/* <CatalogPagination currentItems={currentItems} /> */}
 
           <ReactPaginate
             className={style.paginateBar}

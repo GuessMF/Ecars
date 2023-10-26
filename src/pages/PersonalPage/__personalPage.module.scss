@@ -212,6 +212,9 @@ form {
   flex-direction: column;
   gap: 20px;
   width: 40%;
+  @media (max-width: 450px) {
+    width: 100%;
+  }
   .photos {
     flex-direction: column;
     height: fit-content;

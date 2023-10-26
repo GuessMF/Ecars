@@ -245,7 +245,7 @@ export default function PersonalPage() {
               <option value="Van">Van</option>
               <option value="Station Wagon">Station Wagon</option>
               <option value="Convertible">Convertible</option>
-              <option value="Truck">Truck</option>
+              <option value="Pick Up">Pick Up</option>
             </select>
           </label>
         </div>

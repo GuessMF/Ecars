@@ -7,11 +7,23 @@ import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
 // import {cars} from "../../helpers/carList";
 
+interface CheckBoxes {
+  SUV: boolean;
+  Sedan: boolean;
+  PickUp: boolean;
+  Convertible: boolean;
+  Coupe: boolean;
+  Hatchback: boolean;
+}
 interface FiltersProps {
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
   onBrandFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onModelFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  brandFilterValue: string;
+  modelFilterValue: string;
+  checkBoxes1: CheckBoxes;
 }
 
 export default function Filters({
@@ -19,6 +31,10 @@ export default function Filters({
   setIsFiltersOpen,
   onBrandFilterChange,
   onModelFilterChange,
+  onCheckboxChange,
+  brandFilterValue,
+  modelFilterValue,
+  checkBoxes1,
 }: FiltersProps) {
   const [value, setValue] = React.useState(0);
 
@@ -33,9 +49,6 @@ export default function Filters({
   const closeFilters = () => {
     setIsFiltersOpen(false);
   };
-
-  // const [brandFilter, setBrandFilter] = useState<string>("");
-  // const filteredBrands = items.filter(())
 
   return (
     <div
@@ -55,6 +68,8 @@ export default function Filters({
           <input
             type="text"
             placeholder="Brand"
+            id="BrandInput"
+            value={brandFilterValue}
             onChange={onBrandFilterChange}
           />
         </div>
@@ -63,7 +78,13 @@ export default function Filters({
             <h6>Model</h6>
             <span>Reset</span>
           </div>
-          <input type="text" placeholder="All" onChange={onModelFilterChange} />
+          <input
+            type="text"
+            placeholder="All"
+            id="ModelInput"
+            value={modelFilterValue}
+            onChange={onModelFilterChange}
+          />
         </div>
 
         <div className={style.filters__vehicle_type}>
@@ -77,69 +98,83 @@ export default function Filters({
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox1"
+                id="SUV"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.SUV}
               />
-              <label htmlFor="checkbox1">SUV/Crossover</label>
+              <label htmlFor="SUV">SUV/Crossover</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox2"
+                id="Sedan"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.Sedan}
               />
-              <label htmlFor="checkbox2">Sedan</label>
+              <label htmlFor="Sedan">Sedan</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox3"
+                id="PickUp"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.PickUp}
               />
-              <label htmlFor="checkbox3">Pick Up Truck</label>
+              <label htmlFor="PickUp">Pick Up</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox4"
+                id="Convertible"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.Convertible}
               />
-              <label htmlFor="checkbox4">Convertible</label>
+              <label htmlFor="Convertible">Convertible</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox5"
+                id="Coupe"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.Coupe}
               />
-              <label htmlFor="checkbox5">Coupe</label>
+              <label htmlFor="Coupe">Coupe</label>
             </li>
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox6"
+                id="Hatchback"
+                onChange={onCheckboxChange}
+                checked={checkBoxes1.Hatchback}
               />
-              <label htmlFor="checkbox6">Hatchback</label>
+              <label htmlFor="Hatchback">Hatchback</label>
             </li>
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox7"
+                id="Van"
+                onChange={onCheckboxChange}
               />
-              <label htmlFor="checkbox7">Shawn Carter</label>
+              <label htmlFor="Van">Van</label>
             </li>
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox8"
+                id="StationWagon"
+                onChange={onCheckboxChange}
               />
-              <label htmlFor="checkbox8">Shawn Carter</label>
+              <label htmlFor="StationWagon">Station Wagon</label>
             </li>
             <li className={style.form_checkbox}>
               <input

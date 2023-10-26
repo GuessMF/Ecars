@@ -1,26 +1,43 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
+import {Console} from "console";
 
 interface FiltersProps {
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
+  founted: number;
+  brand: string;
+  model: string;
+  type: {[key: string]: boolean};
+  clearFilterArg: () => void;
 }
 
 export default function Sorted({
   isFiltersOpen,
   setIsFiltersOpen,
+  founted,
+  brand,
+  model,
+  type,
+  clearFilterArg,
 }: FiltersProps) {
   const openFilters = () => {
     setIsFiltersOpen(true);
   };
-
+  const typeArr: string[] = [];
+  Object.keys(type).forEach((key) => {
+    if (type[key]) {
+      typeArr.push(key);
+    }
+  });
+  // console.log(typeArr);
   return (
     <div className={style.sorted}>
       <div className={style.sorted__top}>
         <div className={style.total__found}>
-          <span>2743</span>
+          <span>{founted}</span>
           <p>found</p>
         </div>
         <div className={style.sortBy}>
@@ -47,19 +64,12 @@ export default function Sorted({
         <span>Filters</span>
       </button>
       <div className={style.sorted__bottom}>
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-        <SelectedFilter />
-
-        <ResetAll />
+        {brand && <SelectedFilter params={brand} />}
+        {model && <SelectedFilter params={model} />}
+        {typeArr &&
+          typeArr.map((type, index) => <SelectedFilter params={type} />)}
+        {Object.values({brand, model, ...typeArr}).filter(Boolean).length >=
+          2 && <ResetAll onClick={clearFilterArg} />}
       </div>
     </div>
   );
