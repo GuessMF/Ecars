@@ -23,7 +23,29 @@ interface FiltersProps {
   onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   brandFilterValue: string;
   modelFilterValue: string;
+  resetModel: () => void;
+  resetBrand: () => void;
+  resetVechicleType: () => void;
+  resetMileage: () => void;
+  resetYear: () => void;
+  resetPrice: () => void;
   checkBoxes1: CheckBoxes;
+  minMileageValue: number;
+  maxMileageValue: number;
+  onMinMileageValue: (value: number) => void;
+  onMaxMileageValue: (value: number) => void;
+
+  //mileageSliderChange: (values: [number, number]) => void;
+
+  minYearValue: number;
+  maxYearValue: number;
+  onMinYearValue: (value: number) => void;
+  onMaxYearValue: (value: number) => void;
+
+  minPriceValue: number;
+  maxPriceValue: number;
+  onMinPriceValue: (value: number) => void;
+  onMaxPriceValue: (value: number) => void;
 }
 
 export default function Filters({
@@ -34,8 +56,28 @@ export default function Filters({
   onCheckboxChange,
   brandFilterValue,
   modelFilterValue,
+  resetBrand,
+  resetModel,
+  resetVechicleType,
+  resetMileage,
+  resetYear,
+  resetPrice,
   checkBoxes1,
-}: FiltersProps) {
+  minMileageValue,
+  maxMileageValue,
+  onMaxMileageValue,
+  onMinMileageValue,
+  minYearValue,
+  maxYearValue,
+  onMaxYearValue,
+  onMinYearValue,
+  minPriceValue,
+  maxPriceValue,
+  onMinPriceValue,
+  onMaxPriceValue,
+}: // mileageSliderChange,
+
+FiltersProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (newValue: number) => {
@@ -50,6 +92,9 @@ export default function Filters({
     setIsFiltersOpen(false);
   };
 
+  const currendate = new Date();
+  const currentYear = currendate.getFullYear();
+
   return (
     <div
       className={`${style.filtersWrapper} ${
@@ -63,7 +108,7 @@ export default function Filters({
         <div className={style.filters__brand}>
           <div className={style.filters__label}>
             <h6>Brand</h6>
-            <span>Reset</span>
+            <span onClick={() => resetBrand()}>Reset</span>
           </div>
           <input
             type="text"
@@ -76,7 +121,7 @@ export default function Filters({
         <div className={style.filters__model}>
           <div className={style.filters__label}>
             <h6>Model</h6>
-            <span>Reset</span>
+            <span onClick={() => resetModel()}>Reset</span>
           </div>
           <input
             type="text"
@@ -90,7 +135,7 @@ export default function Filters({
         <div className={style.filters__vehicle_type}>
           <div className={style.filters__label}>
             <h6>Vechicle type</h6>
-            <span>Reset</span>
+            <span onClick={() => resetVechicleType()}>Reset</span>
           </div>
 
           <ul className={style.filters__check_list}>
@@ -190,42 +235,116 @@ export default function Filters({
         <div className={style.filters__mileage}>
           <div className={style.filters__label}>
             <h6>Mileage</h6>
-            <span>Reset</span>
+            <span onClick={() => resetMileage()}>Reset</span>
           </div>
           <div className={style.filters__min_max}>
-            <input type="text" placeholder="Min" />
-            <input type="text" placeholder="Max" />
+            <input
+              type="text"
+              placeholder="Min"
+              min="1"
+              value={minMileageValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = Number(e.target.value);
+                onMinMileageValue(value);
+              }}
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              max="999999"
+              value={maxMileageValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                if (/^\d*$/.test(value)) {
+                  onMaxMileageValue(parseInt(value, 10));
+                }
+              }}
+            />
           </div>
           <div className={style.miliage__slider}>
-            <RangeSlider defaultValue={[0, 999999]} max={999999} />
+            <RangeSlider
+              value={[minMileageValue, maxMileageValue]}
+              step={1000}
+              defaultValue={[0, 999999]}
+              max={999999}
+              onChange={(values: [number, number]) => {
+                onMinMileageValue(values[0]);
+                onMaxMileageValue(values[1]);
+              }}
+            />
           </div>
         </div>
 
         <div className={style.filters__year}>
           <div className={style.filters__label}>
             <h6>Year</h6>
-            <span>Reset</span>
+            <span onClick={() => resetYear()}>Reset</span>
           </div>
           <div className={style.filters__min_max}>
-            <input type="text" placeholder="Min" />
-            <input type="text" placeholder="Max" />
+            <input
+              type="number"
+              placeholder="Min"
+              min={0}
+              max={currentYear}
+              value={minYearValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onMinYearValue(parseInt(e.target.value, 10))
+              }
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              min={0}
+              max={currentYear}
+              value={maxYearValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onMaxYearValue(parseInt(e.target.value, 10))
+              }
+            />
           </div>
-          {/* <div className={style.test2}>
-            <span>test2</span>
-          </div> */}
         </div>
 
         <div className={style.filters__price}>
           <div className={style.filters__label}>
             <h6>Price, USD</h6>
-            <span>Reset</span>
+            <span onClick={() => resetPrice()}>Reset</span>
           </div>
           <div className={style.filters__min_max}>
-            <input type="text" placeholder="Min" />
-            <input type="text" placeholder="Max" />
+            <input
+              type="text"
+              placeholder="Min"
+              min="1"
+              value={minPriceValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = Number(e.target.value);
+                onMinPriceValue(value);
+              }}
+            />
+            <input
+              type="number"
+              placeholder="Max"
+              max="999999"
+              value={maxPriceValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.target.value;
+                if (/^\d*$/.test(value)) {
+                  //onMaxPriceValue(parseInt(value, 10));
+                  onMaxPriceValue(Number(value));
+                }
+              }}
+            />
           </div>
           <div className={style.price__slider}>
-            <RangeSlider defaultValue={[0, 999999]} max={999999} />
+            <RangeSlider
+              value={[minPriceValue, maxPriceValue]}
+              step={1000}
+              defaultValue={[0, 999999]}
+              max={999999}
+              onChange={(values: [number, number]) => {
+                onMinPriceValue(values[0]);
+                onMaxPriceValue(values[1]);
+              }}
+            />
           </div>
         </div>
 

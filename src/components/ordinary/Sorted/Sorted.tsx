@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
@@ -10,8 +10,13 @@ interface FiltersProps {
   founted: number;
   brand: string;
   model: string;
+  mileage: boolean;
+  date: boolean;
+  price: boolean;
+
   type: {[key: string]: boolean};
   clearFilterArg: () => void;
+  closeSelectedFilter: (filter: string) => void;
 }
 
 export default function Sorted({
@@ -20,8 +25,13 @@ export default function Sorted({
   founted,
   brand,
   model,
+  mileage,
+  date,
+  price,
   type,
+
   clearFilterArg,
+  closeSelectedFilter,
 }: FiltersProps) {
   const openFilters = () => {
     setIsFiltersOpen(true);
@@ -64,10 +74,43 @@ export default function Sorted({
         <span>Filters</span>
       </button>
       <div className={style.sorted__bottom}>
-        {brand && <SelectedFilter params={brand} />}
-        {model && <SelectedFilter params={model} />}
+        {brand && (
+          <SelectedFilter
+            onClick={() => closeSelectedFilter("brand")}
+            params={brand}
+          />
+        )}
+        {model && (
+          <SelectedFilter
+            onClick={() => closeSelectedFilter("model")}
+            params={model}
+          />
+        )}
+        {!mileage && (
+          <SelectedFilter
+            onClick={() => closeSelectedFilter("mileage")}
+            params={"mileage"}
+          />
+        )}
+        {date && (
+          <SelectedFilter
+            onClick={() => closeSelectedFilter("year")}
+            params={"year"}
+          />
+        )}
+        {price && (
+          <SelectedFilter
+            onClick={() => closeSelectedFilter("price")}
+            params={"price"}
+          />
+        )}
         {typeArr &&
-          typeArr.map((type, index) => <SelectedFilter params={type} />)}
+          typeArr.map((type, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(type)}
+              params={type}
+            />
+          ))}
         {Object.values({brand, model, ...typeArr}).filter(Boolean).length >=
           2 && <ResetAll onClick={clearFilterArg} />}
       </div>

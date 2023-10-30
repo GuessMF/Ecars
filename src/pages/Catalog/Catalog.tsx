@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {useLocation} from "react-router-dom";
 import style from "./__catalog.module.scss";
 import Filters from "../../components/ordinary/Filters/Filters";
@@ -140,6 +140,56 @@ export default function Catalog() {
     Van: false,
     StationWagon: false,
   });
+  const [minMileageValue, setMinMileageValue] = useState<number>(0);
+  const [maxMileageValue, setMaxMileageValue] = useState<number>(999999);
+
+  const [mileageFilter, setMileageFilter] = useState<boolean>(false);
+
+  const currendate = new Date();
+  const currentYear = currendate.getFullYear();
+
+  const [minYearValue, setMinYearValue] = useState<number>(2000);
+  const [maxYearValue, setMaxYearValue] = useState<number>(currentYear);
+
+  const [yearFilter, setYearFilter] = useState<boolean>(false);
+
+  const [minPriceValue, setMinPriceValue] = useState<number>(0);
+  const [maxPriceValue, setMaxPriceValue] = useState<number>(999999);
+
+  const [priceFilter, setPriceFilter] = useState<boolean>(false);
+
+  const resetBrandFilter = () => {
+    setBrandFilter("");
+  };
+  const resetModelFilter = () => {
+    setModelFilter("");
+  };
+
+  const resetVechicleTypeFilter = () => {
+    setVechicleTypeCheckboxes({
+      SUV: false,
+      Sedan: false,
+      PickUp: false,
+      Convertible: false,
+      Coupe: false,
+      Hatchback: false,
+      Van: false,
+      StationWagon: false,
+    });
+  };
+  const resetMileage = () => {
+    setMinMileageValue(0);
+    setMaxMileageValue(999999);
+  };
+  const resetYear = () => {
+    setMinYearValue(0);
+    setMaxYearValue(currentYear);
+  };
+
+  const resetPrice = () => {
+    setMinPriceValue(0);
+    setMaxPriceValue(999999);
+  };
 
   const clearFiltersArg = () => {
     setBrandFilter("");
@@ -157,6 +207,8 @@ export default function Catalog() {
     console.log(vechicleTypeCheckboxes);
   };
 
+  // const newRef = useRef(null);
+
   const [filteredCars, setFilteredCars] = useState(carsWithImages);
 
   React.useEffect(() => {
@@ -164,6 +216,24 @@ export default function Catalog() {
     //   (item) =>
     //     item.brand.toLowerCase().startsWith(brandFilter.toLowerCase()) &&
     //     item.model.toLowerCase().startsWith(modelFilter.toLowerCase())
+    if (minMileageValue !== 0 || maxMileageValue !== 999999) {
+      setMileageFilter(true);
+    } else {
+      setMileageFilter(false);
+    }
+
+    if (minYearValue !== 2000 || maxYearValue !== 2023) {
+      setYearFilter(true);
+    } else {
+      setYearFilter(false);
+    }
+
+    if (minPriceValue !== 0 || maxPriceValue !== 999999) {
+      setPriceFilter(true);
+    } else {
+      setPriceFilter(false);
+    }
+
     // );
     const filteredItems = carsWithImages.filter((item) => {
       const isBrandMatch = item.brand
@@ -184,10 +254,25 @@ export default function Catalog() {
         (vechicleTypeCheckboxes.Van && item.vehicleType === "Van") ||
         (vechicleTypeCheckboxes.StationWagon &&
           item.vehicleType === "Station Wagon");
+      const isMileageMatch =
+        item.mileage >= minMileageValue && item.mileage <= maxMileageValue;
+
+      isMileageMatch ? setMileageFilter(true) : setMileageFilter(false);
+
+      const isYearMatch =
+        item.year >= minYearValue && item.year <= maxYearValue;
+
+      const isPriceMatch =
+        Number(item.price) >= minPriceValue &&
+        Number(item.price) <= maxPriceValue;
+      // console.log(isMileageMatch);
 
       return (
         isBrandMatch &&
         isModelMatch &&
+        isMileageMatch &&
+        isYearMatch &&
+        isPriceMatch &&
         (isTypeMatch ||
           Object.values(vechicleTypeCheckboxes).every((value) => !value))
       );
@@ -201,11 +286,18 @@ export default function Catalog() {
   }, [
     brandFilter,
     modelFilter,
+    minMileageValue,
+    maxMileageValue,
+    minYearValue,
+    maxYearValue,
+    minPriceValue,
+    maxPriceValue,
     vechicleTypeCheckboxes,
     itemOffset,
     itemsPerPage,
     carsWithImages,
   ]);
+  // console.log(maxMileageValue);
 
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -230,6 +322,31 @@ export default function Catalog() {
     }));
   };
 
+  const handleMinMileageChange = (value: number) => {
+    setMinMileageValue(value);
+  };
+
+  const handleMaxMileageChange = (value: number) => {
+    setMaxMileageValue(value);
+  };
+
+  const handleMinYearChange = (value: number) => {
+    setMinYearValue(value);
+  };
+  const handleMaxYearChange = (value: number) => {
+    setMaxYearValue(value);
+  };
+
+  const handleMinPriceChange = (value: number) => {
+    console.log(value);
+
+    setMinPriceValue(value);
+  };
+
+  const handleMaxPriceChange = (value: number) => {
+    setMaxPriceValue(value);
+  };
+
   const handlePageClick = (event: any) => {
     const selectedPage = event.selected;
     const newOffset = selectedPage * itemsPerPage;
@@ -249,11 +366,38 @@ export default function Catalog() {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
-  const handleVechicleChange = (event: any) => {
-    // console.log(event.target.id);
-  };
+  // const handleVechicleChange = (event: any) => {
+  //   // console.log(event.target.id);
+  // };
 
   // console.log(vechicleTypeCheckboxes);
+  const closeSelectedFilter = (filter: string) => {
+    if (filter === "brand") {
+      setBrandFilter("");
+    }
+    if (filter === "model") {
+      setModelFilter("");
+    }
+    if (filter === "mileage") {
+      setMinMileageValue(0);
+      setMaxMileageValue(999999);
+    }
+    if (filter === "year") {
+      setMinYearValue(2000);
+      setMaxYearValue(currentYear);
+    }
+
+    if (filter === "price") {
+      setMinPriceValue(0);
+      setMaxPriceValue(999999);
+    } else {
+      setVechicleTypeCheckboxes((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      console.log(filter);
+    }
+  };
 
   return (
     <div className={style.catalog}>
@@ -266,8 +410,28 @@ export default function Catalog() {
           onModelFilterChange={handleModelFilterChange}
           onCheckboxChange={handleCheckboxChange}
           brandFilterValue={brandFilter}
+          resetBrand={resetBrandFilter}
+          resetModel={resetModelFilter}
+          resetVechicleType={resetVechicleTypeFilter}
+          resetMileage={resetMileage}
+          resetYear={resetYear}
+          resetPrice={resetPrice}
           modelFilterValue={modelFilter}
           checkBoxes1={vechicleTypeCheckboxes}
+          minMileageValue={minMileageValue}
+          maxMileageValue={maxMileageValue}
+          onMinMileageValue={handleMinMileageChange}
+          onMaxMileageValue={handleMaxMileageChange}
+          // mileageSliderChange={handleMileageSliderChange}
+
+          minYearValue={minYearValue}
+          maxYearValue={maxYearValue}
+          onMinYearValue={handleMinYearChange}
+          onMaxYearValue={handleMaxYearChange}
+          minPriceValue={minPriceValue}
+          maxPriceValue={maxPriceValue}
+          onMinPriceValue={handleMinPriceChange}
+          onMaxPriceValue={handleMaxPriceChange}
         />
 
         <div id="catalogList" className={style.catalog__left}>
@@ -276,9 +440,13 @@ export default function Catalog() {
             setIsFiltersOpen={setIsFiltersOpen}
             brand={brandFilter}
             model={modelFilter}
+            mileage={mileageFilter}
+            date={yearFilter}
+            price={priceFilter}
             type={vechicleTypeCheckboxes}
             founted={filteredCars.length}
             clearFilterArg={clearFiltersArg}
+            closeSelectedFilter={(filter) => closeSelectedFilter(filter)}
           />
 
           <div className={style.catalogPagination}>
