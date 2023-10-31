@@ -5,6 +5,8 @@ import ResetAll from "../../ui/ResetAll/ResetAll";
 import {Console} from "console";
 
 interface FiltersProps {
+  sortType: string;
+  onChangeSort: (name: string) => void;
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
   founted: number;
@@ -20,6 +22,8 @@ interface FiltersProps {
 }
 
 export default function Sorted({
+  sortType,
+  onChangeSort,
   isFiltersOpen,
   setIsFiltersOpen,
   founted,
@@ -42,7 +46,32 @@ export default function Sorted({
       typeArr.push(key);
     }
   });
-  // console.log(typeArr);
+
+  interface SortOption {
+    name: string;
+    sortProperty: string;
+  }
+
+  const sorts: SortOption[] = [
+    {name: "Expensive", sortProperty: "price"},
+    {name: "Cheaper", sortProperty: "price"},
+    {name: "Older", sortProperty: "value"},
+    {name: "Newer", sortProperty: "value"},
+    {name: "By date before", sortProperty: "date"},
+    {name: "By date later", sortProperty: "date"},
+  ];
+  const [selectedSort, setSelectedSort] = useState<number>(0);
+
+  const onClickSortBy = (name: string) => {
+    // setSelectedSort(index);
+    onChangeSort(name);
+    console.log(selectedSort);
+  };
+
+  console.log(sorts);
+  // className={`${style.sortBy__item} ${
+  //   index.toString === sortType ? style.selected : "ssss"
+  // }`}
   return (
     <div className={style.sorted}>
       <div className={style.sorted__top}>
@@ -52,7 +81,13 @@ export default function Sorted({
         </div>
         <div className={style.sortBy}>
           <p>Sort by:</p>
-          <span>Newly added</span>
+          {sorts.map((obj, i) => {
+            return (
+              <span key={i} onClick={() => onClickSortBy(obj.sortProperty)}>
+                {obj.name}
+              </span>
+            );
+          })}
         </div>
       </div>
 

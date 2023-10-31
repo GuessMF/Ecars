@@ -10,6 +10,7 @@ interface Props {
   model: string;
   price: string;
   fuel: string;
+  owners: string;
   location: string;
   mileage: number;
   description: string;
@@ -24,24 +25,24 @@ export default function BigCard({
   model,
   price,
   fuel,
+  owners,
   location,
   mileage,
   description,
   previewIMG,
   onLoad,
 }: Props) {
-  // console.log(id + " ID");
   const formattedPrice: string = price
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
+  const owner = Number(owners);
 
   return (
     <NavLink to={`/details/${id}`}>
       <div className={style.bigCard}>
         <div className={style.bigCard__image}>
           <img className={style.bigCard__img} src={previewIMG} />
-
-          {/* <div className={style.image__badge}>Premium</div> */}
         </div>
         <div className={style.bigCard__information}>
           <div className={style.information__top}>
@@ -51,7 +52,7 @@ export default function BigCard({
             </div>
             <div className={style.information__state}>
               {location} • {mileage < 20 ? "Brand NEW" : "Used"} • {mileage} km
-              • {fuel}
+              {owner === 0 ? " " : " • " + owner + " Owners"}
             </div>
             <div className={style.information__description}>{description}</div>
           </div>

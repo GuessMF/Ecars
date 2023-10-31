@@ -29,6 +29,8 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 export default function Catalog() {
+  const [sortType, setSortType] = useState<string>("");
+
   const [carsWithImages, setCarsWithImages] = useState<
     {
       id: string;
@@ -37,6 +39,10 @@ export default function Catalog() {
       price: string;
       year: number;
       fuel: string;
+      color: string;
+      seats: string;
+      transmission: string;
+      owners: string;
       vehicleType: string;
       location: string;
       description: string;
@@ -57,10 +63,12 @@ export default function Catalog() {
           const carsWithImagesArray = [];
           for (const car of carData) {
             const folderRef = ref(storage, `cars/${car.id}`);
+
             try {
               const carImages = await listAll(folderRef);
               if (carImages.items.length > 0) {
                 const imageUrl = await getDownloadURL(carImages.items[0]);
+
                 carsWithImagesArray.push({
                   id: car.id.toString(),
                   brand: car.brand,
@@ -68,6 +76,10 @@ export default function Catalog() {
                   price: car.price.toString(),
                   year: car.year,
                   fuel: car.fuel,
+                  color: car.color,
+                  seats: car.seats,
+                  transmission: car.transmission,
+                  owners: car.owners,
                   location: car.location,
                   vehicleType: car.vehicleType,
                   description: car.description,
@@ -96,7 +108,7 @@ export default function Catalog() {
     };
 
     fetchCarImages();
-  }, []);
+  }, [sortType]);
 
   const itemsPerPage = 8;
   const location = useLocation();
@@ -112,6 +124,7 @@ export default function Catalog() {
     location: string;
     vehicleType: string;
     year: number;
+    owners: string;
     description: string;
     mileage: number;
     imageUrl: string;
@@ -123,6 +136,54 @@ export default function Catalog() {
     Convertible: boolean;
     Coupe: boolean;
     Hatchback: boolean;
+  }
+  interface Cities {
+    SaintPetersburg: boolean;
+    Moscow: boolean;
+    Almaty: boolean;
+    Minsk: boolean;
+    Dubai: boolean;
+    AbuDhabi: boolean;
+    Shanghai: boolean;
+  }
+  interface OwnersCheckboxes {
+    None: boolean;
+    One: boolean;
+    Two: boolean;
+    Three: boolean;
+    More: boolean;
+  }
+
+  interface ColorCheckboxes {
+    Black: boolean;
+    White: boolean;
+    Gray: boolean;
+    Blue: boolean;
+    Silver: boolean;
+    Brown: boolean;
+    Orange: boolean;
+    Yellow: boolean;
+    Red: boolean;
+    Green: boolean;
+  }
+
+  interface SeatsCheckboxes {
+    TwoSeats: boolean;
+    ThreeSeats: boolean;
+    FourSeats: boolean;
+    FiveSeats: boolean;
+    SixSeats: boolean;
+    SevenSeats: boolean;
+  }
+  interface FuelCheckboxes {
+    Gasoline: boolean;
+    Diesel: boolean;
+    Electric: boolean;
+    Hybrid: boolean;
+  }
+  interface TransmissionCheckboxes {
+    Automatic: boolean;
+    Manual: boolean;
   }
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
   const [pageCount, setPageCount] = React.useState(0);
@@ -158,6 +219,57 @@ export default function Catalog() {
 
   const [priceFilter, setPriceFilter] = useState<boolean>(false);
 
+  const [cityCheckboxes, setCityCheckboxes] = useState({
+    SaintPetersburg: false,
+    Moscow: false,
+    Almaty: false,
+    Minsk: false,
+    Dubai: false,
+    AbuDhabi: false,
+    Shanghai: false,
+  });
+
+  const [owners, setOwners] = useState({
+    None: false,
+    One: false,
+    Two: false,
+    Three: false,
+    More: false,
+  });
+
+  const [color, setColor] = useState({
+    Black: false,
+    White: false,
+    Gray: false,
+    Blue: false,
+    Silver: false,
+    Brown: false,
+    Orange: false,
+    Yellow: false,
+    Red: false,
+    Green: false,
+  });
+  const [seats, setSeats] = useState({
+    TwoSeats: false,
+    ThreeSeats: false,
+    FourSeats: false,
+    FiveSeats: false,
+    SixSeats: false,
+    SevenSeats: false,
+  });
+
+  const [fuel, setFuel] = useState({
+    Gasoline: false,
+    Diesel: false,
+    Electric: false,
+    Hybrid: false,
+  });
+
+  const [transmission, setTransmission] = useState({
+    Automatic: false,
+    Manual: false,
+  });
+
   const resetBrandFilter = () => {
     setBrandFilter("");
   };
@@ -191,6 +303,18 @@ export default function Catalog() {
     setMaxPriceValue(999999);
   };
 
+  const resetCity = () => {
+    setCityCheckboxes({
+      SaintPetersburg: false,
+      Moscow: false,
+      Almaty: false,
+      Minsk: false,
+      Dubai: false,
+      AbuDhabi: false,
+      Shanghai: false,
+    });
+  };
+
   const clearFiltersArg = () => {
     setBrandFilter("");
     setModelFilter("");
@@ -204,18 +328,11 @@ export default function Catalog() {
       Van: false,
       StationWagon: false,
     });
-    console.log(vechicleTypeCheckboxes);
   };
-
-  // const newRef = useRef(null);
 
   const [filteredCars, setFilteredCars] = useState(carsWithImages);
 
   React.useEffect(() => {
-    // const filteredItems = carsWithImages.filter(
-    //   (item) =>
-    //     item.brand.toLowerCase().startsWith(brandFilter.toLowerCase()) &&
-    //     item.model.toLowerCase().startsWith(modelFilter.toLowerCase())
     if (minMileageValue !== 0 || maxMileageValue !== 999999) {
       setMileageFilter(true);
     } else {
@@ -265,7 +382,53 @@ export default function Catalog() {
       const isPriceMatch =
         Number(item.price) >= minPriceValue &&
         Number(item.price) <= maxPriceValue;
-      // console.log(isMileageMatch);
+
+      const isCity =
+        (cityCheckboxes.SaintPetersburg &&
+          item.location === "Saint-Petersburg") ||
+        (cityCheckboxes.Moscow && item.location === "Moscow") ||
+        (cityCheckboxes.Almaty && item.location === "Almaty") ||
+        (cityCheckboxes.Minsk && item.location === "Minsk") ||
+        (cityCheckboxes.Dubai && item.location === "Dubai") ||
+        (cityCheckboxes.AbuDhabi && item.location === "AbuDhabi") ||
+        (cityCheckboxes.Shanghai && item.location === "Shanghai");
+
+      const isOwnersMatch =
+        (owners.None && item.owners === "0") ||
+        (owners.One && item.owners === "1") ||
+        (owners.Two && item.owners === "2") ||
+        (owners.Three && item.owners === "3") ||
+        (owners.More && item.owners === "4");
+
+      const isColorMatch =
+        (color.Black && item.color === "Black") ||
+        (color.White && item.color === "White") ||
+        (color.Gray && item.color === "Gray") ||
+        (color.Blue && item.color === "Blue") ||
+        (color.Silver && item.color === "Silver") ||
+        (color.Brown && item.color === "Brown") ||
+        (color.Orange && item.color === "Orange") ||
+        (color.Yellow && item.color === "Yellow") ||
+        (color.Red && item.color === "Red") ||
+        (color.Green && item.color === "Green");
+
+      const isSeatsMatch =
+        (seats.TwoSeats && item.seats === "2") ||
+        (seats.ThreeSeats && item.seats === "3") ||
+        (seats.FourSeats && item.seats === "4") ||
+        (seats.FiveSeats && item.seats === "5") ||
+        (seats.SixSeats && item.seats === "6") ||
+        (seats.SevenSeats && item.seats === "7");
+
+      const isFuelMatch =
+        (fuel.Gasoline && item.fuel === "Gasoline") ||
+        (fuel.Diesel && item.fuel === "Diesel") ||
+        (fuel.Electric && item.fuel === "Electric") ||
+        (fuel.Hybrid && item.fuel === "Hybrid");
+
+      const isTransmissionMatch =
+        (transmission.Automatic && item.transmission === "Automatic") ||
+        (transmission.Manual && item.transmission === "Manual");
 
       return (
         isBrandMatch &&
@@ -274,7 +437,14 @@ export default function Catalog() {
         isYearMatch &&
         isPriceMatch &&
         (isTypeMatch ||
-          Object.values(vechicleTypeCheckboxes).every((value) => !value))
+          Object.values(vechicleTypeCheckboxes).every((value) => !value)) &&
+        (isCity || Object.values(cityCheckboxes).every((value) => !value)) &&
+        (isOwnersMatch || Object.values(owners).every((value) => !value)) &&
+        (isColorMatch || Object.values(color).every((value) => !value)) &&
+        (isSeatsMatch || Object.values(seats).every((value) => !value)) &&
+        (isFuelMatch || Object.values(fuel).every((value) => !value)) &&
+        (isTransmissionMatch ||
+          Object.values(transmission).every((value) => !value))
       );
     });
     const endOffset = itemOffset + itemsPerPage;
@@ -293,11 +463,16 @@ export default function Catalog() {
     minPriceValue,
     maxPriceValue,
     vechicleTypeCheckboxes,
+    cityCheckboxes,
+    owners,
+    color,
+    seats,
+    fuel,
+    transmission,
     itemOffset,
     itemsPerPage,
     carsWithImages,
   ]);
-  // console.log(maxMileageValue);
 
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -322,6 +497,57 @@ export default function Catalog() {
     }));
   };
 
+  const handleCitiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof Cities;
+
+    setCityCheckboxes((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
+  const handleOwnersChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof OwnersCheckboxes;
+    setOwners((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
+  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof ColorCheckboxes;
+    setColor((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
+  const handleSeatsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof SeatsCheckboxes;
+    setSeats((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
+  const handleFuelChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const checkboxId = event.target.id as keyof FuelCheckboxes;
+    setFuel((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
+  const handleTransmissionChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const checkboxId = event.target.id as keyof TransmissionCheckboxes;
+    setTransmission((prevCheckboxes) => ({
+      ...prevCheckboxes,
+      [checkboxId]: !prevCheckboxes[checkboxId],
+    }));
+  };
+
   const handleMinMileageChange = (value: number) => {
     setMinMileageValue(value);
   };
@@ -338,8 +564,6 @@ export default function Catalog() {
   };
 
   const handleMinPriceChange = (value: number) => {
-    console.log(value);
-
     setMinPriceValue(value);
   };
 
@@ -366,11 +590,6 @@ export default function Catalog() {
     setIsFiltersOpen(!isFiltersOpen);
   };
 
-  // const handleVechicleChange = (event: any) => {
-  //   // console.log(event.target.id);
-  // };
-
-  // console.log(vechicleTypeCheckboxes);
   const closeSelectedFilter = (filter: string) => {
     if (filter === "brand") {
       setBrandFilter("");
@@ -395,7 +614,6 @@ export default function Catalog() {
         ...prevState,
         [filter]: false,
       }));
-      console.log(filter);
     }
   };
 
@@ -409,6 +627,12 @@ export default function Catalog() {
           onBrandFilterChange={handleBrandFilterChange}
           onModelFilterChange={handleModelFilterChange}
           onCheckboxChange={handleCheckboxChange}
+          onCitiesChange={handleCitiesChange}
+          onOwnersChange={handleOwnersChange}
+          onColorChange={handleColorChange}
+          onSeatsChange={handleSeatsChange}
+          onFuelChange={handleFuelChange}
+          onTransmissionchange={handleTransmissionChange}
           brandFilterValue={brandFilter}
           resetBrand={resetBrandFilter}
           resetModel={resetModelFilter}
@@ -418,6 +642,12 @@ export default function Catalog() {
           resetPrice={resetPrice}
           modelFilterValue={modelFilter}
           checkBoxes1={vechicleTypeCheckboxes}
+          cities={cityCheckboxes}
+          ownersBoxes={owners}
+          color={color}
+          seats={seats}
+          fuel={fuel}
+          transmission={transmission}
           minMileageValue={minMileageValue}
           maxMileageValue={maxMileageValue}
           onMinMileageValue={handleMinMileageChange}
@@ -436,6 +666,8 @@ export default function Catalog() {
 
         <div id="catalogList" className={style.catalog__left}>
           <Sorted
+            sortType={sortType}
+            onChangeSort={(i) => setSortType(i)}
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
             brand={brandFilter}
@@ -464,6 +696,7 @@ export default function Catalog() {
                   model={car.model}
                   price={car.price}
                   fuel={car.fuel}
+                  owners={car.owners}
                   location={car.location}
                   mileage={car.mileage}
                   description={car.description}

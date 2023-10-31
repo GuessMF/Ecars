@@ -18,14 +18,20 @@
     "agent-base": "^7.1.0",
     "axios": "^1.5.1",
     "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "firebase": "^10.5.0",
     "fs-extra": "^11.1.1",
     "googleapis": "^127.0.0",
+    "graceful-fs": "^4.2.11",
     "http2": "^3.3.7",
     "https-browserify": "^1.0.0",
+    "image-compressor": "^2.0.3",
+    "image-conversion": "^2.1.1",
     "net": "^1.0.2",
     "node-libs-browser": "^2.2.1",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "nouislider": "^15.7.1",
+    "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
@@ -37,6 +43,7 @@
     "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
     "rsuite": "^5.40.0",
+    "sharp": "^0.32.6",
     "stream-browserify": "^3.0.0",
     "swiper": "^10.2.0",
     "tls": "^0.0.1",
@@ -80,5 +87,8 @@
     "sass": "^1.62.1",
     "typescript": "^5.2.2",
     "typescript-plugin-css-modules": "^5.0.1"
+  },
+  "browser": {
+    "child_process": false
   }
 }

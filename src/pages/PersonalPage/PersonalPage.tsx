@@ -4,8 +4,16 @@ import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+// import ImageCompressor from "image-compressor";
+//import sharp from "sharp";
 
 const storage = getStorage();
+
+interface Errors {
+  brand?: string;
+  model?: string;
+  // Добавьте другие поля с ошибками, если необходимо
+}
 
 export default function PersonalPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -14,7 +22,7 @@ export default function PersonalPage() {
   const [price, setPrice] = useState<number>(0);
   const [year, setYear] = useState<number>(0);
   const [mileage, setMileage] = useState<number>(0);
-  const [gearbox, setGearbox] = useState<string>("");
+  const [transmission, setTransmission] = useState<string>("");
   const [fuel, setFuel] = useState<string>("");
   const [wheels, setWheels] = useState<string>("");
   const [vehicleType, setVehicleType] = useState<string>("");
@@ -23,6 +31,7 @@ export default function PersonalPage() {
   const [interior, setInterior] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [owners, setOwners] = useState<string>("");
   const [exportStatus, setExportStatus] = useState<string>("");
 
   const [description, setDescription] = useState("");
@@ -33,6 +42,8 @@ export default function PersonalPage() {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      console.log(e.target.files);
+
       setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
     }
 
@@ -60,87 +71,105 @@ export default function PersonalPage() {
   const generateNewId = (): string => {
     return uuidv4();
   };
-
+  const [formErrors, setFormErrors] = useState<Errors>({});
+  const errors: Errors = {};
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const uploadTasks: Promise<string>[] = [];
-    const newId = generateNewId();
 
-    selectedFiles.forEach((file) => {
-      const storageRef = ref(storage, `cars/${newId}/${file.name}`);
-      uploadTasks.push(
-        uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
-      );
-    });
+    if (!brand) {
+      errors.brand = "Поле Брэнд обязательно для заполнения";
+    }
 
-    const imageUrls = await Promise.all(uploadTasks);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      console.log("Errors Brand");
+    } else {
+      console.log("No Errors");
+      // Если нет ошибок, выполните отправку данных
+      // Ваш код для отправки данных на сервер
 
-    // Используйте сгенерированный ID в названии папки в Firebase Storage
-    const storageFolder = `cars/${newId}`;
+      const uploadTasks: Promise<string>[] = [];
+      const newId = generateNewId();
 
-    const carObject = {
-      id: newId,
-      brand,
-      model,
-      price,
-      year,
-      mileage,
-      gearbox,
-      fuel,
-      wheels,
-      vehicleType,
-      engineCapacity,
-      seats,
-      color,
-      interior,
-      location,
-      exportStatus,
-      description,
-      imageUrls, // Массив URL изображений
-    };
-    // Отправить объект на сервер или выполнить другие действия с ним
-    //  console.log(carObject);
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(carObject),
-    };
-    fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Network response was not ok.");
-      })
-      .then((json) => {
-        console.log("Объект успешно отправлен на сервер:", json);
-      })
-      .catch((error) => {
-        console.error("Ошибка при отправке объекта на сервер:", error);
+      selectedFiles.forEach((file) => {
+        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+
+        uploadTasks.push(
+          uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+        );
       });
 
-    // Сбросить значения формы
+      const imageUrls = await Promise.all(uploadTasks);
 
-    setSelectedFiles([]);
-    setPreviewImages([]);
-    setBrand("");
-    setModel("");
-    setPrice(0);
-    setYear(0);
-    setGearbox("");
-    setEngineCapacity("");
-    setMileage(0);
-    setFuel("");
-    setWheels("");
-    setVehicleType("");
-    setSeats("");
-    setInterior("");
-    setColor("");
-    setLocation("");
-    setExportStatus("");
-    setDescription("");
+      // Используйте сгенерированный ID в названии папки в Firebase Storage
+      //  const storageFolder = `cars/${newId}`;
+
+      const carObject = {
+        id: newId,
+        brand,
+        model,
+        price,
+        year,
+        mileage,
+        transmission,
+        fuel,
+        wheels,
+        vehicleType,
+        engineCapacity,
+        seats,
+        owners,
+        color,
+        interior,
+        location,
+        exportStatus,
+        description,
+        imageUrls, // Массив URL изображений
+      };
+      // Отправить объект на сервер или выполнить другие действия с ним
+      //  console.log(carObject);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(carObject),
+      };
+      fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Network response was not ok.");
+        })
+        .then((json) => {
+          console.log("Объект успешно отправлен на сервер:", json);
+        })
+        .catch((error) => {
+          console.error("Ошибка при отправке объекта на сервер:", error);
+        });
+
+      // Сбросить значения формы
+
+      setSelectedFiles([]);
+      setPreviewImages([]);
+      setBrand("");
+      setModel("");
+      setPrice(0);
+      setYear(0);
+      setTransmission("");
+      setEngineCapacity("");
+      setMileage(0);
+      setFuel("");
+      setWheels("");
+      setVehicleType("");
+      setSeats("");
+      setInterior("");
+      setColor("");
+      setLocation("");
+      setExportStatus("");
+      setDescription("");
+      setOwners("");
+    }
   };
 
   const handleEngineCapacityChange = (
@@ -218,6 +247,10 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
+
+        {formErrors.brand && (
+          <div className={style.error}>{formErrors.brand}</div>
+        )}
         <div>
           <label>
             <span>Модель:</span>
@@ -256,6 +289,8 @@ export default function PersonalPage() {
               <option value="">Вид топлива</option>
               <option value="Gasoline">Gasoline</option>
               <option value="Diesel">Diesel</option>
+              <option value="Hybrid">Hybrid</option>
+              <option value="Electric">Electric</option>
             </select>
           </label>
         </div>
@@ -309,8 +344,8 @@ export default function PersonalPage() {
           <label>
             Трансмиссия:
             <select
-              value={gearbox}
-              onChange={(e) => setGearbox(e.target.value)}
+              value={transmission}
+              onChange={(e) => setTransmission(e.target.value)}
             >
               <option value="">Выберите трансмиссию</option>
               <option value="Automatic">Automatic</option>
@@ -343,27 +378,44 @@ export default function PersonalPage() {
             Колличество мест:
             <select value={seats} onChange={(e) => setSeats(e.target.value)}>
               <option value="">Выберите колличество мест</option>
-              <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
               <option value="6">6</option>
               <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
             </select>
           </label>
         </div>
         <div>
           <label>
             Местоположение:
-            <input
-              type="text"
+            <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-            />
+            >
+              <option value="">Выберите город</option>
+              <option value="Saint-Petersburg">Saint-Petersburg</option>
+              <option value="Moscow">Moscow</option>
+              <option value="Almaty">Almaty</option>
+              <option value="Minsk">Minsk</option>
+              <option value="Abu Dhabi">Abu Dhabi</option>
+              <option value="Shanghai">Shanghai</option>
+            </select>
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Владельцы:
+            <select value={owners} onChange={(e) => setOwners(e.target.value)}>
+              <option value="">Количество владельцев</option>
+              <option value="0">None</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">3+</option>
+            </select>
           </label>
         </div>
 

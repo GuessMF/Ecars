@@ -15,12 +15,68 @@ interface CheckBoxes {
   Coupe: boolean;
   Hatchback: boolean;
 }
+interface Cities {
+  SaintPetersburg: boolean;
+  Moscow: boolean;
+  Almaty: boolean;
+  Minsk: boolean;
+  Dubai: boolean;
+  AbuDhabi: boolean;
+  Shanghai: boolean;
+}
+
+interface Owners {
+  None: boolean;
+  One: boolean;
+  Two: boolean;
+  Three: boolean;
+  More: boolean;
+}
+
+interface ColorCheckboxes {
+  Black: boolean;
+  White: boolean;
+  Gray: boolean;
+  Blue: boolean;
+  Silver: boolean;
+  Brown: boolean;
+  Orange: boolean;
+  Yellow: boolean;
+  Red: boolean;
+  Green: boolean;
+}
+
+interface SeatsCheckboxes {
+  TwoSeats: boolean;
+  ThreeSeats: boolean;
+  FourSeats: boolean;
+  FiveSeats: boolean;
+  SixSeats: boolean;
+  SevenSeats: boolean;
+}
+interface FuelCheckboxes {
+  Gasoline: boolean;
+  Diesel: boolean;
+  Electric: boolean;
+  Hybrid: boolean;
+}
+interface TransmissionCheckboxes {
+  Automatic: boolean;
+  Manual: boolean;
+}
+
 interface FiltersProps {
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
   onBrandFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onModelFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onCitiesChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onOwnersChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onColorChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSeatsChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFuelChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onTransmissionchange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   brandFilterValue: string;
   modelFilterValue: string;
   resetModel: () => void;
@@ -30,6 +86,12 @@ interface FiltersProps {
   resetYear: () => void;
   resetPrice: () => void;
   checkBoxes1: CheckBoxes;
+  cities: Cities;
+  ownersBoxes: Owners;
+  color: ColorCheckboxes;
+  fuel: FuelCheckboxes;
+  seats: SeatsCheckboxes;
+  transmission: TransmissionCheckboxes;
   minMileageValue: number;
   maxMileageValue: number;
   onMinMileageValue: (value: number) => void;
@@ -54,6 +116,11 @@ export default function Filters({
   onBrandFilterChange,
   onModelFilterChange,
   onCheckboxChange,
+  onOwnersChange,
+  onColorChange,
+  onSeatsChange,
+  onFuelChange,
+  onTransmissionchange,
   brandFilterValue,
   modelFilterValue,
   resetBrand,
@@ -63,6 +130,13 @@ export default function Filters({
   resetYear,
   resetPrice,
   checkBoxes1,
+  cities,
+  ownersBoxes,
+  color,
+  fuel,
+  seats,
+  transmission,
+  onCitiesChange,
   minMileageValue,
   maxMileageValue,
   onMaxMileageValue,
@@ -348,14 +422,6 @@ FiltersProps) {
           </div>
         </div>
 
-        <div className={style.filters__country}>
-          <div className={style.filters__label}>
-            <h6>Country</h6>
-            <span>Reset</span>
-          </div>
-          <input type="text" placeholder="USA" />
-        </div>
-
         <div className={style.filters__city}>
           <div className={style.filters__label}>
             <h6>City</h6>
@@ -367,69 +433,75 @@ FiltersProps) {
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox10"
+                id="SaintPetersburg"
+                checked={cities.SaintPetersburg}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox10">New York</label>
+              <label htmlFor="SaintPetersburg">Saint-Petersburg</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox11"
+                id="Moscow"
+                checked={cities.Moscow}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox11">Los Angeles</label>
+              <label htmlFor="Moscow">Moscow</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox12"
+                id="Almaty"
+                checked={cities.Almaty}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox12">Chicago</label>
+              <label htmlFor="Almaty">Almaty</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox13"
+                id="Minsk"
+                checked={cities.Minsk}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox13">Houston</label>
+              <label htmlFor="Minsk">Minsk</label>
             </li>
 
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox14"
+                id="Dubai"
+                checked={cities.Dubai}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox14">Phoenix</label>
+              <label htmlFor="Dubai">Dubai</label>
             </li>
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox15"
+                id="AbuDhabi"
+                checked={cities.AbuDhabi}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox15">Philadelphia</label>
+              <label htmlFor="AbuDhabi">Abu Dhabi</label>
             </li>
             <li className={style.form_checkbox}>
               <input
                 className={style.checkbox}
                 type="checkbox"
-                id="checkbox16"
+                id="Shanghai"
+                checked={cities.Shanghai}
+                onChange={onCitiesChange}
               />
-              <label htmlFor="checkbox16">City 1</label>
-            </li>
-            <li className={style.form_checkbox}>
-              <input
-                className={style.checkbox}
-                type="checkbox"
-                id="checkbox17"
-              />
-              <label htmlFor="checkbox17">City 2</label>
+              <label htmlFor="Shanghai">Shanghai</label>
             </li>
           </ul>
         </div>
@@ -444,7 +516,7 @@ FiltersProps) {
 
             <div className={style.filters__cylinders}>
               <div className={style.filters__label}>
-                <h6>Cylinders</h6>
+                <h6>Owners</h6>
                 <span>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
@@ -452,69 +524,55 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox18"
+                    id="None"
+                    checked={ownersBoxes.None}
+                    onChange={onOwnersChange}
                   />
-                  <label htmlFor="checkbox18">2</label>
+                  <label htmlFor="None">None</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox19"
+                    id="One"
+                    checked={ownersBoxes.One}
+                    onChange={onOwnersChange}
                   />
-                  <label htmlFor="checkbox19">3</label>
+                  <label htmlFor="One">1</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox20"
+                    id="Two"
+                    checked={ownersBoxes.Two}
+                    onChange={onOwnersChange}
                   />
-                  <label htmlFor="checkbox20">4</label>
+                  <label htmlFor="Two">2</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox21"
+                    id="Three"
+                    checked={ownersBoxes.Three}
+                    onChange={onOwnersChange}
                   />
-                  <label htmlFor="checkbox21">5</label>
+                  <label htmlFor="Three">3</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox22"
+                    id="More"
+                    checked={ownersBoxes.More}
+                    onChange={onOwnersChange}
                   />
-                  <label htmlFor="checkbox22">6</label>
-                </li>
-                <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
-                    id="checkbox23"
-                  />
-                  <label htmlFor="checkbox23">7</label>
-                </li>
-                <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
-                    id="checkbox24"
-                  />
-                  <label htmlFor="checkbox24">8</label>
-                </li>
-                <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
-                    id="checkbox25"
-                  />
-                  <label htmlFor="checkbox25">9</label>
+                  <label htmlFor="More">3+</label>
                 </li>
               </ul>
             </div>
@@ -528,69 +586,85 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox26"
+                    id="Black"
+                    checked={color.Black}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox26">Black</label>
+                  <label htmlFor="Black">Black</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox27"
+                    id="White"
+                    checked={color.White}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox27">Blue</label>
+                  <label htmlFor="White">White</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox28"
+                    id="Gray"
+                    checked={color.Gray}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox28">Brown</label>
+                  <label htmlFor="Gray">Gray</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox29"
+                    id="Silver"
+                    checked={color.Silver}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox29">Gold</label>
+                  <label htmlFor="Silver">Silver</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox30"
+                    id="Blue"
+                    // checked={color.Blue}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox30">Green</label>
+                  <label htmlFor="Blue">Blue</label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox31"
+                    id="Red"
+                    checked={color.Red}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox31">Gray</label>
+                  <label htmlFor="Red">Red</label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox32"
+                    id="Green"
+                    checked={color.Green}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox32">White</label>
+                  <label htmlFor="Green">Green</label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox33"
+                    id="Yellow"
+                    checked={color.Yellow}
+                    onChange={onColorChange}
                   />
-                  <label htmlFor="checkbox33">Yellow</label>
+                  <label htmlFor="Yellow">Yellow</label>
                 </li>
               </ul>
             </div>
@@ -605,70 +679,75 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox34"
+                    id="TwoSeats"
+                    checked={seats.TwoSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox34">2</label>
+                  <label htmlFor="TwoSeats">2</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox35"
+                    id="ThreeSeats"
+                    checked={seats.ThreeSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox35">3</label>
+                  <label htmlFor="ThreeSeats">3</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox36"
+                    id="FourSeats"
+                    checked={seats.FourSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox36">4</label>
+                  <label htmlFor="FourSeats">4</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox37"
+                    id="FiveSeats"
+                    checked={seats.FiveSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox37">5</label>
+                  <label htmlFor="FiveSeats">5</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox38"
+                    id="SixSeats"
+                    checked={seats.SixSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox38">6</label>
+                  <label htmlFor="SixSeats">6</label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox39"
+                    id="SevenSeats"
+                    checked={seats.SevenSeats}
+                    onChange={onSeatsChange}
                   />
-                  <label htmlFor="checkbox39">7</label>
+                  <label htmlFor="SevenSeats">7</label>
                 </li>
-                <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
-                    id="checkbox40"
-                  />
-                  <label htmlFor="checkbox40">8</label>
-                </li>
-                <li className={style.form_checkbox}>
+
+                {/* <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
                     id="checkbox41"
                   />
                   <label htmlFor="checkbox41">9</label>
-                </li>
+                </li> */}
               </ul>
             </div>
 
@@ -682,36 +761,44 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox42"
+                    id="Gasoline"
+                    checked={fuel.Gasoline}
+                    onChange={onFuelChange}
                   />
-                  <label htmlFor="checkbox42">Gasoline</label>
+                  <label htmlFor="Gasoline">Gasoline</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox43"
+                    id="Diesel"
+                    checked={fuel.Diesel}
+                    onChange={onFuelChange}
                   />
-                  <label htmlFor="checkbox43">Diesel</label>
+                  <label htmlFor="Diesel">Diesel</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox44"
+                    id="Hybrid"
+                    checked={fuel.Hybrid}
+                    onChange={onFuelChange}
                   />
-                  <label htmlFor="checkbox44">Hybrid</label>
+                  <label htmlFor="Hybrid">Hybrid</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox45"
+                    id="Electric"
+                    checked={fuel.Electric}
+                    onChange={onFuelChange}
                   />
-                  <label htmlFor="checkbox45">Electric</label>
+                  <label htmlFor="Electric">Electric</label>
                 </li>
               </ul>
             </div>
@@ -726,18 +813,22 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox46"
+                    id="Manual"
+                    checked={transmission.Manual}
+                    onChange={onTransmissionchange}
                   />
-                  <label htmlFor="checkbox46">Manual</label>
+                  <label htmlFor="Manual">Manual</label>
                 </li>
 
                 <li className={style.form_checkbox}>
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="checkbox47"
+                    id="Automatic"
+                    checked={transmission.Automatic}
+                    onChange={onTransmissionchange}
                   />
-                  <label htmlFor="checkbox47">Automatic</label>
+                  <label htmlFor="Automatic">Automatic</label>
                 </li>
               </ul>
             </div>
