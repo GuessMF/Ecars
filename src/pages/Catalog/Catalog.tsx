@@ -28,8 +28,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+interface SortType {
+  name: string;
+  sortProperty: string;
+}
+
 export default function Catalog() {
-  const [sortType, setSortType] = useState<string>("");
+  const [sortType, setSortType] = useState<SortType>({
+    name: "Expensive",
+    sortProperty: "price&order=desc",
+  });
+  console.log(sortType);
 
   const [carsWithImages, setCarsWithImages] = useState<
     {
@@ -56,7 +65,7 @@ export default function Catalog() {
     const fetchCarImages = async () => {
       try {
         const response = await fetch(
-          "https://65378b85bb226bb85dd365a6.mockapi.io/cars"
+          `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType.sortProperty}`
         );
         if (response.ok) {
           const carData = await response.json();
@@ -667,7 +676,7 @@ export default function Catalog() {
         <div id="catalogList" className={style.catalog__left}>
           <Sorted
             sortType={sortType}
-            onChangeSort={(i) => setSortType(i)}
+            onChangeSort={(obj) => setSortType(obj)}
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
             brand={brandFilter}

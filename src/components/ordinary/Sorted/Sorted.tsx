@@ -4,9 +4,14 @@ import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
 import {Console} from "console";
 
+interface SortType {
+  name: string;
+  sortProperty: string;
+}
+
 interface FiltersProps {
-  sortType: string;
-  onChangeSort: (name: string) => void;
+  sortType: {name: string; sortProperty: string};
+  onChangeSort: (obj: SortType) => void;
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
   founted: number;
@@ -53,24 +58,34 @@ export default function Sorted({
   }
 
   const sorts: SortOption[] = [
-    {name: "Expensive", sortProperty: "price"},
+    {name: "Expensive", sortProperty: "price&order=desc"},
     {name: "Cheaper", sortProperty: "price"},
-    {name: "Older", sortProperty: "value"},
-    {name: "Newer", sortProperty: "value"},
-    {name: "By date before", sortProperty: "date"},
+    {name: "Older", sortProperty: "year"},
+    {name: "Newer", sortProperty: "year&order=desc"},
+    {name: "By date before", sortProperty: "date&order=desc"},
     {name: "By date later", sortProperty: "date"},
   ];
-  const [selectedSort, setSelectedSort] = useState<number>(0);
+  const [selectedSort, setSelectedSort] = useState<string>("");
 
-  const onClickSortBy = (name: string) => {
-    // setSelectedSort(index);
-    onChangeSort(name);
+  // const onClickSortBy = (name: string) => {
+  //   setSelectedSort(name);
+  //   onChangeSort(obj);
+  //   console.log(selectedSort);
+  // };
+
+  const onClickSortBy = (sortOption: SortOption) => {
+    setSelectedSort(sortOption.sortProperty); // Устанавливаем имя выбранной опции в state
+    onChangeSort(sortOption); // Передаем объект SortOption в функцию родителя
     console.log(selectedSort);
   };
-
-  console.log(sorts);
+  // console.log(sorts);
   // className={`${style.sortBy__item} ${
   //   index.toString === sortType ? style.selected : "ssss"
+  // }`}
+  // className={`${style.sortBy__item} ${
+  //   sortType.sortProperty === obj.sortProperty
+  //     ? style.selected
+  //     : "ssss"
   // }`}
   return (
     <div className={style.sorted}>
@@ -83,7 +98,7 @@ export default function Sorted({
           <p>Sort by:</p>
           {sorts.map((obj, i) => {
             return (
-              <span key={i} onClick={() => onClickSortBy(obj.sortProperty)}>
+              <span key={i} onClick={() => onClickSortBy(obj)}>
                 {obj.name}
               </span>
             );
