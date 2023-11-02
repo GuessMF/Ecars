@@ -46,6 +46,13 @@ interface DataItem {
 
   // Добавьте другие свойства объекта данных, если необходимо
 }
+interface DateObject {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
+}
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
@@ -96,16 +103,19 @@ export default function Details() {
     price: number;
     year: number;
     mileage: number;
-    gearbox: string;
+    transmission: string;
     fuel: string;
     wheels: number;
     vehicleType: string;
     engineCapacity: number;
+    owners: string;
     seats: number;
+    color: string;
     interior: string;
     location: string;
     exportStatus: string;
     description: string;
+    dateObj: DateObject;
   } | null>(null);
 
   useEffect(() => {
@@ -122,10 +132,11 @@ export default function Details() {
             model: foundObject.model,
             price: foundObject.price,
             year: foundObject.year,
-            gearbox: foundObject.gearbox,
-
+            transmission: foundObject.transmission,
+            owners: foundObject.owners,
             fuel: foundObject.fuel,
             wheels: foundObject.wheels,
+            color: foundObject.color,
             vehicleType: foundObject.vehicleType,
             engineCapacity: foundObject.engineCapacity,
             seats: foundObject.seats,
@@ -135,6 +146,7 @@ export default function Details() {
 
             mileage: foundObject.mileage,
             description: foundObject.description,
+            dateObj: foundObject.dateObj,
           });
         } else {
           console.log("Объект с id", id, "не найден.");
@@ -199,6 +211,7 @@ export default function Details() {
                 exportStatus={currentCar.exportStatus}
                 year={currentCar.year}
                 mileage={currentCar.mileage}
+                dateObj={currentCar.dateObj}
               />
             )}
 
@@ -210,43 +223,58 @@ export default function Details() {
                 <div>
                   <span>Model</span> <span>{currentCar.model}</span>
                 </div>
+
                 <div>
-                  <span>Year</span> <span>{currentCar.year}</span>
-                </div>
-                <div>
-                  <span>Wheels</span> <span>{currentCar.wheels}</span>
-                </div>
-                <div>
-                  <span>Vehicle type</span>{" "}
+                  <span>Vehicle type</span>
                   <span>{currentCar.vehicleType}</span>
                 </div>
                 <div>
-                  <span>Kilometers</span> <span>{mileage}</span>
-                </div>
-              </div>
-              <div className={style.right__information}>
-                <div>
-                  <span>Gearbox</span> <span>{currentCar.gearbox}</span>
-                </div>
-                <div>
-                  <span>Fuel</span> <span>{currentCar.fuel}</span>
-                </div>
-                <div>
-                  <span>Seats</span> <span>{currentCar.seats}</span>
-                </div>
-                <div>
-                  <span>Engine Volume</span>{" "}
-                  <span>{currentCar.engineCapacity}</span>
+                  <span>Color</span>
+                  <span>{currentCar.color}</span>
                 </div>
                 <div>
                   <span>Interior</span> <span>{currentCar.interior}</span>
                 </div>
                 <div>
-                  <span>Location</span> <span>{currentCar.location}</span>
+                  <span>Owners</span>{" "}
+                  <span>
+                    {currentCar.owners === "0"
+                      ? "None"
+                      : currentCar.owners
+                      ? "4"
+                      : "3+"}
+                  </span>
+                </div>
+
+                <div>
+                  <span>Mileage</span> <span>{mileage + " km"}</span>
+                </div>
+              </div>
+              <div className={style.right__information}>
+                <div>
+                  <span>Year</span> <span>{currentCar.year}</span>
                 </div>
                 <div>
-                  <span>Export status</span>{" "}
-                  <span>{currentCar.exportStatus}</span>
+                  <span>Gearbox</span> <span>{currentCar.transmission}</span>
+                </div>
+                <div>
+                  <span>Engine Volume</span>{" "}
+                  <span>{currentCar.engineCapacity}</span>
+                </div>
+
+                <div>
+                  <span>Fuel</span> <span>{currentCar.fuel}</span>
+                </div>
+                <div>
+                  <span>Wheels</span> <span>{"R " + currentCar.wheels}</span>
+                </div>
+
+                <div>
+                  <span>Seats</span> <span>{currentCar.seats}</span>
+                </div>
+
+                <div>
+                  <span>Location</span> <span>{currentCar.location}</span>
                 </div>
               </div>
             </div>
@@ -327,6 +355,7 @@ export default function Details() {
               exportStatus={currentCar.exportStatus}
               year={currentCar.year}
               mileage={currentCar.mileage}
+              dateObj={currentCar.dateObj}
             />
           )}
         </div>

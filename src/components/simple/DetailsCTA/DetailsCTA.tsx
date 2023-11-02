@@ -8,6 +8,14 @@ import {ReactComponent as ShareIcon} from "../../../assets/icons/shareIcon.svg";
 import Email from "../../../components/ui/Email/Email";
 import Mobile from "../../../components/ui/Mobile/Mobile";
 
+interface DateObject {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
+}
+
 interface Props {
   brand: string;
   model: string;
@@ -16,6 +24,7 @@ interface Props {
   location: string;
   exportStatus: string;
   mileage: number;
+  dateObj: DateObject;
 }
 
 export default function DetailsCTA({
@@ -26,9 +35,10 @@ export default function DetailsCTA({
   location,
   exportStatus,
   mileage,
+  dateObj,
 }: Props) {
   const black: string = "#1A1A1A";
-
+  console.log(dateObj.year);
   const formattedPrice: string = price
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
@@ -36,7 +46,20 @@ export default function DetailsCTA({
   const formattedMileage: string = mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
-
+  const monthNames = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December",
+  };
   return (
     <div
       className={`${style.CTA} ${window.innerWidth <= 768 ? style.mobile : ""}`}
@@ -69,8 +92,8 @@ export default function DetailsCTA({
               <td>{year}</td>
             </tr>
             <tr>
-              <td>Kilometers</td>
-              <td>{formattedMileage}</td>
+              <td>Mileage</td>
+              <td>{formattedMileage + " km"}</td>
             </tr>
             <tr>
               <td>Location</td>
@@ -152,7 +175,10 @@ export default function DetailsCTA({
       </div>
       <div className={style.CTA__added}>
         <span>Added:</span>
-        <b>Jan 6, 2023</b>
+        <b>
+          {dateObj.day}
+          {monthNames[dateObj.month]}, 2023
+        </b>
         <span>• Views:</span> <b>38</b>
       </div>
     </div>
