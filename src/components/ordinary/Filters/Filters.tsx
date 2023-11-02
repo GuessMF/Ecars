@@ -85,6 +85,15 @@ interface FiltersProps {
   resetMileage: () => void;
   resetYear: () => void;
   resetPrice: () => void;
+
+  resetCity: () => void;
+
+  resetFuel: () => void;
+  resetOwners: () => void;
+  resetColor: () => void;
+  resetSeats: () => void;
+  resetTransmission: () => void;
+
   checkBoxes1: CheckBoxes;
   cities: Cities;
   ownersBoxes: Owners;
@@ -129,6 +138,12 @@ export default function Filters({
   resetMileage,
   resetYear,
   resetPrice,
+  resetCity,
+  resetFuel,
+  resetOwners,
+  resetColor,
+  resetSeats,
+  resetTransmission,
   checkBoxes1,
   cities,
   ownersBoxes,
@@ -425,7 +440,7 @@ FiltersProps) {
         <div className={style.filters__city}>
           <div className={style.filters__label}>
             <h6>City</h6>
-            <span>Reset</span>
+            <span onClick={() => resetCity()}>Reset</span>
           </div>
 
           <ul className={style.filters__check_list}>
@@ -517,7 +532,7 @@ FiltersProps) {
             <div className={style.filters__cylinders}>
               <div className={style.filters__label}>
                 <h6>Owners</h6>
-                <span>Reset</span>
+                <span onClick={() => resetOwners()}>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
                 <li className={style.form_checkbox}>
@@ -579,7 +594,7 @@ FiltersProps) {
             <div className={style.filters__color}>
               <div className={style.filters__label}>
                 <h6>Color</h6>
-                <span>Reset</span>
+                <span onClick={() => resetColor()}>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
                 <li className={style.form_checkbox}>
@@ -672,7 +687,7 @@ FiltersProps) {
             <div className={style.filters__seats}>
               <div className={style.filters__label}>
                 <h6>Seats</h6>
-                <span>Reset</span>
+                <span onClick={() => resetSeats()}>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
                 <li className={style.form_checkbox}>
@@ -739,22 +754,13 @@ FiltersProps) {
                   />
                   <label htmlFor="SevenSeats">7</label>
                 </li>
-
-                {/* <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
-                    id="checkbox41"
-                  />
-                  <label htmlFor="checkbox41">9</label>
-                </li> */}
               </ul>
             </div>
 
             <div className={style.filters__fuel_type}>
               <div className={style.filters__label}>
                 <h6>Fuel type</h6>
-                <span>Reset</span>
+                <span onClick={() => resetFuel()}>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
                 <li className={style.form_checkbox}>
@@ -806,7 +812,7 @@ FiltersProps) {
             <div className={style.filters__transmission}>
               <div className={style.filters__label}>
                 <h6>Transmision</h6>
-                {/* <span>Reset</span> */}
+                <span onClick={() => resetTransmission()}>Reset</span>
               </div>
               <ul className={style.filters__check_list}>
                 <li className={style.form_checkbox}>

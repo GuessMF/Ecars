@@ -38,7 +38,6 @@ export default function Catalog() {
     name: "Expensive",
     sortProperty: "price&order=desc",
   });
-  console.log(sortType);
 
   const [carsWithImages, setCarsWithImages] = useState<
     {
@@ -64,6 +63,7 @@ export default function Catalog() {
   useEffect(() => {
     const fetchCarImages = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType.sortProperty}`
         );
@@ -303,7 +303,7 @@ export default function Catalog() {
     setMaxMileageValue(999999);
   };
   const resetYear = () => {
-    setMinYearValue(0);
+    setMinYearValue(2000);
     setMaxYearValue(currentYear);
   };
 
@@ -323,20 +323,67 @@ export default function Catalog() {
       Shanghai: false,
     });
   };
+  const resetOwners = () => {
+    setOwners({
+      None: false,
+      One: false,
+      Two: false,
+      Three: false,
+      More: false,
+    });
+  };
+  const resetColor = () => {
+    setColor({
+      Black: false,
+      White: false,
+      Gray: false,
+      Blue: false,
+      Silver: false,
+      Brown: false,
+      Orange: false,
+      Yellow: false,
+      Red: false,
+      Green: false,
+    });
+  };
+  const resetSeats = () => {
+    setSeats({
+      TwoSeats: false,
+      ThreeSeats: false,
+      FourSeats: false,
+      FiveSeats: false,
+      SixSeats: false,
+      SevenSeats: false,
+    });
+  };
+  const resetFuel = () => {
+    setFuel({
+      Gasoline: false,
+      Diesel: false,
+      Electric: false,
+      Hybrid: false,
+    });
+  };
+  const resetTransmission = () => {
+    setTransmission({
+      Automatic: false,
+      Manual: false,
+    });
+  };
 
   const clearFiltersArg = () => {
-    setBrandFilter("");
-    setModelFilter("");
-    setVechicleTypeCheckboxes({
-      SUV: false,
-      Sedan: false,
-      PickUp: false,
-      Convertible: false,
-      Coupe: false,
-      Hatchback: false,
-      Van: false,
-      StationWagon: false,
-    });
+    resetBrandFilter();
+    resetModelFilter();
+    resetVechicleTypeFilter();
+    resetMileage();
+    resetYear();
+    resetPrice();
+    resetCity();
+    resetOwners();
+    resetColor();
+    resetSeats();
+    resetFuel();
+    resetTransmission();
   };
 
   const [filteredCars, setFilteredCars] = useState(carsWithImages);
@@ -623,6 +670,30 @@ export default function Catalog() {
         ...prevState,
         [filter]: false,
       }));
+      setCityCheckboxes((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      setOwners((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      setColor((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      setSeats((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      setFuel((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
+      setTransmission((prevState) => ({
+        ...prevState,
+        [filter]: false,
+      }));
     }
   };
 
@@ -649,6 +720,12 @@ export default function Catalog() {
           resetMileage={resetMileage}
           resetYear={resetYear}
           resetPrice={resetPrice}
+          resetCity={resetCity}
+          resetOwners={resetOwners}
+          resetColor={resetColor}
+          resetSeats={resetSeats}
+          resetFuel={resetFuel}
+          resetTransmission={resetTransmission}
           modelFilterValue={modelFilter}
           checkBoxes1={vechicleTypeCheckboxes}
           cities={cityCheckboxes}
@@ -685,6 +762,12 @@ export default function Catalog() {
             date={yearFilter}
             price={priceFilter}
             type={vechicleTypeCheckboxes}
+            cities={cityCheckboxes}
+            owners={owners}
+            color={color}
+            seats={seats}
+            fuel={fuel}
+            transmission={transmission}
             founted={filteredCars.length}
             clearFilterArg={clearFiltersArg}
             closeSelectedFilter={(filter) => closeSelectedFilter(filter)}

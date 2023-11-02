@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from "react";
 import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
-import {Console} from "console";
 
 interface SortType {
   name: string;
@@ -22,6 +21,12 @@ interface FiltersProps {
   price: boolean;
 
   type: {[key: string]: boolean};
+  cities: {[key: string]: boolean};
+  owners: {[key: string]: boolean};
+  color: {[key: string]: boolean};
+  seats: {[key: string]: boolean};
+  fuel: {[key: string]: boolean};
+  transmission: {[key: string]: boolean};
   clearFilterArg: () => void;
   closeSelectedFilter: (filter: string) => void;
 }
@@ -38,6 +43,12 @@ export default function Sorted({
   date,
   price,
   type,
+  cities,
+  owners,
+  color,
+  seats,
+  fuel,
+  transmission,
 
   clearFilterArg,
   closeSelectedFilter,
@@ -52,6 +63,48 @@ export default function Sorted({
     }
   });
 
+  const citiesArr: string[] = [];
+  Object.keys(cities).forEach((key) => {
+    if (cities[key]) {
+      citiesArr.push(key);
+    }
+  });
+
+  const ownersArr: string[] = [];
+  Object.keys(owners).forEach((key) => {
+    if (owners[key]) {
+      ownersArr.push(key);
+    }
+  });
+
+  const colorArr: string[] = [];
+  Object.keys(color).forEach((key) => {
+    if (color[key]) {
+      colorArr.push(key);
+    }
+  });
+
+  const seatsArr: string[] = [];
+  Object.keys(seats).forEach((key) => {
+    if (seats[key]) {
+      seatsArr.push(key);
+    }
+  });
+
+  const fuelArr: string[] = [];
+  Object.keys(fuel).forEach((key) => {
+    if (fuel[key]) {
+      fuelArr.push(key);
+    }
+  });
+
+  const transmissionArr: string[] = [];
+  Object.keys(transmission).forEach((key) => {
+    if (transmission[key]) {
+      transmissionArr.push(key);
+    }
+  });
+
   interface SortOption {
     name: string;
     sortProperty: string;
@@ -62,31 +115,16 @@ export default function Sorted({
     {name: "Cheaper", sortProperty: "price"},
     {name: "Older", sortProperty: "year"},
     {name: "Newer", sortProperty: "year&order=desc"},
-    {name: "By date before", sortProperty: "date&order=desc"},
-    {name: "By date later", sortProperty: "date"},
+    {name: "By date before", sortProperty: "dateAdded&order=desc"},
+    {name: "By date later", sortProperty: "dateAdded"},
   ];
-  const [selectedSort, setSelectedSort] = useState<string>("");
-
-  // const onClickSortBy = (name: string) => {
-  //   setSelectedSort(name);
-  //   onChangeSort(obj);
-  //   console.log(selectedSort);
-  // };
+  const [selectedSort, setSelectedSort] = useState<string>("Expensive");
 
   const onClickSortBy = (sortOption: SortOption) => {
-    setSelectedSort(sortOption.sortProperty); // Устанавливаем имя выбранной опции в state
-    onChangeSort(sortOption); // Передаем объект SortOption в функцию родителя
-    console.log(selectedSort);
+    onChangeSort(sortOption);
+    setSelectedSort(sortOption.name);
   };
-  // console.log(sorts);
-  // className={`${style.sortBy__item} ${
-  //   index.toString === sortType ? style.selected : "ssss"
-  // }`}
-  // className={`${style.sortBy__item} ${
-  //   sortType.sortProperty === obj.sortProperty
-  //     ? style.selected
-  //     : "ssss"
-  // }`}
+
   return (
     <div className={style.sorted}>
       <div className={style.sorted__top}>
@@ -98,7 +136,13 @@ export default function Sorted({
           <p>Sort by:</p>
           {sorts.map((obj, i) => {
             return (
-              <span key={i} onClick={() => onClickSortBy(obj)}>
+              <span
+                key={i}
+                className={`${style.sortBy__item} ${
+                  obj.name === selectedSort ? style.selected : ""
+                }`}
+                onClick={() => onClickSortBy(obj)}
+              >
                 {obj.name}
               </span>
             );
@@ -161,8 +205,73 @@ export default function Sorted({
               params={type}
             />
           ))}
-        {Object.values({brand, model, ...typeArr}).filter(Boolean).length >=
-          2 && <ResetAll onClick={clearFilterArg} />}
+        {citiesArr &&
+          citiesArr.map((city, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(city)}
+              params={
+                city === "SaintPetersburg"
+                  ? "Saint-Petersburg"
+                  : city === "AbuDhabi"
+                  ? "Abu Dhabi"
+                  : city
+              }
+            />
+          ))}
+
+        {ownersArr &&
+          ownersArr.map((owners, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(owners)}
+              params={owners}
+            />
+          ))}
+
+        {colorArr &&
+          colorArr.map((color, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(color)}
+              params={color}
+            />
+          ))}
+
+        {seatsArr &&
+          seatsArr.map((seats, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(seats)}
+              params={seats}
+            />
+          ))}
+
+        {fuelArr &&
+          fuelArr.map((fuel, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(fuel)}
+              params={fuel}
+            />
+          ))}
+        {transmissionArr &&
+          transmissionArr.map((transmisision, index) => (
+            <SelectedFilter
+              onClick={() => closeSelectedFilter(transmisision)}
+              params={transmisision}
+            />
+          ))}
+
+        {Object.values({
+          brand,
+          model,
+          mileage,
+          date,
+          price,
+          ...typeArr,
+          ...citiesArr,
+          ...ownersArr,
+          ...colorArr,
+          ...seatsArr,
+          ...fuelArr,
+          ...transmissionArr,
+        }).filter(Boolean).length >= 3 && <ResetAll onClick={clearFilterArg} />}
       </div>
     </div>
   );

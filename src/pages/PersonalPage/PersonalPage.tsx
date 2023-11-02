@@ -15,6 +15,13 @@ interface Errors {
   // Добавьте другие поля с ошибками, если необходимо
 }
 
+type DateObject = {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
+};
 export default function PersonalPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [brand, setBrand] = useState<string>("");
@@ -33,6 +40,9 @@ export default function PersonalPage() {
   const [location, setLocation] = useState<string>("");
   const [owners, setOwners] = useState<string>("");
   const [exportStatus, setExportStatus] = useState<string>("");
+  // const [dateAdded, setDateAdded] = useState<string>("");
+
+  //console.log(dateObj);
 
   const [description, setDescription] = useState("");
 
@@ -91,6 +101,15 @@ export default function PersonalPage() {
       const uploadTasks: Promise<string>[] = [];
       const newId = generateNewId();
 
+      const currentDate: Date = new Date();
+      const dateObj: DateObject = {
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1, // Месяцы в JavaScript начинаются с 0, поэтому добавляем 1
+        day: currentDate.getDate(),
+        hours: currentDate.getHours(),
+        minutes: currentDate.getMinutes(),
+      };
+
       selectedFiles.forEach((file) => {
         const storageRef = ref(storage, `cars/${newId}/${file.name}`);
 
@@ -106,6 +125,7 @@ export default function PersonalPage() {
 
       const carObject = {
         id: newId,
+        dateAdded: currentDate,
         brand,
         model,
         price,
@@ -123,6 +143,7 @@ export default function PersonalPage() {
         location,
         exportStatus,
         description,
+        dateObj: dateObj,
         imageUrls, // Массив URL изображений
       };
       // Отправить объект на сервер или выполнить другие действия с ним

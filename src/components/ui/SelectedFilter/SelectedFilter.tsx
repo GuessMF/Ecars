@@ -16,8 +16,8 @@ export default function SelectedFilter({params, onClick}: FiltersProps) {
   return (
     <div className={style.selectedFilter}>
       <span>{params.charAt(0).toLocaleUpperCase() + params.slice(1)}</span>
-      <button onClick={() => onClick(params)}>
-        <Close />
+      <button>
+        <Close onClick={() => onClick(params)} />
       </button>
     </div>
   );
