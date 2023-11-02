@@ -3,6 +3,7 @@ import Email from "../../ui/Email/Email";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import Mobile from "../../ui/Mobile/Mobile";
 import style from "./__hero.module.scss";
+import {NavLink} from "react-router-dom";
 
 // interface Props {
 //   color: string;
@@ -19,10 +20,17 @@ export default function Hero() {
           <h1>Car import services with delivery to your doorstep.</h1>
         </div>
         <div className={style.content__subtitle}>
-          <GetAquote version={version} />
+          <NavLink to="/per">
+            <GetAquote version={version} />
+          </NavLink>
+
           <div>
-            <Mobile color={black} />
-            <Email color={black} />
+            <a href="https://wa.me/+79214003269">
+              <Mobile color={black} />
+            </a>
+            <a href="mailto:segas95@yandex.ru">
+              <Email color={black} />
+            </a>
           </div>
         </div>
       </div>

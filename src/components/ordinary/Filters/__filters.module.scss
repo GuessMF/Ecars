@@ -139,6 +139,16 @@
       border: 1px solid $outline1;
       border-radius: 8px;
     }
+    select {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 10px 8px 10px 12px;
+      gap: 8px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
   }
   .filters__model {
     // border: black 1px solid;
@@ -149,7 +159,17 @@
     padding: 0px;
     gap: 8px;
     input {
-      width: 92%;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 10px 8px 10px 12px;
+      gap: 8px;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
+    select {
+      width: 100%;
       display: flex;
       flex-direction: row;
       align-items: flex-start;

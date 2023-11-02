@@ -13,7 +13,7 @@ export default function GetAquote({version}: Props) {
     <button
       className={version == "big" ? style.getAquote_big : style.getAquote}
     >
-      Get a quote
+      Sell your car
     </button>
   );
 }

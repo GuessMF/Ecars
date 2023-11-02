@@ -5,7 +5,11 @@ import MoreFilters from "../../ui/MoreFilters/MoreFilters";
 import {useState} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
+import carData from "../../../helpers/modelsBrands";
 // import {cars} from "../../helpers/carList";
+interface CarModel {
+  name: string;
+}
 
 interface CheckBoxes {
   SUV: boolean;
@@ -68,8 +72,8 @@ interface TransmissionCheckboxes {
 interface FiltersProps {
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
-  onBrandFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onModelFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBrandFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onModelFilterChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onCheckboxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onCitiesChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onOwnersChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -180,10 +184,34 @@ FiltersProps) {
   const closeFilters = () => {
     setIsFiltersOpen(false);
   };
+  const [brand, setBrand] = useState<string>("");
+  const [model, setModel] = useState<string>("");
+  const [models, setModels] = useState<CarModel[]>([]);
+
+  const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedBrand = event.target.value;
+    setBrand(selectedBrand);
+
+    // Найти модели для выбранной марки из carData
+    const selectedBrandData = carData.brands.find(
+      (item) => item.name === selectedBrand
+    );
+    setModels(selectedBrandData ? selectedBrandData.models : []);
+    console.log(selectedBrand);
+  };
+  const onBrandSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedBrand: string = event.target.value;
+    setBrand(selectedBrand);
+    const selectedBrandData = carData.brands.find(
+      (item) => item.name === selectedBrand
+    );
+    setModels(selectedBrandData ? selectedBrandData.models : []);
+    onBrandFilterChange(event);
+  };
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
-
+  // onChange={onModelFilterChange}
   return (
     <div
       className={`${style.filtersWrapper} ${
@@ -199,26 +227,32 @@ FiltersProps) {
             <h6>Brand</h6>
             <span onClick={() => resetBrand()}>Reset</span>
           </div>
-          <input
-            type="text"
-            placeholder="Brand"
-            id="BrandInput"
-            value={brandFilterValue}
-            onChange={onBrandFilterChange}
-          />
+
+          <select value={brandFilterValue} onChange={onBrandSelectChange}>
+            <option value="">Select Brand</option>
+            {carData.brands.map((brand) => {
+              return (
+                <option key={brand.name} value={brand.name}>
+                  {brand.name}
+                </option>
+              );
+            })}
+          </select>
         </div>
         <div className={style.filters__model}>
           <div className={style.filters__label}>
             <h6>Model</h6>
             <span onClick={() => resetModel()}>Reset</span>
           </div>
-          <input
-            type="text"
-            placeholder="All"
-            id="ModelInput"
-            value={modelFilterValue}
-            onChange={onModelFilterChange}
-          />
+
+          <select onChange={onModelFilterChange}>
+            <option value="">Выбери модель</option>
+            {models.map((model) => (
+              <option key={model.name} value={model.name}>
+                {model.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className={style.filters__vehicle_type}>

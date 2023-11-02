@@ -10,6 +10,11 @@
   gap: 24px;
   background-color: $darkBG1;
   // height: 500px;
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
   @media (max-width: 768px) {
     display: flex;
     padding: 40px 32px;

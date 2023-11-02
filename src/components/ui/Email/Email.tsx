@@ -22,7 +22,7 @@ export default function Email({color}: Props) {
         />
       </svg>
       <span className={style.email__data} style={{color: color}}>
-        request@example.com
+        segas95@yandex.ru
       </span>
     </div>
   );

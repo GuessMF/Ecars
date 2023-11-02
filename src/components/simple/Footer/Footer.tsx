@@ -8,6 +8,7 @@ import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/inst
 import Mobile from "../../ui/Mobile/Mobile";
 import Email from "../../ui/Email/Email";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
+import {NavLink} from "react-router-dom";
 
 const white: string = "#FFFFFFB2";
 const black: string = "#1A1A1A";
@@ -46,8 +47,13 @@ export default function Footer() {
             <ul>
               <li className={style.footer__title}>Cars</li>
               <li>Special offers</li>
-              <li>New cars</li>
-              <li>Used cars</li>
+              <NavLink to="/catalog?owners=new">
+                <li>New cars</li>
+              </NavLink>
+              <NavLink to="/catalog?owners=used">
+                <li>Used cars</li>
+              </NavLink>
+
               <li>Brands</li>
             </ul>
           </div>
@@ -55,10 +61,14 @@ export default function Footer() {
             <ul>
               <li className={style.footer__title}>Contacts</li>
               <li>
-                <Mobile color={black} />
+                <a href="https://wa.me/+79214003269">
+                  <Mobile color={black} />
+                </a>
               </li>
               <li>
-                <Email color={black} />
+                <a href="mailto:segas95@yandex.ru">
+                  <Email color={black} />
+                </a>
               </li>
             </ul>
           </div>

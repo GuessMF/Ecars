@@ -1,6 +1,7 @@
 import React from "react";
 import style from "./__middleCTA.module.scss";
 import GetAquote from "../../ui/GetAquote/GetAquote";
+import {NavLink} from "react-router-dom";
 
 const version: string = "big";
 
@@ -19,7 +20,9 @@ export default function MiddleCTA() {
             veniam consequat sunt nostrud amet.
           </span>
         </div>
-        <GetAquote version={version} />
+        <NavLink to="/per">
+          <GetAquote version={version} />
+        </NavLink>
       </div>
     </div>
   );

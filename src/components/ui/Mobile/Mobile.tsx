@@ -21,7 +21,7 @@ export default function Mobile({color}: Props) {
         />
       </svg>
       <span className={style.mobile__data} style={{color: color}}>
-        +971 55 811 9024
+        +7 921 400 32 69
       </span>
     </div>
   );

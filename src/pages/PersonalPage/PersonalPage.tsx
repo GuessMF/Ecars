@@ -4,10 +4,16 @@ import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
+// import { carData } from "../../helpers/modelsBrands";
+import carData from "../../helpers/modelsBrands";
 // import ImageCompressor from "image-compressor";
 //import sharp from "sharp";
 
 const storage = getStorage();
+
+interface CarModel {
+  name: string;
+}
 
 interface Errors {
   brand?: string;
@@ -25,6 +31,7 @@ type DateObject = {
 export default function PersonalPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [brand, setBrand] = useState<string>("");
+  const [models, setModels] = useState<CarModel[]>([]);
   const [model, setModel] = useState("");
   const [price, setPrice] = useState<number>(0);
   const [year, setYear] = useState<number>(0);
@@ -212,6 +219,17 @@ export default function PersonalPage() {
     }
   };
 
+  const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedBrand = e.target.value;
+    setBrand(selectedBrand);
+
+    // Найти модели для выбранной марки из carData
+    const selectedBrandData = carData.brands.find(
+      (item) => item.name === selectedBrand
+    );
+    setModels(selectedBrandData ? selectedBrandData.models : []);
+  };
+
   return (
     <div className={style.login}>
       <form onSubmit={handleSubmit}>
@@ -241,30 +259,15 @@ export default function PersonalPage() {
           <label>
             <span>Марка:</span>
 
-            <select value={brand} onChange={(e) => setBrand(e.target.value)}>
+            <select value={brand} onChange={handleBrandChange}>
               <option value="">Выберите Марку</option>
-              <option value="Acura">Acura</option>
-              <option value="Alfa Romeo">Alfa Romeo</option>
-              <option value="Aston Martin">Aston Martin</option>
-              <option value="Audi">Audi</option>
-              <option value="Bentley">Bentley</option>
-              <option value="BMW">BMW</option>
-              <option value="Ferrari">Ferrari</option>
-              <option value="Ford">Ford</option>
-              <option value="Infiniti">Infiniti</option>
-              <option value="Jaguar">Jaguar</option>
-              <option value="Land Rover">Land Rover</option>
-              <option value="Lexus">Lexus</option>
-              <option value="Maserati">Maserati</option>
-              <option value="Maybach">Maybach</option>
-              <option value="Mercedes Benz">Mercedes Benz</option>
-              <option value="Nissan">Nissan</option>
-              <option value="Porsche">Porsche</option>
-              <option value="Rolls Royce">Rolls Royce</option>
-              <option value="Tesla">Tesla</option>
-              <option value="Toyota">Toyota</option>
-              <option value="Volkswagen">Volkswagen</option>
-              <option value="Volvo">Volvo</option>
+              {carData.brands.map((brand) => {
+                return (
+                  <option key={brand.name} value={brand.name}>
+                    {brand.name}
+                  </option>
+                );
+              })}
             </select>
           </label>
         </div>
@@ -272,15 +275,18 @@ export default function PersonalPage() {
         {formErrors.brand && (
           <div className={style.error}>{formErrors.brand}</div>
         )}
+
         <div>
           <label>
             <span>Модель:</span>
-
-            <input
-              type="text"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-            />
+            <select onChange={(e) => setModel(e.target.value)}>
+              <option value="">Выбери модель</option>
+              {models.map((model) => (
+                <option key={model.name} value={model.name}>
+                  {model.name}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 

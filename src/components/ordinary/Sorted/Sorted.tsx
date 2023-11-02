@@ -118,7 +118,7 @@ export default function Sorted({
     {name: "By date before", sortProperty: "dateAdded&order=desc"},
     {name: "By date later", sortProperty: "dateAdded"},
   ];
-  const [selectedSort, setSelectedSort] = useState<string>("Expensive");
+  const [selectedSort, setSelectedSort] = useState<string>("By date later");
 
   const onClickSortBy = (sortOption: SortOption) => {
     onChangeSort(sortOption);

@@ -10,6 +10,12 @@
   @media (max-width: 768px) {
     padding: 40px 32px;
   }
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  cursor: default;
   .footer__content {
     //border: black 1px solid;
     width: 100%;

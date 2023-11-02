@@ -15,7 +15,11 @@
     background-image: url("../../../assets/images/hero-mobile.webp");
     background-size: contain;
   }
-
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
   .hero__content {
     display: flex;
     flex-direction: column;

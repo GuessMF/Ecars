@@ -72,6 +72,7 @@ export default function Catalog() {
           const carsWithImagesArray = [];
           for (const car of carData) {
             const folderRef = ref(storage, `cars/${car.id}`);
+            console.log(car);
 
             try {
               const carImages = await listAll(folderRef);
@@ -123,6 +124,12 @@ export default function Catalog() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
+
+  const ownersParam = searchParams.get("owners") || "";
+  //console.log(ownersParam);
+
+  //http://localhost:3000/Ecars#/catalog?brand=Acura
+  // const ownersParam =
 
   interface Car {
     id: string;
@@ -200,6 +207,10 @@ export default function Catalog() {
   const [itemOffset, setItemOffset] = React.useState(0);
   const [brandFilter, setBrandFilter] = useState<string>(brandParam);
   const [modelFilter, setModelFilter] = useState<string>("");
+
+  console.log(brandFilter + ": Brand Fiter");
+  console.log(modelFilter + ": ModelFilter");
+
   const [vechicleTypeCheckboxes, setVechicleTypeCheckboxes] = useState({
     SUV: false,
     Sedan: false,
@@ -407,6 +418,27 @@ export default function Catalog() {
       setPriceFilter(false);
     }
 
+    if (ownersParam === "new") {
+      console.log("Показать новые машины");
+      //console.log(ownersParam);
+      setOwners({
+        None: true,
+        One: false,
+        Two: false,
+        Three: false,
+        More: false,
+      });
+    } else if (ownersParam === "used") {
+      console.log("Показать бу машины");
+      setOwners({
+        None: false,
+        One: true,
+        Two: true,
+        Three: true,
+        More: true,
+      });
+    }
+
     // );
     const filteredItems = carsWithImages.filter((item) => {
       const isBrandMatch = item.brand
@@ -504,6 +536,7 @@ export default function Catalog() {
       );
     });
     const endOffset = itemOffset + itemsPerPage;
+    console.log(filteredItems);
 
     setCurrentItems(filteredItems.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(filteredItems.length / itemsPerPage));
@@ -529,9 +562,10 @@ export default function Catalog() {
     itemsPerPage,
     carsWithImages,
   ]);
+  console.log();
 
   const handleBrandFilterChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setBrandFilter(event.target.value);
     setItemOffset(0);
@@ -539,7 +573,7 @@ export default function Catalog() {
     //поменять на текущую стр
   };
   const handleModelFilterChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setModelFilter(event.target.value);
     setItemOffset(0);

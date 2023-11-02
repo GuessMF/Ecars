@@ -46,7 +46,7 @@ export default function DetailsCTA({
   const formattedMileage: string = mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
-  const monthNames = {
+  const monthNames: {[key: number]: string} = {
     1: "January",
     2: "February",
     3: "March",
@@ -60,6 +60,8 @@ export default function DetailsCTA({
     11: "November",
     12: "December",
   };
+  console.log(monthNames[dateObj.month]);
+  console.log(dateObj.month);
   return (
     <div
       className={`${style.CTA} ${window.innerWidth <= 768 ? style.mobile : ""}`}
@@ -114,12 +116,25 @@ export default function DetailsCTA({
             Contact us and our manager will give you all the information you
             need.
           </p>
-          <button className={style.checkAvail}>Check availability</button>
+          <button
+            className={style.checkAvail}
+            onClick={() => window.open("https://t.me/+79214003269", "_blank")}
+          >
+            Check availability
+          </button>
           <div className={style.contacts}>
-            <button>
+            <button
+              onClick={() =>
+                window.open("https://wa.me/+79214003269", "_blank")
+              }
+            >
               <Mobile color={black} />
             </button>
-            <button>
+            <button
+              onClick={() =>
+                (window.location.href = `mailto:segas95@yandex.ru`)
+              }
+            >
               <Email color={black} />
             </button>
           </div>
@@ -176,10 +191,12 @@ export default function DetailsCTA({
       <div className={style.CTA__added}>
         <span>Added:</span>
         <b>
-          {dateObj.day}
-          {monthNames[dateObj.month]}, 2023
+          {dateObj.day} {monthNames[dateObj.month]}, {dateObj.year}{" "}
         </b>
-        <span>• Views:</span> <b>38</b>
+        <span>
+          {" "}
+          {dateObj.hours}:{dateObj.minutes}
+        </span>
       </div>
     </div>
   );

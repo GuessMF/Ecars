@@ -4,6 +4,7 @@ import {ReactComponent as Mail} from "../../../assets/icons/bottomCTA/mail.svg";
 import {ReactComponent as Question} from "../../../assets/icons/bottomCTA/question.svg";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import ContactUs from "../../ui/ContactUs/ContactUs";
+import {NavLink} from "react-router-dom";
 
 const version: string = "big";
 export default function BottomCTA() {
@@ -25,7 +26,9 @@ export default function BottomCTA() {
           <div
           //    className={style.bottomCTA__footer}
           >
-            <GetAquote version={version} />
+            <NavLink to="/per">
+              <GetAquote version={version} />
+            </NavLink>
           </div>
         </div>
         <div className={style.vl}></div>
@@ -42,7 +45,9 @@ export default function BottomCTA() {
           <div
           //    className={style.bottomCTA__footer}
           >
-            <ContactUs />
+            <a href="https://t.me/+79214003269">
+              <ContactUs />
+            </a>
           </div>
         </div>
       </div>
