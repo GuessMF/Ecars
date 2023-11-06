@@ -65,6 +65,11 @@ export default function TopBar({
         <div className={style.logos}>
           <Email color={white} />
         </div>
+        {selectedCurrency?.value === "USD"
+          ? selectedCurrency?.value + `: ${usdValue}`
+          : selectedCurrency?.value === "EUR"
+          ? selectedCurrency?.value + `: ${eurValue}`
+          : "RUB"}
       </div>
       <div className={style.topBar_right}>
         <svg
@@ -114,6 +119,7 @@ export default function TopBar({
 
           <span className={style.countryName}> Canada</span>
         </div>
+
         <span className={style.currency}> Currency:</span>
         <div>
           <span className={style.currencySelected}>
@@ -126,12 +132,6 @@ export default function TopBar({
               //menuIsOpen={true}
               onMenuOpen={toggleMenu}
             />
-
-            {/**selectedCurrency === "USD"
-              ? selectedCurrency + `: ${usdValue}`
-              : selectedCurrency === "EUR"
-              ? selectedCurrency + `: ${eurValue}`
-      : "RUB"*/}
           </span>
           {/**  <button onClick={() => handleCurrencyChange("USD")}>USD</button>
           <button onClick={() => handleCurrencyChange("EUR")}>EUR</button>
