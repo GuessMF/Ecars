@@ -25,6 +25,7 @@ import {log} from "console";
 import {getDocs} from "firebase/firestore/lite";
 import {initializeApp} from "firebase/app";
 import {getFirestore} from "firebase/firestore";
+import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
 
 // interface RouteParams {
 //   id: string;
@@ -67,7 +68,16 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export default function Details() {
+interface DetailsProps {
+  selectedCurrency: string;
+  eurValue: number;
+  usdValue: number;
+}
+export default function Details({
+  selectedCurrency,
+  eurValue,
+  usdValue,
+}: DetailsProps) {
   const black: string = "#1A1A1A";
   const [carData, setCarData] = useState(null);
 
@@ -212,6 +222,9 @@ export default function Details() {
                 year={currentCar.year}
                 mileage={currentCar.mileage}
                 dateObj={currentCar.dateObj}
+                selectedCurrency={selectedCurrency}
+                usdValue={usdValue}
+                eurValue={eurValue}
               />
             )}
 
@@ -356,6 +369,9 @@ export default function Details() {
               year={currentCar.year}
               mileage={currentCar.mileage}
               dateObj={currentCar.dateObj}
+              selectedCurrency={selectedCurrency}
+              usdValue={usdValue}
+              eurValue={eurValue}
             />
           )}
         </div>

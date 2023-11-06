@@ -97,7 +97,7 @@ interface FiltersProps {
   resetColor: () => void;
   resetSeats: () => void;
   resetTransmission: () => void;
-
+  selectedCurrency: string;
   checkBoxes1: CheckBoxes;
   cities: Cities;
   ownersBoxes: Owners;
@@ -136,6 +136,7 @@ export default function Filters({
   onTransmissionchange,
   brandFilterValue,
   modelFilterValue,
+  selectedCurrency,
   resetBrand,
   resetModel,
   resetVechicleType,
@@ -429,7 +430,7 @@ FiltersProps) {
 
         <div className={style.filters__price}>
           <div className={style.filters__label}>
-            <h6>Price, USD</h6>
+            <h6>Price, {selectedCurrency}</h6>
             <span onClick={() => resetPrice()}>Reset</span>
           </div>
           <div className={style.filters__min_max}>
@@ -446,7 +447,7 @@ FiltersProps) {
             <input
               type="number"
               placeholder="Max"
-              max="999999"
+              max="99999999"
               value={maxPriceValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
@@ -461,8 +462,8 @@ FiltersProps) {
             <RangeSlider
               value={[minPriceValue, maxPriceValue]}
               step={1000}
-              defaultValue={[0, 999999]}
-              max={999999}
+              defaultValue={[0, 99999999]}
+              max={99999999}
               onChange={(values: [number, number]) => {
                 onMinPriceValue(values[0]);
                 onMaxPriceValue(values[1]);

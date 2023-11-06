@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useRef} from "react";
 import Email from "../../ui/Email/Email";
 import Mobile from "../../ui/Mobile/Mobile";
 import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
 import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
 import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
 import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
+import Select from "react-select";
 
 import style from "./__topBar.module.scss";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
@@ -13,7 +14,42 @@ const white: string = "#FFFFFFB2";
 const color: string = "rgba(255, 255, 255, 0.7)";
 const opacity: string = "1";
 
-export default function TopBar() {
+interface TopBarProps {
+  eurValue: number;
+  usdValue: number;
+  selectedCurrency: string;
+  onCurrencyChange: (obj: any) => void;
+}
+
+export default function TopBar({
+  eurValue,
+  usdValue,
+
+  onCurrencyChange,
+}: TopBarProps) {
+  // const handleCurrencyChange = (currencyCode: string) => {
+  //   onCurrencyChange(currencyCode);
+  // };
+  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
+  const toggleMenu = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
+
+  const selectRef = useRef(null);
+
+  const options = [
+    {value: "RUB", label: "RUB"},
+    {value: "USD", label: "USD"},
+    {value: "EUR", label: "EUR"},
+  ];
+  const initialOption = options.find((option) => option.value === "RUB");
+  const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
+  const onClickCurrency = (selectedOption: any) => {
+    setSelectedCurrency(selectedOption);
+    onCurrencyChange(selectedOption);
+    console.log(selectedOption);
+    setMenuIsOpen(false);
+  };
   return (
     <div className={style.topBar}>
       <div className={style.topBar_left}>
@@ -80,8 +116,26 @@ export default function TopBar() {
         </div>
         <span className={style.currency}> Currency:</span>
         <div>
-          {" "}
-          <span className={style.currencySelected}>USD</span>
+          <span className={style.currencySelected}>
+            <Select
+              classNamePrefix="top-bar__select"
+              value={selectedCurrency}
+              onChange={onClickCurrency}
+              options={options}
+              menuIsOpen={menuIsOpen}
+              //menuIsOpen={true}
+              onMenuOpen={toggleMenu}
+            />
+
+            {/**selectedCurrency === "USD"
+              ? selectedCurrency + `: ${usdValue}`
+              : selectedCurrency === "EUR"
+              ? selectedCurrency + `: ${eurValue}`
+      : "RUB"*/}
+          </span>
+          {/**  <button onClick={() => handleCurrencyChange("USD")}>USD</button>
+          <button onClick={() => handleCurrencyChange("EUR")}>EUR</button>
+          <button onClick={() => handleCurrencyChange("RUB")}>RUB</button> */}
         </div>
         <svg
           className={style.question_logo}

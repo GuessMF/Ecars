@@ -25,6 +25,9 @@ interface Props {
   exportStatus: string;
   mileage: number;
   dateObj: DateObject;
+  selectedCurrency: string;
+  usdValue: number;
+  eurValue: number;
 }
 
 export default function DetailsCTA({
@@ -36,10 +39,25 @@ export default function DetailsCTA({
   exportStatus,
   mileage,
   dateObj,
+  selectedCurrency,
+  usdValue,
+  eurValue,
 }: Props) {
   const black: string = "#1A1A1A";
   console.log(dateObj.year);
-  const formattedPrice: string = price
+
+  let multiplier: number =
+    selectedCurrency === "RUB"
+      ? usdValue
+      : selectedCurrency === "EUR"
+      ? usdValue / eurValue
+      : 1;
+  console.log(multiplier);
+
+  const newPrice = Number(price) * multiplier;
+  const currentPrice = parseInt(newPrice.toFixed(0));
+
+  const formattedPrice: string = currentPrice
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
@@ -87,7 +105,17 @@ export default function DetailsCTA({
             <br />
             {model}
           </h5>
-          <h4>${formattedPrice}</h4>
+          <h4>
+            {selectedCurrency === "RUB"
+              ? `₽ `
+              : selectedCurrency === "USD"
+              ? "$ "
+              : selectedCurrency === "EUR"
+              ? "€ "
+              : ""}
+
+            {formattedPrice}
+          </h4>
           <table>
             <tr>
               <td>Year</td>

@@ -29,15 +29,24 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 
 interface SortType {
-  name: string;
+  value: string;
+  label: string;
   sortProperty: string;
 }
 
-export default function Catalog() {
-  const [sortType, setSortType] = useState<SortType>({
-    name: "Expensive",
-    sortProperty: "price&order=desc",
-  });
+interface CatalogProps {
+  selectedCurrency: string;
+  eurValue: number;
+  usdValue: number;
+}
+
+export default function Catalog({
+  selectedCurrency,
+  eurValue,
+  usdValue,
+}: CatalogProps) {
+  const [sortType, setSortType] = useState<string>("dateAdded");
+  // console.log(sortType.value + " Catalog");
 
   const [carsWithImages, setCarsWithImages] = useState<
     {
@@ -65,14 +74,13 @@ export default function Catalog() {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType.sortProperty}`
+          `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType}`
         );
         if (response.ok) {
           const carData = await response.json();
           const carsWithImagesArray = [];
           for (const car of carData) {
             const folderRef = ref(storage, `cars/${car.id}`);
-            console.log(car);
 
             try {
               const carImages = await listAll(folderRef);
@@ -126,7 +134,6 @@ export default function Catalog() {
   const brandParam = searchParams.get("brand") || "";
 
   const ownersParam = searchParams.get("owners") || "";
-  //console.log(ownersParam);
 
   //http://localhost:3000/Ecars#/catalog?brand=Acura
   // const ownersParam =
@@ -208,9 +215,6 @@ export default function Catalog() {
   const [brandFilter, setBrandFilter] = useState<string>(brandParam);
   const [modelFilter, setModelFilter] = useState<string>("");
 
-  console.log(brandFilter + ": Brand Fiter");
-  console.log(modelFilter + ": ModelFilter");
-
   const [vechicleTypeCheckboxes, setVechicleTypeCheckboxes] = useState({
     SUV: false,
     Sedan: false,
@@ -235,7 +239,7 @@ export default function Catalog() {
   const [yearFilter, setYearFilter] = useState<boolean>(false);
 
   const [minPriceValue, setMinPriceValue] = useState<number>(0);
-  const [maxPriceValue, setMaxPriceValue] = useState<number>(999999);
+  const [maxPriceValue, setMaxPriceValue] = useState<number>(99999999);
 
   const [priceFilter, setPriceFilter] = useState<boolean>(false);
 
@@ -320,7 +324,7 @@ export default function Catalog() {
 
   const resetPrice = () => {
     setMinPriceValue(0);
-    setMaxPriceValue(999999);
+    setMaxPriceValue(99999999);
   };
 
   const resetCity = () => {
@@ -412,15 +416,13 @@ export default function Catalog() {
       setYearFilter(false);
     }
 
-    if (minPriceValue !== 0 || maxPriceValue !== 999999) {
+    if (minPriceValue !== 0 || maxPriceValue !== 99999999) {
       setPriceFilter(true);
     } else {
       setPriceFilter(false);
     }
 
     if (ownersParam === "new") {
-      console.log("Показать новые машины");
-      //console.log(ownersParam);
       setOwners({
         None: true,
         One: false,
@@ -429,7 +431,6 @@ export default function Catalog() {
         More: false,
       });
     } else if (ownersParam === "used") {
-      console.log("Показать бу машины");
       setOwners({
         None: false,
         One: true,
@@ -536,7 +537,6 @@ export default function Catalog() {
       );
     });
     const endOffset = itemOffset + itemsPerPage;
-    console.log(filteredItems);
 
     setCurrentItems(filteredItems.slice(itemOffset, endOffset));
     setPageCount(Math.ceil(filteredItems.length / itemsPerPage));
@@ -562,7 +562,6 @@ export default function Catalog() {
     itemsPerPage,
     carsWithImages,
   ]);
-  console.log();
 
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -698,7 +697,7 @@ export default function Catalog() {
 
     if (filter === "price") {
       setMinPriceValue(0);
-      setMaxPriceValue(999999);
+      setMaxPriceValue(99999999);
     } else {
       setVechicleTypeCheckboxes((prevState) => ({
         ...prevState,
@@ -773,7 +772,7 @@ export default function Catalog() {
           onMinMileageValue={handleMinMileageChange}
           onMaxMileageValue={handleMaxMileageChange}
           // mileageSliderChange={handleMileageSliderChange}
-
+          selectedCurrency={selectedCurrency}
           minYearValue={minYearValue}
           maxYearValue={maxYearValue}
           onMinYearValue={handleMinYearChange}
@@ -786,8 +785,9 @@ export default function Catalog() {
 
         <div id="catalogList" className={style.catalog__left}>
           <Sorted
-            sortType={sortType}
-            onChangeSort={(obj) => setSortType(obj)}
+            onChangeSortBy={(selectedOption) =>
+              setSortType(selectedOption.value)
+            }
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
             brand={brandFilter}
@@ -817,6 +817,9 @@ export default function Catalog() {
                 <BigCard
                   key={index}
                   id={car.id}
+                  selectedCurrency={selectedCurrency}
+                  usdValue={usdValue}
+                  eurValue={eurValue}
                   index={index}
                   brand={car.brand}
                   model={car.model}

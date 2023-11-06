@@ -15,6 +15,9 @@ interface Props {
   mileage: number;
   description: string;
   previewIMG: string;
+  selectedCurrency: string;
+  usdValue: number;
+  eurValue: number;
   onLoad: () => void;
 }
 
@@ -30,9 +33,23 @@ export default function BigCard({
   mileage,
   description,
   previewIMG,
+  selectedCurrency,
+  eurValue,
+  usdValue,
   onLoad,
 }: Props) {
-  const formattedPrice: string = price
+  let multiplier: number =
+    selectedCurrency === "RUB"
+      ? usdValue
+      : selectedCurrency === "EUR"
+      ? usdValue / eurValue
+      : 1;
+  console.log(multiplier);
+
+  const newPrice = Number(price) * multiplier;
+  const currentPrice = parseInt(newPrice.toFixed(0));
+
+  const formattedPrice: string = currentPrice
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
@@ -58,7 +75,16 @@ export default function BigCard({
           </div>
 
           <div className={style.information__bottom}>
-            <span>${formattedPrice}</span>
+            <span>
+              {selectedCurrency === "RUB"
+                ? `₽ `
+                : selectedCurrency === "USD"
+                ? "$ "
+                : selectedCurrency === "EUR"
+                ? "€ "
+                : ""}
+              {formattedPrice}
+            </span>
             <Details />
           </div>
         </div>

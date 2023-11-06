@@ -19,12 +19,7 @@ const carData: CarData = {
     },
     {
       name: "Alfa Romeo",
-      models: [
-        {name: "Giulietta"},
-        {name: "Giullia"},
-        {name: "RS 7"},
-        {name: "RS Q8"},
-      ],
+      models: [{name: "Giulietta"}, {name: "Giullia"}],
     },
     {
       name: "Audi",

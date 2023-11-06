@@ -68,9 +68,23 @@
         border-radius: 5px;
         padding: 2px 10px;
         cursor: pointer;
+        &:hover {
+          background-color: $primary500;
+          color: $white;
+          opacity: 1;
+          // display: block;
+          .hidden {
+            //display: block;
+
+            // background-color: aqua;
+          }
+        }
+      }
+      .hidden {
+        opacity: 0.5;
+        //display: none;
       }
       .selected {
-        background-color: red;
         background-color: $primary500;
         color: $white;
       }
@@ -107,4 +121,16 @@
     //   // background-color: aquamarine;
     // }
   }
+}
+.sortselect {
+  &__control {
+    background-color: red !important;
+  }
+  &--menu-is-open {
+    border-color: green !important;
+  }
+}
+.sortselect__control {
+  background-color: red !important;
+  min-height: 20px !important;
 }

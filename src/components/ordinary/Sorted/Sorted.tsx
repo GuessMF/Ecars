@@ -2,15 +2,22 @@ import React, {useState, useEffect, useRef} from "react";
 import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
+import Select, {components} from "react-select";
+import StylesConfig from "react-select";
 
 interface SortType {
-  name: string;
+  value: string;
+  label: string;
   sortProperty: string;
+}
+interface OptionsSelect {
+  value: string;
+  label: string;
 }
 
 interface FiltersProps {
-  sortType: {name: string; sortProperty: string};
-  onChangeSort: (obj: SortType) => void;
+  onChangeSortBy: (obj: any) => void;
+
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
   founted: number;
@@ -19,7 +26,6 @@ interface FiltersProps {
   mileage: boolean;
   date: boolean;
   price: boolean;
-
   type: {[key: string]: boolean};
   cities: {[key: string]: boolean};
   owners: {[key: string]: boolean};
@@ -32,9 +38,7 @@ interface FiltersProps {
 }
 
 export default function Sorted({
-  sortType,
-  onChangeSort,
-  isFiltersOpen,
+  onChangeSortBy,
   setIsFiltersOpen,
   founted,
   brand,
@@ -105,24 +109,40 @@ export default function Sorted({
     }
   });
 
-  interface SortOption {
-    name: string;
-    sortProperty: string;
-  }
-
-  const sorts: SortOption[] = [
-    {name: "Expensive", sortProperty: "price&order=desc"},
-    {name: "Cheaper", sortProperty: "price"},
-    {name: "Older", sortProperty: "year"},
-    {name: "Newer", sortProperty: "year&order=desc"},
-    {name: "By date before", sortProperty: "dateAdded&order=desc"},
-    {name: "By date later", sortProperty: "dateAdded"},
+  const options = [
+    {value: "price&order=desc", label: "Expensive"},
+    {value: "price", label: "Cheaper"},
+    {value: "year", label: "Older"},
+    {value: "year&order=desc", label: "Newer"},
+    {
+      value: "dateAdded&order=desc",
+      label: "By date before",
+    },
+    {
+      value: "dateAdded",
+      label: "By date later",
+    },
   ];
-  const [selectedSort, setSelectedSort] = useState<string>("By date later");
+  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
 
-  const onClickSortBy = (sortOption: SortOption) => {
-    onChangeSort(sortOption);
-    setSelectedSort(sortOption.name);
+  const initialOption = options.find((option) => option.value === "dateAdded");
+  const [selectedOption, setSelectedOption] = React.useState(initialOption);
+
+  const toggleMenu = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
+
+  const onClickSortBy = (selectedOption: any) => {
+    setSelectedOption(selectedOption);
+    onChangeSortBy(selectedOption);
+    console.log(selectedOption);
+    setMenuIsOpen(false);
+  };
+
+  const DropdownIndicator = (props: any) => {
+    return (
+      <components.DropdownIndicator {...props}>▼</components.DropdownIndicator>
+    );
   };
 
   return (
@@ -134,19 +154,17 @@ export default function Sorted({
         </div>
         <div className={style.sortBy}>
           <p>Sort by:</p>
-          {sorts.map((obj, i) => {
-            return (
-              <span
-                key={i}
-                className={`${style.sortBy__item} ${
-                  obj.name === selectedSort ? style.selected : ""
-                }`}
-                onClick={() => onClickSortBy(obj)}
-              >
-                {obj.name}
-              </span>
-            );
-          })}
+          <Select
+            classNamePrefix="sort-select"
+            value={selectedOption}
+            onChange={onClickSortBy}
+            options={options}
+            menuIsOpen={menuIsOpen}
+            //menuIsOpen={true}
+            onMenuOpen={toggleMenu}
+            //  onMenuClose={toggleMenu}
+            components={{DropdownIndicator}}
+          />
         </div>
       </div>
 
