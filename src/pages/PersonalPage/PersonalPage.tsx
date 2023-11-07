@@ -105,8 +105,8 @@ export default function PersonalPage() {
 
   const refs: Refs = {
     selectedFiles: selectedFilesRef,
-    brandRef: brandRef,
-    modelRef: modelRef,
+    brand: brandRef,
+    model: modelRef,
     vehicleType: vehicleTypeRef,
     fuel: fuelRef,
     engineCapacity: engineCapacityRef,
@@ -267,7 +267,7 @@ export default function PersonalPage() {
 
       setFormErrors(errors);
       setPopUpErrors(true);
-      console.log("Errors" + Object.keys(errors).length);
+      // console.log("Errors" + Object.keys(errors).length);
     } else {
       console.log("No Errors");
       // Если нет ошибок, выполните отправку данных
@@ -407,11 +407,13 @@ export default function PersonalPage() {
 
   const handleAgreeClick = () => {
     // const firstEmptyField = hasErrors.find((element) => !eval(element)); // Проверяем, есть ли пустые поля
-    console.log(hasErrors[0]);
+    //console.log(hasErrors[0]);
     const scrollTopOffset = 100; // Задайте желаемый отступ сверху в пикселях
-
+    setPopUpErrors(false);
     const fieldName = hasErrors[0];
     const fieldRef = refs[fieldName];
+    console.log(fieldName, fieldRef);
+
     if (fieldRef && fieldRef.current !== null) {
       console.log(`${fieldName} ref value:`);
       const topOffset =
@@ -423,27 +425,11 @@ export default function PersonalPage() {
         behavior: "smooth",
       });
     } else {
-      console.log(`${fieldName} ref NOvalue:`);
+      // console.log(`${fieldName} ref NOvalue:`);
+      // setPopUpErrors(true);
     }
-
-    if (descriptionRef.current !== null) {
-      setPopUpErrors(false);
-      // const topOffset =
-      //   descriptionRef.current.getBoundingClientRect().top +
-      //   window.scrollY -
-      //   scrollTopOffset;
-      // window.scrollTo({
-      //   top: topOffset,
-      //   behavior: "smooth",
-      // });
-    }
-    // window.scrollTo({
-    //   top: 50,
-    //   behavior: "smooth",
-    // });
-    // setPopUpErrors(false);
   };
-  //console.log(hasErrors);
+  console.log(popUpErrors);
 
   return (
     <div className={style.login}>
