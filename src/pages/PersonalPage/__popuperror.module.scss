@@ -1,0 +1,66 @@
+.popUp__errors {
+  position: fixed;
+  //   bottom: 355px;
+  top: 95px;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 10px;
+  height: 89vh;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // border: black 1px solid;
+  z-index: 9995;
+  background-color: rgba(119, 119, 119, 0.6);
+  // opacity: 0.5;
+  @media (max-width: 450px) {
+    bottom: 100px;
+    height: 200vh;
+    width: 100%;
+  }
+  .container {
+    //position: absolute;
+    // top: 50%;
+    // right: 50%;
+    // transform: translate(-50%, -50%);
+    border-radius: 10px;
+    // background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    .close__btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 40px;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      width: 50px;
+    }
+    .message_box {
+      //background-color: red;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        font-size: 30px;
+        color: aliceblue;
+      }
+      .agree__btn {
+        margin-top: 30px;
+        width: 70%;
+        height: 50px;
+      }
+    }
+  }
+}

@@ -8,6 +8,10 @@ import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import carData from "../../helpers/modelsBrands";
 // import ImageCompressor from "image-compressor";
 //import sharp from "sharp";
+import PopUpError from "./PopUpError";
+import PhotoList from "../../components/ordinary/PhotoList/PhotoList";
+import ScrollToTop from "../../utils/scrollToTop";
+import ScrollToTopPagination from "../../utils/scrollToTopPagination";
 
 const storage = getStorage();
 
@@ -18,6 +22,22 @@ interface CarModel {
 interface Errors {
   brand?: string;
   model?: string;
+  selectedFiles?: string;
+  price?: string;
+  year?: string;
+  mileage?: string;
+  transmission?: string;
+  fuel?: string;
+  wheels?: string;
+  vehicleType?: string;
+  engineCapacity?: string;
+  seats?: string;
+  interior?: string;
+  color?: string;
+  location?: string;
+  owners?: string;
+  exportStatus?: string;
+  description?: string;
   // Добавьте другие поля с ошибками, если необходимо
 }
 
@@ -28,8 +48,15 @@ type DateObject = {
   hours: number;
   minutes: number;
 };
+
+interface Photo {
+  id: string;
+  url: string;
+}
 export default function PersonalPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  //const [selectedFiles, setSelectedFiles] = useState<Photo[]>([]);
+
   const [brand, setBrand] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
   const [model, setModel] = useState("");
@@ -47,21 +74,45 @@ export default function PersonalPage() {
   const [location, setLocation] = useState<string>("");
   const [owners, setOwners] = useState<string>("");
   const [exportStatus, setExportStatus] = useState<string>("");
-  // const [dateAdded, setDateAdded] = useState<string>("");
-
-  //console.log(dateObj);
-
   const [description, setDescription] = useState("");
+
+  const [formErrors, setFormErrors] = useState<Errors>({});
+
+  const errors: Errors = {};
 
   //const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      console.log(e.target.files);
 
-      setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
+  // const handleReorderPhotos = (reorderedPhotos: File[]) => {
+  //   // Преобразовать объекты типа File в объекты типа Photo
+  //   const photos: Photo[] = reorderedPhotos.map((file) => ({
+  //     id: uuidv4(), // Здесь вы должны сгенерировать уникальный идентификатор для фотографии
+  //     url: URL.createObjectURL(file), // Используйте URL.createObjectURL для получения временной ссылки на файл
+  //   }));
+  //   setSelectedFiles(photos);
+  //   // Здесь вы можете отправить обновленный порядок фотографий на сервер или выполнить другие необходимые действия.
+  // };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let imageCounter = 1;
+    // if (e.target.files) {
+    //   console.log(e.target.files);
+
+    //   setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
+    // }
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).map((file) => {
+        const renamedFile = new File([file], `${imageCounter}.webp`, {
+          type: file.type,
+        });
+        imageCounter++;
+        return renamedFile;
+      });
+
+      setSelectedFiles([...selectedFiles, ...newFiles]);
+      console.log(selectedFiles);
     }
 
     const files = e.target.files;
@@ -88,18 +139,89 @@ export default function PersonalPage() {
   const generateNewId = (): string => {
     return uuidv4();
   };
-  const [formErrors, setFormErrors] = useState<Errors>({});
-  const errors: Errors = {};
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!brand) {
-      errors.brand = "Поле Брэнд обязательно для заполнения";
+    if (selectedFiles.length < 1) {
+      errors.selectedFiles = "Должно быть добавлено хотя бы 1 фото";
     }
+
+    if (!brand) {
+      errors.brand = "Поле Марка обязательно для заполнения";
+    }
+
+    if (!model) {
+      errors.model = "Поле Модель должна быть заполнена";
+    }
+    if (!vehicleType) {
+      errors.vehicleType = "Поле Тип кузова должна быть заполнена";
+    }
+
+    if (!fuel) {
+      errors.fuel = "Поле модель должна быть заполнена";
+    }
+    if (!engineCapacity) {
+      errors.engineCapacity = "Поле модель должна быть заполнена";
+    }
+    if (!color) {
+      errors.color = "Поле модель должна быть заполнена";
+    }
+    if (!interior) {
+      errors.interior = "Поле модель должна быть заполнена";
+    }
+
+    if (!transmission) {
+      errors.transmission = "Поле модель должна быть заполнена";
+    }
+    if (!wheels) {
+      errors.wheels = "Поле модель должна быть заполнена";
+    }
+    if (!seats) {
+      errors.seats = "Поле модель должна быть заполнена";
+    }
+    if (!location) {
+      errors.location = "Поле модель должна быть заполнена";
+    }
+    if (!owners) {
+      errors.owners = "Поле модель должна быть заполнена";
+    }
+    if (!exportStatus) {
+      errors.exportStatus = "Поле модель должна быть заполнена";
+    }
+    if (!year) {
+      errors.year = "Поле модель должна быть заполнена";
+    }
+    if (!mileage) {
+      errors.mileage = "Поле модель должна быть заполнена";
+    }
+    if (!price) {
+      errors.price = "Поле модель должна быть заполнена";
+    }
+    if (!description) {
+      errors.description = "Поле модель должна быть заполнена";
+    }
+
+    //description
+    // price
+    // year
+    // mileage
+    // transmission
+    // fuel
+    // wheels
+    // vehicleType
+    // engineCapacity
+    // seats
+    // interior
+    // color
+    // location
+    // owners
+    // exportStatus
+    console.log(model);
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      console.log("Errors Brand");
+      console.log("Errors" + Object.keys(errors).length);
     } else {
       console.log("No Errors");
       // Если нет ошибок, выполните отправку данных
@@ -117,13 +239,13 @@ export default function PersonalPage() {
         minutes: currentDate.getMinutes(),
       };
 
-      selectedFiles.forEach((file) => {
-        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+      // selectedFiles.forEach((file) => {
+      //   const storageRef = ref(storage, `cars/${newId}/${file.name}`);
 
-        uploadTasks.push(
-          uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
-        );
-      });
+      //   uploadTasks.push(
+      //     uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+      //   );
+      // });
 
       const imageUrls = await Promise.all(uploadTasks);
 
@@ -155,26 +277,27 @@ export default function PersonalPage() {
       };
       // Отправить объект на сервер или выполнить другие действия с ним
       //  console.log(carObject);
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(carObject),
-      };
-      fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error("Network response was not ok.");
-        })
-        .then((json) => {
-          console.log("Объект успешно отправлен на сервер:", json);
-        })
-        .catch((error) => {
-          console.error("Ошибка при отправке объекта на сервер:", error);
-        });
+
+      // const requestOptions = {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(carObject),
+      // };
+      // fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
+      //   .then((res) => {
+      //     if (res.ok) {
+      //       return res.json();
+      //     }
+      //     throw new Error("Network response was not ok.");
+      //   })
+      //   .then((json) => {
+      //     console.log("Объект успешно отправлен на сервер:", json);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Ошибка при отправке объекта на сервер:", error);
+      //   });
 
       // Сбросить значения формы
 
@@ -229,11 +352,30 @@ export default function PersonalPage() {
     );
     setModels(selectedBrandData ? selectedBrandData.models : []);
   };
+  // <PhotoList
+  //           photos={selectedFiles}
+  //           onReorderPhotos={handleReorderPhotos}
+  //         />
+  console.log(errors);
+  console.log(formErrors);
+  const hasErrors = Object.keys(formErrors).length > 0;
+  console.log(hasErrors);
+
+  const handleAgreeClick = () => {
+    ScrollToTop();
+  };
 
   return (
     <div className={style.login}>
+      {/* <form onSubmit={handleSubmit}> */}
+
+      {hasErrors ? <PopUpError /> : null}
       <form onSubmit={handleSubmit}>
-        <div className={style.photos}>
+        <div
+          className={
+            formErrors.selectedFiles ? style.error__selectedFiles : style.photos
+          }
+        >
           <label>
             <span> Фотография машины:</span>
 
@@ -241,7 +383,7 @@ export default function PersonalPage() {
               type="file"
               accept="image/*"
               multiple
-              onChange={handleFileChange}
+              onChange={ScrollToTopPagination}
             />
           </label>
           <div className={style.preview__photos}>
@@ -255,7 +397,8 @@ export default function PersonalPage() {
             ))}
           </div>
         </div>
-        <div>
+        <button onClick={handleAgreeClick}>click me</button>
+        <div className={formErrors.brand ? style.error : ""}>
           <label>
             <span>Марка:</span>
 
@@ -272,11 +415,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        {formErrors.brand && (
-          <div className={style.error}>{formErrors.brand}</div>
-        )}
-
-        <div>
+        <div className={formErrors.model ? style.error : ""}>
           <label>
             <span>Модель:</span>
             <select onChange={(e) => setModel(e.target.value)}>
@@ -290,7 +429,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.vehicleType ? style.error : ""}>
           <label>
             Тип кузова:
             <select
@@ -309,7 +448,7 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div>
+        <div className={formErrors.fuel ? style.error : ""}>
           <label>
             Топливо:
             <select value={fuel} onChange={(e) => setFuel(e.target.value)}>
@@ -321,7 +460,7 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div>
+        <div className={formErrors.engineCapacity ? style.error : ""}>
           <label>
             Обьем двигателя:
             <input
@@ -333,7 +472,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.color ? style.error : ""}>
           <label>
             Цвет автомобиля:
             <select value={color} onChange={(e) => setColor(e.target.value)}>
@@ -349,7 +488,7 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div>
+        <div className={formErrors.interior ? style.error : ""}>
           <label>
             Цвет интерьера:
             <select
@@ -367,7 +506,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.transmission ? style.error : ""}>
           <label>
             Трансмиссия:
             <select
@@ -381,7 +520,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.wheels ? style.error : ""}>
           <label>
             Размер колес:
             <select value={wheels} onChange={(e) => setWheels(e.target.value)}>
@@ -400,7 +539,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.seats ? style.error : ""}>
           <label>
             Колличество мест:
             <select value={seats} onChange={(e) => setSeats(e.target.value)}>
@@ -414,7 +553,7 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div>
+        <div className={formErrors.location ? style.error : ""}>
           <label>
             Местоположение:
             <select
@@ -432,7 +571,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.owners ? style.error : ""}>
           <label>
             Владельцы:
             <select value={owners} onChange={(e) => setOwners(e.target.value)}>
@@ -446,7 +585,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.exportStatus ? style.error : ""}>
           <label>
             Export status:
             <select
@@ -460,7 +599,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.year ? style.error : ""}>
           <label>
             Год выпуска:
             <input
@@ -470,7 +609,7 @@ export default function PersonalPage() {
             />
           </label>
         </div>
-        <div>
+        <div className={formErrors.mileage ? style.error : ""}>
           <label>
             Пробег:
             <input
@@ -481,7 +620,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div>
+        <div className={formErrors.price ? style.error : ""}>
           <label>
             Цена:
             <input
@@ -492,7 +631,7 @@ export default function PersonalPage() {
             />
           </label>
         </div>
-        <div>
+        <div className={formErrors.description ? style.error : ""}>
           <label>
             Описание:
             <input

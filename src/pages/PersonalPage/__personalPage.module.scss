@@ -212,6 +212,7 @@ form {
   flex-direction: column;
   gap: 20px;
   width: 40%;
+  position: relative;
   @media (max-width: 450px) {
     width: 100%;
   }
@@ -288,4 +289,24 @@ form {
     align-self: stretch;
     border-radius: 8px;
   }
+}
+.error {
+  border: 1px solid red;
+}
+.error__selectedFiles {
+  border: 1px solid red;
+  flex-direction: column;
+  height: fit-content;
+}
+.popUp__errors {
+  position: absolute;
+  bottom: 355px;
+  left: 50%;
+  transform: translate(-50%);
+  height: 100vh;
+  width: 80%;
+  // border: black 1px solid;
+  z-index: 9995;
+  background-color: rgba(119, 119, 119, 0.8);
+  // opacity: 0.5;
 }

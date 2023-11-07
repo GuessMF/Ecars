@@ -27,10 +27,17 @@
     height: 180px;
     position: relative;
     border-radius: 8px 8px 0px 0px;
-    background-repeat: no-repeat;
-    background-size: cover;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     @media (max-width: 450px) {
       height: 260px;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
     }
   }
 

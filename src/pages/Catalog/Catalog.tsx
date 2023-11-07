@@ -67,6 +67,7 @@ export default function Catalog({
       imageUrl: string;
     }[]
   >([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

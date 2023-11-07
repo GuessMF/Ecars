@@ -20,10 +20,8 @@ export default function LittleCard({
 }: Props) {
   return (
     <div className={style.littleCard}>
-      <div
-        className={style.littleCard__previewImg}
-        style={{backgroundImage: `url(${previewIMG})`}}
-      >
+      <div className={style.littleCard__previewImg}>
+        <img src={previewIMG} width={200} />
         <Like />
       </div>
       <div className={style.littleCard__content}>
