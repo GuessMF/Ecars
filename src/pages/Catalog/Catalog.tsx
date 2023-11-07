@@ -45,7 +45,7 @@ export default function Catalog({
   eurValue,
   usdValue,
 }: CatalogProps) {
-  const [sortType, setSortType] = useState<string>("dateAdded");
+  const [sortType, setSortType] = useState<string>("dateAdded&order=desc");
   // console.log(sortType.value + " Catalog");
 
   const [carsWithImages, setCarsWithImages] = useState<

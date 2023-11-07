@@ -292,12 +292,14 @@ form {
 }
 .error {
   border: 1px solid red;
-}
-.error__selectedFiles {
-  border: 1px solid red;
   flex-direction: column;
   height: fit-content;
 }
+// .error__selectedFiles {
+//   border: 1px solid red;
+//   flex-direction: column;
+//   height: fit-content;
+// }
 .popUp__errors {
   position: absolute;
   bottom: 355px;

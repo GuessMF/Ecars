@@ -115,17 +115,19 @@ export default function Sorted({
     {value: "year", label: "Older"},
     {value: "year&order=desc", label: "Newer"},
     {
-      value: "dateAdded&order=desc",
+      value: "dateAdded",
       label: "By date before",
     },
     {
-      value: "dateAdded",
+      value: "dateAdded&order=desc",
       label: "By date later",
     },
   ];
   const [menuIsOpen, setMenuIsOpen] = React.useState(false);
 
-  const initialOption = options.find((option) => option.value === "dateAdded");
+  const initialOption = options.find(
+    (option) => option.value === "dateAdded&order=desc"
+  );
   const [selectedOption, setSelectedOption] = React.useState(initialOption);
 
   const toggleMenu = () => {

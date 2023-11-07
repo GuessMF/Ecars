@@ -53,6 +53,9 @@ interface Photo {
   id: string;
   url: string;
 }
+interface Refs {
+  [key: string]: React.RefObject<HTMLDivElement>;
+}
 export default function PersonalPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   //const [selectedFiles, setSelectedFiles] = useState<Photo[]>([]);
@@ -77,9 +80,49 @@ export default function PersonalPage() {
   const [description, setDescription] = useState("");
 
   const [formErrors, setFormErrors] = useState<Errors>({});
-
+  const [popUpErrors, setPopUpErrors] = useState<boolean>(false);
   const errors: Errors = {};
+  //console.log(formErrors);
 
+  const selectedFilesRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLDivElement>(null);
+  const modelRef = useRef<HTMLDivElement>(null);
+  const vehicleTypeRef = useRef<HTMLDivElement>(null);
+  const fuelRef = useRef<HTMLDivElement>(null);
+  const engineCapacityRef = useRef<HTMLDivElement>(null);
+  const colorRef = useRef<HTMLDivElement>(null);
+  const interiorRef = useRef<HTMLDivElement>(null);
+  const transmissionRef = useRef<HTMLDivElement>(null);
+  const wheelsRef = useRef<HTMLDivElement>(null);
+  const seatsRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
+  const ownersRef = useRef<HTMLDivElement>(null);
+  const exportStatusRef = useRef<HTMLDivElement>(null);
+  const yearRef = useRef<HTMLDivElement>(null);
+  const mileageRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+
+  const refs: Refs = {
+    selectedFiles: selectedFilesRef,
+    brandRef: brandRef,
+    modelRef: modelRef,
+    vehicleType: vehicleTypeRef,
+    fuel: fuelRef,
+    engineCapacity: engineCapacityRef,
+    color: colorRef,
+    interior: interiorRef,
+    transmission: transmissionRef,
+    wheels: wheelsRef,
+    seats: seatsRef,
+    location: locationRef,
+    owners: ownersRef,
+    exportStatus: exportStatusRef,
+    year: yearRef,
+    mileage: mileageRef,
+    price: priceRef,
+    description: descriptionRef,
+  };
   //const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const storage = getStorage();
@@ -112,7 +155,7 @@ export default function PersonalPage() {
       });
 
       setSelectedFiles([...selectedFiles, ...newFiles]);
-      console.log(selectedFiles);
+      //  console.log(selectedFiles);
     }
 
     const files = e.target.files;
@@ -217,10 +260,13 @@ export default function PersonalPage() {
     // location
     // owners
     // exportStatus
-    console.log(model);
+    //  console.log(model);
 
     if (Object.keys(errors).length > 0) {
+      // console.log(errors);
+
       setFormErrors(errors);
+      setPopUpErrors(true);
       console.log("Errors" + Object.keys(errors).length);
     } else {
       console.log("No Errors");
@@ -239,18 +285,18 @@ export default function PersonalPage() {
         minutes: currentDate.getMinutes(),
       };
 
-      // selectedFiles.forEach((file) => {
-      //   const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+      selectedFiles.forEach((file) => {
+        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
 
-      //   uploadTasks.push(
-      //     uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
-      //   );
-      // });
+        uploadTasks.push(
+          uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+        );
+      });
 
       const imageUrls = await Promise.all(uploadTasks);
 
       // Используйте сгенерированный ID в названии папки в Firebase Storage
-      //  const storageFolder = `cars/${newId}`;
+      // const storageFolder = `cars/${newId}`;
 
       const carObject = {
         id: newId,
@@ -278,26 +324,26 @@ export default function PersonalPage() {
       // Отправить объект на сервер или выполнить другие действия с ним
       //  console.log(carObject);
 
-      // const requestOptions = {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(carObject),
-      // };
-      // fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
-      //   .then((res) => {
-      //     if (res.ok) {
-      //       return res.json();
-      //     }
-      //     throw new Error("Network response was not ok.");
-      //   })
-      //   .then((json) => {
-      //     console.log("Объект успешно отправлен на сервер:", json);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Ошибка при отправке объекта на сервер:", error);
-      //   });
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(carObject),
+      };
+      fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw new Error("Network response was not ok.");
+        })
+        .then((json) => {
+          console.log("Объект успешно отправлен на сервер:", json);
+        })
+        .catch((error) => {
+          console.error("Ошибка при отправке объекта на сервер:", error);
+        });
 
       // Сбросить значения формы
 
@@ -356,25 +402,56 @@ export default function PersonalPage() {
   //           photos={selectedFiles}
   //           onReorderPhotos={handleReorderPhotos}
   //         />
-  console.log(errors);
-  console.log(formErrors);
-  const hasErrors = Object.keys(formErrors).length > 0;
-  console.log(hasErrors);
+
+  const hasErrors = Object.keys(formErrors);
 
   const handleAgreeClick = () => {
-    ScrollToTop();
+    // const firstEmptyField = hasErrors.find((element) => !eval(element)); // Проверяем, есть ли пустые поля
+    console.log(hasErrors[0]);
+    const scrollTopOffset = 100; // Задайте желаемый отступ сверху в пикселях
+
+    const fieldName = hasErrors[0];
+    const fieldRef = refs[fieldName];
+    if (fieldRef && fieldRef.current !== null) {
+      console.log(`${fieldName} ref value:`);
+      const topOffset =
+        fieldRef.current.getBoundingClientRect().top +
+        window.scrollY -
+        scrollTopOffset;
+      window.scrollTo({
+        top: topOffset,
+        behavior: "smooth",
+      });
+    } else {
+      console.log(`${fieldName} ref NOvalue:`);
+    }
+
+    if (descriptionRef.current !== null) {
+      setPopUpErrors(false);
+      // const topOffset =
+      //   descriptionRef.current.getBoundingClientRect().top +
+      //   window.scrollY -
+      //   scrollTopOffset;
+      // window.scrollTo({
+      //   top: topOffset,
+      //   behavior: "smooth",
+      // });
+    }
+    // window.scrollTo({
+    //   top: 50,
+    //   behavior: "smooth",
+    // });
+    // setPopUpErrors(false);
   };
+  //console.log(hasErrors);
 
   return (
     <div className={style.login}>
-      {/* <form onSubmit={handleSubmit}> */}
-
-      {hasErrors ? <PopUpError /> : null}
-      <form onSubmit={handleSubmit}>
+      {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
+      <form onSubmit={handleSubmit} id="form">
         <div
-          className={
-            formErrors.selectedFiles ? style.error__selectedFiles : style.photos
-          }
+          className={formErrors.selectedFiles ? style.error : style.photos}
+          ref={selectedFilesRef}
         >
           <label>
             <span> Фотография машины:</span>
@@ -383,7 +460,7 @@ export default function PersonalPage() {
               type="file"
               accept="image/*"
               multiple
-              onChange={ScrollToTopPagination}
+              onChange={handleFileChange}
             />
           </label>
           <div className={style.preview__photos}>
@@ -397,8 +474,8 @@ export default function PersonalPage() {
             ))}
           </div>
         </div>
-        <button onClick={handleAgreeClick}>click me</button>
-        <div className={formErrors.brand ? style.error : ""}>
+
+        <div className={formErrors.brand ? style.error : ""} ref={brandRef}>
           <label>
             <span>Марка:</span>
 
@@ -415,7 +492,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.model ? style.error : ""}>
+        <div className={formErrors.model ? style.error : ""} ref={modelRef}>
           <label>
             <span>Модель:</span>
             <select onChange={(e) => setModel(e.target.value)}>
@@ -429,7 +506,10 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.vehicleType ? style.error : ""}>
+        <div
+          className={formErrors.vehicleType ? style.error : ""}
+          ref={vehicleTypeRef}
+        >
           <label>
             Тип кузова:
             <select
@@ -448,7 +528,8 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div className={formErrors.fuel ? style.error : ""}>
+
+        <div className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
           <label>
             Топливо:
             <select value={fuel} onChange={(e) => setFuel(e.target.value)}>
@@ -472,7 +553,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.color ? style.error : ""}>
+        <div className={formErrors.color ? style.error : ""} ref={colorRef}>
           <label>
             Цвет автомобиля:
             <select value={color} onChange={(e) => setColor(e.target.value)}>
@@ -488,7 +569,10 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div className={formErrors.interior ? style.error : ""}>
+        <div
+          className={formErrors.interior ? style.error : ""}
+          ref={interiorRef}
+        >
           <label>
             Цвет интерьера:
             <select
@@ -506,7 +590,10 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.transmission ? style.error : ""}>
+        <div
+          className={formErrors.transmission ? style.error : ""}
+          ref={transmissionRef}
+        >
           <label>
             Трансмиссия:
             <select
@@ -520,7 +607,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.wheels ? style.error : ""}>
+        <div className={formErrors.wheels ? style.error : ""} ref={wheelsRef}>
           <label>
             Размер колес:
             <select value={wheels} onChange={(e) => setWheels(e.target.value)}>
@@ -539,7 +626,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.seats ? style.error : ""}>
+        <div className={formErrors.seats ? style.error : ""} ref={seatsRef}>
           <label>
             Колличество мест:
             <select value={seats} onChange={(e) => setSeats(e.target.value)}>
@@ -553,7 +640,11 @@ export default function PersonalPage() {
             </select>
           </label>
         </div>
-        <div className={formErrors.location ? style.error : ""}>
+
+        <div
+          className={formErrors.location ? style.error : ""}
+          ref={locationRef}
+        >
           <label>
             Местоположение:
             <select
@@ -571,7 +662,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.owners ? style.error : ""}>
+        <div className={formErrors.owners ? style.error : ""} ref={ownersRef}>
           <label>
             Владельцы:
             <select value={owners} onChange={(e) => setOwners(e.target.value)}>
@@ -585,7 +676,10 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.exportStatus ? style.error : ""}>
+        <div
+          className={formErrors.exportStatus ? style.error : ""}
+          ref={exportStatusRef}
+        >
           <label>
             Export status:
             <select
@@ -599,7 +693,7 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.year ? style.error : ""}>
+        <div className={formErrors.year ? style.error : ""} ref={yearRef}>
           <label>
             Год выпуска:
             <input
@@ -609,7 +703,8 @@ export default function PersonalPage() {
             />
           </label>
         </div>
-        <div className={formErrors.mileage ? style.error : ""}>
+
+        <div className={formErrors.mileage ? style.error : ""} ref={mileageRef}>
           <label>
             Пробег:
             <input
@@ -620,18 +715,21 @@ export default function PersonalPage() {
           </label>
         </div>
 
-        <div className={formErrors.price ? style.error : ""}>
+        <div className={formErrors.price ? style.error : ""} ref={priceRef}>
           <label>
             Цена:
             <input
               type="number"
               value={price}
-              //onChange={(e) => setPrice(e.target.value)}
               onChange={(e) => setPrice(parseInt(e.target.value, 10))}
             />
           </label>
         </div>
-        <div className={formErrors.description ? style.error : ""}>
+
+        <div
+          className={formErrors.description ? style.error : ""}
+          ref={descriptionRef}
+        >
           <label>
             Описание:
             <input
