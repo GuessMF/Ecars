@@ -61,13 +61,47 @@
         }
       }
       .littlePictures {
-        height: 70px;
-
+        height: 100px;
         display: flex;
         flex-direction: row;
         gap: 8px;
         overflow-x: scroll;
         max-width: 808px;
+        cursor: grab;
+        //  border: black 1px solid;
+        &:active {
+          cursor: grabbing;
+        }
+
+        &::-webkit-scrollbar {
+          width: 5px; /* ширина всей полосы прокрутки */
+        }
+
+        &::-webkit-scrollbar-track {
+          background: $white; /* цвет зоны отслеживания */
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: $gray100; /* цвет бегунка */
+          border-radius: 20px; /* округлось бегунка */
+          border: 6px solid $white; /* отступ вокруг бегунка */
+        }
+
+        // &::-webkit-scrollbar {
+        //   width: 3px !important;
+        // }
+
+        // &::-webkit-scrollbar-thumb {
+        //   background-color: #888; /* Цвет полосы прокрутки */
+        // }
+
+        // &::-webkit-scrollbar-track {
+        //   background-color: #f1f1f1; /* Цвет фона полосы прокрутки */
+        // }
+
+        // scrollbar-width: thin; /* Для Firefox */
+        // scrollbar-color: #888 #f1f1f1; /* Для Firefox */
+
         @media (max-width: 450px) {
           overflow-x: scroll;
           height: fit-content;
@@ -88,6 +122,35 @@
           }
         }
       }
+
+      // .swiper {
+      //   border: black 1px solid;
+      //   // background-color: red !important;
+      //   height: 100px;
+
+      //   img {
+      //     //  margin-top: 10px;
+      //     height: 95px;
+      //   }
+      //   .swiper-wrapper {
+      //     height: 100px !important;
+      //     //  background-color: red !important;
+      //   }
+      .detailsSwiper {
+        // display: flex;
+        // flex-direction: row;
+        //  background-color: red !important;
+        border: black 1px solid;
+        img {
+          height: 100px;
+        }
+
+        .swiper-wrapper {
+          background-color: red !important;
+          height: 200px;
+        }
+      }
+      // }
     }
     .content__mainInformation {
       //  border: black 1px solid;

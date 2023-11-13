@@ -40,7 +40,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export default function SpecialOffers() {
+interface Props {
+  selectedCurrency: string;
+  eurValue: number;
+  usdValue: number;
+}
+
+export default function SpecialOffers({
+  selectedCurrency,
+  eurValue,
+  usdValue,
+}: Props) {
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [carsDownloaded, setCarsDownloaded] = useState<
@@ -215,6 +225,12 @@ export default function SpecialOffers() {
                       brand={car.brand}
                       model={car.model}
                       price={car.price}
+                      fuel={car.fuel}
+                      mileage={car.mileage}
+                      owners={car.owners}
+                      selectedCurrency={selectedCurrency}
+                      eurValue={eurValue}
+                      usdValue={usdValue}
                       //special={car.special}
                       previewIMG={car.imageUrl}
                     />

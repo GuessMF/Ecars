@@ -10,9 +10,10 @@ import Skeleton from "../../components/ui/Skeleton/Skeleton";
 import SkeletonMobile from "../../components/ui/SkeletonMobile/SkeletonMobile";
 import ReactPaginate from "react-paginate";
 import {initializeApp} from "firebase/app";
-import {getStorage, ref, listAll} from "firebase/storage";
+import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
 import {getDownloadURL} from "firebase/storage";
 import {getFirestore} from "firebase/firestore";
+import DeleteCar from "../../components/ui/DeleteCar/DeleteCar";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
@@ -47,10 +48,12 @@ export default function Catalog({
 }: CatalogProps) {
   const [sortType, setSortType] = useState<string>("dateAdded&order=desc");
   // console.log(sortType.value + " Catalog");
-
+  const [password, setPassword] = useState<string>("");
+  const [openPassword, setOpenPassword] = useState<boolean>(false);
   const [carsWithImages, setCarsWithImages] = useState<
     {
       id: string;
+      index: string;
       brand: string;
       model: string;
       price: string;
@@ -90,6 +93,7 @@ export default function Catalog({
 
                 carsWithImagesArray.push({
                   id: car.id.toString(),
+                  index: car.index,
                   brand: car.brand,
                   model: car.model,
                   price: car.price.toString(),
@@ -141,6 +145,7 @@ export default function Catalog({
 
   interface Car {
     id: string;
+    index: string;
     brand: string;
     model: string;
     price: string;
@@ -730,6 +735,66 @@ export default function Catalog({
       }));
     }
   };
+  const checkPassword = () => {
+    console.log(password);
+    if (password === "060606") {
+      console.log("You can delete");
+    } else {
+      console.log("Nio");
+    }
+  };
+  // const onClickDelete = (carId: string, carIndex: string) => {
+  //   checkPassword();
+  //   setOpenPassword(true);
+  // };
+
+  const onClickDelete = async (carId: string, carIndex: string) => {
+    setOpenPassword(true);
+    if (password === "060606") {
+      console.log("You can delete");
+      try {
+        setOpenPassword(false);
+        setPassword("");
+
+        const storage = getStorage();
+        const storageRef = ref(storage, `cars/${carId}`);
+        const imagesList = await list(storageRef);
+        const deleteImagePromises = imagesList.items.map(async (imageRef) => {
+          try {
+            await deleteObject(imageRef);
+          } catch (error) {
+            console.error(
+              `Ошибка при удалении изображения ${imageRef.name}:`,
+              error
+            );
+          }
+        });
+        await Promise.all(deleteImagePromises);
+
+        fetch(`https://65378b85bb226bb85dd365a6.mockapi.io/cars/${carIndex}`, {
+          method: "DELETE",
+        })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+          })
+          .then((tasks) => {
+            console.log(tasks);
+          })
+          .catch((error) => {});
+
+        console.log("Автомобиль удален из базы данных");
+      } catch (error) {
+        console.error(
+          "Ошибка удаления изображений из папки и объекта из базы данных:",
+          error
+        );
+      }
+    } else {
+      console.log("Nio");
+    }
+  };
 
   return (
     <div className={style.catalog}>
@@ -815,24 +880,38 @@ export default function Catalog({
               )
             ) : filteredCars.length > 0 ? (
               currentItems.map((car, index) => (
-                <BigCard
-                  key={index}
-                  id={car.id}
-                  selectedCurrency={selectedCurrency}
-                  usdValue={usdValue}
-                  eurValue={eurValue}
-                  index={index}
-                  brand={car.brand}
-                  model={car.model}
-                  price={car.price}
-                  fuel={car.fuel}
-                  owners={car.owners}
-                  location={car.location}
-                  mileage={car.mileage}
-                  description={car.description}
-                  previewIMG={car.imageUrl}
-                  onLoad={() => setIsLoading(false)}
-                />
+                <div className={style.bigCrad__wrapper}>
+                  <BigCard
+                    key={index}
+                    id={car.id}
+                    selectedCurrency={selectedCurrency}
+                    usdValue={usdValue}
+                    eurValue={eurValue}
+                    index={index}
+                    brand={car.brand}
+                    model={car.model}
+                    price={car.price}
+                    fuel={car.fuel}
+                    owners={car.owners}
+                    location={car.location}
+                    mileage={car.mileage}
+                    description={car.description}
+                    previewIMG={car.imageUrl}
+                    onLoad={() => setIsLoading(false)}
+                  />
+
+                  <DeleteCar
+                    deleteCarFunc={() => onClickDelete(car.id, car.index)}
+                    id={car.id}
+                  />
+                  {openPassword && (
+                    <input
+                      type="text"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  )}
+                </div>
               ))
             ) : (
               <h2>No cars</h2>

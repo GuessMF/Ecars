@@ -76,7 +76,9 @@ export default function Header() {
         <div className={style.formGroup__icons}>
           <Search />
           <Liked />
-          <Profile />
+          <NavLink to="/login">
+            <Profile />
+          </NavLink>
         </div>
         <NavLink to="/per">
           <GetAquote version={version} />

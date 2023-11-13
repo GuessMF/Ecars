@@ -1,29 +1,55 @@
-import React from "react";
+import React, {useRef, useEffect, useState} from "react";
 import style from "./__signUp.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 
 export default function SignUp() {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [checkBox, setCheckBox] = useState<boolean>(false);
+  useEffect(() => {
+    console.log("Name: " + name);
+    console.log("Email: " + email);
+    console.log("Password: " + password);
+    console.log("ConfirmPassword: " + confirmPassword);
+    console.log("Checkbox: " + checkBox);
+  });
+
   return (
     <div className={style.signUp}>
       <div className={style.wrapper}>
         <h1>Sing Up</h1>
-        <div className={style.form}>
+
+        <form className={style.form}>
           <div className={style.name}>
             <span>Full name</span>
-            <input type="name" placeholder="John Doe" />
+            <input
+              type="name"
+              placeholder="John Doe"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
 
           <div className={style.email}>
             <span>Email address</span>
-            <input type="email" placeholder="example@mail.com" />
+            <input
+              type="email"
+              placeholder="example@mail.com"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className={style.password}>
             <div>
               <span>Password</span>
             </div>
-            <input type="password" placeholder="Your password" />
+            <input
+              type="password"
+              placeholder="Your password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <span className={style.limit}>At least 8 characters</span>
           </div>
 
@@ -31,7 +57,11 @@ export default function SignUp() {
             <div>
               <span>Confirm password</span>
             </div>
-            <input type="password" placeholder="Re-type password" />
+            <input
+              type="password"
+              placeholder="Re-type password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
           </div>
 
           <div className={style.termsPolicy}>
@@ -50,13 +80,14 @@ export default function SignUp() {
               <span>Login</span>
             </NavLink>
           </div>
+
           <span className={style.line}>
             <hr /> or <hr />
           </span>
           <button className={style.googleBtn}>
             <GoogleIcon /> Authorize with Google
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

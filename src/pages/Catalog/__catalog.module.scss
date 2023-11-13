@@ -120,3 +120,17 @@
     }
   }
 }
+
+.bigCrad__wrapper {
+  position: relative;
+  .delete_btn {
+    background-color: $red500;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
+    cursor: default;
+    color: $white;
+  }
+}

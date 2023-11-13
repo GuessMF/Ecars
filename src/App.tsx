@@ -68,7 +68,16 @@ function App() {
       />
       <Header />
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route
+          path="/"
+          element={
+            <Homepage
+              selectedCurrency={selectedCurr}
+              eurValue={eurValue}
+              usdValue={usdValue}
+            />
+          }
+        />
         <Route
           path="/catalog"
           element={

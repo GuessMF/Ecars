@@ -67,6 +67,7 @@ export default function BigCard({
               <span>{brand}</span>
               <span>{model}</span>
             </div>
+
             <div className={style.information__state}>
               {location} • {mileage < 20 ? "Brand NEW" : "Used"} • {mileage} km
               {owner === 0 ? " " : " • " + owner + " Owners"}

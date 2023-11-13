@@ -9,9 +9,11 @@ import carData from "../../helpers/modelsBrands";
 // import ImageCompressor from "image-compressor";
 //import sharp from "sharp";
 import PopUpError from "./PopUpError";
+import PopUpSent from "./PopUpSent";
 import PhotoList from "../../components/ordinary/PhotoList/PhotoList";
 import ScrollToTop from "../../utils/scrollToTop";
 import ScrollToTopPagination from "../../utils/scrollToTopPagination";
+import {Rings} from "react-loader-spinner";
 
 const storage = getStorage();
 
@@ -57,6 +59,8 @@ interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
 export default function PersonalPage() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   //const [selectedFiles, setSelectedFiles] = useState<Photo[]>([]);
 
@@ -245,33 +249,12 @@ export default function PersonalPage() {
       errors.description = "Поле модель должна быть заполнена";
     }
 
-    //description
-    // price
-    // year
-    // mileage
-    // transmission
-    // fuel
-    // wheels
-    // vehicleType
-    // engineCapacity
-    // seats
-    // interior
-    // color
-    // location
-    // owners
-    // exportStatus
-    //  console.log(model);
-
     if (Object.keys(errors).length > 0) {
-      // console.log(errors);
-
       setFormErrors(errors);
       setPopUpErrors(true);
-      // console.log("Errors" + Object.keys(errors).length);
     } else {
+      setLoading(true);
       console.log("No Errors");
-      // Если нет ошибок, выполните отправку данных
-      // Ваш код для отправки данных на сервер
 
       const uploadTasks: Promise<string>[] = [];
       const newId = generateNewId();
@@ -340,6 +323,11 @@ export default function PersonalPage() {
         })
         .then((json) => {
           console.log("Объект успешно отправлен на сервер:", json);
+          setSent(true);
+          setLoading(false);
+          setTimeout(() => {
+            setSent(false);
+          }, 2000);
         })
         .catch((error) => {
           console.error("Ошибка при отправке объекта на сервер:", error);
@@ -412,10 +400,10 @@ export default function PersonalPage() {
     setPopUpErrors(false);
     const fieldName = hasErrors[0];
     const fieldRef = refs[fieldName];
-    console.log(fieldName, fieldRef);
+    // console.log(fieldName, fieldRef);
 
     if (fieldRef && fieldRef.current !== null) {
-      console.log(`${fieldName} ref value:`);
+      // console.log(`${fieldName} ref value:`);
       const topOffset =
         fieldRef.current.getBoundingClientRect().top +
         window.scrollY -
@@ -429,12 +417,14 @@ export default function PersonalPage() {
       // setPopUpErrors(true);
     }
   };
-  console.log(popUpErrors);
+  //console.log(popUpErrors);
 
   return (
     <div className={style.login}>
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
-      <form onSubmit={handleSubmit} id="form">
+      <PopUpSent sent={sent} />
+
+      <form onSubmit={handleSubmit} id="form" className={style.form}>
         <div
           className={formErrors.selectedFiles ? style.error : style.photos}
           ref={selectedFilesRef}
@@ -725,7 +715,23 @@ export default function PersonalPage() {
             />
           </label>
         </div>
-        <button type="submit">Добавить машину</button>
+
+        <button type="submit" className={loading ? style.button__load : ""}>
+          {loading ? (
+            <Rings
+              height="48"
+              width="30"
+              color="#4fa94d"
+              // radius="6"
+              // wrapperStyle={{}}
+              wrapperClass={style.loader}
+              visible={true}
+              // ariaLabel="rings-loading"
+            />
+          ) : (
+            "Добавить машину"
+          )}
+        </button>
       </form>
     </div>
   );

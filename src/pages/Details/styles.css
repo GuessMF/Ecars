@@ -1,0 +1,12 @@
+.detailsSwiper {
+  background-color: aquamarine;
+}
+
+.detailsSwiper .swiper-wrapper {
+  /* background-color: aqua; */
+  height: 300px !important;
+
+  width: fit-content;
+  width: 1000px;
+  /* border: black 1px solid; */
+}

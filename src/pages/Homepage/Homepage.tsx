@@ -9,11 +9,25 @@ import WhyChooseUs from "../../components/simple/WhyChooseUs/WhyChooseUs";
 import Reviews from "../../components/simple/Reviews/Reviews";
 import BottomCTA from "../../components/simple/BottomCTA/BottomCTA";
 
-export default function Homepage() {
+interface Props {
+  selectedCurrency: string;
+  eurValue: number;
+  usdValue: number;
+}
+
+export default function Homepage({
+  selectedCurrency,
+  eurValue,
+  usdValue,
+}: Props) {
   return (
     <div>
       <Hero />
-      <SpecialOffers />
+      <SpecialOffers
+        selectedCurrency={selectedCurrency}
+        eurValue={eurValue}
+        usdValue={usdValue}
+      />
       <BrowseByBrand />
       <MiddleCTA />
       <HowItWorks />

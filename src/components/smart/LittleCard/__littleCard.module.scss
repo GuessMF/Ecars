@@ -34,6 +34,17 @@
     @media (max-width: 450px) {
       height: 260px;
     }
+    span {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: black;
+      font-weight: 500;
+      background-color: $yellow500;
+      padding: 3px 7px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
     img {
       width: 100%;
       height: auto;

@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useRef} from "react";
 import style from "./__details.module.scss";
 import {useParams} from "react-router-dom";
 // import {cars} from '../../helpers/cars.json'
@@ -26,6 +26,11 @@ import {getDocs} from "firebase/firestore/lite";
 import {initializeApp} from "firebase/app";
 import {getFirestore} from "firebase/firestore";
 import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
+
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Swiper as SwiperCore} from "swiper/types";
+import {Autoplay, Pagination, Navigation} from "swiper/modules";
+import {Virtual} from "swiper/modules";
 
 // interface RouteParams {
 //   id: string;
@@ -78,6 +83,8 @@ export default function Details({
   eurValue,
   usdValue,
 }: DetailsProps) {
+  const swiperRef = useRef<SwiperCore>();
+
   const black: string = "#1A1A1A";
   const [carData, setCarData] = useState(null);
 
@@ -175,7 +182,34 @@ export default function Details({
   let mileage: string | undefined = currentCar?.mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
-
+  //   <div className={style.swiper}>
+  //   <Swiper
+  //     //spaceBetween={30}
+  //     centeredSlides={true}
+  //     pagination={{clickable: true}}
+  //     navigation={true}
+  //     //  autoplay={{delay: 2500, disableOnInteraction: false}}
+  //     autoplay={false}
+  //     // spaceBetween={20}
+  //     modules={[Autoplay, Pagination, Navigation, Virtual]}
+  //     slidesPerView={5}
+  //     virtual
+  //     className={style.detailsSwiper}
+  //     onBeforeInit={(swiper) => {
+  //       swiperRef.current = swiper;
+  //     }}
+  //   >
+  //     {photoURLs.map((img, index) => (
+  //       <SwiperSlide virtualIndex={2}>
+  //         <img
+  //           className={style.little_preview}
+  //           src={img}
+  //           onClick={() => setSelectedPhoto(index)}
+  //         />
+  //       </SwiperSlide>
+  //     ))}
+  //   </Swiper>
+  // </div>
   return (
     <div className={style.details}>
       <div className={style.topNavigation}>
@@ -209,7 +243,6 @@ export default function Details({
                   />
                 ))}
               </div>
-              <div></div>
             </div>
 
             {window.innerWidth <= 768 && (

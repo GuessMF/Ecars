@@ -1,0 +1,46 @@
+.popUp__sent {
+  position: fixed;
+  top: 95px;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 10px;
+  height: 89vh;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  background-color: rgba(119, 119, 119, 0.5);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+
+  @media (max-width: 450px) {
+    bottom: 100px;
+    width: 100%;
+  }
+  .container {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .message_box {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      p {
+        font-size: 30px;
+        color: aliceblue;
+      }
+    }
+  }
+}
+.show {
+  z-index: 9995;
+  opacity: 1;
+}
