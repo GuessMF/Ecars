@@ -103,3 +103,11 @@
     }
   }
 }
+.user {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  button {
+    background-color: $primary500;
+  }
+}

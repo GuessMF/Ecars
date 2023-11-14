@@ -25,16 +25,18 @@ export default function Homepage({
   usdValue,
 }: Props) {
   const dispatch = useAppDispatch();
-  const {isAuth, email} = useAuth();
+  const {isAuth, email, displayName} = useAuth();
 
   return (
     <div>
       <Hero />
+
       <SpecialOffers
         selectedCurrency={selectedCurrency}
         eurValue={eurValue}
         usdValue={usdValue}
       />
+
       <BrowseByBrand />
       <MiddleCTA />
       <HowItWorks />

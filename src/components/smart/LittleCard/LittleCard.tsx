@@ -36,7 +36,6 @@ export default function LittleCard({
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  // console.log(multiplier);
 
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -46,7 +45,6 @@ export default function LittleCard({
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   const randomNum = Math.floor(Math.random() * 10) + 5;
-  console.log(randomNum);
 
   const persent = Number(currentPrice / randomNum).toFixed(0);
 

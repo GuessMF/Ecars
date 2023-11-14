@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from "react";
+import React, {useRef, useEffect, useState} from "react";
 import style from "./__login.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
@@ -6,13 +6,49 @@ import {NavLink} from "react-router-dom";
 import {useDispatch} from "react-redux";
 //import { useHistory } from 'react-router-dom';
 
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   //const {push} = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  console.log(email);
+  console.log(password);
+
+  const handleLogin = (email: string, password: string) => {
+    const auth = getAuth();
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        return signInWithEmailAndPassword(auth, email, password).then(
+          ({user}) => {
+            console.log(user);
+            dispatch(
+              setUser({
+                email: user.email,
+                id: user.uid,
+                token: user.refreshToken,
+              })
+            );
+            //push
+          }
+        );
+      })
+
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        alert("Auth failed");
+      });
+  };
 
   return (
     <div className={style.login}>
@@ -21,7 +57,12 @@ export default function Login() {
         <div className={style.form}>
           <div className={style.email}>
             <span>Email address</span>
-            <input type="email" placeholder="example@mail.com" />
+            <input
+              type="email"
+              placeholder="example@mail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className={style.password}>
             <div>
@@ -31,9 +72,19 @@ export default function Login() {
               </NavLink>
             </div>
 
-            <input type="password" placeholder="Your password" />
+            <input
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <button className={style.loginBtn}>Login</button>
+          <button
+            className={style.loginBtn}
+            onClick={() => handleLogin(email, password)}
+          >
+            Login
+          </button>
           <div className={style.signUp}>
             Don't have an account?
             <NavLink to="/signUp" className={style.navLink}>

@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function GetAquote({version}: Props) {
-  console.log(version);
   return (
     <button
       className={version == "big" ? style.getAquote_big : style.getAquote}

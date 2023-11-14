@@ -162,8 +162,6 @@ export default function SpecialOffers({
     fetchCarImages();
   }, []);
 
-  console.log(carsDownloaded);
-
   // {carsDownloaded.map((car, i) => (
   //   <LittleCard
   //     brand={car.brand}

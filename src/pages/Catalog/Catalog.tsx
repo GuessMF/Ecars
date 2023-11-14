@@ -16,25 +16,13 @@ import {getDownloadURL} from "firebase/storage";
 import DeleteCar from "../../components/ui/DeleteCar/DeleteCar";
 import "../../firebase";
 import {storage} from "../../firebase";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
-//   authDomain: "ecars-de7bc.firebaseapp.com",
-//   projectId: "ecars-de7bc",
-//   storageBucket: "ecars-de7bc.appspot.com",
-//   messagingSenderId: "110000528537",
-//   appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
-//   measurementId: "G-XDXHPB18TW",
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const storage = getStorage(app);
-
-interface SortType {
-  value: string;
-  label: string;
-  sortProperty: string;
-}
+// interface SortType {
+//   value: string;
+//   label: string;
+//   sortProperty: string;
+// }
 
 interface CatalogProps {
   selectedCurrency: string;
@@ -47,6 +35,18 @@ export default function Catalog({
   eurValue,
   usdValue,
 }: CatalogProps) {
+  const [admin, setAdmin] = useState<boolean>(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        uid === "OpHYS3Hk8kgDKKUgCTa9gD7oJKE3" && setAdmin(true);
+      }
+    });
+  });
+
   const [sortType, setSortType] = useState<string>("dateAdded&order=desc");
   // console.log(sortType.value + " Catalog");
   const [password, setPassword] = useState<string>("");
@@ -900,11 +900,13 @@ export default function Catalog({
                     previewIMG={car.imageUrl}
                     onLoad={() => setIsLoading(false)}
                   />
+                  {admin && (
+                    <DeleteCar
+                      deleteCarFunc={() => onClickDelete(car.id, car.index)}
+                      id={car.id}
+                    />
+                  )}
 
-                  <DeleteCar
-                    deleteCarFunc={() => onClickDelete(car.id, car.index)}
-                    id={car.id}
-                  />
                   {openPassword && (
                     <input
                       type="text"

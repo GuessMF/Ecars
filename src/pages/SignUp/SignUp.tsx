@@ -1,11 +1,16 @@
 import React, {useRef, useEffect, useState} from "react";
 import style from "./__signUp.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
+import {Navigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux";
-import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "../../hooks/redux-hooks";
 
@@ -115,24 +120,63 @@ export default function SignUp() {
   //
   //
   const dispatch = useAppDispatch();
-  // const {push} = useHistory();
+  const navigate = useNavigate();
 
-  const handleRegister = (email: string, password: string) => {
+  // const handleRegister = (email: string, password: string, name: string) => {
+  //   const auth = getAuth();
+  //   console.log("clicked");
+
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then(({user}) => {
+  //       console.log(user);
+
+  //       dispatch(
+  //         setUser({
+  //           displayName: name,
+  //           email: user.email,
+  //           id: user.uid,
+  //           token: user.refreshToken,
+  //         })
+  //       );
+  //       // push('/')
+  //       navigate("/");
+
+  //       console.log("отправилось");
+  //     })
+  //     .catch(console.error);
+  // };
+
+  const handleRegister = (email: string, password: string, name: string) => {
     const auth = getAuth();
     console.log("clicked");
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(({user}) => {
         console.log(user);
+
+        // Обновление профиля пользователя с добавлением имени
+        updateProfile(user, {
+          displayName: name,
+        })
+          .then(() => {
+            console.log("Profile updated successfully");
+          })
+          .catch((error) => {
+            console.error("Error updating profile:", error);
+          });
+
         dispatch(
           setUser({
-            name: user.displayName,
+            displayName: name,
             email: user.email,
             id: user.uid,
             token: user.refreshToken,
           })
         );
+
         // push('/')
+        navigate("/");
+
         console.log("отправилось");
       })
       .catch(console.error);
@@ -150,7 +194,7 @@ export default function SignUp() {
 
         <form
           className={style.form}
-          onSubmit={() => handleRegister(email, password)}
+          onSubmit={() => handleRegister(email, password, name)}
         >
           <div className={style.name}>
             <span>Full name</span>

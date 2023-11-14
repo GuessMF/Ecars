@@ -16,15 +16,35 @@ import SignUp from "./pages/SignUp/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PersonalPage from "./pages/PersonalPage/PersonalPage";
 
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {setUser} from "store/slices/userSlice";
+import {useAppDispatch} from "hooks/redux-hooks";
+
 function App() {
   const [currentExchange, setCurrentExchange] = useState<any>(null);
+  const dispatch = useAppDispatch();
 
   const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
-  console.log(selectedCurr);
 
   const [usdValue, setUsdValue] = useState<number>(0);
   const [eurValue, setEurValue] = useState<number>(0);
   useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(
+          setUser({
+            email: user.email,
+            id: user.uid,
+            token: user.refreshToken,
+          })
+        );
+        //push
+      } else {
+        console.log("no user");
+      }
+    });
+
     const fetchExchangeRates = async () => {
       try {
         const response = await fetch(
@@ -41,8 +61,6 @@ function App() {
         );
 
         setCurrentExchange(data.Valute);
-        console.log(usdValue + " USD");
-        console.log(eurValue + " EUR");
       } catch (error) {
         console.error("Error fetching exchange rates:", error);
       }

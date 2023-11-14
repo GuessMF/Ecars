@@ -8,15 +8,29 @@ import style from "./__header.module.scss";
 import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-line.svg";
 import Sidebar from "../Sidebar/Sidebar";
 
+import {useAuth} from "hooks/use-auth";
+import {removeUser} from "store/slices/userSlice";
+import {useAppDispatch} from "hooks/redux-hooks";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+// import {useAuth} from "utils/useAuth";
+
 const version: string = "little";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  const {isAuth, email, displayName} = useAuth();
+  console.log(email);
+  console.log(displayName);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  const dispatch = useAppDispatch();
+  // const {isAuth, email, displayName} = useAuth();
+  console.log(email);
+  console.log(displayName);
 
   return (
     <div className={style.header}>
@@ -73,6 +87,13 @@ export default function Header() {
         </div>
       </nav>
       <div className={style.header__formGroup}>
+        {isAuth && (
+          <div className={style.user}>
+            <p>{displayName}</p>
+
+            <button onClick={() => dispatch(removeUser())}>Выйти</button>
+          </div>
+        )}
         <div className={style.formGroup__icons}>
           <Search />
           <Liked />

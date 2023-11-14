@@ -1,23 +1,3 @@
-// import {useEffect, useState} from "react";
-// import {useSelector} from "react-redux";
-// import {useAppSelector} from "./redux-hooks";
-// import {getAuth, onAuthStateChanged, User} from "firebase/auth";
-
-// interface AuthUser extends User {
-//   displayName: string | null;
-// }
-// export function useAuth() {
-//   const {email, token, id, displayName} = useAppSelector((state) => state.user);
-//   const [user, setUser] = useState<AuthUser | null>(null);
-//   return {
-//     isAuth: !!email,
-//     displayName,
-//     email,
-//     token,
-//     id,
-//   };
-// }
-
 import {useEffect, useState} from "react";
 import {getAuth, onAuthStateChanged, User} from "firebase/auth";
 
