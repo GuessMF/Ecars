@@ -8,6 +8,10 @@ import HowItWorks from "../../components/simple/HowItWorks/HowItWorks";
 import WhyChooseUs from "../../components/simple/WhyChooseUs/WhyChooseUs";
 import Reviews from "../../components/simple/Reviews/Reviews";
 import BottomCTA from "../../components/simple/BottomCTA/BottomCTA";
+import {redirect} from "react-router-dom";
+import {useAuth} from "hooks/use-auth";
+import {removeUser} from "store/slices/userSlice";
+import {useAppDispatch} from "hooks/redux-hooks";
 
 interface Props {
   selectedCurrency: string;
@@ -20,6 +24,9 @@ export default function Homepage({
   eurValue,
   usdValue,
 }: Props) {
+  const dispatch = useAppDispatch();
+  const {isAuth, email} = useAuth();
+
   return (
     <div>
       <Hero />

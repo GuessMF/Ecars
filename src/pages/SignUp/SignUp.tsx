@@ -3,6 +3,12 @@ import style from "./__signUp.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
+
+import {useDispatch} from "react-redux";
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import {setUser} from "store/slices/userSlice";
+import {useAppDispatch} from "../../hooks/redux-hooks";
+
 interface Errors {
   name?: string;
   email?: string;
@@ -21,95 +27,131 @@ export default function SignUp() {
 
   const errors: Errors = {};
 
-  useEffect(() => {
-    console.log("Name: " + name);
-    console.log("Email: " + email);
-    console.log("Password: " + password);
-    console.log("ConfirmPassword: " + confirmPassword);
-    console.log("Checkbox: " + checkBox);
-  });
+  // useEffect(() => {
+  //   console.log("Name: " + name);
+  //   console.log("Email: " + email);
+  //   console.log("Password: " + password);
+  //   console.log("ConfirmPassword: " + confirmPassword);
+  //   console.log("Checkbox: " + checkBox);
+  // });
 
   const generateNewId = (): string => {
     return uuidv4();
   };
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const submit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    if (!name) {
-      errors.name = "Поле Имя обязательно для заполнения";
-    }
+  //   if (!name) {
+  //     errors.name = "Поле Имя обязательно для заполнения";
+  //   }
 
-    if (!email) {
-      errors.email = "Поле Емэйл обязательно для заполнения";
-    }
-    if (!password) {
-      errors.password = "Поле Пароль обязательно для заполнения";
-    }
-    if (password !== confirmPassword) {
-      errors.confirmPassword = "Пароли не совпадают";
-    }
-    if (!checkBox) {
-      errors.checkBox = "Нет чекбокса";
-    }
-    console.log(errors);
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      alert("Заполните поля");
-    } else {
-      const newId = generateNewId();
-      const currentDate: Date = new Date();
+  //   if (!email) {
+  //     errors.email = "Поле Емэйл обязательно для заполнения";
+  //   }
+  //   if (!password) {
+  //     errors.password = "Поле Пароль обязательно для заполнения";
+  //   }
+  //   if (password !== confirmPassword) {
+  //     errors.confirmPassword = "Пароли не совпадают";
+  //   }
+  //   if (!checkBox) {
+  //     errors.checkBox = "Нет чекбокса";
+  //   }
+  //   console.log(errors);
+  //   if (Object.keys(errors).length > 0) {
+  //     setFormErrors(errors);
+  //     alert("Заполните поля");
+  //   } else {
+  //     const newId = generateNewId();
+  //     const currentDate: Date = new Date();
 
-      const user = {
-        id: newId,
-        dateAdded: currentDate,
-        name: name,
-        email: email,
-        password: password,
-      };
+  //     const user = {
+  //       id: newId,
+  //       dateAdded: currentDate,
+  //       name: name,
+  //       email: email,
+  //       password: password,
+  //     };
 
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      };
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(user),
+  //     };
 
-      fetch("https://65378b85bb226bb85dd365a6.mockapi.io/users", requestOptions)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error("Network response was not ok.");
-        })
-        .then((json) => {
-          console.log("Объект успешно отправлен на сервер:", json);
-          // setSent(true);
-          // setLoading(false);
-          // setTimeout(() => {
-          //   setSent(false);
-          // }, 2000);
-        })
-        .catch((error) => {
-          console.error("Ошибка при отправке объекта на сервер:", error);
-        });
+  //     fetch("https://65378b85bb226bb85dd365a6.mockapi.io/users", requestOptions)
+  //       .then((res) => {
+  //         if (res.ok) {
+  //           return res.json();
+  //         }
+  //         throw new Error("Network response was not ok.");
+  //       })
+  //       .then((json) => {
+  //         console.log("Объект успешно отправлен на сервер:", json);
+  //         // setSent(true);
+  //         // setLoading(false);
+  //         // setTimeout(() => {
+  //         //   setSent(false);
+  //         // }, 2000);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Ошибка при отправке объекта на сервер:", error);
+  //       });
 
-      setName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setCheckBox(false);
+  //     setName("");
+  //     setEmail("");
+  //     setPassword("");
+  //     setConfirmPassword("");
+  //     setCheckBox(false);
 
-      console.log("SUBMITTED");
-    }
-  };
+  //     console.log("SUBMITTED");
+  //   }
+  // };
   //<div className={formErrors.name ? `${style.name} error` : style.name}>
+  //
+  //
+  //
+  //
+  const dispatch = useAppDispatch();
+  // const {push} = useHistory();
+
+  const handleRegister = (email: string, password: string) => {
+    const auth = getAuth();
+    console.log("clicked");
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(({user}) => {
+        console.log(user);
+        dispatch(
+          setUser({
+            name: user.displayName,
+            email: user.email,
+            id: user.uid,
+            token: user.refreshToken,
+          })
+        );
+        // push('/')
+        console.log("отправилось");
+      })
+      .catch(console.error);
+  };
+
+  //
+  //
+  //
+  //
+
   return (
     <div className={style.signUp}>
       <div className={style.wrapper}>
         <h1>Sing Up</h1>
 
-        <form className={style.form} onSubmit={submit}>
+        <form
+          className={style.form}
+          onSubmit={() => handleRegister(email, password)}
+        >
           <div className={style.name}>
             <span>Full name</span>
             <input

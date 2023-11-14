@@ -3,13 +3,16 @@ import style from "./__login.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 
+import {useDispatch} from "react-redux";
+//import { useHistory } from 'react-router-dom';
+
+import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import {setUser} from "store/slices/userSlice";
+import {useAppDispatch} from "hooks/redux-hooks";
+
 export default function Login() {
-  //   const headerRef = useRef<HTMLElement | null>(null);
-  //   useEffect(() => {
-  //     if (headerRef.current) {
-  //       const headerHeight = headerRef.current.clientHeight;
-  //     }
-  //   }, []);
+  const dispatch = useAppDispatch();
+  //const {push} = useHistory();
 
   return (
     <div className={style.login}>
