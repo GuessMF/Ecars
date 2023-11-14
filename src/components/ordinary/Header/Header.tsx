@@ -21,16 +21,16 @@ export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
 
   const {isAuth, email, displayName} = useAuth();
-  console.log(email);
-  console.log(displayName);
+  // console.log(email);
+  // console.log(displayName);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   const dispatch = useAppDispatch();
   // const {isAuth, email, displayName} = useAuth();
-  console.log(email);
-  console.log(displayName);
+  // console.log(email);
+  // console.log(displayName);
 
   return (
     <div className={style.header}>

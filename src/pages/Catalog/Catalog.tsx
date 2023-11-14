@@ -36,6 +36,7 @@ export default function Catalog({
   usdValue,
 }: CatalogProps) {
   const [admin, setAdmin] = useState<boolean>(false);
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const auth = getAuth();
@@ -78,14 +79,32 @@ export default function Catalog({
     const fetchCarImages = async () => {
       try {
         setIsLoading(true);
+
+        // const url = new URL(
+        //   `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType}?limit=10`
+        // );
+        // url.searchParams.append("completed", "false");
+        // url.searchParams.append("page", "1");
+        // url.searchParams.append("limit", "10");
         const response = await fetch(
           `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType}`
+          // url
         );
         if (response.ok) {
           const carData = await response.json();
+          console.log(carData);
+
           const carsWithImagesArray = [];
+          // carData.forEach((el: any) => {
+          //   const folderRef = ref(storage, `cars/${el.id}`);
+          //   // console.log(folderRef);
+          //   const carImages = listAll(folderRef);
+          //   console.log(carImages);
+          // });
+
           for (const car of carData) {
             const folderRef = ref(storage, `cars/${car.id}`);
+            console.log(folderRef);
 
             try {
               const carImages = await listAll(folderRef);
@@ -110,6 +129,7 @@ export default function Catalog({
                   mileage: car.mileage,
                   imageUrl: imageUrl,
                 });
+                // console.log(carsWithImagesArray);
               }
             } catch (error) {
               console.error(
@@ -134,7 +154,6 @@ export default function Catalog({
     fetchCarImages();
   }, [sortType]);
 
-  const itemsPerPage = 8;
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
@@ -216,6 +235,8 @@ export default function Catalog({
     Manual: boolean;
   }
   const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
+  console.log(currentItems);
+
   const [pageCount, setPageCount] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(0);
   const [itemOffset, setItemOffset] = React.useState(0);
@@ -736,17 +757,13 @@ export default function Catalog({
       }));
     }
   };
-  const checkPassword = () => {
-    console.log(password);
-    if (password === "060606") {
-      console.log("You can delete");
-    } else {
-      console.log("Nio");
-    }
-  };
-  // const onClickDelete = (carId: string, carIndex: string) => {
-  //   checkPassword();
-  //   setOpenPassword(true);
+  // const checkPassword = () => {
+  //   console.log(password);
+  //   if (password === "060606") {
+  //     console.log("You can delete");
+  //   } else {
+  //     console.log("Nio");
+  //   }
   // };
 
   const onClickDelete = async (carId: string, carIndex: string) => {
