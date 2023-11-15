@@ -15,6 +15,9 @@ import ScrollToTop from "../../utils/scrollToTop";
 import ScrollToTopPagination from "../../utils/scrollToTopPagination";
 import {Rings} from "react-loader-spinner";
 
+import {db} from "../../firebase";
+import {collection, doc, setDoc} from "firebase/firestore";
+
 const storage = getStorage();
 
 interface CarModel {
@@ -418,6 +421,84 @@ export default function PersonalPage() {
     }
   };
   //console.log(popUpErrors);
+
+  //Новая отправка формы
+  // useEffect(() => {
+  //   const newDoc = async () => {
+  //     try {
+  //       await setDoc(doc(db, "cities", "TEST"), {
+  //         name: "Los",
+  //         state: "CAaa",
+  //         country: "USAaa",
+  //       });
+  //       console.log("Document successfully written!");
+  //     } catch (error) {
+  //       console.error("Error writing document: ", error);
+  //     }
+  //   };
+
+  //   // Вызываем функцию создания нового документа
+  //   newDoc();
+  // }, []);
+
+  // useEffect(() => {
+  //   const addCities = async () => {
+  //     const citiesRef = collection(db, "cities");
+
+  //     try {
+  //       await setDoc(doc(citiesRef, "SF"), {
+  //         name: "San Francisco",
+  //         state: "CA",
+  //         country: "USA",
+  //         capital: false,
+  //         population: 860000,
+  //         regions: ["west_coast", "norcal"],
+  //       });
+
+  //       await setDoc(doc(citiesRef, "LA"), {
+  //         name: "Los Angeles",
+  //         state: "CA",
+  //         country: "USA",
+  //         capital: false,
+  //         population: 3900000,
+  //         regions: ["west_coast", "socal"],
+  //       });
+  //       await setDoc(doc(citiesRef, "DC"), {
+  //         name: "Washington, D.C.",
+  //         state: null,
+  //         country: "USA",
+  //         capital: true,
+  //         population: 680000,
+  //         regions: ["east_coast"],
+  //       });
+  //       await setDoc(doc(citiesRef, "TOK"), {
+  //         name: "Tokyo",
+  //         state: null,
+  //         country: "Japan",
+  //         capital: true,
+  //         population: 9000000,
+  //         regions: ["kanto", "honshu"],
+  //       });
+  //       await setDoc(doc(citiesRef, "BJ"), {
+  //         name: "Beijing",
+  //         state: null,
+  //         country: "China",
+  //         capital: true,
+  //         population: 21500000,
+  //         regions: ["jingjinji", "hebei"],
+  //       });
+
+  //       // Другие вызовы setDoc...
+
+  //       console.log("Documents successfully added!");
+  //     } catch (error) {
+  //       console.error("Error adding documents: ", error);
+  //     }
+  //   };
+
+  //   // Вызываем функцию добавления документов
+  //   addCities();
+  // }, []);
 
   return (
     <div className={style.login}>

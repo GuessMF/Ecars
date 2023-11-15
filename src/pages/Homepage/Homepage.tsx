@@ -1,4 +1,5 @@
 import React from "react";
+import {useEffect} from "react";
 
 import Hero from "../../components/simple/Hero/Hero";
 import SpecialOffers from "../../components/simple/SpecialOffers/SpecialOffers";
@@ -8,10 +9,9 @@ import HowItWorks from "../../components/simple/HowItWorks/HowItWorks";
 import WhyChooseUs from "../../components/simple/WhyChooseUs/WhyChooseUs";
 import Reviews from "../../components/simple/Reviews/Reviews";
 import BottomCTA from "../../components/simple/BottomCTA/BottomCTA";
-import {redirect} from "react-router-dom";
-import {useAuth} from "hooks/use-auth";
-import {removeUser} from "store/slices/userSlice";
-import {useAppDispatch} from "hooks/redux-hooks";
+
+import {db} from "../../firebase";
+import {doc, getDocs, collection} from "firebase/firestore";
 
 interface Props {
   selectedCurrency: string;
@@ -24,8 +24,51 @@ export default function Homepage({
   eurValue,
   usdValue,
 }: Props) {
-  const dispatch = useAppDispatch();
-  const {isAuth, email, displayName} = useAuth();
+  // console.log(db);
+
+  // useEffect(() => {
+  //   const docRef = doc(db, "cities");
+
+  //   const fetchData = async () => {
+  //     try {
+  //       const docSnapshot = await getDoc(docRef);
+
+  //       if (docSnapshot.exists()) {
+  //         console.log("Document data:", docSnapshot.data());
+  //       } else {
+  //         console.log("Document does not exist!");
+  //       }
+
+  //       console.log("Document successfully downloaded!");
+  //     } catch (error) {
+  //       console.error("Error fetching document: ", error);
+  //     }
+  //   };
+
+  //   // Вызываем функцию получения документа
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    const citiesRef = collection(db, "2222");
+
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await getDocs(citiesRef);
+
+        querySnapshot.forEach((doc) => {
+          console.log("Document data:", doc.data());
+        });
+
+        console.log("Documents successfully downloaded!");
+      } catch (error) {
+        console.error("Error fetching documents: ", error);
+      }
+    };
+
+    // Вызываем функцию получения документов
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -36,6 +79,9 @@ export default function Homepage({
         eurValue={eurValue}
         usdValue={usdValue}
       />
+      <button>
+        <h1>hello</h1>
+      </button>
 
       <BrowseByBrand />
       <MiddleCTA />
