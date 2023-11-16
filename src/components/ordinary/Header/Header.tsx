@@ -83,7 +83,12 @@ export default function Header() {
             </NavLink>
           </li>
           <li>Blog</li>
-          <li>Contact</li>
+          <li>
+            {" "}
+            <NavLink to="/test" className={style.navLink}>
+              Test
+            </NavLink>
+          </li>
         </div>
       </nav>
       <div className={style.header__formGroup}>

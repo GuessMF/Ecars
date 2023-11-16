@@ -1,5 +1,5 @@
 import React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 import Hero from "../../components/simple/Hero/Hero";
 import SpecialOffers from "../../components/simple/SpecialOffers/SpecialOffers";
@@ -10,8 +10,8 @@ import WhyChooseUs from "../../components/simple/WhyChooseUs/WhyChooseUs";
 import Reviews from "../../components/simple/Reviews/Reviews";
 import BottomCTA from "../../components/simple/BottomCTA/BottomCTA";
 
-import {db} from "../../firebase";
-import {doc, getDocs, collection} from "firebase/firestore";
+// import {db} from "../../firebase";
+// import {doc, getDocs, collection} from "firebase/firestore";
 
 interface Props {
   selectedCurrency: string;
@@ -25,6 +25,14 @@ export default function Homepage({
   usdValue,
 }: Props) {
   // console.log(db);
+  // const [cars, setCars] = useState<
+  //   {
+  //     id: string;
+  //     index: string;
+  //     brand: string;
+  //     model: string;
+  //   }[]
+  // >([]);
 
   // useEffect(() => {
   //   const docRef = doc(db, "cities");
@@ -49,28 +57,29 @@ export default function Homepage({
   //   fetchData();
   // }, []);
 
-  useEffect(() => {
-    const citiesRef = collection(db, "cities");
-    const arr: any = [];
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await getDocs(citiesRef);
+  // useEffect(() => {
+  //   const citiesRef = collection(db, "cars");
+  //   const arr: any = [];
+  //   const fetchData = async () => {
+  //     try {
+  //       const querySnapshot = await getDocs(citiesRef);
 
-        querySnapshot.forEach((doc) => {
-          console.log("Test " + doc);
-          arr.push(doc.data());
-          console.log("Document data:", doc.data());
-        });
-        console.log(arr);
-        console.log("Documents successfully downloaded!");
-      } catch (error) {
-        console.error("Error fetching documents: ", error);
-      }
-    };
+  //       querySnapshot.forEach((doc) => {
+  //         console.log("Test " + doc.id);
+  //         arr.push(doc.data());
+  //         console.log("Document data:", doc.data());
+  //       });
+  //       console.log(arr);
+  //       console.log("Documents successfully downloaded!");
+  //setCars(arr)
+  //     } catch (error) {
+  //       console.error("Error fetching documents: ", error);
+  //     }
+  //   };
 
-    // Вызываем функцию получения документов
-    fetchData();
-  }, []);
+  //   // Вызываем функцию получения документов
+  //   fetchData();
+  // }, []);
 
   return (
     <div>

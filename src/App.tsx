@@ -15,6 +15,7 @@ import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PersonalPage from "./pages/PersonalPage/PersonalPage";
+import TestPage from "./pages/TestPage/TestPage";
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
@@ -121,6 +122,7 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
         <Route path="/per" element={<PersonalPage />} />
+        <Route path="/test" element={<TestPage />} />
       </Routes>
       <Footer />
       <div></div>
