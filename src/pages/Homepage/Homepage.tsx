@@ -50,16 +50,18 @@ export default function Homepage({
   // }, []);
 
   useEffect(() => {
-    const citiesRef = collection(db, "2222");
-
+    const citiesRef = collection(db, "cities");
+    const arr: any = [];
     const fetchData = async () => {
       try {
         const querySnapshot = await getDocs(citiesRef);
 
         querySnapshot.forEach((doc) => {
+          console.log("Test " + doc);
+          arr.push(doc.data());
           console.log("Document data:", doc.data());
         });
-
+        console.log(arr);
         console.log("Documents successfully downloaded!");
       } catch (error) {
         console.error("Error fetching documents: ", error);
