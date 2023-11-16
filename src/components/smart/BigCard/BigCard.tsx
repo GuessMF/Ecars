@@ -44,7 +44,7 @@ export default function BigCard({
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  console.log(multiplier);
+  // console.log(multiplier);
 
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -59,7 +59,7 @@ export default function BigCard({
     <NavLink to={`/details/${id}`}>
       <div className={style.bigCard}>
         <div className={style.bigCard__image}>
-          <img className={style.bigCard__img} src={previewIMG} />
+          <img className={style.bigCard__img} src={previewIMG} loading="lazy" />
         </div>
         <div className={style.bigCard__information}>
           <div className={style.information__top}>

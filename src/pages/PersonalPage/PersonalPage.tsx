@@ -552,9 +552,11 @@ export default function PersonalPage() {
   // }, []);
 
   useEffect(() => {
+    // for (let i = 0; i < 10; i++) {
     const addCars = async () => {
       const carsRef = collection(db, "cars");
       const newID = uuidv4();
+
       try {
         // await setDoc(doc(carsRef, newID), {
         //   brand: "2",
@@ -572,6 +574,46 @@ export default function PersonalPage() {
         //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVzUR24jqezi1cQQmhRPbp4mkr29nPetarlsdrQsXuokWFx6zfoMvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=46d8f28a-b7c8-41a6-8293-1206965e1094",
         //   ],
         // });
+
+        await setDoc(doc(carsRef, newID), {
+          index: "29",
+          id: "4bf36a5b-1e17-4593-b5e0-33a0e654e3f3",
+          dateAdded: "2023-11-03T15:47:55.237Z",
+          brand: "BMW",
+          model: "M5",
+          price: 192000,
+          year: 2023,
+          mileage: 6999,
+          transmission: "Automatic",
+          fuel: "Gasoline",
+          wheels: "21",
+          vehicleType: "Sedan",
+          engineCapacity: "4.4",
+          seats: "5",
+          owners: "1",
+          color: "Red",
+          interior: "Orange",
+          location: "Saint-Petersburg",
+          exportStatus: "Can be exported",
+          description:
+            " 💥 На ВСЕ новые автомобили доступна ГАРАНТИЯ 2 ГОДА! Выбирайте понравившийся автомобиль и наслаждайтесь его владением без переживаний! Мы позаботимся о вашем автомобиле в ЛЮБОЙ ситуации.",
+          dateObj: {
+            year: 2023,
+            month: 11,
+            day: 3,
+            hours: 18,
+            minutes: 47,
+          },
+          imageUrls: [
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2F1200x900n%20(1).webp?alt=media&token=2133a011-eb57-485c-ac28-1052649dd44c",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2F1200x900n%20(2).webp?alt=media&token=0b1acbce-dc9a-4934-a02e-fa05cdeeff39",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2F1200x900n.webp?alt=media&token=bcdf3ca0-6726-4e55-b51f-f1a501f4a440",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPKk-UQxvCSmzOF4VjxXKzF5oOvGkClaUWm5C8z5YMu3WIwdaGZsCoM-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=d1f54e19-7f33-402c-b1c2-d96ea500ec04",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPKkGSQhbBSmvOStA3xiS_Qs1Y7mhVxvJAmMLvmMAO53WOk47RaMX2M-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=6c6d5ff5-d84d-4529-93b6-5f0c5b1478da",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPLUiTQxfASjfHRoJgknCxF8oPvjsIzKBGw5G1ypIHu3vdxNeCPMf4M-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=b8c75e1a-b15e-4179-8255-0f36c36f49dd",
+            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F4bf36a5b-1e17-4593-b5e0-33a0e654e3f3%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTXOLkCQQRrcVTfEQtc3wyC1E8dc7T4FkaAUw8G-n5FZ7neMxtqEPZXhLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=a41e9dc3-248a-4183-8f4e-64c77c2cda04",
+          ],
+        });
 
         // await setDoc(doc(carsRef, newID), {
         //   index: "29",
@@ -663,6 +705,7 @@ export default function PersonalPage() {
 
     // Вызываем функцию добавления документов
     addCars();
+    // }
   }, []);
 
   return (

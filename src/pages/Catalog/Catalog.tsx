@@ -695,8 +695,8 @@ export default function Catalog({
       newOffset + itemsPerPage,
       filteredCars.length
     );
-    const catalog = document.getElementById("catalogList");
-    catalog?.scrollIntoView({behavior: "smooth"});
+    // const catalog = document.getElementById("catalogList");
+    // catalog?.scrollIntoView({behavior: "smooth"});
     setItemOffset(newOffset);
     setCurrentItems(filteredCars.slice(newOffset, maxItemsPerPage));
     setCurrentPage(selectedPage);
