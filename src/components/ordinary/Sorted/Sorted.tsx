@@ -109,25 +109,44 @@ export default function Sorted({
     }
   });
 
+  // const options = [
+  //   {value: "price&order=desc", label: "Expensive"},
+  //   {value: "price", label: "Cheaper"},
+  //   {value: "year", label: "Older"},
+  //   {value: "year&order=desc", label: "Newer"},
+  //   {
+  //     value: "dateAdded",
+  //     label: "By date before",
+  //   },
+  //   {
+  //     value: "dateAdded&order=desc",
+  //     label: "By date later",
+  //   },
+  // ];
   const options = [
-    {value: "price&order=desc", label: "Expensive"},
-    {value: "price", label: "Cheaper"},
-    {value: "year", label: "Older"},
-    {value: "year&order=desc", label: "Newer"},
+    {value: "Expensive", sort: "price", desc: true, label: "Expensive"},
+    {value: "Cheaper", sort: "price", desc: false, label: "Cheaper"},
+    {value: "Older", sort: "year", desc: false, label: "Older"},
+    {value: "Newer", sort: "year", desc: true, label: "Newer"},
     {
-      value: "dateAdded",
+      value: "By date before",
+      sort: "dateAdded",
+      desc: true,
       label: "By date before",
     },
     {
-      value: "dateAdded&order=desc",
+      value: "By date later",
+      sort: "dateAdded",
+      desc: false,
       label: "By date later",
     },
   ];
   const [menuIsOpen, setMenuIsOpen] = React.useState(false);
 
-  const initialOption = options.find(
-    (option) => option.value === "dateAdded&order=desc"
-  );
+  // const initialOption = options.find(
+  //   (option) => option.value === "dateAdded&order=desc"
+  // );
+  const initialOption = options.find((option) => option.value === "Expensive");
   const [selectedOption, setSelectedOption] = React.useState(initialOption);
 
   const toggleMenu = () => {
@@ -135,9 +154,10 @@ export default function Sorted({
   };
 
   const onClickSortBy = (selectedOption: any) => {
+    console.log(selectedOption);
+
     setSelectedOption(selectedOption);
     onChangeSortBy(selectedOption);
-    console.log(selectedOption);
     setMenuIsOpen(false);
   };
 
@@ -200,7 +220,7 @@ export default function Sorted({
             params={model}
           />
         )}
-        {!mileage && (
+        {mileage && (
           <SelectedFilter
             onClick={() => closeSelectedFilter("mileage")}
             params={"mileage"}

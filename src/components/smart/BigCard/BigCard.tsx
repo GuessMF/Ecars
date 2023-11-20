@@ -1,7 +1,10 @@
 import React from "react";
+
+import {useState, useEffect} from "react";
 import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
+import Skeleton from "components/ui/Skeleton/Skeleton";
 
 interface Props {
   id: string;
@@ -18,7 +21,7 @@ interface Props {
   selectedCurrency: string;
   usdValue: number;
   eurValue: number;
-  onLoad: () => void;
+  // onLoad: () => void;
 }
 
 export default function BigCard({
@@ -36,8 +39,8 @@ export default function BigCard({
   selectedCurrency,
   eurValue,
   usdValue,
-  onLoad,
-}: Props) {
+}: // onLoad,
+Props) {
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue
