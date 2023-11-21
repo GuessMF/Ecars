@@ -11,7 +11,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 // import {useAuth} from "utils/useAuth";
 
 const version: string = "little";
@@ -19,7 +19,7 @@ const version: string = "little";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
+  const [userId, setUserId] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
   // console.log(email);
   // console.log(displayName);
@@ -31,6 +31,25 @@ export default function Header() {
   // const {isAuth, email, displayName} = useAuth();
   // console.log(email);
   // console.log(displayName);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      user && setUserId(user?.uid);
+    });
+  }, []);
+
+  const handleLogout = () => {
+    const auth = getAuth(); // Получаем объект аутентификации Firebase
+    signOut(auth) // Выход из учетной записи
+      .then(() => {
+        dispatch(removeUser()); // Удаляем данные пользователя из Redux store
+      })
+      .catch((error) => {
+        console.error("Sign out error:", error);
+        // Обработка ошибок выхода из учетной записи
+      });
+  };
 
   return (
     <div className={style.header}>
@@ -92,11 +111,17 @@ export default function Header() {
         </div>
       </nav>
       <div className={style.header__formGroup}>
-        {isAuth && (
+        {isAuth ? (
           <div className={style.user}>
             <p>{displayName}</p>
 
-            <button onClick={() => dispatch(removeUser())}>Выйти</button>
+            <button onClick={handleLogout}>Выйти</button>
+          </div>
+        ) : (
+          <div className={style.user}>
+            <p>NoUser</p>
+
+            <button onClick={handleLogout}>Выйти</button>
           </div>
         )}
         <div className={style.formGroup__icons}>
@@ -106,9 +131,15 @@ export default function Header() {
             <Profile />
           </NavLink>
         </div>
-        <NavLink to="/per">
-          <GetAquote version={version} />
-        </NavLink>
+        {userId ? (
+          <NavLink to={`/per/${userId}`}>
+            <GetAquote version={version} />
+          </NavLink>
+        ) : (
+          <NavLink to={`/login`}>
+            <GetAquote version={version} />
+          </NavLink>
+        )}
       </div>
     </div>
   );

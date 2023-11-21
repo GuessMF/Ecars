@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 
 import ScrollToTop from "./utils/scrollToTop";
 
@@ -20,21 +20,43 @@ import TestPage from "./pages/TestPage/TestPage";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
+import {useSelector} from "react-redux";
+import {RootState} from "./store";
+import {useNavigate} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 function App() {
   const [currentExchange, setCurrentExchange] = useState<any>(null);
   const dispatch = useAppDispatch();
+  const [userId, setUserId] = useState<string>("");
+  // console.log(userId);
+  // const userId = useSelector((state: RootState) => state.user.id);
+
+  const navigate = useNavigate();
 
   const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
 
   const [usdValue, setUsdValue] = useState<number>(0);
   const [eurValue, setEurValue] = useState<number>(0);
+
+  // const userIdCatch= async()=>{
+  // try {
+
+  // } catch (error) {
+
+  // }
+
+  // }
+
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
+      user && setUserId(user?.uid);
+
       if (user) {
         dispatch(
           setUser({
+            displayName: user.displayName,
             email: user.email,
             id: user.uid,
             token: user.refreshToken,
@@ -73,6 +95,20 @@ function App() {
   const handleCurrencyChange = (currencyCode: string) => {
     setSelectedCurr(currencyCode);
   };
+
+  const redirectToUserPage = () => {
+    if (userId) {
+      navigate(`/per/${userId}`);
+    } else {
+      navigate(`/login`);
+    }
+  };
+
+  // <Route path="/per/:userID" element={<PersonalPage userID={userId} />} />
+
+  //<Route path="per/:userID" element={<UserRoute />} />
+
+  //   <Route path="/per/:userId" element={<PersonalPage userID={userId} />} />
 
   return (
     <div className={style.app}>
@@ -118,13 +154,15 @@ function App() {
             />
           }
         />
+        <Route path="/per/:userId" element={<PersonalPage userID={userId} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
-        <Route path="/per" element={<PersonalPage />} />
+
         <Route path="/test" element={<TestPage />} />
       </Routes>
       <Footer />
+      <button onClick={redirectToUserPage}>nnn</button>
       <div></div>
     </div>
   );

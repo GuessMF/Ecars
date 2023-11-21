@@ -2,7 +2,7 @@ import React, {useRef, useEffect, useState} from "react";
 import style from "./__login.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
-
+import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 //import { useHistory } from 'react-router-dom';
 
@@ -14,30 +14,42 @@ import {
 } from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
+import {onAuthStateChanged} from "firebase/auth";
 
 export default function Login() {
   const dispatch = useAppDispatch();
   //const {push} = useHistory();
   const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState("");
   console.log(email);
-  console.log(password);
 
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   onAuthStateChanged(auth, (user) => {
+  //     user && setUserId(user?.uid);
+  //   });
+  // }, []);
+
+  console.log(password);
+  const navigate = useNavigate();
   const handleLogin = (email: string, password: string) => {
     const auth = getAuth();
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
         return signInWithEmailAndPassword(auth, email, password).then(
           ({user}) => {
-            console.log(user);
+            setUserId(user.uid);
+            console.log(user.uid + " login");
             dispatch(
               setUser({
+                displayName: user.displayName,
                 email: user.email,
                 id: user.uid,
                 token: user.refreshToken,
               })
             );
-            //push
+            // navigate(`/per/${userId}`);
           }
         );
       })
@@ -49,6 +61,36 @@ export default function Login() {
         alert("Auth failed");
       });
   };
+  useEffect(() => {
+    if (userId) {
+      navigate(`/per/${userId}`);
+    }
+  }, [userId, navigate]);
+  // const handleLogin = async (email: string, password: string) => {
+  //   try {
+  //     const auth = getAuth(); // Получаем объект аутентификации Firebase
+  //     const userCredential = await signInWithEmailAndPassword(
+  //       auth,
+  //       email,
+  //       password
+  //     ); // Аутентификация пользователя
+
+  //     // При успешной аутентификации записываем данные пользователя в Redux store
+  //     const user = userCredential.user;
+  //     dispatch(
+  //       setUser({
+  //         displayName: user.displayName || null,
+  //         email: user.email || null,
+  //         id: user.uid || null,
+  //         token: user.refreshToken || null,
+  //       })
+  //     );
+  //   } catch (error) {
+  //     // Обработка ошибок аутентификации
+  //     console.error("Authentication error:", error);
+  //     // Возможно, здесь нужно показать пользователю сообщение об ошибке
+  //   }
+  // };
 
   return (
     <div className={style.login}>

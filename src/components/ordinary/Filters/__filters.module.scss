@@ -189,13 +189,16 @@
     //  gap: 12px;
   }
   .filters__mileage {
-    // border: black 1px solid;
+    //border: black 1px solid;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0px;
     gap: 8px;
+    input {
+      border: red 1px solid !important;
+    }
 
     .miliage__slider {
       //background-color: red;
@@ -232,7 +235,8 @@
     input {
       width: 124px;
       height: 40px;
-      border: 1px solid $outline1;
+      // border: 1px solid $outline1;
+      border: red 1px solid;
       border-radius: 8px;
       //  padding: 10px 12px;
       display: flex;

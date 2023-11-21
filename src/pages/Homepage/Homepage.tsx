@@ -24,63 +24,6 @@ export default function Homepage({
   eurValue,
   usdValue,
 }: Props) {
-  // console.log(db);
-  // const [cars, setCars] = useState<
-  //   {
-  //     id: string;
-  //     index: string;
-  //     brand: string;
-  //     model: string;
-  //   }[]
-  // >([]);
-
-  // useEffect(() => {
-  //   const docRef = doc(db, "cities");
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const docSnapshot = await getDoc(docRef);
-
-  //       if (docSnapshot.exists()) {
-  //         console.log("Document data:", docSnapshot.data());
-  //       } else {
-  //         console.log("Document does not exist!");
-  //       }
-
-  //       console.log("Document successfully downloaded!");
-  //     } catch (error) {
-  //       console.error("Error fetching document: ", error);
-  //     }
-  //   };
-
-  //   // Вызываем функцию получения документа
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   const citiesRef = collection(db, "cars");
-  //   const arr: any = [];
-  //   const fetchData = async () => {
-  //     try {
-  //       const querySnapshot = await getDocs(citiesRef);
-
-  //       querySnapshot.forEach((doc) => {
-  //         console.log("Test " + doc.id);
-  //         arr.push(doc.data());
-  //         console.log("Document data:", doc.data());
-  //       });
-  //       console.log(arr);
-  //       console.log("Documents successfully downloaded!");
-  //setCars(arr)
-  //     } catch (error) {
-  //       console.error("Error fetching documents: ", error);
-  //     }
-  //   };
-
-  //   // Вызываем функцию получения документов
-  //   fetchData();
-  // }, []);
-
   return (
     <div>
       <Hero />

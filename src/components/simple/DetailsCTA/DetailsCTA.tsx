@@ -1,4 +1,5 @@
 import React from "react";
+import {useState, useRef} from "react";
 import style from "./__detailsCTA.module.scss";
 import {ReactComponent as CheckMarkDetails} from "../../../assets/icons/checkMarkDetails.svg";
 import {ReactComponent as DownloadIcon} from "../../../assets/icons/downloadIcon.svg";
@@ -17,17 +18,20 @@ interface DateObject {
 }
 
 interface Props {
-  brand: string;
+  brand: string | undefined;
   model: string;
   price: number;
   year: number;
   location: string;
   exportStatus: string;
   mileage: number;
-  dateObj: DateObject;
+  // dateObj: DateObject;
   selectedCurrency: string;
   usdValue: number;
   eurValue: number;
+  addLiked: () => void;
+  liked: boolean;
+  handleLike: () => void;
 }
 
 export default function DetailsCTA({
@@ -38,13 +42,18 @@ export default function DetailsCTA({
   location,
   exportStatus,
   mileage,
-  dateObj,
+  // dateObj,
   selectedCurrency,
   usdValue,
   eurValue,
+  addLiked,
+  liked,
+  handleLike,
 }: Props) {
   const black: string = "#1A1A1A";
-  console.log(dateObj.year);
+  // console.log(dateObj.year);
+
+  // const [likeded, setLikeded] = useState<boolean>(liked);
 
   let multiplier: number =
     selectedCurrency === "RUB"
@@ -78,8 +87,25 @@ export default function DetailsCTA({
     11: "November",
     12: "December",
   };
-  console.log(monthNames[dateObj.month]);
-  console.log(dateObj.month);
+  // console.log(monthNames[dateObj.month]);
+  // console.log(dateObj.month);
+  //   <div className={style.CTA__added}>
+  //   <span>Added:</span>
+  //   <b>
+  //     {dateObj.day} {monthNames[dateObj.month]}, {dateObj.year}{" "}
+  //   </b>
+  //   <span>
+  //     {" "}
+  //     {dateObj.hours}:{dateObj.minutes}
+  //   </span>
+  // </div>
+
+  // const likeCar = () => {
+  //   // setLikeded(!liked);
+  //   addLiked();
+  // };
+  // console.log(liked);
+
   return (
     <div
       className={`${style.CTA} ${window.innerWidth <= 768 ? style.mobile : ""}`}
@@ -88,8 +114,8 @@ export default function DetailsCTA({
         <div className={style.info__top}>
           <div className={style.saveAndShare}>
             <span>
-              <i>
-                <LikeIcon />
+              <i onClick={handleLike}>
+                <LikeIcon className={liked ? style.liked : ""} />
               </i>
               Save
             </span>
@@ -215,16 +241,6 @@ export default function DetailsCTA({
           <button>Book a full inspection</button>
           <a href="">Learn more about the full inspection</a>
         </div>
-      </div>
-      <div className={style.CTA__added}>
-        <span>Added:</span>
-        <b>
-          {dateObj.day} {monthNames[dateObj.month]}, {dateObj.year}{" "}
-        </b>
-        <span>
-          {" "}
-          {dateObj.hours}:{dateObj.minutes}
-        </span>
       </div>
     </div>
   );

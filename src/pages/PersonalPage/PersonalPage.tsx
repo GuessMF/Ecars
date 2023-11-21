@@ -10,18 +10,61 @@ import carData from "../../helpers/modelsBrands";
 //import sharp from "sharp";
 import PopUpError from "./PopUpError";
 import PopUpSent from "./PopUpSent";
-import PhotoList from "../../components/ordinary/PhotoList/PhotoList";
-import ScrollToTop from "../../utils/scrollToTop";
-import ScrollToTopPagination from "../../utils/scrollToTopPagination";
+// import PhotoList from "../../components/ordinary/PhotoList/PhotoList";
+// import ScrollToTop from "../../utils/scrollToTop";
+// import ScrollToTopPagination from "../../utils/scrollToTopPagination";
 import {Rings} from "react-loader-spinner";
+//import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+import {useAuth} from "hooks/use-auth";
+// import {removeUser} from "store/slices/userSlice";
+// import {useAppDispatch} from "hooks/redux-hooks";
+
+import {
+  collection,
+  query,
+  orderBy,
+  startAfter,
+  endBefore,
+  startAt,
+  limit,
+  getDocs,
+  DocumentSnapshot,
+  where,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase/firestore";
 
 import {db} from "../../firebase";
-import {collection, doc, setDoc} from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
+import BigCard from "components/smart/BigCard/BigCard";
 
+interface Props {
+  userID: string;
+}
 const storage = getStorage();
 
 interface CarModel {
   name: string;
+}
+interface Car {
+  id: string;
+  userId: string;
+  index: string;
+  brand: string;
+  model: string;
+  price: string;
+  fuel: string;
+  location: string;
+  vehicleType: string;
+  year: number;
+  owners: string;
+  description: string;
+  mileage: number;
+  imageUrl: string;
+}
+interface LikedCar {
+  carId: string;
+  carIndex: string;
 }
 
 interface Errors {
@@ -61,7 +104,10 @@ interface Photo {
 interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
-export default function PersonalPage() {
+export default function PersonalPage({userID}: Props) {
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const {isAuth, email, displayName} = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -265,7 +311,7 @@ export default function PersonalPage() {
       const currentDate: Date = new Date();
       const dateObj: DateObject = {
         year: currentDate.getFullYear(),
-        month: currentDate.getMonth() + 1, // Месяцы в JavaScript начинаются с 0, поэтому добавляем 1
+        month: currentDate.getMonth() + 1,
         day: currentDate.getDate(),
         hours: currentDate.getHours(),
         minutes: currentDate.getMinutes(),
@@ -280,61 +326,103 @@ export default function PersonalPage() {
       });
 
       const imageUrls = await Promise.all(uploadTasks);
+      const carsRef = collection(db, "cars");
+      // const newID = uuidv4();
+      const newIndex = uuidv4();
+      // const storageFolder = `cars/${newId}`;
+      try {
+        console.log(userID);
+
+        await setDoc(doc(carsRef, newId), {
+          index: newIndex,
+          id: newId,
+          userId: userID,
+          dateAdded: currentDate,
+          brand: brand,
+          model: model,
+          price: price,
+          year: year,
+          mileage: mileage,
+          transmission: transmission,
+          fuel: fuel,
+          wheels: wheels,
+          vehicleType: vehicleType,
+          engineCapacity: engineCapacity,
+          seats: seats,
+          owners: owners,
+          color: color,
+          interior: interior,
+          location: location,
+          exportStatus: exportStatus,
+          description: description,
+          dateObj: dateObj,
+          imageUrls: imageUrls,
+        });
+
+        console.log("Автомобиль успешно добавлен!");
+        setSent(true);
+        setLoading(false);
+        setTimeout(() => {
+          setSent(false);
+        }, 2000);
+      } catch (error) {
+        console.error("Error adding documents: ", error);
+      }
 
       // Используйте сгенерированный ID в названии папки в Firebase Storage
       // const storageFolder = `cars/${newId}`;
 
-      const carObject = {
-        id: newId,
-        dateAdded: currentDate,
-        brand,
-        model,
-        price,
-        year,
-        mileage,
-        transmission,
-        fuel,
-        wheels,
-        vehicleType,
-        engineCapacity,
-        seats,
-        owners,
-        color,
-        interior,
-        location,
-        exportStatus,
-        description,
-        dateObj: dateObj,
-        imageUrls, // Массив URL изображений
-      };
+      // const carObject = {
+      //   id: newId,
+      //   dateAdded: currentDate,
+      //   brand,
+      //   model,
+      //   price,
+      //   year,
+      //   mileage,
+      //   transmission,
+      //   fuel,
+      //   wheels,
+      //   vehicleType,
+      //   engineCapacity,
+      //   seats,
+      //   owners,
+      //   color,
+      //   interior,
+      //   location,
+      //   exportStatus,
+      //   description,
+      //   dateObj: dateObj,
+      //   imageUrls, // Массив URL изображений
+      // };
       // Отправить объект на сервер или выполнить другие действия с ним
       //  console.log(carObject);
 
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(carObject),
-      };
-      fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw new Error("Network response was not ok.");
-        })
-        .then((json) => {
-          console.log("Объект успешно отправлен на сервер:", json);
-          setSent(true);
-          setLoading(false);
-          setTimeout(() => {
-            setSent(false);
-          }, 2000);
-        })
-        .catch((error) => {
-          console.error("Ошибка при отправке объекта на сервер:", error);
-        });
+      // const requestOptions = {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(carObject),
+      // };
+      // fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
+      //   .then((res) => {
+      //     if (res.ok) {
+      //       return res.json();
+      //     }
+      //     throw new Error("Network response was not ok.");
+      //   })
+      //   .then((json) => {
+      //     console.log("Объект успешно отправлен на сервер:", json);
+      // setSent(true);
+      // setLoading(false);
+      // setTimeout(() => {
+      //   setSent(false);
+      // }, 2000);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Ошибка при отправке объекта на сервер:", error);
+      //   });
 
       // Сбросить значения формы
 
@@ -423,211 +511,132 @@ export default function PersonalPage() {
   //console.log(popUpErrors);
 
   //Новая отправка формы
-  // useEffect(() => {
-  //   const newDoc = async () => {
-  //     try {
-  //       await setDoc(doc(db, "cities", "TEST"), {
-  //         name: "Los",
-  //         state: "CAaa",
-  //         country: "USAaa",
-  //       });
-  //       console.log("Document successfully written!");
-  //     } catch (error) {
-  //       console.error("Error writing document: ", error);
-  //     }
-  //   };
 
-  //   // Вызываем функцию создания нового документа
-  //   newDoc();
-  // }, []);
+  // const addCars = async () => {
+  //   const carsRef = collection(db, "cars");
+  //   const newID = uuidv4();
+  //   const newIndex = uuidv4()
 
-  // useEffect(() => {
-  //   const addCities = async () => {
-  //     const citiesRef = collection(db, "cities");
+  //   try {
+  //     console.log(userID);
 
-  //     try {
-  //       // await setDoc(doc(carsRef, "1"), {
-  //       //   index: "1",
-  //       //   id: "ee624a58-fbd8-4e4b-9554-50166670e82d",
-  //       //   dateAdded: "2023-11-03T13:57:40.085Z",
-  //       //   brand: "Acura",
-  //       //   model: "MDX",
-  //       //   price: 121990,
-  //       //   year: 2008,
-  //       //   mileage: 72,
-  //       //   transmission: "Automatic",
-  //       //   fuel: "Gasoline",
-  //       //   wheels: "21",
-  //       //   vehicleType: "SUV",
-  //       //   engineCapacity: "3.0",
-  //       //   seats: "5",
-  //       //   owners: "0",
-  //       //   color: "Yellow",
-  //       //   interior: "White",
-  //       //   location: "Saint-Petersburg",
-  //       //   exportStatus: "Can be exported",
-  //       //   description: "Первая Acura MDX T7-местный салон.",
-  //       //   dateObj: {
-  //       //     year: 2023,
-  //       //     month: 11,
-  //       //     day: 3,
-  //       //     hours: 16,
-  //       //     minutes: 57,
-  //       //   },
+  //     await setDoc(doc(carsRef, newID), {
+  //       index: newIndex,
+  //       id: newID,
+  //       userId: userID,
+  //       dateAdded: cur,
+  //       brand: "Audi",
+  //       model: "A1",
+  //       price: 200000,
+  //       year: 2023,
+  //       mileage: 31,
+  //       transmission: "Automatic",
+  //       fuel: "Gasoline",
+  //       wheels: "23",
+  //       vehicleType: "Sedan",
+  //       engineCapacity: "4.0",
+  //       seats: "5",
+  //       owners: "0",
+  //       color: "Black",
+  //       interior: "Black",
+  //       location: "Minsk",
+  //       exportStatus: "Can be exported",
+  //       description: "Ноa.",
+  //       dateObj: {
+  //         year: 2023,
+  //         month: 11,
+  //         day: 3,
+  //         hours: 18,
+  //         minutes: 12,
+  //       },
+  //       imageUrls: [
+  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPKUqSRR7ESjaWRdg1wHm1T8gNuj0JzKMTzJXsnpII7nDdlN7XapD9M-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=714c5c3e-f2e3-40ef-bd0c-d6d8518417a5",
+  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTPLLk2URx_cUm3CEdA3wHjiTs0Otm5SlfEUypa5wsMO7neLkt-AbcbhLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=dcbc6bb2-f250-4cf0-a6bd-6f34d0b6e5a1",
+  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTTHKU6WRRvcUDvCStE_xHiwT5oNuD5QxKBFzMe5zJwK6nLaw96AP53hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=58f053a9-aec8-438e-bc71-836408bd0047",
+  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTXPLEGVRB7cXDnFENlnw3OxT85cuTkGxqZOy8G4w5NZ7yfalN_XbZ3hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=718b5633-4419-446f-8805-a15e67d12293",
+  //       ],
+  //     });
 
-  //       //   imageUrls: [
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(3).webp?alt=media&token=7e46bc12-2b54-4acc-bc59-6aaf09fcebd4",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(1).webp?alt=media&token=aef89f5d-ed5e-440d-999e-b73e1da21ce1",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(2).webp?alt=media&token=3980cb51-0731-464c-92af-6e446ccf02a1",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(4).webp?alt=media&token=52c39bdd-9402-4302-bdab-68b2983a2579",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n.webp?alt=media&token=bb43a7a2-bdcb-4f53-8f6e-18732d5867fe",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVjAa1IrqLjK0dQB2iELb99ml-jkzMuRf-V5O_Q8Q744TFx_nKokvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=48d42fd5-3b4f-4f40-aa58-2b69f03c14c9",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNObWDcQ24nqIzPmLgByghKMp4-jqj5kOrdbqgxI-l0R7o0SGBHneNgvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=d429dc41-00ae-489a-83b3-fe3f8e4976e7",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVjcc0IvqfDbjdgFz00nT9NT3_Gk0M-YO_lBK8VhD7Y9BRRrieoMvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=3421c86d-e1ce-4842-a69c-f72a67612a25",
-  //       //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVzUR24jqezi1cQQmhRPbp4mkr29nPetarlsdrQsXuokWFx6zfoMvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=46d8f28a-b7c8-41a6-8293-1206965e1094",
-  //       //   ],
-  //       // });
-
-  //       // await setDoc(doc(citiesRef, "Acura"), {
-  //       //   name: "Los Angeless",
-  //       //   state: "CAs",
-  //       //   country: "USAs",
-  //       //   capital: false,
-  //       //   population: 39000020,
-  //       // });
-
-  //       // await setDoc(doc(db, "cars", "car1"), {
-  //       //   name: "Tset",
-  //       //   state: "CAci",
-  //       //   country: "USAch",
-  //       // });
-  //       // await setDoc(doc(db, "cars", "car2"), {
-  //       //   name: "Tset2",
-  //       //   state: "CAc2i",
-  //       //   country: "U2SAch",
-  //       // });
-  //       // await setDoc(doc(db, "cars", "car3"), {
-  //       //   name: "Tset3",
-  //       //   state: "CAc3i",
-  //       //   country: "U3SAch",
-  //       // });
-  //       // await setDoc(doc(db, "cars", "car4"), {
-  //       //   name: "Tset4",
-  //       //   state: "CAc4i",
-  //       //   country: "U4SAch",
-  //       // });
-
-  //       // await setDoc(doc(citiesRef, "DC"), {
-  //       //   name: "Washington, D.C.",
-  //       //   state: null,
-  //       //   country: "USA",
-  //       //   capital: true,
-  //       //   population: 680000,
-  //       // });
-  //       // await setDoc(doc(citiesRef, "TOK"), {
-  //       //   name: "Tokyo",
-  //       //   state: null,
-  //       //   country: "Japan",
-  //       //   capital: true,
-  //       //   population: 9000000,
-  //       // });
-  //       // await setDoc(doc(citiesRef, "BJ"), {
-  //       //   name: "Beijing",
-  //       //   state: null,
-  //       //   country: "China",
-  //       //   capital: true,
-  //       //   population: 21500000,
-  //       // });
-
-  //       //       // Другие вызовы setDoc...
-
-  //       console.log("Documents successfully added!");
-  //     } catch (error) {
-  //       console.error("Error adding documents: ", error);
-  //     }
-  //   };
-
-  //   // Вызываем функцию добавления документов
-  //   addCities();
-  // }, []);
+  //     console.log("Автомобиль успешно добавлен!");
+  //   } catch (error) {
+  //     console.error("Error adding documents: ", error);
+  //   }
+  // };
+  const [likedCars, setLikedCars] = useState<LikedCar[]>([]);
 
   useEffect(() => {
-    // for (let i = 0; i < 10; i++) {
-    const addCars = async () => {
-      const carsRef = collection(db, "cars");
-      const newID = uuidv4();
-
-      try {
-        // await setDoc(doc(carsRef, newID), {
-        //   brand: "2",
-        //   model: "2",
-        //   year: 1991,
-        //   price: 121900,
-        //   imageUrls: [
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(1).webp?alt=media&token=aef89f5d-ed5e-440d-999e-b73e1da21ce1",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(2).webp?alt=media&token=3980cb51-0731-464c-92af-6e446ccf02a1",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n%20(4).webp?alt=media&token=52c39bdd-9402-4302-bdab-68b2983a2579",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2F1200x900n.webp?alt=media&token=bb43a7a2-bdcb-4f53-8f6e-18732d5867fe",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVjAa1IrqLjK0dQB2iELb99ml-jkzMuRf-V5O_Q8Q744TFx_nKokvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=48d42fd5-3b4f-4f40-aa58-2b69f03c14c9",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNObWDcQ24nqIzPmLgByghKMp4-jqj5kOrdbqgxI-l0R7o0SGBHneNgvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=d429dc41-00ae-489a-83b3-fe3f8e4976e7",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVjcc0IvqfDbjdgFz00nT9NT3_Gk0M-YO_lBK8VhD7Y9BRRrieoMvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=3421c86d-e1ce-4842-a69c-f72a67612a25",
-        //     "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2Fee624a58-fbd8-4e4b-9554-50166670e82d%2FHx-9DwCtkkpFWq0y2m4qV_-lamtYFi9oLv9gSxS31BfUbR_yXNCcVzUR24jqezi1cQQmhRPbp4mkr29nPetarlsdrQsXuokWFx6zfoMvfwC3u3w3HAkmUgWTQHw_l_QrvlI-4AaWwk5zXLzn5X1rkEJNFdsgupiv5MonHlKCP-wBMq4ACLnWb0hE5zPSbA9R7_pnfnpjJUAetGN5Jr3_KKpfBOwigc4Fa2WU0ZBXb5BybRf.webp?alt=media&token=46d8f28a-b7c8-41a6-8293-1206965e1094",
-        //   ],
-        // });
-
-        await setDoc(doc(carsRef, newID), {
-          index: "19",
-          id: "139544bb-079f-4b3f-8948-22cc660bb440",
-          dateAdded: "2023-11-03T15:12:13.283Z",
-          brand: "BMW",
-          model: "1",
-          yearMileagePrice: {
-            price: 200000,
-            year: 2023,
-            mileage: 31,
-          },
-
-          transmission: "Automatic",
-          fuel: "Gasoline",
-          wheels: "23",
-          vehicleType: "Sedan",
-          engineCapacity: "4.0",
-          seats: "5",
-          owners: "0",
-          color: "Black",
-          interior: "Black",
-          location: "Minsk",
-          exportStatus: "Can be exported",
-          description:
-            'Новый АSTON MARTIN DBX707 Q-Series в наличии в Минске. Автомобиль для рынка РФ (зимний пакет, доп защиты и т.п.), полностью растаможен без Киргизских и прочих схем, ПТС получен. Заказывался в подразделении Aston Martin "Q": Кузов цвета Nero Daytona из палитры Ferrari, салон эксклюзивная кожа Partlona Frau цвета Rosso Ferrari c контрастным швом и вставками цвета Sabbia. Единственный автомобиль в таком сочетании в мире.',
-          dateObj: {
-            year: 2023,
-            month: 11,
-            day: 3,
-            hours: 18,
-            minutes: 12,
-          },
-          imageUrls: [
-            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPKUqSRR7ESjaWRdg1wHm1T8gNuj0JzKMTzJXsnpII7nDdlN7XapD9M-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=714c5c3e-f2e3-40ef-bd0c-d6d8518417a5",
-            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTPLLk2URx_cUm3CEdA3wHjiTs0Otm5SlfEUypa5wsMO7neLkt-AbcbhLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=dcbc6bb2-f250-4cf0-a6bd-6f34d0b6e5a1",
-            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTTHKU6WRRvcUDvCStE_xHiwT5oNuD5QxKBFzMe5zJwK6nLaw96AP53hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=58f053a9-aec8-438e-bc71-836408bd0047",
-            "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTXPLEGVRB7cXDnFENlnw3OxT85cuTkGxqZOy8G4w5NZ7yfalN_XbZ3hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=718b5633-4419-446f-8805-a15e67d12293",
-          ],
-        });
-
-        console.log("Documents successfully added!");
-      } catch (error) {
-        console.error("Error adding documents: ", error);
-      }
-    };
-
-    // Вызываем функцию добавления документов
-    addCars();
-    // }
+    fetchSalingCars();
+    fetchLikedCars();
   }, []);
+
+  const fetchSalingCars = async () => {
+    try {
+      const carsRef = collection(db, "cars");
+      let first = query(carsRef);
+      first = query(first, where("userId", "==", userID));
+      const querySnapshot = await getDocs(first);
+      const cars = querySnapshot.docs.map(
+        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+      );
+      setCars(cars);
+      setLoaded(true);
+    } catch (error) {
+      console.error("Error fetching first page: ", error);
+    }
+  };
+
+  const fetchLikedCars = async () => {
+    try {
+      const likedRef = collection(db, "likedCars");
+      let first = query(likedRef);
+      first = query(first, where("id", "==", userID));
+      const querySnapshot = await getDocs(first);
+      const cars = querySnapshot.docs.map(
+        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as LikedCar
+      );
+      // setLikedCars(cars);
+      console.log(cars);
+
+      // console.log(likedCars);
+      console.log("загружены лайкнутые авто");
+      setLoaded(true);
+    } catch (error) {
+      console.error("Error fetching first page: ", error);
+    }
+  };
 
   return (
     <div className={style.login}>
+      <div>
+        <h3>Liked Cars</h3>
+      </div>
+      <h3>Ваши автомобили</h3>
+      <p>{userID}</p>
+      <div>
+        {displayName}, Продайте свой автомобиль
+        {loaded &&
+          cars.map((car: any, index: any) => (
+            <BigCard
+              key={index}
+              id={car.id}
+              selectedCurrency={"USD"}
+              usdValue={10}
+              eurValue={20}
+              index={index}
+              brand={car.brand}
+              model={car.model}
+              price={car.price}
+              fuel={car.fuel}
+              owners={car.owners}
+              location={car.location}
+              mileage={car.mileage}
+              description={car.description}
+              previewIMG={car.imageUrls[0]}
+              //onLoad={handleLoad}
+            />
+          ))}
+      </div>
+
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
       <PopUpSent sent={sent} />
 

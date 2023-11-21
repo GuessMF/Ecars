@@ -16,13 +16,14 @@ import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.sv
 import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
 import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
-
+import {useSelector} from "react-redux";
+import {RootState} from "store";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
-
+import {doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {log} from "console";
 // import { listAll, getDownloadURL } from 'firebase/storage';
-import {getDocs} from "firebase/firestore/lite";
+// import {getDocs} from "firebase/firestore/lite";
 import {initializeApp} from "firebase/app";
 import {getFirestore} from "firebase/firestore";
 import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
@@ -31,7 +32,26 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
 import {Autoplay, Pagination, Navigation} from "swiper/modules";
 import {Virtual} from "swiper/modules";
-
+import {
+  collection,
+  query,
+  orderBy,
+  startAfter,
+  endBefore,
+  startAt,
+  limit,
+  getDocs,
+  DocumentSnapshot,
+  where,
+  QueryDocumentSnapshot,
+  DocumentData,
+  deleteDoc,
+  addDoc,
+} from "firebase/firestore";
+interface LikedCar {
+  carId: string;
+  carIndex: string;
+}
 // interface RouteParams {
 //   id: string;
 //   [key: string]: string | undefined;
@@ -58,6 +78,26 @@ interface DateObject {
   day: number;
   hours: number;
   minutes: number;
+}
+interface Car {
+  id: string;
+  userId: string;
+  index: string;
+  brand: string;
+  model: string;
+  price: string;
+  fuel: string;
+  location: string;
+  vehicleType: string;
+  year: number;
+  owners: string;
+  seats: string;
+  description: string;
+  mileage: number;
+  transmission: string;
+  engineCapacity: string;
+  wheels: string;
+  imageUrl: string;
 }
 
 const firebaseConfig = {
@@ -88,6 +128,8 @@ export default function Details({
   const black: string = "#1A1A1A";
   const [carData, setCarData] = useState(null);
 
+  const [cars, setCars] = useState<Car[]>([]);
+
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>(); // Тип id может быть строкой или undefined
 
@@ -114,70 +156,85 @@ export default function Details({
     loadPhotosFromFirebase(currentIndex);
   }, [id]);
 
-  const [currentCar, setCurrentCar] = useState<{
-    brand: string;
-    model: string;
-    price: number;
-    year: number;
-    mileage: number;
-    transmission: string;
-    fuel: string;
-    wheels: number;
-    vehicleType: string;
-    engineCapacity: number;
-    owners: string;
-    seats: number;
-    color: string;
-    interior: string;
-    location: string;
-    exportStatus: string;
-    description: string;
-    dateObj: DateObject;
-  } | null>(null);
+  // const [currentCar, setCurrentCar] = useState<{
+  //   brand: string;
+  //   model: string;
+  //   price: number;
+  //   year: number;
+  //   mileage: number;
+  //   transmission: string;
+  //   fuel: string;
+  //   wheels: number;
+  //   vehicleType: string;
+  //   engineCapacity: number;
+  //   owners: string;
+  //   seats: number;
+  //   color: string;
+  //   interior: string;
+  //   location: string;
+  //   exportStatus: string;
+  //   description: string;
+  //   dateObj: DateObject;
+  // } | null>(null);
+  const [currentCar, setCurrentCar] = useState<Car>();
+  const [liked, setLiked] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars")
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((json) => {
+  //       const foundObject = json.find((item: {id: string}) => item.id === id);
+  //       if (foundObject) {
+  //         // console.log("Найденный объект:", foundObject);
+  //         setCurrentCar({
+  //           brand: foundObject.brand,
+  //           model: foundObject.model,
+  //           price: foundObject.price,
+  //           year: foundObject.year,
+  //           transmission: foundObject.transmission,
+  //           owners: foundObject.owners,
+  //           fuel: foundObject.fuel,
+  //           wheels: foundObject.wheels,
+  //           color: foundObject.color,
+  //           vehicleType: foundObject.vehicleType,
+  //           engineCapacity: foundObject.engineCapacity,
+  //           seats: foundObject.seats,
+  //           interior: foundObject.interior,
+  //           location: foundObject.location,
+  //           exportStatus: foundObject.exportStatus,
+  //           mileage: foundObject.mileage,
+  //           description: foundObject.description,
+  //           dateObj: foundObject.dateObj,
+  //         });
+  //       } else {
+  //         console.log("Объект с id", id, "не найден.");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Произошла ошибка при получении данных:", error);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars")
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        const foundObject = json.find((item: {id: string}) => item.id === id);
-        if (foundObject) {
-          // console.log("Найденный объект:", foundObject);
-          setCurrentCar({
-            brand: foundObject.brand,
-            model: foundObject.model,
-            price: foundObject.price,
-            year: foundObject.year,
-            transmission: foundObject.transmission,
-            owners: foundObject.owners,
-            fuel: foundObject.fuel,
-            wheels: foundObject.wheels,
-            color: foundObject.color,
-            vehicleType: foundObject.vehicleType,
-            engineCapacity: foundObject.engineCapacity,
-            seats: foundObject.seats,
-            interior: foundObject.interior,
-            location: foundObject.location,
-            exportStatus: foundObject.exportStatus,
-
-            mileage: foundObject.mileage,
-            description: foundObject.description,
-            dateObj: foundObject.dateObj,
-          });
-        } else {
-          console.log("Объект с id", id, "не найден.");
-        }
-      })
-      .catch((error) => {
-        console.error("Произошла ошибка при получении данных:", error);
-      });
+    fetchFirstPage();
   }, []);
 
-  // if (filteredData.length === 0) {
-  //   return <div>Объект с id {id} не найден</div>;
-  // }
-  // const {brand, model, year, price} = filteredData[0];
+  const fetchFirstPage = async () => {
+    try {
+      const carsRef = collection(db, "cars");
+      let first = query(carsRef);
+      const querySnapshot = await getDocs(first);
+      const cars = querySnapshot.docs.map((doc) => doc.data() as Car);
+      const foundCar = cars.find((car) => car.id === id);
+      if (foundCar !== undefined) {
+        setCurrentCar(foundCar);
+      }
+    } catch (error) {
+      console.error("Error fetching first page: ", error);
+    }
+  };
 
   let mileage: string | undefined = currentCar?.mileage
     .toLocaleString()
@@ -210,6 +267,89 @@ export default function Details({
   //     ))}
   //   </Swiper>
   // </div>
+
+  const userId = useSelector(
+    (state: RootState) => (state.user as {id: string})?.id
+  );
+  const userIdValue = userId; // userId уже содержит id, поэтому дополнительный ? и .id не нужны
+
+  console.log(userIdValue);
+
+  const addLiked = async () => {
+    const likedRef = collection(db, "likedCars");
+    const likedDocRef = doc(likedRef, userIdValue);
+
+    try {
+      const likedDocSnap = await getDoc(likedDocRef);
+
+      if (likedDocSnap.exists()) {
+        const likedData = likedDocSnap.data();
+        const currentLikedCars = likedData?.likedCars || [];
+
+        const existingCarIndex = currentLikedCars.findIndex(
+          (carId: string) => carId === id
+        );
+
+        if (existingCarIndex !== -1) {
+          // Если автомобиль уже лайкнут, удаляем его из массива
+          currentLikedCars.splice(existingCarIndex, 1);
+          await setDoc(likedDocRef, {
+            likedCars: currentLikedCars,
+          });
+
+          console.log("Автомобиль удален из массива likedCars!");
+        } else {
+          const updatedLikedCars = [...currentLikedCars, id].filter(Boolean);
+          await setDoc(likedDocRef, {
+            likedCars: updatedLikedCars,
+          });
+
+          console.log(
+            "Новый лайкнутый автомобиль добавлен в массив likedCars!"
+          );
+        }
+      } else {
+        // Если документ не существует, создаем новый с массивом likedCars
+        await setDoc(likedDocRef, {
+          likedCars: [id],
+        });
+
+        console.log("Документ с лайкнутыми автомобилями создан!");
+      }
+    } catch (error) {
+      console.error("Ошибка при обновлении документа: ", error);
+    }
+  };
+
+  const fetchLiked = async () => {
+    const likedRef = collection(db, "likedCars");
+    const likedDocRef = doc(likedRef, userIdValue);
+    try {
+      const likedDocSnap = await getDoc(likedDocRef);
+      if (likedDocSnap.exists()) {
+        const likedData = likedDocSnap.data();
+        const currentLikedCars = likedData?.likedCars || [];
+        console.log(currentLikedCars);
+        const hasMatch = currentLikedCars.some((el: string) => el === id);
+        setLiked(hasMatch);
+        console.log(hasMatch + " hasMatch");
+      }
+    } catch (error) {
+      console.error("Ошибка при скачивании документа: ", error);
+    }
+  };
+
+  const handleLike = () => {
+    setLiked(!liked);
+    addLiked();
+  };
+
+  useEffect(() => {
+    if (userIdValue) {
+      fetchLiked();
+    }
+  }, [userIdValue]);
+
   return (
     <div className={style.details}>
       <div className={style.topNavigation}>
@@ -247,46 +387,49 @@ export default function Details({
 
             {window.innerWidth <= 768 && (
               <DetailsCTA
-                brand={currentCar.brand}
-                model={currentCar.model}
-                price={currentCar.price}
-                location={currentCar.location}
-                exportStatus={currentCar.exportStatus}
-                year={currentCar.year}
-                mileage={currentCar.mileage}
-                dateObj={currentCar.dateObj}
+                brand={currentCar?.brand}
+                model="wwwww"
+                price={33333}
+                location="ceecece"
+                exportStatus="no"
+                year={2000}
+                mileage={3133}
+                // dateObj={}
                 selectedCurrency={selectedCurrency}
                 usdValue={usdValue}
                 eurValue={eurValue}
+                addLiked={() => addLiked()}
+                liked={liked}
+                handleLike={handleLike}
               />
             )}
 
             <div className={style.content__mainInformation}>
               <div className={style.left__information}>
                 <div>
-                  <span>Make</span> <span>{currentCar.brand}</span>
+                  <span>Make</span> <span>{currentCar?.brand}</span>
                 </div>
                 <div>
-                  <span>Model</span> <span>{currentCar.model}</span>
+                  <span>Model</span> <span>{currentCar?.model}</span>
                 </div>
 
                 <div>
                   <span>Vehicle type</span>
-                  <span>{currentCar.vehicleType}</span>
+                  <span>{currentCar?.vehicleType}</span>
                 </div>
                 <div>
                   <span>Color</span>
-                  <span>{currentCar.color}</span>
+                  <span>{currentCar?.model}</span>
                 </div>
                 <div>
-                  <span>Interior</span> <span>{currentCar.interior}</span>
+                  <span>Interior</span> <span>{currentCar?.brand}</span>
                 </div>
                 <div>
                   <span>Owners</span>{" "}
                   <span>
-                    {currentCar.owners === "0"
+                    {currentCar?.owners === "0"
                       ? "None"
-                      : currentCar.owners
+                      : currentCar?.owners
                       ? "4"
                       : "3+"}
                   </span>
@@ -298,35 +441,35 @@ export default function Details({
               </div>
               <div className={style.right__information}>
                 <div>
-                  <span>Year</span> <span>{currentCar.year}</span>
+                  <span>Year</span> <span>{currentCar?.year}</span>
                 </div>
                 <div>
-                  <span>Gearbox</span> <span>{currentCar.transmission}</span>
+                  <span>Gearbox</span> <span>{currentCar?.transmission}</span>
                 </div>
                 <div>
                   <span>Engine Volume</span>{" "}
-                  <span>{currentCar.engineCapacity}</span>
+                  <span>{currentCar?.engineCapacity}</span>
                 </div>
 
                 <div>
-                  <span>Fuel</span> <span>{currentCar.fuel}</span>
+                  <span>Fuel</span> <span>{currentCar?.fuel}</span>
                 </div>
                 <div>
-                  <span>Wheels</span> <span>{"R " + currentCar.wheels}</span>
-                </div>
-
-                <div>
-                  <span>Seats</span> <span>{currentCar.seats}</span>
+                  <span>Wheels</span> <span>{"R " + currentCar?.wheels}</span>
                 </div>
 
                 <div>
-                  <span>Location</span> <span>{currentCar.location}</span>
+                  <span>Seats</span> <span>{currentCar?.seats}</span>
+                </div>
+
+                <div>
+                  <span>Location</span> <span>{currentCar?.location}</span>
                 </div>
               </div>
             </div>
             <div className={style.content__description}>
               <h5>Description</h5>
-              <div className={style.description}>{currentCar.description}</div>
+              <div className={style.description}>{currentCar?.description}</div>
               <div>MORE</div>
             </div>
             <div className={style.content__features}>
@@ -394,17 +537,20 @@ export default function Details({
 
           {window.innerWidth > 768 && (
             <DetailsCTA
-              brand={currentCar.brand}
-              model={currentCar.model}
-              price={currentCar.price}
-              location={currentCar.location}
-              exportStatus={currentCar.exportStatus}
-              year={currentCar.year}
-              mileage={currentCar.mileage}
-              dateObj={currentCar.dateObj}
+              brand={currentCar?.brand}
+              model="wwwww"
+              price={33333}
+              location="ceecece"
+              exportStatus="no"
+              year={2000}
+              mileage={3133}
+              // dateObj={}
               selectedCurrency={selectedCurrency}
               usdValue={usdValue}
               eurValue={eurValue}
+              addLiked={() => addLiked()}
+              liked={liked}
+              handleLike={handleLike}
             />
           )}
         </div>
