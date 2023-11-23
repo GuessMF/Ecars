@@ -4,7 +4,7 @@ import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink, useNavigate} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
 import {Navigate} from "react-router-dom";
-
+import {useAuth} from "hooks/use-auth";
 import {useDispatch} from "react-redux";
 import {
   getAuth,
@@ -32,133 +32,23 @@ export default function SignUp() {
 
   const errors: Errors = {};
 
-  // useEffect(() => {
-  //   console.log("Name: " + name);
-  //   console.log("Email: " + email);
-  //   console.log("Password: " + password);
-  //   console.log("ConfirmPassword: " + confirmPassword);
-  //   console.log("Checkbox: " + checkBox);
-  // });
+  const [userId, setUserId] = useState<string>("");
+  const {isAuth, displayName} = useAuth();
 
-  const generateNewId = (): string => {
-    return uuidv4();
-  };
-  // const submit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!name) {
-  //     errors.name = "Поле Имя обязательно для заполнения";
-  //   }
-
-  //   if (!email) {
-  //     errors.email = "Поле Емэйл обязательно для заполнения";
-  //   }
-  //   if (!password) {
-  //     errors.password = "Поле Пароль обязательно для заполнения";
-  //   }
-  //   if (password !== confirmPassword) {
-  //     errors.confirmPassword = "Пароли не совпадают";
-  //   }
-  //   if (!checkBox) {
-  //     errors.checkBox = "Нет чекбокса";
-  //   }
-  //   console.log(errors);
-  //   if (Object.keys(errors).length > 0) {
-  //     setFormErrors(errors);
-  //     alert("Заполните поля");
-  //   } else {
-  //     const newId = generateNewId();
-  //     const currentDate: Date = new Date();
-
-  //     const user = {
-  //       id: newId,
-  //       dateAdded: currentDate,
-  //       name: name,
-  //       email: email,
-  //       password: password,
-  //     };
-
-  //     const requestOptions = {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(user),
-  //     };
-
-  //     fetch("https://65378b85bb226bb85dd365a6.mockapi.io/users", requestOptions)
-  //       .then((res) => {
-  //         if (res.ok) {
-  //           return res.json();
-  //         }
-  //         throw new Error("Network response was not ok.");
-  //       })
-  //       .then((json) => {
-  //         console.log("Объект успешно отправлен на сервер:", json);
-  //         // setSent(true);
-  //         // setLoading(false);
-  //         // setTimeout(() => {
-  //         //   setSent(false);
-  //         // }, 2000);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Ошибка при отправке объекта на сервер:", error);
-  //       });
-
-  //     setName("");
-  //     setEmail("");
-  //     setPassword("");
-  //     setConfirmPassword("");
-  //     setCheckBox(false);
-
-  //     console.log("SUBMITTED");
-  //   }
-  // };
-  //<div className={formErrors.name ? `${style.name} error` : style.name}>
-  //
-  //
-  //
-  //
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // const handleRegister = (email: string, password: string, name: string) => {
-  //   const auth = getAuth();
-  //   console.log("clicked");
-
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then(({user}) => {
-  //       console.log(user);
-
-  //       dispatch(
-  //         setUser({
-  //           displayName: name,
-  //           email: user.email,
-  //           id: user.uid,
-  //           token: user.refreshToken,
-  //         })
-  //       );
-  //       // push('/')
-  //       navigate("/");
-
-  //       console.log("отправилось");
-  //     })
-  //     .catch(console.error);
-  // };
-
   const handleRegister = (email: string, password: string, name: string) => {
     const auth = getAuth();
-    console.log("clicked");
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(({user}) => {
-        console.log(user);
-
-        // Обновление профиля пользователя с добавлением имени
         updateProfile(user, {
           displayName: name,
         })
           .then(() => {
+            console.log(user.uid);
+
             console.log("Profile updated successfully");
           })
           .catch((error) => {
@@ -173,9 +63,8 @@ export default function SignUp() {
             token: user.refreshToken,
           })
         );
-
-        // push('/')
-        navigate("/");
+        //navigate(`/user-page${}`);
+        navigate(`/user-page/${user.uid}`);
 
         console.log("отправилось");
       })

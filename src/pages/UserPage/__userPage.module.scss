@@ -1,23 +1,20 @@
-.liked {
-  width: 100%;
-  height: fit-content;
+.userPage {
+  background-color: antiquewhite;
   padding-top: 100px;
   padding-bottom: 100px;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // align-items: center;
-  h2 {
-    // text;
-    margin-bottom: 50px;
+  //   align-items: center;
+  h3 {
+    padding-left: 50px;
+  }
+  h4 {
+    padding-left: 50px;
   }
   .wrapper {
     display: flex;
-    // flex-direction: row;
-    // flex-wrap: wrap;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 10px;
   }

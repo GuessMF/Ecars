@@ -47,40 +47,11 @@ interface Car {
 export default function Liked({userID}: Props) {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [likedCars, setLikedCars] = useState<string[]>([]);
-  const [liked, setLiked] = useState<boolean>(false);
+  // const [liked, setLiked] = useState<boolean>(false);
   const [cars, setCars] = useState<Car[]>([]);
-  const prevLikedCars = useRef<string[]>([]);
+  // const prevLikedCars = useRef<string[]>([]);
 
   const [loadingLiked, setLoadingLiked] = useState(true);
-  //   const fetchLikedCars = async () => {
-  //     try {
-  //       const likedRef = collection(db, "likedCars");
-  //       let first = query(likedRef);
-  //       first = query(first, where("id", "==", "7sCg7gnCYCb1qgRZTPTAoamOy663"));
-  //       const querySnapshot = await getDocs(first);
-  //       console.log(querySnapshot.docs);
-
-  //         const cars = querySnapshot.docs.map(
-  //           (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as LikedCar
-  //         );
-
-  //     //   const cars = querySnapshot.docs.map(
-  //     //     (doc: QueryDocumentSnapshot<DocumentData>) => {
-  //     //       const data = doc.data() as LikedCar;
-  //     //       return {id: doc.id, ...data};
-  //     //     }
-  //     //   );
-
-  //       setLikedCars(cars);
-  //       console.log(cars);
-
-  //       // console.log(likedCars);
-  //       console.log("Загружены лайкнутые авто");
-  //       setLoaded(true);
-  //     } catch (error) {
-  //       console.error("Error fetching first page: ", error);
-  //     }
-  //   };
 
   const fetchLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -248,7 +219,8 @@ export default function Liked({userID}: Props) {
 
   return (
     <div className={style.liked}>
-      <div>
+      <h2>Cars you like</h2>
+      <div className={style.wrapper}>
         {likedCars &&
           cars.map((car: any, index: any) => (
             <BigCard

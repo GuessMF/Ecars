@@ -10,9 +10,6 @@ import WhyChooseUs from "../../components/simple/WhyChooseUs/WhyChooseUs";
 import Reviews from "../../components/simple/Reviews/Reviews";
 import BottomCTA from "../../components/simple/BottomCTA/BottomCTA";
 
-// import {db} from "../../firebase";
-// import {doc, getDocs, collection} from "firebase/firestore";
-
 interface Props {
   selectedCurrency: string;
   eurValue: number;
@@ -27,7 +24,6 @@ export default function Homepage({
   return (
     <div>
       <Hero />
-
       <SpecialOffers
         selectedCurrency={selectedCurrency}
         eurValue={eurValue}

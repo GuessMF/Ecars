@@ -49,7 +49,6 @@ export default function Login() {
                 token: user.refreshToken,
               })
             );
-            // navigate(`/per/${userId}`);
           }
         );
       })
@@ -63,34 +62,9 @@ export default function Login() {
   };
   useEffect(() => {
     if (userId) {
-      navigate(`/per/${userId}`);
+      navigate(`/user-page/${userId}`);
     }
   }, [userId, navigate]);
-  // const handleLogin = async (email: string, password: string) => {
-  //   try {
-  //     const auth = getAuth(); // Получаем объект аутентификации Firebase
-  //     const userCredential = await signInWithEmailAndPassword(
-  //       auth,
-  //       email,
-  //       password
-  //     ); // Аутентификация пользователя
-
-  //     // При успешной аутентификации записываем данные пользователя в Redux store
-  //     const user = userCredential.user;
-  //     dispatch(
-  //       setUser({
-  //         displayName: user.displayName || null,
-  //         email: user.email || null,
-  //         id: user.uid || null,
-  //         token: user.refreshToken || null,
-  //       })
-  //     );
-  //   } catch (error) {
-  //     // Обработка ошибок аутентификации
-  //     console.error("Authentication error:", error);
-  //     // Возможно, здесь нужно показать пользователю сообщение об ошибке
-  //   }
-  // };
 
   return (
     <div className={style.login}>

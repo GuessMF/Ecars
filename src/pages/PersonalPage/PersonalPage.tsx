@@ -1,71 +1,22 @@
 import React, {useRef, useEffect, useState} from "react";
 import style from "./__personalPage.module.scss";
-import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
-import {NavLink} from "react-router-dom";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
-// import { carData } from "../../helpers/modelsBrands";
 import carData from "../../helpers/modelsBrands";
-// import ImageCompressor from "image-compressor";
-//import sharp from "sharp";
 import PopUpError from "./PopUpError";
 import PopUpSent from "./PopUpSent";
-// import PhotoList from "../../components/ordinary/PhotoList/PhotoList";
-// import ScrollToTop from "../../utils/scrollToTop";
-// import ScrollToTopPagination from "../../utils/scrollToTopPagination";
 import {Rings} from "react-loader-spinner";
-//import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
-import {useAuth} from "hooks/use-auth";
-// import {removeUser} from "store/slices/userSlice";
-// import {useAppDispatch} from "hooks/redux-hooks";
-
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
-  getDocs,
-  DocumentSnapshot,
-  where,
-  QueryDocumentSnapshot,
-  DocumentData,
-} from "firebase/firestore";
-
+import {useNavigate} from "react-router-dom";
+import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
-import BigCard from "components/smart/BigCard/BigCard";
-import SpecialOffers from "../../components/simple/SpecialOffers/SpecialOffers";
 
 interface Props {
   userID: string;
 }
-const storage = getStorage();
 
 interface CarModel {
   name: string;
-}
-interface Car {
-  id: string;
-  userId: string;
-  index: string;
-  brand: string;
-  model: string;
-  price: string;
-  fuel: string;
-  location: string;
-  vehicleType: string;
-  year: number;
-  owners: string;
-  description: string;
-  mileage: number;
-  imageUrl: string;
-}
-interface LikedCar {
-  carId: string;
-  carIndex: string;
 }
 
 interface Errors {
@@ -87,7 +38,6 @@ interface Errors {
   owners?: string;
   exportStatus?: string;
   description?: string;
-  // Добавьте другие поля с ошибками, если необходимо
 }
 
 type DateObject = {
@@ -98,22 +48,15 @@ type DateObject = {
   minutes: number;
 };
 
-interface Photo {
-  id: string;
-  url: string;
-}
 interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
 export default function PersonalPage({userID}: Props) {
-  const [cars, setCars] = useState<Car[]>([]);
-  const [loaded, setLoaded] = useState<boolean>(false);
-  const {isAuth, email, displayName} = useAuth();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  //const [selectedFiles, setSelectedFiles] = useState<Photo[]>([]);
-
   const [brand, setBrand] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
   const [model, setModel] = useState("");
@@ -138,7 +81,6 @@ export default function PersonalPage({userID}: Props) {
   const [formErrors, setFormErrors] = useState<Errors>({});
   const [popUpErrors, setPopUpErrors] = useState<boolean>(false);
   const errors: Errors = {};
-  //console.log(formErrors);
 
   const selectedFilesRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
@@ -179,28 +121,11 @@ export default function PersonalPage({userID}: Props) {
     price: priceRef,
     description: descriptionRef,
   };
-  //const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
-  // const handleReorderPhotos = (reorderedPhotos: File[]) => {
-  //   // Преобразовать объекты типа File в объекты типа Photo
-  //   const photos: Photo[] = reorderedPhotos.map((file) => ({
-  //     id: uuidv4(), // Здесь вы должны сгенерировать уникальный идентификатор для фотографии
-  //     url: URL.createObjectURL(file), // Используйте URL.createObjectURL для получения временной ссылки на файл
-  //   }));
-  //   setSelectedFiles(photos);
-  //   // Здесь вы можете отправить обновленный порядок фотографий на сервер или выполнить другие необходимые действия.
-  // };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let imageCounter = 1;
-    // if (e.target.files) {
-    //   console.log(e.target.files);
-
-    //   setSelectedFiles([...selectedFiles, ...Array.from(e.target.files)]);
-    // }
     if (e.target.files) {
       const newFiles = Array.from(e.target.files).map((file) => {
         const renamedFile = new File([file], `${imageCounter}.webp`, {
@@ -211,21 +136,18 @@ export default function PersonalPage({userID}: Props) {
       });
 
       setSelectedFiles([...selectedFiles, ...newFiles]);
-      //  console.log(selectedFiles);
     }
 
     const files = e.target.files;
     if (files) {
       const images: string[] = [];
 
-      // Проход по списку выбранных файлов и создание превью
       for (let i = 0; i < files.length; i++) {
         const reader = new FileReader();
         reader.onloadend = () => {
           if (typeof reader.result === "string") {
             images.push(reader.result);
             if (images.length === files.length) {
-              // Устанавливаем массив с превью в состояние
               setPreviewImages(images);
             }
           }
@@ -331,12 +253,8 @@ export default function PersonalPage({userID}: Props) {
 
       const imageUrls = await Promise.all(uploadTasks);
       const carsRef = collection(db, "cars");
-      // const newID = uuidv4();
       const newIndex = uuidv4();
-      // const storageFolder = `cars/${newId}`;
       try {
-        // console.log(userID);
-
         await setDoc(doc(carsRef, newId), {
           index: newIndex,
           id: newId,
@@ -369,6 +287,7 @@ export default function PersonalPage({userID}: Props) {
         setLoading(false);
         setTimeout(() => {
           setSent(false);
+          navigate(`/details/${newId}`);
         }, 2000);
       } catch (error) {
         console.error("Error adding documents: ", error);
@@ -429,16 +348,12 @@ export default function PersonalPage({userID}: Props) {
   const hasErrors = Object.keys(formErrors);
 
   const handleAgreeClick = () => {
-    // const firstEmptyField = hasErrors.find((element) => !eval(element)); // Проверяем, есть ли пустые поля
-    //console.log(hasErrors[0]);
-    const scrollTopOffset = 100; // Задайте желаемый отступ сверху в пикселях
+    const scrollTopOffset = 100;
     setPopUpErrors(false);
     const fieldName = hasErrors[0];
     const fieldRef = refs[fieldName];
-    // console.log(fieldName, fieldRef);
 
     if (fieldRef && fieldRef.current !== null) {
-      // console.log(`${fieldName} ref value:`);
       const topOffset =
         fieldRef.current.getBoundingClientRect().top +
         window.scrollY -
@@ -448,63 +363,13 @@ export default function PersonalPage({userID}: Props) {
         behavior: "smooth",
       });
     } else {
-      // console.log(`${fieldName} ref NOvalue:`);
       setPopUpErrors(true);
-    }
-  };
-  // console.log(popUpErrors);
-
-  const [likedCars, setLikedCars] = useState<LikedCar[]>([]);
-
-  useEffect(() => {
-    fetchSalingCars();
-    // fetchLikedCars();
-  }, []);
-
-  const fetchSalingCars = async () => {
-    try {
-      const carsRef = collection(db, "cars");
-      let first = query(carsRef);
-      first = query(first, where("userId", "==", userID));
-      const querySnapshot = await getDocs(first);
-      const cars = querySnapshot.docs.map(
-        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-      );
-      setCars(cars);
-      setLoaded(true);
-    } catch (error) {
-      console.error("Error fetching first page: ", error);
     }
   };
 
   return (
     <div className={style.login}>
-      <h3>Ваши автомобили</h3>
-
-      <div>
-        {displayName}, Продайте свой автомобиль
-        {loaded &&
-          cars.map((car: any, index: any) => (
-            <BigCard
-              key={index}
-              id={car.id}
-              selectedCurrency={"USD"}
-              usdValue={10}
-              eurValue={20}
-              index={index}
-              brand={car.brand}
-              model={car.model}
-              price={car.price}
-              fuel={car.fuel}
-              owners={car.owners}
-              location={car.location}
-              mileage={car.mileage}
-              description={car.description}
-              previewIMG={car.imageUrls[0]}
-              //onLoad={handleLoad}
-            />
-          ))}
-      </div>
+      <h3>Sell your car</h3>
 
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
       <PopUpSent sent={sent} />

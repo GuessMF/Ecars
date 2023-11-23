@@ -25,6 +25,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "./store";
 import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
+import UserPage from "pages/UserPage/UserPage";
 
 function App() {
   const [currentExchange, setCurrentExchange] = useState<any>(null);
@@ -156,9 +157,15 @@ function App() {
           }
         />
         <Route
-          path="/user-page/:userId"
+          path="/sell/:userId"
           element={<PersonalPage userID={userId} />}
         />
+
+        <Route
+          path="/user-page/:userId"
+          element={<UserPage userID={userId} />}
+        />
+
         <Route path="/liked/:userId" element={<Liked userID={userId} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
