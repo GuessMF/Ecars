@@ -37,6 +37,7 @@ import {
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
 import BigCard from "components/smart/BigCard/BigCard";
+import SpecialOffers from "../../components/simple/SpecialOffers/SpecialOffers";
 
 interface Props {
   userID: string;
@@ -131,6 +132,8 @@ export default function PersonalPage({userID}: Props) {
   const [owners, setOwners] = useState<string>("");
   const [exportStatus, setExportStatus] = useState<string>("");
   const [description, setDescription] = useState("");
+
+  const [specialOffer, setSpecialOffer] = useState<boolean>(false);
 
   const [formErrors, setFormErrors] = useState<Errors>({});
   const [popUpErrors, setPopUpErrors] = useState<boolean>(false);
@@ -301,6 +304,7 @@ export default function PersonalPage({userID}: Props) {
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setPopUpErrors(true);
+      console.log(errors);
     } else {
       setLoading(true);
       console.log("No Errors");
@@ -331,7 +335,7 @@ export default function PersonalPage({userID}: Props) {
       const newIndex = uuidv4();
       // const storageFolder = `cars/${newId}`;
       try {
-        console.log(userID);
+        // console.log(userID);
 
         await setDoc(doc(carsRef, newId), {
           index: newIndex,
@@ -357,6 +361,7 @@ export default function PersonalPage({userID}: Props) {
           description: description,
           dateObj: dateObj,
           imageUrls: imageUrls,
+          special: specialOffer,
         });
 
         console.log("Автомобиль успешно добавлен!");
@@ -368,63 +373,6 @@ export default function PersonalPage({userID}: Props) {
       } catch (error) {
         console.error("Error adding documents: ", error);
       }
-
-      // Используйте сгенерированный ID в названии папки в Firebase Storage
-      // const storageFolder = `cars/${newId}`;
-
-      // const carObject = {
-      //   id: newId,
-      //   dateAdded: currentDate,
-      //   brand,
-      //   model,
-      //   price,
-      //   year,
-      //   mileage,
-      //   transmission,
-      //   fuel,
-      //   wheels,
-      //   vehicleType,
-      //   engineCapacity,
-      //   seats,
-      //   owners,
-      //   color,
-      //   interior,
-      //   location,
-      //   exportStatus,
-      //   description,
-      //   dateObj: dateObj,
-      //   imageUrls, // Массив URL изображений
-      // };
-      // Отправить объект на сервер или выполнить другие действия с ним
-      //  console.log(carObject);
-
-      // const requestOptions = {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(carObject),
-      // };
-      // fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars", requestOptions)
-      //   .then((res) => {
-      //     if (res.ok) {
-      //       return res.json();
-      //     }
-      //     throw new Error("Network response was not ok.");
-      //   })
-      //   .then((json) => {
-      //     console.log("Объект успешно отправлен на сервер:", json);
-      // setSent(true);
-      // setLoading(false);
-      // setTimeout(() => {
-      //   setSent(false);
-      // }, 2000);
-      //   })
-      //   .catch((error) => {
-      //     console.error("Ошибка при отправке объекта на сервер:", error);
-      //   });
-
-      // Сбросить значения формы
 
       setSelectedFiles([]);
       setPreviewImages([]);
@@ -445,6 +393,7 @@ export default function PersonalPage({userID}: Props) {
       setExportStatus("");
       setDescription("");
       setOwners("");
+      setSpecialOffer(false);
     }
   };
 
@@ -470,17 +419,12 @@ export default function PersonalPage({userID}: Props) {
   const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedBrand = e.target.value;
     setBrand(selectedBrand);
-
-    // Найти модели для выбранной марки из carData
     const selectedBrandData = carData.brands.find(
       (item) => item.name === selectedBrand
     );
     setModels(selectedBrandData ? selectedBrandData.models : []);
   };
-  // <PhotoList
-  //           photos={selectedFiles}
-  //           onReorderPhotos={handleReorderPhotos}
-  //         />
+  console.log(specialOffer);
 
   const hasErrors = Object.keys(formErrors);
 
@@ -505,68 +449,16 @@ export default function PersonalPage({userID}: Props) {
       });
     } else {
       // console.log(`${fieldName} ref NOvalue:`);
-      // setPopUpErrors(true);
+      setPopUpErrors(true);
     }
   };
-  //console.log(popUpErrors);
+  // console.log(popUpErrors);
 
-  //Новая отправка формы
-
-  // const addCars = async () => {
-  //   const carsRef = collection(db, "cars");
-  //   const newID = uuidv4();
-  //   const newIndex = uuidv4()
-
-  //   try {
-  //     console.log(userID);
-
-  //     await setDoc(doc(carsRef, newID), {
-  //       index: newIndex,
-  //       id: newID,
-  //       userId: userID,
-  //       dateAdded: cur,
-  //       brand: "Audi",
-  //       model: "A1",
-  //       price: 200000,
-  //       year: 2023,
-  //       mileage: 31,
-  //       transmission: "Automatic",
-  //       fuel: "Gasoline",
-  //       wheels: "23",
-  //       vehicleType: "Sedan",
-  //       engineCapacity: "4.0",
-  //       seats: "5",
-  //       owners: "0",
-  //       color: "Black",
-  //       interior: "Black",
-  //       location: "Minsk",
-  //       exportStatus: "Can be exported",
-  //       description: "Ноa.",
-  //       dateObj: {
-  //         year: 2023,
-  //         month: 11,
-  //         day: 3,
-  //         hours: 18,
-  //         minutes: 12,
-  //       },
-  //       imageUrls: [
-  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTbPKUqSRR7ESjaWRdg1wHm1T8gNuj0JzKMTzJXsnpII7nDdlN7XapD9M-pV0HvMFxdamXCo3u4GRHTh1AuXMfNyinZW1QdwrEV3kQGsdrwr_yycAvttS7nnD4qW_4_MSr0E-biAwRXunk6fBZAf5FdVJ7Fqjvn8LW9z59wmtBzTVKt7FOsUS5UwdLAfq.webp?alt=media&token=714c5c3e-f2e3-40ef-bd0c-d6d8518417a5",
-  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTPLLk2URx_cUm3CEdA3wHjiTs0Otm5SlfEUypa5wsMO7neLkt-AbcbhLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=dcbc6bb2-f250-4cf0-a6bd-6f34d0b6e5a1",
-  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTTHKU6WRRvcUDvCStE_xHiwT5oNuD5QxKBFzMe5zJwK6nLaw96AP53hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=58f053a9-aec8-438e-bc71-836408bd0047",
-  //         "https://firebasestorage.googleapis.com/v0/b/ecars-de7bc.appspot.com/o/cars%2F139544bb-079f-4b3f-8948-22cc660bb440%2FibguyOxE2sbNOTnJ0nxaB4vh_OJdFaCA2SW9r-2jB0ScawOrEMvTXPLEGVRB7cXDnFENlnw3OxT85cuTkGxqZOy8G4w5NZ7yfalN_XbZ3hLelX0DONHhcEqHC23u0bVGn62gWQHudzkTcK0i1w0xxohD6QSZk43BSXH-52fITvB5iG-JPQXZkF8Zid-BT0nFi5F7QbzVxqLLJWkczGMFNv8vcmvT7BUpx1NMEWSaYfSZo7t.webp?alt=media&token=718b5633-4419-446f-8805-a15e67d12293",
-  //       ],
-  //     });
-
-  //     console.log("Автомобиль успешно добавлен!");
-  //   } catch (error) {
-  //     console.error("Error adding documents: ", error);
-  //   }
-  // };
   const [likedCars, setLikedCars] = useState<LikedCar[]>([]);
 
   useEffect(() => {
     fetchSalingCars();
-    fetchLikedCars();
+    // fetchLikedCars();
   }, []);
 
   const fetchSalingCars = async () => {
@@ -579,26 +471,6 @@ export default function PersonalPage({userID}: Props) {
         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
       );
       setCars(cars);
-      setLoaded(true);
-    } catch (error) {
-      console.error("Error fetching first page: ", error);
-    }
-  };
-
-  const fetchLikedCars = async () => {
-    try {
-      const likedRef = collection(db, "likedCars");
-      let first = query(likedRef);
-      first = query(first, where("id", "==", userID));
-      const querySnapshot = await getDocs(first);
-      const cars = querySnapshot.docs.map(
-        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as LikedCar
-      );
-      // setLikedCars(cars);
-      console.log(cars);
-
-      // console.log(likedCars);
-      console.log("загружены лайкнутые авто");
       setLoaded(true);
     } catch (error) {
       console.error("Error fetching first page: ", error);
@@ -928,6 +800,21 @@ export default function PersonalPage({userID}: Props) {
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <div
+          className={formErrors.description ? style.error : ""}
+          // ref={specialRef}
+        >
+          <label>
+            Special:
+            <input
+              type="checkbox"
+              checked={specialOffer}
+              // value={specialOffer}
+              onChange={(e) => setSpecialOffer(e.target.checked)}
             />
           </label>
         </div>

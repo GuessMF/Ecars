@@ -26,24 +26,43 @@ import {getStorage, ref, listAll} from "firebase/storage";
 import {getDownloadURL} from "firebase/storage";
 import {getFirestore} from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
-  authDomain: "ecars-de7bc.firebaseapp.com",
-  projectId: "ecars-de7bc",
-  storageBucket: "ecars-de7bc.appspot.com",
-  messagingSenderId: "110000528537",
-  appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
-  measurementId: "G-XDXHPB18TW",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+import {db} from "../../../firebase";
+import {
+  collection,
+  query,
+  orderBy,
+  startAfter,
+  endBefore,
+  startAt,
+  limit,
+  getDocs,
+  DocumentSnapshot,
+  where,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase/firestore";
 
 interface Props {
   selectedCurrency: string;
   eurValue: number;
   usdValue: number;
+}
+interface Car {
+  id: string;
+  userId: string;
+  index: string;
+  brand: string;
+  model: string;
+  price: string;
+  fuel: string;
+  location: string;
+  vehicleType: string;
+  year: number;
+  owners: string;
+  description: string;
+  mileage: number;
+  imageUrl: string;
+  special: boolean;
 }
 
 export default function SpecialOffers({
@@ -72,6 +91,9 @@ export default function SpecialOffers({
       imageUrl: string;
     }[]
   >([]);
+
+  const [specialCars, setSpecialCars] = useState<Car[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const specialCarsArr: number[] = [];
 
@@ -95,72 +117,119 @@ export default function SpecialOffers({
     };
   }, []);
 
+  const fetchSpecialCars = async () => {
+    try {
+      const carsRef = collection(db, "cars");
+      let first = query(carsRef);
+      first = query(first, where("special", "==", true));
+      const querySnapshot = await getDocs(first);
+      const cars = querySnapshot.docs.map(
+        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+      );
+
+      setSpecialCars(cars);
+    } catch (error) {
+      console.error("Error fetching first page: ", error);
+    }
+  };
   useEffect(() => {
-    const fetchCarImages = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `https://65378b85bb226bb85dd365a6.mockapi.io/cars`
-        );
-        if (response.ok) {
-          const carData = await response.json();
-          for (let i = 0; i < 7; i++) {
-            const num = Math.floor(Math.random() * carData.length);
-            specialCarsArr.push(num);
-          }
-          const extractedCars: any = specialCarsArr.map(
-            (index) => carData[index]
-          );
-
-          const carsArray = [];
-          for (const car of extractedCars) {
-            const folderRef = ref(storage, `cars/${car.id}`);
-
-            try {
-              const carImages = await listAll(folderRef);
-              if (carImages.items.length > 0) {
-                const imageUrl = await getDownloadURL(carImages.items[0]);
-
-                carsArray.push({
-                  id: car.id.toString(),
-                  brand: car.brand,
-                  model: car.model,
-                  price: car.price.toString(),
-                  year: car.year,
-                  fuel: car.fuel,
-                  color: car.color,
-                  seats: car.seats,
-                  transmission: car.transmission,
-                  owners: car.owners,
-                  location: car.location,
-                  vehicleType: car.vehicleType,
-                  description: car.description,
-                  mileage: car.mileage,
-                  imageUrl: imageUrl,
-                });
-              }
-            } catch (error) {
-              console.error(
-                `Error fetching images for car with ID ${car.id}:`,
-                error
-              );
-            }
-          }
-
-          setCarsDownloaded(carsArray);
-          setIsLoading(false);
-        } else {
-          console.error("Failed to fetch car data");
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Error fetching car data: ", error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchCarImages();
+    fetchSpecialCars();
   }, []);
+  useEffect(() => {
+    console.log(specialCars);
+  }, [specialCars]);
+
+  // const fetchSpecialCars = async () => {
+  //   try {
+  //     const carsRef = collection(db, "cars");
+  //     let first = query(carsRef);
+  //     first = query(first, where("special", "==", true));
+  //     const querySnapshot = await getDocs(first);
+  //     const cars = querySnapshot.docs.map(
+  //       (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+  //     );
+  //     return cars;
+  //   } catch (error) {
+  //     console.error("Error fetching first page: ", error);
+  //     return []; // или другая обработка ошибки
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const cars = await fetchSpecialCars();
+  //     if (cars.length > 0) {
+  //       setSpecialCars(cars);
+  //     }
+  //     console.log(specialCars);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // useEffect(() => {
+  //   const fetchCarImages = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       const response = await fetch(
+  //         `https://65378b85bb226bb85dd365a6.mockapi.io/cars`
+  //       );
+  //       if (response.ok) {
+  //         const carData = await response.json();
+
+  //         const extractedCars: any = specialCarsArr.map(
+  //           (index) => carData[index]
+  //         );
+
+  //         const carsArray = [];
+  //         for (const car of extractedCars) {
+  //           const folderRef = ref(storage, `cars/${car.id}`);
+
+  //           try {
+  //             const carImages = await listAll(folderRef);
+  //             if (carImages.items.length > 0) {
+  //               const imageUrl = await getDownloadURL(carImages.items[0]);
+
+  //               carsArray.push({
+  //                 id: car.id.toString(),
+  //                 brand: car.brand,
+  //                 model: car.model,
+  //                 price: car.price.toString(),
+  //                 year: car.year,
+  //                 fuel: car.fuel,
+  //                 color: car.color,
+  //                 seats: car.seats,
+  //                 transmission: car.transmission,
+  //                 owners: car.owners,
+  //                 location: car.location,
+  //                 vehicleType: car.vehicleType,
+  //                 description: car.description,
+  //                 mileage: car.mileage,
+  //                 imageUrl: imageUrl,
+  //               });
+  //             }
+  //           } catch (error) {
+  //             console.error(
+  //               `Error fetching images for car with ID ${car.id}:`,
+  //               error
+  //             );
+  //           }
+  //         }
+
+  //         setCarsDownloaded(carsArray);
+  //         setIsLoading(false);
+  //       } else {
+  //         console.error("Failed to fetch car data");
+  //         setIsLoading(false);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching car data: ", error);
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchCarImages();
+  // }, []);
 
   // {carsDownloaded.map((car, i) => (
   //   <LittleCard
@@ -215,7 +284,7 @@ export default function SpecialOffers({
               swiperRef.current = swiper;
             }}
           >
-            {carsDownloaded.map((car, i) => {
+            {specialCars.map((car: any, i) => {
               return (
                 <SwiperSlide key={car.price} virtualIndex={i}>
                   <NavLink to={`/details/${car.id}`}>
@@ -230,7 +299,7 @@ export default function SpecialOffers({
                       eurValue={eurValue}
                       usdValue={usdValue}
                       //special={car.special}
-                      previewIMG={car.imageUrl}
+                      previewIMG={car.imageUrls[0]}
                     />
                   </NavLink>
                 </SwiperSlide>

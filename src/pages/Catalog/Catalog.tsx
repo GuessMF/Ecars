@@ -1172,53 +1172,53 @@ export default function Catalog({
   //   }
   // };
 
-  const onClickDelete = async (carId: string, carIndex: string) => {
-    setOpenPassword(true);
-    if (password === "060606") {
-      console.log("You can delete");
-      try {
-        setOpenPassword(false);
-        setPassword("");
+  // const onClickDelete = async (carId: string, carIndex: string) => {
+  //   setOpenPassword(true);
+  //   if (password === "060606") {
+  //     console.log("You can delete");
+  //     try {
+  //       setOpenPassword(false);
+  //       setPassword("");
 
-        const storage = getStorage();
-        const storageRef = ref(storage, `cars/${carId}`);
-        const imagesList = await list(storageRef);
-        const deleteImagePromises = imagesList.items.map(async (imageRef) => {
-          try {
-            await deleteObject(imageRef);
-          } catch (error) {
-            console.error(
-              `Ошибка при удалении изображения ${imageRef.name}:`,
-              error
-            );
-          }
-        });
-        await Promise.all(deleteImagePromises);
+  //       const storage = getStorage();
+  //       const storageRef = ref(storage, `cars/${carId}`);
+  //       const imagesList = await list(storageRef);
+  //       const deleteImagePromises = imagesList.items.map(async (imageRef) => {
+  //         try {
+  //           await deleteObject(imageRef);
+  //         } catch (error) {
+  //           console.error(
+  //             `Ошибка при удалении изображения ${imageRef.name}:`,
+  //             error
+  //           );
+  //         }
+  //       });
+  //       await Promise.all(deleteImagePromises);
 
-        fetch(`https://65378b85bb226bb85dd365a6.mockapi.io/cars/${carIndex}`, {
-          method: "DELETE",
-        })
-          .then((res) => {
-            if (res.ok) {
-              return res.json();
-            }
-          })
-          .then((tasks) => {
-            console.log(tasks);
-          })
-          .catch((error) => {});
+  //       fetch(`https://65378b85bb226bb85dd365a6.mockapi.io/cars/${carIndex}`, {
+  //         method: "DELETE",
+  //       })
+  //         .then((res) => {
+  //           if (res.ok) {
+  //             return res.json();
+  //           }
+  //         })
+  //         .then((tasks) => {
+  //           console.log(tasks);
+  //         })
+  //         .catch((error) => {});
 
-        console.log("Автомобиль удален из базы данных");
-      } catch (error) {
-        console.error(
-          "Ошибка удаления изображений из папки и объекта из базы данных:",
-          error
-        );
-      }
-    } else {
-      console.log("Nio");
-    }
-  };
+  //       console.log("Автомобиль удален из базы данных");
+  //     } catch (error) {
+  //       console.error(
+  //         "Ошибка удаления изображений из папки и объекта из базы данных:",
+  //         error
+  //       );
+  //     }
+  //   } else {
+  //     console.log("Nio");
+  //   }
+  // };
 
   return (
     <div className={style.catalog}>

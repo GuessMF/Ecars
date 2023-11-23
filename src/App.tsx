@@ -16,6 +16,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PersonalPage from "./pages/PersonalPage/PersonalPage";
 import TestPage from "./pages/TestPage/TestPage";
+import Liked from "pages/Liked/Liked";
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
@@ -155,6 +156,7 @@ function App() {
           }
         />
         <Route path="/per/:userId" element={<PersonalPage userID={userId} />} />
+        <Route path="/liked/:userId" element={<Liked userID={userId} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />

@@ -312,7 +312,7 @@
   }
 }
 .error {
-  border: 1px solid red;
+  border: 1px solid red !important;
   flex-direction: column;
   height: fit-content;
 }

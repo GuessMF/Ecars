@@ -126,7 +126,11 @@ export default function Header() {
         )}
         <div className={style.formGroup__icons}>
           <Search />
-          <Liked />
+
+          <NavLink to={`/liked/${userId}`}>
+            <Liked />
+          </NavLink>
+
           <NavLink to="/login">
             <Profile />
           </NavLink>

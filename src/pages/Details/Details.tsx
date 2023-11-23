@@ -27,7 +27,7 @@ import {log} from "console";
 import {initializeApp} from "firebase/app";
 import {getFirestore} from "firebase/firestore";
 import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
-
+import {db, storage} from "../../firebase";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
 import {Autoplay, Pagination, Navigation} from "swiper/modules";
@@ -100,18 +100,18 @@ interface Car {
   imageUrl: string;
 }
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
-  authDomain: "ecars-de7bc.firebaseapp.com",
-  projectId: "ecars-de7bc",
-  storageBucket: "ecars-de7bc.appspot.com",
-  messagingSenderId: "110000528537",
-  appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
-  measurementId: "G-XDXHPB18TW",
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
+//   authDomain: "ecars-de7bc.firebaseapp.com",
+//   projectId: "ecars-de7bc",
+//   storageBucket: "ecars-de7bc.appspot.com",
+//   messagingSenderId: "110000528537",
+//   appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
+//   measurementId: "G-XDXHPB18TW",
+// };
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+// const storage = getStorage(app);
 
 interface DetailsProps {
   selectedCurrency: string;
