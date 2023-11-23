@@ -33,10 +33,6 @@ export default function Homepage({
         eurValue={eurValue}
         usdValue={usdValue}
       />
-      <button>
-        <h1>hello</h1>
-      </button>
-
       <BrowseByBrand />
       <MiddleCTA />
       <HowItWorks />

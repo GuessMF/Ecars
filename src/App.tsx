@@ -155,7 +155,10 @@ function App() {
             />
           }
         />
-        <Route path="/per/:userId" element={<PersonalPage userID={userId} />} />
+        <Route
+          path="/user-page/:userId"
+          element={<PersonalPage userID={userId} />}
+        />
         <Route path="/liked/:userId" element={<Liked userID={userId} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signUp" element={<SignUp />} />
@@ -164,8 +167,6 @@ function App() {
         <Route path="/test" element={<TestPage />} />
       </Routes>
       <Footer />
-      <button onClick={redirectToUserPage}>nnn</button>
-      <div></div>
     </div>
   );
 }

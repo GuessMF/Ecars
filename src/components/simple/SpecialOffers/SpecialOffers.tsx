@@ -41,6 +41,8 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
+import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+import {useAuth} from "hooks/use-auth";
 
 interface Props {
   selectedCurrency: string;
@@ -70,32 +72,36 @@ export default function SpecialOffers({
   eurValue,
   usdValue,
 }: Props) {
+  const {isAuth, email, displayName} = useAuth();
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-  const [carsDownloaded, setCarsDownloaded] = useState<
-    {
-      id: string;
-      brand: string;
-      model: string;
-      price: string;
-      year: number;
-      fuel: string;
-      color: string;
-      seats: string;
-      transmission: string;
-      owners: string;
-      vehicleType: string;
-      location: string;
-      description: string;
-      mileage: number;
-      imageUrl: string;
-    }[]
-  >([]);
+  // const [carsDownloaded, setCarsDownloaded] = useState<
+  //   {
+  //     id: string;
+  //     brand: string;
+  //     model: string;
+  //     price: string;
+  //     year: number;
+  //     fuel: string;
+  //     color: string;
+  //     seats: string;
+  //     transmission: string;
+  //     owners: string;
+  //     vehicleType: string;
+  //     location: string;
+  //     description: string;
+  //     mileage: number;
+  //     imageUrl: string;
+  //   }[]
+  // >([]);
 
+  useEffect(() => {
+    console.log(isAuth);
+  }, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const specialCarsArr: number[] = [];
+  // const [isLoading, setIsLoading] = useState(true);
+  // const specialCarsArr: number[] = [];
 
   const screenWidth = windowWidth;
   let numberOfCarts = 4;
@@ -240,7 +246,7 @@ export default function SpecialOffers({
   //     previewIMG={car.imageUrl}
   //   />
   // ))}
-
+  // <NavLink to={`/details/${car.id}`}>
   return (
     <div className={style.specialOffers}>
       <div className={style.specialOffers__content}>
@@ -287,7 +293,7 @@ export default function SpecialOffers({
             {specialCars.map((car: any, i) => {
               return (
                 <SwiperSlide key={car.price} virtualIndex={i}>
-                  <NavLink to={`/details/${car.id}`}>
+                  <NavLink to={`${isAuth ? `/details/${car.id}` : `/login`}`}>
                     <LittleCard
                       brand={car.brand}
                       model={car.model}

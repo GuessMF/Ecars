@@ -21,16 +21,12 @@ export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
-  // console.log(email);
-  // console.log(displayName);
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
   const dispatch = useAppDispatch();
-  // const {isAuth, email, displayName} = useAuth();
-  // console.log(email);
-  // console.log(displayName);
 
   useEffect(() => {
     const auth = getAuth();
@@ -136,7 +132,7 @@ export default function Header() {
           </NavLink>
         </div>
         {userId ? (
-          <NavLink to={`/per/${userId}`}>
+          <NavLink to={`/user-page/${userId}`}>
             <GetAquote version={version} />
           </NavLink>
         ) : (

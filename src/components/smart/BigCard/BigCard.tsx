@@ -5,7 +5,7 @@ import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
 import Skeleton from "components/ui/Skeleton/Skeleton";
-
+import {useAuth} from "hooks/use-auth";
 interface Props {
   id: string;
   index: number;
@@ -48,7 +48,7 @@ Props) {
       ? usdValue / eurValue
       : 1;
   // console.log(multiplier);
-
+  const {isAuth, email, displayName} = useAuth();
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
 
@@ -57,9 +57,11 @@ Props) {
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   const owner = Number(owners);
+  // to={`${isAuth ? `/details/${car.id}` : `/login`}`}
 
+  // to={`/details/${id}`}
   return (
-    <NavLink to={`/details/${id}`}>
+    <NavLink to={`${isAuth ? `/details/${id}` : `/login`}`}>
       <div className={style.bigCard}>
         <div className={style.bigCard__image}>
           <img className={style.bigCard__img} src={previewIMG} loading="lazy" />

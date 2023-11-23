@@ -479,11 +479,8 @@ export default function PersonalPage({userID}: Props) {
 
   return (
     <div className={style.login}>
-      <div>
-        <h3>Liked Cars</h3>
-      </div>
       <h3>Ваши автомобили</h3>
-      <p>{userID}</p>
+
       <div>
         {displayName}, Продайте свой автомобиль
         {loaded &&

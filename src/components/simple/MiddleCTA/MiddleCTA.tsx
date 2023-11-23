@@ -1,11 +1,26 @@
 import React from "react";
+import {useState, useEffect} from "react";
 import style from "./__middleCTA.module.scss";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import {NavLink} from "react-router-dom";
 
+import {useAuth} from "hooks/use-auth";
+import {getAuth} from "firebase/auth";
+import {onAuthStateChanged} from "firebase/auth";
+
 const version: string = "big";
 
 export default function MiddleCTA() {
+  const [userId, setUserId] = useState<string>("");
+  // const {isAuth, email, displayName} = useAuth();
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      user && setUserId(user?.uid);
+    });
+  }, []);
+
   return (
     <div className={style.middleCTA}>
       <div className={style.middleCTA__content}>
@@ -20,9 +35,16 @@ export default function MiddleCTA() {
             veniam consequat sunt nostrud amet.
           </span>
         </div>
-        <NavLink to="/per">
-          <GetAquote version={version} />
-        </NavLink>
+
+        {userId ? (
+          <NavLink to={`/user-page/${userId}`}>
+            <GetAquote version={version} />
+          </NavLink>
+        ) : (
+          <NavLink to={`/login`}>
+            <GetAquote version={version} />
+          </NavLink>
+        )}
       </div>
     </div>
   );

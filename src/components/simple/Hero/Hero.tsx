@@ -1,9 +1,13 @@
 import React from "react";
+import {useState, useEffect} from "react";
 import Email from "../../ui/Email/Email";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import Mobile from "../../ui/Mobile/Mobile";
 import style from "./__hero.module.scss";
 import {NavLink} from "react-router-dom";
+import {useAuth} from "hooks/use-auth";
+import {getAuth} from "firebase/auth";
+import {onAuthStateChanged} from "firebase/auth";
 
 // interface Props {
 //   color: string;
@@ -13,6 +17,16 @@ const black: string = "#1A1A1A";
 const version: string = "little";
 
 export default function Hero() {
+  const [userId, setUserId] = useState<string>("");
+  const {isAuth, email, displayName} = useAuth();
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      user && setUserId(user?.uid);
+    });
+  }, []);
+
   return (
     <div className={style.hero}>
       <div className={style.hero__content}>
@@ -20,9 +34,15 @@ export default function Hero() {
           <h1>Car import services with delivery to your doorstep.</h1>
         </div>
         <div className={style.content__subtitle}>
-          <NavLink to="/per">
-            <GetAquote version={version} />
-          </NavLink>
+          {userId ? (
+            <NavLink to={`/user-page/${userId}`}>
+              <GetAquote version={version} />
+            </NavLink>
+          ) : (
+            <NavLink to={`/login`}>
+              <GetAquote version={version} />
+            </NavLink>
+          )}
 
           <div>
             <a href="https://wa.me/+79214003269">

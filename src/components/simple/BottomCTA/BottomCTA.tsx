@@ -1,13 +1,29 @@
 import React from "react";
 import style from "./__bottomCTA.module.scss";
+
+import {useState, useEffect} from "react";
 import {ReactComponent as Mail} from "../../../assets/icons/bottomCTA/mail.svg";
 import {ReactComponent as Question} from "../../../assets/icons/bottomCTA/question.svg";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import ContactUs from "../../ui/ContactUs/ContactUs";
 import {NavLink} from "react-router-dom";
 
+import {useAuth} from "hooks/use-auth";
+import {getAuth} from "firebase/auth";
+import {onAuthStateChanged} from "firebase/auth";
+
 const version: string = "big";
 export default function BottomCTA() {
+  const [userId, setUserId] = useState<string>("");
+  // const {isAuth, email, displayName} = useAuth();
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      user && setUserId(user?.uid);
+    });
+  }, []);
+
   return (
     <div className={style.bottomCTA}>
       <div className={style.bottomCTA__content}>
@@ -23,12 +39,16 @@ export default function BottomCTA() {
             sint. Velit officia consequat duis enim velit mollit.
           </p>
 
-          <div
-          //    className={style.bottomCTA__footer}
-          >
-            <NavLink to="/per">
-              <GetAquote version={version} />
-            </NavLink>
+          <div>
+            {userId ? (
+              <NavLink to={`/user-page/${userId}`}>
+                <GetAquote version={version} />
+              </NavLink>
+            ) : (
+              <NavLink to={`/login`}>
+                <GetAquote version={version} />
+              </NavLink>
+            )}
           </div>
         </div>
         <div className={style.vl}></div>
@@ -42,9 +62,7 @@ export default function BottomCTA() {
             sint. Velit officia consequat duis enim velit mollit.
           </p>
 
-          <div
-          //    className={style.bottomCTA__footer}
-          >
+          <div>
             <a href="https://t.me/+79214003269">
               <ContactUs />
             </a>
