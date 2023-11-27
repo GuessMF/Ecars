@@ -13,13 +13,19 @@ import {
 } from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "../../hooks/redux-hooks";
+import {error} from "console";
 
 interface Errors {
   name?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
+  mismatch?: string;
   checkBox?: string;
+}
+
+interface Refs {
+  [key: string]: React.RefObject<HTMLDivElement>;
 }
 
 export default function SignUp() {
@@ -32,43 +38,109 @@ export default function SignUp() {
 
   const errors: Errors = {};
 
-  const [userId, setUserId] = useState<string>("");
-  const {isAuth, displayName} = useAuth();
+  const nameRef = useRef<HTMLDivElement>(null);
+  const emailRef = useRef<HTMLDivElement>(null);
+  const passwordRef = useRef<HTMLDivElement>(null);
+  const confirmPasswordRef = useRef<HTMLDivElement>(null);
+  const checkBoxRef = useRef<HTMLDivElement>(null);
+  // const engineCapacityRef = useRef<HTMLDivElement>(null);
+
+  const refs: Refs = {
+    name: nameRef,
+    email: emailRef,
+    password: passwordRef,
+    confirmPassword: confirmPasswordRef,
+    checkBox: checkBoxRef,
+  };
+
+  // const [userId, setUserId] = useState<string>("");
+  // const {isAuth, displayName} = useAuth();
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleRegister = (email: string, password: string, name: string) => {
-    const auth = getAuth();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Submit Clicked");
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({user}) => {
-        updateProfile(user, {
-          displayName: name,
-        })
-          .then(() => {
-            console.log(user.uid);
-
-            console.log("Profile updated successfully");
-          })
-          .catch((error) => {
-            console.error("Error updating profile:", error);
-          });
-
-        dispatch(
-          setUser({
+    if (!name) {
+      errors.name = "Поле имя обязательно для заполнения";
+    }
+    if (!email) {
+      errors.email = " Введите Email";
+    }
+    if (!password) {
+      errors.password = "Введите пароль";
+    }
+    if (password.length < 8) {
+      errors.password = "Пароль должен содержать не менее 8 символов";
+    }
+    if (!confirmPassword) {
+      errors.confirmPassword = "Введите пароль повторно";
+    }
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "Введенные пароли не совпадают";
+    }
+    if (!checkBox) {
+      errors.checkBox = "Необходимо согласиться";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      //  setPopUpErrors(true);
+      console.log(errors);
+      handleAgreeClick();
+    } else {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(({user}) => {
+          updateProfile(user, {
             displayName: name,
-            email: user.email,
-            id: user.uid,
-            token: user.refreshToken,
           })
-        );
-        //navigate(`/user-page${}`);
-        navigate(`/user-page/${user.uid}`);
+            .then(() => {
+              console.log("Profile updated successfully");
+            })
+            .catch((error) => {
+              console.error("Error updating profile:", error);
+            });
+          dispatch(
+            setUser({
+              displayName: name,
+              email: user.email,
+              id: user.uid,
+              token: user.refreshToken,
+            })
+          );
+          navigate(`/user-page/${user.uid}`);
+          console.log("отправилось");
+        })
+        .catch(console.error);
+      console.log(password.length);
 
-        console.log("отправилось");
-      })
-      .catch(console.error);
+      console.log("registration");
+    }
+  };
+
+  const hasErrors = Object.keys(formErrors);
+  const handleAgreeClick = () => {
+    const scrollTopOffset = 100;
+    // setPopUpErrors(false);
+    console.log("popuperrors  false");
+    const fieldName = hasErrors[0];
+    const fieldRef = refs[fieldName];
+
+    if (fieldRef && fieldRef.current !== null) {
+      const topOffset =
+        fieldRef.current.getBoundingClientRect().top +
+        window.scrollY -
+        scrollTopOffset;
+      window.scrollTo({
+        top: topOffset,
+        behavior: "smooth",
+      });
+    } else {
+      //  setPopUpErrors(true);
+      console.log("popuperrors  true");
+    }
   };
 
   //
@@ -81,11 +153,8 @@ export default function SignUp() {
       <div className={style.wrapper}>
         <h1>Sing Up</h1>
 
-        <form
-          className={style.form}
-          onSubmit={() => handleRegister(email, password, name)}
-        >
-          <div className={style.name}>
+        <form className={style.form} onSubmit={handleSubmit}>
+          <div className={style.name} ref={nameRef}>
             <span>Full name</span>
             <input
               type="name"
@@ -96,7 +165,7 @@ export default function SignUp() {
             />
           </div>
 
-          <div className={style.email}>
+          <div className={style.email} ref={emailRef}>
             <span>Email address</span>
             <input
               type="email"
@@ -107,7 +176,7 @@ export default function SignUp() {
             />
           </div>
 
-          <div className={style.password}>
+          <div className={style.password} ref={passwordRef}>
             <div>
               <span>Password</span>
             </div>
@@ -121,7 +190,7 @@ export default function SignUp() {
             <span className={style.limit}>At least 8 characters</span>
           </div>
 
-          <div className={style.password}>
+          <div className={style.password} ref={confirmPasswordRef}>
             <div>
               <span>Confirm password</span>
             </div>
@@ -135,7 +204,10 @@ export default function SignUp() {
           </div>
 
           <div
-            className={formErrors.checkBox ? style.error : style.termsPolicy}
+            className={
+              formErrors.checkBox ? style.errorCheckBox : style.termsPolicy
+            }
+            ref={checkBoxRef}
           >
             <input
               type="checkbox"

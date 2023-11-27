@@ -19,13 +19,13 @@ interface DateObject {
 
 interface Props {
   brand: string | undefined;
-  model: string;
-  price: number;
-  year: number;
-  location: string;
-  exportStatus: string;
-  mileage: number;
-  // dateObj: DateObject;
+  model: string | undefined;
+  price: string | undefined;
+  year: number | undefined;
+  location: string | undefined;
+  exportStatus: string | undefined;
+  mileage: string | undefined;
+  dateObj: DateObject | undefined;
   selectedCurrency: string;
   usdValue: number;
   eurValue: number;
@@ -42,7 +42,7 @@ export default function DetailsCTA({
   location,
   exportStatus,
   mileage,
-  // dateObj,
+  dateObj,
   selectedCurrency,
   usdValue,
   eurValue,
@@ -70,9 +70,9 @@ export default function DetailsCTA({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  const formattedMileage: string = mileage
-    .toLocaleString()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+  // const formattedMileage: string = mileage
+  //   .toLocaleString()
+  //   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   const monthNames: {[key: number]: string} = {
     1: "January",
     2: "February",
@@ -89,16 +89,6 @@ export default function DetailsCTA({
   };
   // console.log(monthNames[dateObj.month]);
   // console.log(dateObj.month);
-  //   <div className={style.CTA__added}>
-  //   <span>Added:</span>
-  //   <b>
-  //     {dateObj.day} {monthNames[dateObj.month]}, {dateObj.year}{" "}
-  //   </b>
-  //   <span>
-  //     {" "}
-  //     {dateObj.hours}:{dateObj.minutes}
-  //   </span>
-  // </div>
 
   // const likeCar = () => {
   //   // setLikeded(!liked);
@@ -149,7 +139,7 @@ export default function DetailsCTA({
             </tr>
             <tr>
               <td>Mileage</td>
-              <td>{formattedMileage + " km"}</td>
+              <td>{mileage + " km"}</td>
             </tr>
             <tr>
               <td>Location</td>
@@ -240,6 +230,17 @@ export default function DetailsCTA({
           </p>
           <button>Book a full inspection</button>
           <a href="">Learn more about the full inspection</a>
+        </div>
+        <div className={style.CTA__added}>
+          <span>Added:</span>
+          <b>
+            {dateObj?.day} {dateObj && monthNames[dateObj?.month]},{" "}
+            {dateObj?.year}{" "}
+          </b>
+          <span>
+            {" "}
+            {dateObj?.hours}:{dateObj?.minutes}
+          </span>
         </div>
       </div>
     </div>

@@ -39,6 +39,16 @@ interface SortObj {
   desc: boolean;
   label: string;
 }
+type CityCheckboxes = {
+  [key: string]: boolean;
+  SaintPetersburg: boolean;
+  Moscow: boolean;
+  Almaty: boolean;
+  Minsk: boolean;
+  Dubai: boolean;
+  AbuDhabi: boolean;
+  Shanghai: boolean;
+};
 
 export default function Catalog({
   selectedCurrency,
@@ -62,13 +72,17 @@ export default function Catalog({
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
+  const yearParam = searchParams.get("year") || "";
+  const modelParam = searchParams.get("model") || "";
+  const locationParam = searchParams.get("location") || "";
+  const mileageParam = searchParams.get("mileage" || "");
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
 
   const ownersParam = searchParams.get("owners") || "";
   const [brandFilter, setBrandFilter] = useState<string>(brandParam);
-  const [modelFilter, setModelFilter] = useState<string>("");
+  const [modelFilter, setModelFilter] = useState<string>(modelParam);
   const [vechicleTypeCheckboxes, setVechicleTypeCheckboxes] = useState({
     SUV: false,
     Sedan: false,
@@ -83,7 +97,7 @@ export default function Catalog({
   const [maxMileageValue, setMaxMileageValue] = useState<number>(999999);
   const [mileageFilter, setMileageFilter] = useState<boolean>(false);
 
-  const [minYearValue, setMinYearValue] = useState<number>(1900);
+  const [minYearValue, setMinYearValue] = useState<number>(Number(yearParam));
   const [maxYearValue, setMaxYearValue] = useState<number>(currentYear);
   const [yearFilter, setYearFilter] = useState<boolean>(false);
 
@@ -91,7 +105,7 @@ export default function Catalog({
   const [maxPriceValue, setMaxPriceValue] = useState<number>(99999999);
   const [priceFilter, setPriceFilter] = useState<boolean>(false);
 
-  const [cityCheckboxes, setCityCheckboxes] = useState({
+  const [cityCheckboxes, setCityCheckboxes] = useState<CityCheckboxes>({
     SaintPetersburg: false,
     Moscow: false,
     Almaty: false,
@@ -100,6 +114,34 @@ export default function Catalog({
     AbuDhabi: false,
     Shanghai: false,
   });
+
+  const newLocationParam = () => {
+    let location = locationParam;
+    console.log(location);
+    if (locationParam == "Saint-Petersburg") {
+      location = "SaintPetersburg";
+    }
+    if (locationParam) {
+      const updatedCityCheckboxes = {...cityCheckboxes};
+      if (locationParam && updatedCityCheckboxes.hasOwnProperty(location)) {
+        updatedCityCheckboxes[location] = true;
+      }
+      setCityCheckboxes(updatedCityCheckboxes);
+    }
+  };
+  const newMileageParam = () => {
+    if (mileageParam == "New") {
+      setMinMileageValue(1);
+      setMaxMileageValue(99);
+      console.log(mileageParam);
+    } else if (mileageParam == "Used") {
+      setMinMileageValue(100);
+    }
+  };
+  useEffect(() => {
+    newLocationParam();
+    newMileageParam();
+  }, []);
 
   const [owners, setOwners] = useState({
     None: false,
@@ -543,8 +585,8 @@ export default function Catalog({
   });
 
   // console.log(sortType.value + " Catalog");
-  const [password, setPassword] = useState<string>("");
-  const [openPassword, setOpenPassword] = useState<boolean>(false);
+  // const [password, setPassword] = useState<string>("");
+  // const [openPassword, setOpenPassword] = useState<boolean>(false);
   // const [carsWithImages, setCarsWithImages] = useState<
   //   {
   //     id: string;
@@ -721,10 +763,10 @@ export default function Catalog({
     Automatic: boolean;
     Manual: boolean;
   }
-  const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
+  // const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
   // console.log(currentItems);
 
-  const [pageCount, setPageCount] = React.useState(0);
+  // const [pageCount, setPageCount] = React.useState(0);
   // const [currentPage, setCurrentPage] = React.useState(0);
   const [itemOffset, setItemOffset] = React.useState(0);
 
@@ -1347,9 +1389,9 @@ export default function Catalog({
                   <BigCard
                     key={index}
                     id={car.id}
-                    selectedCurrency={"USD"}
-                    usdValue={10}
-                    eurValue={20}
+                    selectedCurrency={selectedCurrency}
+                    usdValue={usdValue}
+                    eurValue={eurValue}
                     index={index}
                     brand={car.brand}
                     model={car.model}

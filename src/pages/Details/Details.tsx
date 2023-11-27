@@ -1,7 +1,9 @@
 import React from "react";
 import {useState, useEffect, useRef} from "react";
 import style from "./__details.module.scss";
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {NavLink} from "react-router-dom";
+
 // import {cars} from '../../helpers/cars.json'
 // import {cars} from "../../helpers/carList";
 // import jsonData from "../../helpers/cars.json";
@@ -9,49 +11,34 @@ import {useParams} from "react-router-dom";
 // import {ReactComponent as RightArrow} from "../../../assets/icons/specialOffers/rightArrow.svg";
 import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rightArrow.svg";
 import ContactUsBlock from "../../components/simple/ContactUsBlock/ContactUsBlock";
-import Email from "../../components/ui/Email/Email";
-import Mobile from "../../components/ui/Mobile/Mobile";
-import {ReactComponent as CheckMarkDetails} from "../../assets/icons/checkMarkDetails.svg";
-import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.svg";
-import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
-import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
+// import Email from "../../components/ui/Email/Email";
+// import Mobile from "../../components/ui/Mobile/Mobile";
+// import {ReactComponent as CheckMarkDetails} from "../../assets/icons/checkMarkDetails.svg";
+// import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.svg";
+// import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
+// import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
 import {useSelector} from "react-redux";
 import {RootState} from "store";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
 import {doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
-import {log} from "console";
+// import {log} from "console";
 // import { listAll, getDownloadURL } from 'firebase/storage';
 // import {getDocs} from "firebase/firestore/lite";
-import {initializeApp} from "firebase/app";
-import {getFirestore} from "firebase/firestore";
-import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
+// import {initializeApp} from "firebase/app";
+// import {getFirestore} from "firebase/firestore";
+// import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
 import {db, storage} from "../../firebase";
-import {Swiper, SwiperSlide} from "swiper/react";
+// import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
-import {Autoplay, Pagination, Navigation} from "swiper/modules";
-import {Virtual} from "swiper/modules";
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
-  getDocs,
-  DocumentSnapshot,
-  where,
-  QueryDocumentSnapshot,
-  DocumentData,
-  deleteDoc,
-  addDoc,
-} from "firebase/firestore";
-interface LikedCar {
-  carId: string;
-  carIndex: string;
-}
+// import {Autoplay, Pagination, Navigation} from "swiper/modules";
+// import {Virtual} from "swiper/modules";
+import {collection, query, getDocs} from "firebase/firestore";
+// interface LikedCar {
+//   carId: string;
+//   carIndex: string;
+// }
 // interface RouteParams {
 //   id: string;
 //   [key: string]: string | undefined;
@@ -63,15 +50,22 @@ interface LikedCar {
 //   price?: string;
 //   year?: string;
 // }
-interface DataItem {
-  id: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
+// interface DataItem {
+//   id: string;
+//   brand: string;
+//   model: string;
+//   year: number;
+//   price: number;
 
-  // Добавьте другие свойства объекта данных, если необходимо
-}
+//   // Добавьте другие свойства объекта данных, если необходимо
+// }
+// interface DateObject {
+//   year: number;
+//   month: number;
+//   day: number;
+//   hours: number;
+//   minutes: number;
+// }
 interface DateObject {
   year: number;
   month: number;
@@ -98,20 +92,9 @@ interface Car {
   engineCapacity: string;
   wheels: string;
   imageUrl: string;
+  exportStatus: string;
+  dateObj: DateObject;
 }
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyAPhpxFJD0FYxtAih7jSx8wgqETXHhOBeI",
-//   authDomain: "ecars-de7bc.firebaseapp.com",
-//   projectId: "ecars-de7bc",
-//   storageBucket: "ecars-de7bc.appspot.com",
-//   messagingSenderId: "110000528537",
-//   appId: "1:110000528537:web:321165893ea4a7a8ac6c08",
-//   measurementId: "G-XDXHPB18TW",
-// };
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-// const storage = getStorage(app);
 
 interface DetailsProps {
   selectedCurrency: string;
@@ -124,14 +107,14 @@ export default function Details({
   usdValue,
 }: DetailsProps) {
   const swiperRef = useRef<SwiperCore>();
-
+  const navigate = useNavigate();
   const black: string = "#1A1A1A";
-  const [carData, setCarData] = useState(null);
+  // const [carData, setCarData] = useState(null);
 
-  const [cars, setCars] = useState<Car[]>([]);
+  // const [cars, setCars] = useState<Car[]>([]);
 
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
-  const {id} = useParams<{id?: string}>(); // Тип id может быть строкой или undefined
+  const {id} = useParams<{id?: string}>();
 
   const [selectedPhoto, setSelectedPhoto] = useState(0);
 
@@ -239,41 +222,17 @@ export default function Details({
   let mileage: string | undefined = currentCar?.mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
-  //   <div className={style.swiper}>
-  //   <Swiper
-  //     //spaceBetween={30}
-  //     centeredSlides={true}
-  //     pagination={{clickable: true}}
-  //     navigation={true}
-  //     //  autoplay={{delay: 2500, disableOnInteraction: false}}
-  //     autoplay={false}
-  //     // spaceBetween={20}
-  //     modules={[Autoplay, Pagination, Navigation, Virtual]}
-  //     slidesPerView={5}
-  //     virtual
-  //     className={style.detailsSwiper}
-  //     onBeforeInit={(swiper) => {
-  //       swiperRef.current = swiper;
-  //     }}
-  //   >
-  //     {photoURLs.map((img, index) => (
-  //       <SwiperSlide virtualIndex={2}>
-  //         <img
-  //           className={style.little_preview}
-  //           src={img}
-  //           onClick={() => setSelectedPhoto(index)}
-  //         />
-  //       </SwiperSlide>
-  //     ))}
-  //   </Swiper>
-  // </div>
 
   const userId = useSelector(
     (state: RootState) => (state.user as {id: string})?.id
   );
   const userIdValue = userId; // userId уже содержит id, поэтому дополнительный ? и .id не нужны
 
-  console.log(userIdValue);
+  useEffect(() => {
+    if (!userIdValue) {
+      navigate("/login");
+    }
+  }, [userIdValue]);
 
   const addLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -350,22 +309,122 @@ export default function Details({
     }
   }, [userIdValue]);
 
+  // const brandParam =
+  //   currentCar && currentCar.brand ? encodeURIComponent(currentCar.brand) : ""; // Проверяем существование и определяем значение brandParam
+
+  // const searchQuery1 = `?brand=${brandParam}`;
+
+  // const params: { [key: string]: string | number | boolean } = {};
+
+  // if (currentCar && currentCar.brand) {
+  //   params.brand = encodeURIComponent(currentCar.brand);
+  // }
+
+  // if (currentCar && currentCar.year) {
+  //   params.color = encodeURIComponent(currentCar.year);
+  // }
+
+  // // Создаем новый экземпляр URLSearchParams и добавляем параметры
+  // const searchParams = new URLSearchParams(params);
+
+  // const searchQuery = searchParams.toString(); // Получаем строку запроса
+  const searchParams1 = new URLSearchParams();
+  const searchParams2 = new URLSearchParams();
+  const searchParams3 = new URLSearchParams();
+  const searchParams4 = new URLSearchParams();
+  const searchParams5 = new URLSearchParams();
+  const searchParams6 = new URLSearchParams();
+  const searchParams7 = new URLSearchParams();
+
+  if (currentCar && currentCar.brand) {
+    searchParams1.append("brand", currentCar.brand);
+    searchParams2.append("brand", currentCar.brand);
+    searchParams3.append("brand", currentCar.brand);
+    searchParams6.append("brand", currentCar.brand);
+    searchParams7.append("brand", currentCar.brand);
+  }
+  if (currentCar && currentCar.year) {
+    searchParams1.append("year", currentCar.year.toString());
+  }
+  if (currentCar && currentCar.model) {
+    searchParams1.append("model", currentCar.model);
+    searchParams2.append("model", currentCar.model);
+    searchParams7.append("model", currentCar.model);
+  }
+  if (currentCar && currentCar.location) {
+    const formattedLocation = currentCar.location?.replace(/\s/g, ""); // Заменяем пробелы на символ "_"
+    searchParams2.append("location", formattedLocation);
+    searchParams3.append("location", formattedLocation);
+    searchParams4.append("location", formattedLocation);
+    searchParams5.append("location", formattedLocation);
+  }
+  if (currentCar && currentCar.mileage) {
+    currentCar.mileage < 100
+      ? searchParams5.append("mileage", "New")
+      : searchParams5.append("mileage", "Used");
+  }
+
+  const searchQuery1 = searchParams1.toString();
+  const searchQuery2 = searchParams2.toString();
+  const searchQuery3 = searchParams3.toString();
+  const searchQuery4 = searchParams4.toString();
+  const searchQuery5 = searchParams5.toString();
+  const searchQuery6 = searchParams6.toString();
+  const searchQuery7 = searchParams7.toString();
+
   return (
     <div className={style.details}>
       <div className={style.topNavigation}>
-        <span>Home</span>
+        <Link
+          to={{
+            pathname: "/catalog",
+          }}
+        >
+          <span>Home</span>
+        </Link>
         <i>
           <RightArrow />
         </i>
-        <span>Used cars for slae in Dubai</span>
+
+        <Link
+          to={{
+            pathname: "/catalog",
+            search: searchQuery5,
+          }}
+        >
+          <span>
+            {currentCar?.mileage && currentCar?.mileage < 100 ? "New" : "Used"}{" "}
+            cars for sale in {currentCar?.location}
+          </span>
+        </Link>
+
         <i>
           <RightArrow />
         </i>
-        <span>Toyota</span>
+
+        <Link
+          to={{
+            pathname: "/catalog",
+            search: searchQuery6,
+          }}
+        >
+          <span>{currentCar?.brand}</span>
+        </Link>
+
         <i>
           <RightArrow />
         </i>
-        <span>Toyota Land Cruiser</span>
+
+        <Link
+          to={{
+            pathname: "/catalog",
+            search: searchQuery7,
+          }}
+        >
+          <span>
+            {currentCar?.brand} {currentCar?.model}
+          </span>
+        </Link>
       </div>
       {currentCar !== null ? (
         <div className={style.details__main}>
@@ -388,13 +447,13 @@ export default function Details({
             {window.innerWidth <= 768 && (
               <DetailsCTA
                 brand={currentCar?.brand}
-                model="wwwww"
-                price={33333}
-                location="ceecece"
-                exportStatus="no"
-                year={2000}
-                mileage={3133}
-                // dateObj={}
+                model={currentCar?.model}
+                price={currentCar?.price}
+                location={currentCar?.location}
+                exportStatus={currentCar?.exportStatus}
+                year={currentCar?.year}
+                mileage={mileage}
+                dateObj={currentCar?.dateObj}
                 selectedCurrency={selectedCurrency}
                 usdValue={usdValue}
                 eurValue={eurValue}
@@ -524,10 +583,42 @@ export default function Details({
             <div className={style.content__quick_links}>
               <h5>Quick links</h5>
               <div className={style.links}>
-                <a href="">Toyota Land Cruiser for sale in Dubai</a>
-                <a href="">Toyota Land Cruiser 2017</a>
-                <a href="">Toyota for sale in Dubai</a>
-                <a href="">All cars for sale in Dubai</a>
+                <Link
+                  to={{
+                    pathname: "/catalog",
+                    search: searchQuery1,
+                  }}
+                >
+                  {currentCar?.brand} {currentCar?.model} {currentCar?.year}
+                </Link>
+
+                <Link
+                  to={{
+                    pathname: "/catalog",
+                    search: searchQuery2,
+                  }}
+                >
+                  {currentCar?.brand} {currentCar?.model} for sale in{" "}
+                  {currentCar?.location}
+                </Link>
+
+                <Link
+                  to={{
+                    pathname: "/catalog",
+                    search: searchQuery3,
+                  }}
+                >
+                  {currentCar?.brand} for sale in {currentCar?.location}
+                </Link>
+
+                <Link
+                  to={{
+                    pathname: "/catalog",
+                    search: searchQuery4,
+                  }}
+                >
+                  All cars for sale in {currentCar?.location}
+                </Link>
               </div>
             </div>
             <div className={style.content__similar_cars}>
@@ -538,13 +629,13 @@ export default function Details({
           {window.innerWidth > 768 && (
             <DetailsCTA
               brand={currentCar?.brand}
-              model="wwwww"
-              price={33333}
-              location="ceecece"
-              exportStatus="no"
-              year={2000}
-              mileage={3133}
-              // dateObj={}
+              model={currentCar?.model}
+              price={currentCar?.price}
+              location={currentCar?.location}
+              exportStatus={currentCar?.exportStatus}
+              year={currentCar?.year}
+              mileage={mileage}
+              dateObj={currentCar?.dateObj}
               selectedCurrency={selectedCurrency}
               usdValue={usdValue}
               eurValue={eurValue}

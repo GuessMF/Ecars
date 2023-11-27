@@ -1,32 +1,20 @@
 import React from "react";
 import {useState, useEffect, useRef} from "react";
 import style from "./__liked.module.scss";
-import {
-  collection,
-  query,
-  orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
-  getDocs,
-  DocumentSnapshot,
-  where,
-  QueryDocumentSnapshot,
-  DocumentData,
-} from "firebase/firestore";
+import {collection, getDocs} from "firebase/firestore";
 
 import {db} from "../../firebase";
-import {doc, setDoc, getDoc} from "firebase/firestore";
+import {doc, getDoc} from "firebase/firestore";
 import BigCard from "components/smart/BigCard/BigCard";
+import {useNavigate} from "react-router-dom";
 
 interface Props {
   userID: string;
 }
-interface LikedCar {
-  carId: string;
-  carIndex: string;
-}
+// interface LikedCar {
+//   carId: string;
+//   carIndex: string;
+// }
 interface Car {
   id: string;
   userId: string;
@@ -47,11 +35,9 @@ interface Car {
 export default function Liked({userID}: Props) {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [likedCars, setLikedCars] = useState<string[]>([]);
-  // const [liked, setLiked] = useState<boolean>(false);
   const [cars, setCars] = useState<Car[]>([]);
-  // const prevLikedCars = useRef<string[]>([]);
-
   const [loadingLiked, setLoadingLiked] = useState(true);
+  const navigate = useNavigate();
 
   const fetchLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -128,6 +114,8 @@ export default function Liked({userID}: Props) {
       if (userID) {
         await fetchLiked(); // Подгрузка данных о лайкнутых автомобилях
         setLoadingLiked(false);
+      } else {
+        navigate("/login");
       }
     };
 

@@ -35,7 +35,7 @@ export default function Hero() {
         </div>
         <div className={style.content__subtitle}>
           {userId ? (
-            <NavLink to={`/user-page/${userId}`}>
+            <NavLink to={`/sell/${userId}`}>
               <GetAquote version={version} />
             </NavLink>
           ) : (

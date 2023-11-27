@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import style from "./__footer.module.scss";
 import {ReactComponent as Logo} from "../../../assets/icons/footer/Logo.svg";
-import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
-import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
-import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
-import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
+// import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
+// import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
+// import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
+// import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
+import {useNavigate, useLocation} from "react-router-dom";
 import Mobile from "../../ui/Mobile/Mobile";
 import Email from "../../ui/Email/Email";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
@@ -16,6 +17,28 @@ const color: string = "#767676";
 const opacity: string = "0.7";
 
 export default function Footer() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathName = location.pathname;
+
+  const scrollToAnchor = (anchorID: string) => {
+    if (pathName == "/") {
+      const anchorElement = document.getElementById(anchorID);
+      if (anchorElement) {
+        anchorElement.scrollIntoView({behavior: "smooth", block: "start"});
+      }
+    } else {
+      navigate("/");
+      const scrollAnchor = () => {
+        const anchorElement = document.getElementById(anchorID);
+        if (anchorElement) {
+          anchorElement.scrollIntoView({behavior: "smooth", block: "start"});
+        }
+      };
+      setTimeout(scrollAnchor, 100);
+    }
+  };
+
   return (
     <div className={style.footer}>
       <div className={style.footer__content}>
@@ -38,7 +61,9 @@ export default function Footer() {
           <div className={style.footer__second}>
             <ul>
               <li className={style.footer__title}>Company</li>
-              <li>About us</li>
+              <li>
+                <NavLink to="/aboutUs">About Us</NavLink>
+              </li>
               <li>Blog</li>
               <li>FAQ</li>
             </ul>
@@ -46,15 +71,27 @@ export default function Footer() {
           <div className={style.footer__third}>
             <ul>
               <li className={style.footer__title}>Cars</li>
-              <li>Special offers</li>
-              <NavLink to="/catalog?owners=new">
+              <li
+                onClick={() => {
+                  scrollToAnchor("specialOffers");
+                }}
+              >
+                Special offers
+              </li>
+              <NavLink to="/catalog?mileage=New">
                 <li>New cars</li>
               </NavLink>
-              <NavLink to="/catalog?owners=used">
+              <NavLink to="/catalog?mileage=Used">
                 <li>Used cars</li>
               </NavLink>
 
-              <li>Brands</li>
+              <li
+                onClick={() => {
+                  scrollToAnchor("brands");
+                }}
+              >
+                Brands
+              </li>
             </ul>
           </div>
           <div className={style.footer__fourth}>

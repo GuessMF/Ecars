@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 80px;
 
   @media (max-width: 768px) {
     padding: 32px;
@@ -169,6 +169,8 @@
     .termsPolicy {
       display: flex;
       flex-direction: row;
+      justify-content: start;
+      // align-items: start;
       color: $gray900;
       /* Desktop/Body Small */
       font-family: Inter;
@@ -176,6 +178,7 @@
       font-style: normal;
       font-weight: 400;
       line-height: 20px; /* 142.857% */
+
       input {
         margin-right: 5px;
       }
@@ -263,4 +266,18 @@
 }
 .error {
   border: 1px solid red !important;
+}
+.errorCheckBox {
+  display: flex;
+  flex-direction: row;
+  font-family: Inter;
+  border: red 1px solid;
+  border-radius: 4px;
+  input {
+    margin-right: 5px;
+  }
+  span {
+    color: $primary500;
+    cursor: pointer;
+  }
 }

@@ -7,11 +7,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px $padding108;
+
   border-bottom: 1px solid $outline2;
   // border-left: 1px solid $outline2;
   // border-right: 1px solid $outline2;
   position: fixed;
   top: 30px;
+  top: 40px;
   z-index: 9999;
   max-width: 1440px;
   width: 100%;
@@ -90,6 +92,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      justify-content: center;
       padding: 0px;
       gap: 16px;
       @media (max-width: 450px) {
@@ -107,7 +110,22 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  align-items: center;
+  justify-content: center;
+  p {
+    color: $gray900;
+    font-family: "Inter";
+    font-style: normal;
+    // font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
   button {
     background-color: $primary500;
+    border-radius: 8px;
+    padding: 2px 12px;
+    color: $white;
+    font-family: "Inter";
+    font-style: normal;
   }
 }

@@ -15,6 +15,7 @@ import {
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 import {onAuthStateChanged} from "firebase/auth";
+import {useAuth} from "hooks/use-auth";
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -22,6 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState("");
+  const {isAuth, displayName} = useAuth();
   console.log(email);
 
   // useEffect(() => {
@@ -61,10 +63,10 @@ export default function Login() {
       });
   };
   useEffect(() => {
-    if (userId) {
+    if (userId && isAuth) {
       navigate(`/user-page/${userId}`);
     }
-  }, [userId, navigate]);
+  }, [userId, isAuth, navigate]);
 
   return (
     <div className={style.login}>

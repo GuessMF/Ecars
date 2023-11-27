@@ -15,7 +15,7 @@ export default function BrowseByBrand() {
     setVisible(!visible);
   };
   return (
-    <div className={style.browseByBrand}>
+    <div className={style.browseByBrand} id="brands">
       <div className={style.browseByBrand__content}>
         <h2>Browse by brand</h2>
         <div className={style.browseByBrand__favoritesBrands}>

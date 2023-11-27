@@ -2,6 +2,7 @@ import React from "react";
 import {useState, useEffect} from "react";
 import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
+import {useNavigate} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
 import style from "./__userPage.module.scss";
 import BigCard from "components/smart/BigCard/BigCard";
@@ -44,10 +45,17 @@ export default function UserPage({userID}: Props) {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (userID) {
       fetchSalingCars();
+    } else {
+      // alert("NoUser!");
+      navigate("/login");
     }
+    console.log(userID + " vverh");
   }, [userID]);
 
   useEffect(() => {
@@ -56,8 +64,17 @@ export default function UserPage({userID}: Props) {
         setUserName(displayName);
         setLoading(false);
         console.log("USER NAME" + userName);
+        console.log(isAuth + " is Auth");
+        console.log(userID + " userId");
       }
+      // else {
+      //   navigate("/");
+      // }
+      //  else if (!isAuth) {
+      //   navigate("/");
+      // }
     };
+    console.log(isAuth);
 
     fetchData();
   }, [isAuth, displayName, loading]);

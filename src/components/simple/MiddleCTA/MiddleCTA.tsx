@@ -37,7 +37,7 @@ export default function MiddleCTA() {
         </div>
 
         {userId ? (
-          <NavLink to={`/user-page/${userId}`}>
+          <NavLink to={`/sell/${userId}`}>
             <GetAquote version={version} />
           </NavLink>
         ) : (

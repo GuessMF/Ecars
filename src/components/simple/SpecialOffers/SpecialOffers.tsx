@@ -248,7 +248,7 @@ export default function SpecialOffers({
   // ))}
   // <NavLink to={`/details/${car.id}`}>
   return (
-    <div className={style.specialOffers}>
+    <div className={style.specialOffers} id="specialOffers">
       <div className={style.specialOffers__content}>
         <div className={style.specialOffers__header}>
           <h2>Special offers</h2>

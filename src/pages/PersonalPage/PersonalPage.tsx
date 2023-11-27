@@ -52,6 +52,8 @@ interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
 export default function PersonalPage({userID}: Props) {
+  console.log(userID);
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -123,6 +125,12 @@ export default function PersonalPage({userID}: Props) {
   };
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!userID) {
+      navigate("/login");
+    }
+  }, [userID]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let imageCounter = 1;
@@ -343,7 +351,7 @@ export default function PersonalPage({userID}: Props) {
     );
     setModels(selectedBrandData ? selectedBrandData.models : []);
   };
-  console.log(specialOffer);
+  // console.log(specialOffer);
 
   const hasErrors = Object.keys(formErrors);
 

@@ -7,6 +7,7 @@ import Search from "../../ui/Search/Search";
 import style from "./__header.module.scss";
 import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-line.svg";
 import Sidebar from "../Sidebar/Sidebar";
+import {useNavigate} from "react-router-dom";
 
 import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
@@ -21,7 +22,7 @@ export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
-
+  const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -36,14 +37,16 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    const auth = getAuth(); // Получаем объект аутентификации Firebase
-    signOut(auth) // Выход из учетной записи
+    const auth = getAuth();
+    signOut(auth)
       .then(() => {
-        dispatch(removeUser()); // Удаляем данные пользователя из Redux store
+        dispatch(removeUser());
+
+        console.log(isAuth);
+        console.log(userId);
       })
       .catch((error) => {
         console.error("Sign out error:", error);
-        // Обработка ошибок выхода из учетной записи
       });
   };
 
@@ -107,19 +110,6 @@ export default function Header() {
         </div>
       </nav>
       <div className={style.header__formGroup}>
-        {isAuth ? (
-          <div className={style.user}>
-            <p>{displayName}</p>
-
-            <button onClick={handleLogout}>Выйти</button>
-          </div>
-        ) : (
-          <div className={style.user}>
-            <p>NoUser</p>
-
-            <button onClick={handleLogout}>Выйти</button>
-          </div>
-        )}
         <div className={style.formGroup__icons}>
           <Search />
 
@@ -133,7 +123,7 @@ export default function Header() {
             </NavLink>
           )}
 
-          {userId ? (
+          {isAuth ? (
             <NavLink to={`/user-page/${userId}`}>
               <Profile />
             </NavLink>
@@ -141,6 +131,14 @@ export default function Header() {
             <NavLink to={`/login`}>
               <Profile />
             </NavLink>
+          )}
+
+          {isAuth && (
+            <div className={style.user}>
+              <p>{displayName}</p>
+
+              <button onClick={handleLogout}>Выйти</button>
+            </div>
           )}
         </div>
         {userId ? (
