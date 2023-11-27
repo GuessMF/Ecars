@@ -1,0 +1,11 @@
+.similarCars {
+  // background-color: aqua;
+  height: fit-content;
+  height: fit-content;
+  border: black 1px solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}

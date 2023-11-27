@@ -1,6 +1,6 @@
 @import "./../../../styles/__var.scss";
 
-.contactUs {
+.contactUsLight {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -17,6 +17,26 @@
   font-size: 16px;
   line-height: 24px;
   color: $primary500;
+  border-radius: 8px;
+  border: none;
+}
+.contactUsDark {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  // padding: 12px 24px;
+  gap: 8px;
+  // background-color: $white;
+  background-color: $primary500;
+  width: 135px;
+  height: 48px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: $white;
   border-radius: 8px;
   border: none;
 }

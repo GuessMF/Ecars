@@ -1,6 +1,17 @@
 import React from "react";
 import style from "./__contactUs.module.scss";
 
-export default function ContactUs() {
-  return <button className={style.contactUs}>Contact Us</button>;
+type Props = {
+  version: string;
+};
+export default function ContactUs({version}: Props) {
+  return (
+    <button
+      className={
+        version == "light" ? style.contactUsLight : style.contactUsDark
+      }
+    >
+      Contact Us
+    </button>
+  );
 }

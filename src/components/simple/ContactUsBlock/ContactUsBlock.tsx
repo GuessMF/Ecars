@@ -15,7 +15,7 @@ export default function ContactUsBlock() {
       </div>
       <div className={style.button}>
         {" "}
-        <ContactUs />
+        <ContactUs version={"dark"} />
       </div>
     </div>
   );

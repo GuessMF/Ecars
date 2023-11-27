@@ -64,7 +64,7 @@ export default function BottomCTA() {
 
           <div>
             <a href="https://t.me/+79214003269">
-              <ContactUs />
+              <ContactUs version="light" />
             </a>
           </div>
         </div>

@@ -2,70 +2,21 @@ import React from "react";
 import {useState, useEffect, useRef} from "react";
 import style from "./__details.module.scss";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {NavLink} from "react-router-dom";
-
-// import {cars} from '../../helpers/cars.json'
-// import {cars} from "../../helpers/carList";
-// import jsonData from "../../helpers/cars.json";
-
-// import {ReactComponent as RightArrow} from "../../../assets/icons/specialOffers/rightArrow.svg";
 import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rightArrow.svg";
 import ContactUsBlock from "../../components/simple/ContactUsBlock/ContactUsBlock";
-// import Email from "../../components/ui/Email/Email";
-// import Mobile from "../../components/ui/Mobile/Mobile";
-// import {ReactComponent as CheckMarkDetails} from "../../assets/icons/checkMarkDetails.svg";
-// import {ReactComponent as DownloadIcon} from "../../assets/icons/downloadIcon.svg";
-// import {ReactComponent as LikeIcon} from "../../assets/icons/likeIcon.svg";
-// import {ReactComponent as ShareIcon} from "../../assets/icons/shareIcon.svg";
+
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
 import {useSelector} from "react-redux";
 import {RootState} from "store";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
 import {doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
-// import {log} from "console";
-// import { listAll, getDownloadURL } from 'firebase/storage';
-// import {getDocs} from "firebase/firestore/lite";
-// import {initializeApp} from "firebase/app";
-// import {getFirestore} from "firebase/firestore";
-// import SelectedFilter from "../../components/ui/SelectedFilter/SelectedFilter";
 import {db, storage} from "../../firebase";
-// import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
-// import {Autoplay, Pagination, Navigation} from "swiper/modules";
-// import {Virtual} from "swiper/modules";
 import {collection, query, getDocs} from "firebase/firestore";
-// interface LikedCar {
-//   carId: string;
-//   carIndex: string;
-// }
-// interface RouteParams {
-//   id: string;
-//   [key: string]: string | undefined;
-// }
-// interface Car {
-//   id: string;
-//   brand: string;
-//   model: string;
-//   price?: string;
-//   year?: string;
-// }
-// interface DataItem {
-//   id: string;
-//   brand: string;
-//   model: string;
-//   year: number;
-//   price: number;
+import FullWidthImg from "./FullWidthImg";
+import SimilarCars from "components/simple/SimilarCars/SimilarCars";
 
-//   // Добавьте другие свойства объекта данных, если необходимо
-// }
-// interface DateObject {
-//   year: number;
-//   month: number;
-//   day: number;
-//   hours: number;
-//   minutes: number;
-// }
 interface DateObject {
   year: number;
   month: number;
@@ -372,8 +323,26 @@ export default function Details({
   const searchQuery6 = searchParams6.toString();
   const searchQuery7 = searchParams7.toString();
 
+  const [fullWidth, setFullWidth] = useState<boolean>(false);
+  const openFullWidthImg = () => {
+    setFullWidth(true);
+  };
+  console.log(fullWidth);
+  const closeFullWidthImg = () => {
+    setFullWidth(false);
+  };
+
+  console.log(currentCar?.description.length);
+
   return (
     <div className={style.details}>
+      {fullWidth && (
+        <FullWidthImg
+          imgSrc={photoURLs?.[selectedPhoto]}
+          handleClose={closeFullWidthImg}
+        />
+      )}
+
       <div className={style.topNavigation}>
         <Link
           to={{
@@ -432,6 +401,9 @@ export default function Details({
             <div className={style.content__pictures}>
               <div className={style.bigPicture}>
                 <img src={photoURLs?.[selectedPhoto]} alt="pic" />
+                <button className={style.fullWidth} onClick={openFullWidthImg}>
+                  Full width
+                </button>
               </div>
               <div className={style.littlePictures}>
                 {photoURLs.map((img, index) => (
@@ -529,7 +501,9 @@ export default function Details({
             <div className={style.content__description}>
               <h5>Description</h5>
               <div className={style.description}>{currentCar?.description}</div>
-              <div>MORE</div>
+              {currentCar && currentCar.description.length > 500 ? (
+                <div>MORE</div>
+              ) : null}
             </div>
             <div className={style.content__features}>
               <h5>Features</h5>
@@ -621,9 +595,8 @@ export default function Details({
                 </Link>
               </div>
             </div>
-            <div className={style.content__similar_cars}>
-              <h5>Similar Cars</h5>
-            </div>
+
+            <SimilarCars similarBrand={currentCar?.brand} />
           </div>
 
           {window.innerWidth > 768 && (

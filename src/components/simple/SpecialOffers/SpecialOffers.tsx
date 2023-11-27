@@ -100,9 +100,6 @@ export default function SpecialOffers({
   }, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 
-  // const [isLoading, setIsLoading] = useState(true);
-  // const specialCarsArr: number[] = [];
-
   const screenWidth = windowWidth;
   let numberOfCarts = 4;
   if (windowWidth <= 768) {
@@ -141,112 +138,10 @@ export default function SpecialOffers({
   useEffect(() => {
     fetchSpecialCars();
   }, []);
-  useEffect(() => {
-    console.log(specialCars);
-  }, [specialCars]);
-
-  // const fetchSpecialCars = async () => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-  //     let first = query(carsRef);
-  //     first = query(first, where("special", "==", true));
-  //     const querySnapshot = await getDocs(first);
-  //     const cars = querySnapshot.docs.map(
-  //       (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-  //     );
-  //     return cars;
-  //   } catch (error) {
-  //     console.error("Error fetching first page: ", error);
-  //     return []; // или другая обработка ошибки
-  //   }
-  // };
-
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const cars = await fetchSpecialCars();
-  //     if (cars.length > 0) {
-  //       setSpecialCars(cars);
-  //     }
-  //     console.log(specialCars);
-  //   };
+  //   console.log(specialCars);
+  // }, [specialCars]);
 
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchCarImages = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const response = await fetch(
-  //         `https://65378b85bb226bb85dd365a6.mockapi.io/cars`
-  //       );
-  //       if (response.ok) {
-  //         const carData = await response.json();
-
-  //         const extractedCars: any = specialCarsArr.map(
-  //           (index) => carData[index]
-  //         );
-
-  //         const carsArray = [];
-  //         for (const car of extractedCars) {
-  //           const folderRef = ref(storage, `cars/${car.id}`);
-
-  //           try {
-  //             const carImages = await listAll(folderRef);
-  //             if (carImages.items.length > 0) {
-  //               const imageUrl = await getDownloadURL(carImages.items[0]);
-
-  //               carsArray.push({
-  //                 id: car.id.toString(),
-  //                 brand: car.brand,
-  //                 model: car.model,
-  //                 price: car.price.toString(),
-  //                 year: car.year,
-  //                 fuel: car.fuel,
-  //                 color: car.color,
-  //                 seats: car.seats,
-  //                 transmission: car.transmission,
-  //                 owners: car.owners,
-  //                 location: car.location,
-  //                 vehicleType: car.vehicleType,
-  //                 description: car.description,
-  //                 mileage: car.mileage,
-  //                 imageUrl: imageUrl,
-  //               });
-  //             }
-  //           } catch (error) {
-  //             console.error(
-  //               `Error fetching images for car with ID ${car.id}:`,
-  //               error
-  //             );
-  //           }
-  //         }
-
-  //         setCarsDownloaded(carsArray);
-  //         setIsLoading(false);
-  //       } else {
-  //         console.error("Failed to fetch car data");
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching car data: ", error);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchCarImages();
-  // }, []);
-
-  // {carsDownloaded.map((car, i) => (
-  //   <LittleCard
-  //     brand={car.brand}
-  //     model={car.model}
-  //     price={car.price}
-  //     //special={car.special}
-  //     previewIMG={car.imageUrl}
-  //   />
-  // ))}
-  // <NavLink to={`/details/${car.id}`}>
   return (
     <div className={style.specialOffers} id="specialOffers">
       <div className={style.specialOffers__content}>
