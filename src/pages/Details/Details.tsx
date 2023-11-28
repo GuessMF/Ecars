@@ -207,16 +207,16 @@ export default function Details({
             likedCars: currentLikedCars,
           });
 
-          console.log("Автомобиль удален из массива likedCars!");
+          //  console.log("Автомобиль удален из массива likedCars!");
         } else {
           const updatedLikedCars = [...currentLikedCars, id].filter(Boolean);
           await setDoc(likedDocRef, {
             likedCars: updatedLikedCars,
           });
 
-          console.log(
-            "Новый лайкнутый автомобиль добавлен в массив likedCars!"
-          );
+          // console.log(
+          //   "Новый лайкнутый автомобиль добавлен в массив likedCars!"
+          //  );
         }
       } else {
         // Если документ не существует, создаем новый с массивом likedCars
@@ -224,7 +224,7 @@ export default function Details({
           likedCars: [id],
         });
 
-        console.log("Документ с лайкнутыми автомобилями создан!");
+        //  console.log("Документ с лайкнутыми автомобилями создан!");
       }
     } catch (error) {
       console.error("Ошибка при обновлении документа: ", error);
@@ -239,10 +239,9 @@ export default function Details({
       if (likedDocSnap.exists()) {
         const likedData = likedDocSnap.data();
         const currentLikedCars = likedData?.likedCars || [];
-        console.log(currentLikedCars);
+
         const hasMatch = currentLikedCars.some((el: string) => el === id);
         setLiked(hasMatch);
-        console.log(hasMatch + " hasMatch");
       }
     } catch (error) {
       console.error("Ошибка при скачивании документа: ", error);
@@ -327,12 +326,10 @@ export default function Details({
   const openFullWidthImg = () => {
     setFullWidth(true);
   };
-  console.log(fullWidth);
+
   const closeFullWidthImg = () => {
     setFullWidth(false);
   };
-
-  console.log(currentCar?.description.length);
 
   return (
     <div className={style.details}>
@@ -415,7 +412,6 @@ export default function Details({
                 ))}
               </div>
             </div>
-
             {window.innerWidth <= 768 && (
               <DetailsCTA
                 brand={currentCar?.brand}
@@ -434,7 +430,6 @@ export default function Details({
                 handleLike={handleLike}
               />
             )}
-
             <div className={style.content__mainInformation}>
               <div className={style.left__information}>
                 <div>
@@ -595,8 +590,17 @@ export default function Details({
                 </Link>
               </div>
             </div>
-
-            <SimilarCars similarBrand={currentCar?.brand} />
+            <div className={style.content__similar_cars}>
+              <h5>Similar cars</h5>
+              <SimilarCars
+                similarBrand={currentCar?.brand}
+                similarModel={currentCar?.model}
+                currentId={id}
+                selectedCurrency={selectedCurrency}
+                eurValue={eurValue}
+                usdValue={usdValue}
+              />
+            </div>
           </div>
 
           {window.innerWidth > 768 && (

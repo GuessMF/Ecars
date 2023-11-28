@@ -414,13 +414,24 @@
       }
     }
     .content__similar_cars {
-      background-color: aliceblue;
+      // background-color: aliceblue;
+      // border: black 1px solid;
       display: flex;
       width: 100%;
-      padding: 96px 108px;
+      // padding: 96px 108px;
       flex-direction: column;
-      align-items: center;
+      // align-items: center;
       gap: 24px;
+      padding-bottom: 20px;
+      h5 {
+        color: $gray900;
+
+        font-size: 22px;
+        font-family: Inter Tight;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 120%;
+      }
     }
   }
   .CTA {

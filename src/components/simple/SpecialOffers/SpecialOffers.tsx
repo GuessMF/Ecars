@@ -96,7 +96,7 @@ export default function SpecialOffers({
   // >([]);
 
   useEffect(() => {
-    console.log(isAuth);
+    //  console.log(isAuth);
   }, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 

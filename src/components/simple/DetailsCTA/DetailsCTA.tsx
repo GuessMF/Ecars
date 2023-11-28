@@ -61,7 +61,7 @@ export default function DetailsCTA({
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  console.log(multiplier);
+  // console.log(multiplier);
 
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
