@@ -20,7 +20,8 @@ interface FiltersProps {
   sortOption: string;
   isFiltersOpen: boolean;
   setIsFiltersOpen: (isFiltersOpen: boolean) => void;
-  founted: number;
+  totalCars: number;
+  filtredCars: number;
   brand: string;
   model: string;
   mileage: boolean;
@@ -41,7 +42,8 @@ export default function Sorted({
   onChangeSortBy,
   sortOption,
   setIsFiltersOpen,
-  founted,
+  totalCars,
+  filtredCars,
   brand,
   model,
   mileage,
@@ -169,7 +171,7 @@ export default function Sorted({
     <div className={style.sorted}>
       <div className={style.sorted__top}>
         <div className={style.total__found}>
-          <span>{founted}</span>
+          <span>{totalCars}</span>
           <p>found</p>
         </div>
         <div className={style.sortBy}>

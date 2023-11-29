@@ -134,3 +134,18 @@
     color: $white;
   }
 }
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  span {
+    border: black 1px solid;
+    border-radius: 8px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  button {
+    border: black 1px solid;
+    border-radius: 8px;
+  }
+}

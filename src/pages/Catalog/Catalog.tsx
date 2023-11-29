@@ -7,7 +7,7 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
-
+import {Query} from "firebase/firestore";
 import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
 import "../../firebase";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
@@ -66,7 +66,12 @@ export default function Catalog({
 
   // console.log(newCarData);
   // console.log(yearMileagePrice);
-
+  let multiplier: number =
+    selectedCurrency === "RUB"
+      ? usdValue
+      : selectedCurrency === "EUR"
+      ? usdValue / eurValue
+      : 1;
   //
   //
   const location = useLocation();
@@ -186,9 +191,25 @@ export default function Catalog({
 
   //
   const [totalCars, setTotalCars] = useState<number>(0);
+  const [filtredCars, setFiltredCars] = useState<number>(0);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const itemsPerPage: number = 30;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage: number = 5;
+  const pages = Math.ceil(totalCars / itemsPerPage);
+
+  const buttons = [];
+  for (let i = 0; i < pages; i++) {
+    buttons.push(i);
+  }
+
+  console.log(buttons);
+
+  buttons.forEach((i) => {
+    console.log(i);
+  });
+
+  console.log(pages);
+
   const [cars, setCars] = useState<Car[]>([]);
   const [lastVisibleRefs, setLastVisibleRefs] = useState<
     DocumentSnapshot<Car>[]
@@ -213,7 +234,6 @@ export default function Catalog({
       seats,
       fuel,
       transmission,
-
       minMileageValue,
       maxMileageValue,
       minYearValue,
@@ -221,18 +241,6 @@ export default function Catalog({
       minPriceValue,
       maxPriceValue
     );
-    const getNumberOfCars = async () => {
-      try {
-        const carsRef = collection(db, "cars");
-        const snapshot = await getDocs(carsRef);
-        const numberOfCars = snapshot.size;
-        // setTotalCars(numberOfCars);
-        return numberOfCars;
-      } catch (error) {
-        console.error("Error getting number of cars: ", error);
-      }
-    };
-    getNumberOfCars();
 
     if (minMileageValue > 0 || maxMileageValue < 999999) {
       setMileageFilter(true);
@@ -246,6 +254,7 @@ export default function Catalog({
       setYearFilter(false);
     }
   }, [
+    currentPage,
     sortType,
     brandFilter,
     modelFilter,
@@ -285,14 +294,11 @@ export default function Catalog({
     try {
       const carsRef = collection(db, "cars");
       const firstPrompt = sortType.sort;
+      let first = query(carsRef);
 
-      // let firstPrompt = sortType.sort;
-      let first = query(carsRef); // Начинаем с базового запроса к коллекции без фильтров
-
-      // Применяем фильтр по типу автомобиля
       Object.entries(vehicleType).forEach(([carType, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("vehicleType", "==", carType)); // Применяем условие фильтрации по типу автомобиля
+          first = query(first, where("vehicleType", "==", carType));
         }
       });
       Object.entries(city).forEach(([city, isSelected]) => {
@@ -301,136 +307,36 @@ export default function Catalog({
         }
       });
 
-      // owners
       Object.entries(owners).forEach(([owners, isSelected]) => {
         if (isSelected) {
           first = query(first, where("owners", "==", owners));
         }
       });
 
-      // color
-
       Object.entries(color).forEach(([color, isSelected]) => {
         if (isSelected) {
           first = query(first, where("color", "==", color));
         }
       });
-      // seats
+
       Object.entries(seats).forEach(([seats, isSelected]) => {
         if (isSelected) {
           first = query(first, where("seats", "==", seats));
         }
       });
-      // fuel
+
       Object.entries(fuel).forEach(([fuel, isSelected]) => {
         if (isSelected) {
           first = query(first, where("fuel ", "==", fuel));
         }
       });
-      // transmission
+
       Object.entries(transmission).forEach(([transmission, isSelected]) => {
         if (isSelected) {
           first = query(first, where("transmission ", "==", transmission));
         }
       });
 
-      // if (minMileage > 0 || maxMileage < 999999) {
-      //   if (minMileage > 0 && maxMileage < 999999) {
-      //     first = query(
-      //       first,
-      //       where("mileage", ">", minMileage),
-      //       where("mileage", "<", maxMileage),
-      //       orderBy("mileage")
-      //     );
-      //   } else if (minMileage > 0) {
-      //     first = query(
-      //       first,
-      //       where("mileage", ">", minMileage),
-      //       orderBy("mileage")
-      //     );
-      //   } else {
-      //     first = query(
-      //       first,
-      //       where("mileage", "<", maxMileage),
-      //       orderBy("mileage")
-      //     );
-      //   }
-      // }
-
-      // if (minYear > 1900 || maxYear < currentYear) {
-      //   if (minYear > 1900 && maxYear < currentYear) {
-      //     first = query(
-      //       first,
-      //       where("year", ">", minYear),
-      //       where("year", "<", maxYear),
-      //       orderBy("year")
-      //     );
-      //   } else if (minYear > 1900) {
-      //     first = query(first, where("year", ">", minYear), orderBy("year"));
-      //   } else {
-      //     first = query(first, where("year", "<", maxYear), orderBy("year"));
-      //   }
-      // }
-
-      // if (minMileage > 0 || maxMileage < 999999) {
-      //   // firstPrompt = "mileage";
-      //   console.log(firstPrompt);
-      //   // setSortType({
-      //   //   value: "Mileage few",
-      //   //   sort: "mileage",
-      //   //   desc: false,
-      //   //   label: "Mileage few",
-      //   // });
-
-      //   // console.log(firstPrompt);
-
-      //   first = query(
-      //     first,
-      //     where("mileage", ">", minMileage),
-      //     where("mileage", "<", maxMileage)
-      //   );
-      //   // Применяем orderBy только один раз за пределами условия
-      //   first = query(first, orderBy(firstPrompt));
-      //   // first = query(first);
-      // }
-
-      // if (minYear > 1900 || maxYear < currentYear) {
-      //   // firstPrompt = "year";
-      //   first = query(
-      //     first,
-      //     where("year", ">", minYear),
-      //     where("year", "<", maxYear)
-      //   );
-      //   // Применяем orderBy только один раз за пределами условия
-      //   first = query(first, orderBy(firstPrompt));
-      // }
-
-      // if (minPrice > 0 || maxPrice < 9999999) {
-      //   first = query(
-      //     first,
-      //     where("price", ">", minPrice),
-      //     where("price", "<", maxPrice)
-      //   );
-      //   // Применяем orderBy только один раз за пределами условия
-      //   first = query(first, orderBy(firstPrompt));
-      // }
-
-      // if (minPrice > 0 || maxPrice < 999999) {
-      //   if (minPrice > 0 && maxPrice < 999999) {
-      //     first = query(
-      //       first,
-      //       where("price", ">", minPrice),
-      //       where("price", "<", maxPrice),
-      //       orderBy("price")
-      //     );
-      //   } else if (minPrice > 0) {
-      //     first = query(first, where("price", ">", minPrice), orderBy("price"));
-      //   } else {
-      //     first = query(first, where("price", "<", maxPrice), orderBy("price"));
-      //   }
-      // }
-
-      // Добавляем фильтры по бренду и модели
       if (brandFilter) {
         first = query(first, where("brand", "==", brandFilter));
       }
@@ -439,17 +345,28 @@ export default function Catalog({
         first = query(first, where("model", "==", modelFilter));
       }
 
-      // Применяем сортировку и лимит
       first = query(
         first,
-        orderBy(firstPrompt, `${sortType.desc ? "desc" : "asc"}`),
-        limit(itemsPerPage)
+        orderBy(firstPrompt, `${sortType.desc ? "desc" : "asc"}`)
       );
 
-      // Выполняем запрос и обрабатываем результаты
       const querySnapshot = await getDocs(first);
+
       const cars = querySnapshot.docs.map(
         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+      );
+
+      const filtredMileageCars = cars.filter(
+        (car) =>
+          car.mileage <= maxMileageValue && car.mileage >= minMileageValue
+      );
+      const filtredYearCars = filtredMileageCars.filter(
+        (car) => car.year <= maxYearValue && car.year >= minYearValue
+      );
+      const filtredPriceCars = filtredYearCars.filter(
+        (car) =>
+          Number(car.price) * multiplier <= maxPriceValue &&
+          Number(car.price) * multiplier >= minPriceValue
       );
 
       if (querySnapshot.docs.length > 0) {
@@ -460,29 +377,92 @@ export default function Catalog({
         ]);
       }
 
-      setCars(cars);
-      setTotalCars(cars.length);
-      // console.log(cars.length);
-      // console.log(totalCars);
+      const paginatedCars = filtredPriceCars.slice(
+        currentPage * itemsPerPage - itemsPerPage,
+        currentPage * itemsPerPage
+      );
+      // console.log(currentPage * 0);
 
+      // console.log(filtredPriceCars.length);
+      setTotalCars(filtredPriceCars.length);
+      //  setCars(filtredPriceCars);
+      setCars(paginatedCars);
+      // console.log(cars);
+
+      setFiltredCars(filtredPriceCars.length);
       setLoaded(true);
     } catch (error) {
       console.error("Error fetching first page: ", error);
     }
   };
+  const nextPage = () => {
+    fetchNextPage(vechicleTypeCheckboxes, cityCheckboxes);
+  };
 
-  const fetchNextPage = async () => {
+  const fetchNextPage = async (
+    vehicleType: Record<string, boolean>,
+    city: Record<string, boolean>
+  ) => {
     try {
       const carsRef = collection(db, "cars");
       const lastVisible = lastVisibleRefs[currentPage - 1];
       if (lastVisible) {
-        const next = query(
+        let next = query(
           carsRef,
           orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
           startAfter(lastVisible),
           limit(itemsPerPage)
         );
-        // console.log(lastVisible);
+
+        Object.entries(vehicleType).forEach(([carType, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("vehicleType", "==", carType));
+          }
+        });
+
+        Object.entries(city).forEach(([city, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("location", "==", city));
+          }
+        });
+
+        Object.entries(owners).forEach(([owners, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("owners", "==", owners));
+          }
+        });
+
+        Object.entries(color).forEach(([color, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("color", "==", color));
+          }
+        });
+
+        Object.entries(seats).forEach(([seats, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("seats", "==", seats));
+          }
+        });
+
+        Object.entries(fuel).forEach(([fuel, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("fuel ", "==", fuel));
+          }
+        });
+
+        Object.entries(transmission).forEach(([transmission, isSelected]) => {
+          if (isSelected) {
+            next = query(next, where("transmission ", "==", transmission));
+          }
+        });
+
+        if (brandFilter) {
+          next = query(next, where("brand", "==", brandFilter));
+        }
+
+        if (modelFilter) {
+          next = query(next, where("model", "==", modelFilter));
+        }
 
         const documentSnapshots = await getDocs(next);
         const arr: Car[] = [];
@@ -584,114 +564,6 @@ export default function Catalog({
     });
   });
 
-  // console.log(sortType.value + " Catalog");
-  // const [password, setPassword] = useState<string>("");
-  // const [openPassword, setOpenPassword] = useState<boolean>(false);
-  // const [carsWithImages, setCarsWithImages] = useState<
-  //   {
-  //     id: string;
-  //     index: string;
-  //     brand: string;
-  //     model: string;
-  //     price: string;
-  //     year: number;
-  //     fuel: string;
-  //     color: string;
-  //     seats: string;
-  //     transmission: string;
-  //     owners: string;
-  //     vehicleType: string;
-  //     location: string;
-  //     description: string;
-  //     mileage: number;
-  //     imageUrl: string;
-  //   }[]
-  // >([]);
-
-  // const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const fetchCarImages = async () => {
-  //     try {
-  //       // setIsLoading(true);
-
-  //       // const url = new URL(
-  //       //   `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType}?limit=10`
-  //       // );
-  //       // url.searchParams.append("completed", "false");
-  //       // url.searchParams.append("page", "1");
-  //       // url.searchParams.append("limit", "10");
-  //       const response = await fetch(
-  //         `https://65378b85bb226bb85dd365a6.mockapi.io/cars?sortBy=${sortType}`
-  //         // url
-  //       );
-  //       if (response.ok) {
-  //         const carData = await response.json();
-  //         console.log(carData);
-
-  //         const carsWithImagesArray = [];
-  //         // carData.forEach((el: any) => {
-  //         //   const folderRef = ref(storage, `cars/${el.id}`);
-  //         //   // console.log(folderRef);
-  //         //   const carImages = listAll(folderRef);
-  //         //   console.log(carImages);
-  //         // });
-
-  //         for (const car of carData) {
-  //           const folderRef = ref(storage, `cars/${car.id}`);
-  //           console.log(folderRef);
-
-  //           try {
-  //             const carImages = await listAll(folderRef);
-  //             if (carImages.items.length > 0) {
-  //               const imageUrl = await getDownloadURL(carImages.items[0]);
-
-  //               carsWithImagesArray.push({
-  //                 id: car.id.toString(),
-  //                 index: car.index,
-  //                 brand: car.brand,
-  //                 model: car.model,
-  //                 price: car.price.toString(),
-  //                 year: car.year,
-  //                 fuel: car.fuel,
-  //                 color: car.color,
-  //                 seats: car.seats,
-  //                 transmission: car.transmission,
-  //                 owners: car.owners,
-  //                 location: car.location,
-  //                 vehicleType: car.vehicleType,
-  //                 description: car.description,
-  //                 mileage: car.mileage,
-  //                 imageUrl: imageUrl,
-  //               });
-  //               // console.log(carsWithImagesArray);
-  //             }
-  //           } catch (error) {
-  //             console.error(
-  //               `Error fetching images for car with ID ${car.id}:`,
-  //               error
-  //             );
-  //           }
-  //         }
-
-  //         setCarsWithImages(carsWithImagesArray);
-  //         setIsLoading(false);
-  //       } else {
-  //         console.error("Failed to fetch car data");
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching car data: ", error);
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchCarImages();
-  // }, [sortType]);
-
-  //http://localhost:3000/Ecars#/catalog?brand=Acura
-  // const ownersParam =
-
   interface Car {
     id: string;
     index: string;
@@ -763,11 +635,7 @@ export default function Catalog({
     Automatic: boolean;
     Manual: boolean;
   }
-  // const [currentItems, setCurrentItems] = React.useState<Car[]>([]);
-  // console.log(currentItems);
 
-  // const [pageCount, setPageCount] = React.useState(0);
-  // const [currentPage, setCurrentPage] = React.useState(0);
   const [itemOffset, setItemOffset] = React.useState(0);
 
   const resetBrandFilter = () => {
@@ -877,175 +745,12 @@ export default function Catalog({
     resetTransmission();
   };
 
-  // const [filteredCars, setFilteredCars] = useState(carsWithImages);
-
-  // React.useEffect(() => {
-  //   if (minMileageValue !== 0 || maxMileageValue !== 999999) {
-  //     setMileageFilter(true);
-  //   } else {
-  //     setMileageFilter(false);
-  //   }
-
-  //   if (minYearValue !== 2000 || maxYearValue !== 2023) {
-  //     setYearFilter(true);
-  //   } else {
-  //     setYearFilter(false);
-  //   }
-
-  //   if (minPriceValue !== 0 || maxPriceValue !== 99999999) {
-  //     setPriceFilter(true);
-  //   } else {
-  //     setPriceFilter(false);
-  //   }
-
-  //   if (ownersParam === "new") {
-  //     setOwners({
-  //       None: true,
-  //       One: false,
-  //       Two: false,
-  //       Three: false,
-  //       More: false,
-  //     });
-  //   } else if (ownersParam === "used") {
-  //     setOwners({
-  //       None: false,
-  //       One: true,
-  //       Two: true,
-  //       Three: true,
-  //       More: true,
-  //     });
-  //   }
-
-  // );
-  // const filteredItems = carsWithImages.filter((item) => {
-  //   const isBrandMatch = item.brand
-  //     .toLowerCase()
-  //     .startsWith(brandFilter.toLowerCase());
-  //   const isModelMatch = item.model
-  //     .toLowerCase()
-  //     .startsWith(modelFilter.toLowerCase());
-  //   const isTypeMatch =
-  //     (vechicleTypeCheckboxes.SUV && item.vehicleType === "SUV") ||
-  //     (vechicleTypeCheckboxes.Sedan && item.vehicleType === "Sedan") ||
-  //     (vechicleTypeCheckboxes.PickUp && item.vehicleType === "Pick Up") ||
-  //     (vechicleTypeCheckboxes.Convertible &&
-  //       item.vehicleType === "Convertible") ||
-  //     (vechicleTypeCheckboxes.Coupe && item.vehicleType === "Coupe") ||
-  //     (vechicleTypeCheckboxes.Hatchback &&
-  //       item.vehicleType === "Hatchback") ||
-  //     (vechicleTypeCheckboxes.Van && item.vehicleType === "Van") ||
-  //     (vechicleTypeCheckboxes.StationWagon &&
-  //       item.vehicleType === "Station Wagon");
-  //   const isMileageMatch =
-  //     item.mileage >= minMileageValue && item.mileage <= maxMileageValue;
-
-  //   isMileageMatch ? setMileageFilter(true) : setMileageFilter(false);
-
-  //   const isYearMatch =
-  //     item.year >= minYearValue && item.year <= maxYearValue;
-
-  //   const isPriceMatch =
-  //     Number(item.price) >= minPriceValue &&
-  //     Number(item.price) <= maxPriceValue;
-
-  //   const isCity =
-  //     (cityCheckboxes.SaintPetersburg &&
-  //       item.location === "Saint-Petersburg") ||
-  //     (cityCheckboxes.Moscow && item.location === "Moscow") ||
-  //     (cityCheckboxes.Almaty && item.location === "Almaty") ||
-  //     (cityCheckboxes.Minsk && item.location === "Minsk") ||
-  //     (cityCheckboxes.Dubai && item.location === "Dubai") ||
-  //     (cityCheckboxes.AbuDhabi && item.location === "AbuDhabi") ||
-  //     (cityCheckboxes.Shanghai && item.location === "Shanghai");
-
-  //   const isOwnersMatch =
-  //     (owners.None && item.owners === "0") ||
-  //     (owners.One && item.owners === "1") ||
-  //     (owners.Two && item.owners === "2") ||
-  //     (owners.Three && item.owners === "3") ||
-  //     (owners.More && item.owners === "4");
-
-  //   const isColorMatch =
-  //     (color.Black && item.color === "Black") ||
-  //     (color.White && item.color === "White") ||
-  //     (color.Gray && item.color === "Gray") ||
-  //     (color.Blue && item.color === "Blue") ||
-  //     (color.Silver && item.color === "Silver") ||
-  //     (color.Brown && item.color === "Brown") ||
-  //     (color.Orange && item.color === "Orange") ||
-  //     (color.Yellow && item.color === "Yellow") ||
-  //     (color.Red && item.color === "Red") ||
-  //     (color.Green && item.color === "Green");
-
-  //   const isSeatsMatch =
-  //     (seats.TwoSeats && item.seats === "2") ||
-  //     (seats.ThreeSeats && item.seats === "3") ||
-  //     (seats.FourSeats && item.seats === "4") ||
-  //     (seats.FiveSeats && item.seats === "5") ||
-  //     (seats.SixSeats && item.seats === "6") ||
-  //     (seats.SevenSeats && item.seats === "7");
-
-  //   const isFuelMatch =
-  //     (fuel.Gasoline && item.fuel === "Gasoline") ||
-  //     (fuel.Diesel && item.fuel === "Diesel") ||
-  //     (fuel.Electric && item.fuel === "Electric") ||
-  //     (fuel.Hybrid && item.fuel === "Hybrid");
-
-  //   const isTransmissionMatch =
-  //     (transmission.Automatic && item.transmission === "Automatic") ||
-  //     (transmission.Manual && item.transmission === "Manual");
-
-  //   return (
-  //     isBrandMatch &&
-  //     isModelMatch &&
-  //     isMileageMatch &&
-  //     isYearMatch &&
-  //     isPriceMatch &&
-  //     (isTypeMatch ||
-  //       Object.values(vechicleTypeCheckboxes).every((value) => !value)) &&
-  //     (isCity || Object.values(cityCheckboxes).every((value) => !value)) &&
-  //     (isOwnersMatch || Object.values(owners).every((value) => !value)) &&
-  //     (isColorMatch || Object.values(color).every((value) => !value)) &&
-  //     (isSeatsMatch || Object.values(seats).every((value) => !value)) &&
-  //     (isFuelMatch || Object.values(fuel).every((value) => !value)) &&
-  //     (isTransmissionMatch ||
-  //       Object.values(transmission).every((value) => !value))
-  //   );
-  // });
-  //   const endOffset = itemOffset + itemsPerPage;
-
-  //   setCurrentItems(filteredItems.slice(itemOffset, endOffset));
-  //   setPageCount(Math.ceil(filteredItems.length / itemsPerPage));
-  //   setCurrentPage(0);
-  //   setFilteredCars(filteredItems);
-  // }, [
-  //   brandFilter,
-  //   modelFilter,
-  //   minMileageValue,
-  //   maxMileageValue,
-  //   minYearValue,
-  //   maxYearValue,
-  //   minPriceValue,
-  //   maxPriceValue,
-  //   vechicleTypeCheckboxes,
-  //   cityCheckboxes,
-  //   owners,
-  //   color,
-  //   seats,
-  //   fuel,
-  //   transmission,
-  //   itemOffset,
-  //   itemsPerPage,
-  //   carsWithImages,
-  // ]);
-
   const handleBrandFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setBrandFilter(event.target.value);
     setItemOffset(0);
     setCurrentPage(1);
-    //поменять на текущую стр
   };
   const handleModelFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -1136,24 +841,10 @@ export default function Catalog({
     setMaxPriceValue(value);
   };
 
-  // const handlePageClick = (event: any) => {
-  //   const selectedPage = event.selected;
-  //   const newOffset = selectedPage * itemsPerPage;
-  //   const maxItemsPerPage = Math.min(
-  //     newOffset + itemsPerPage,
-  //     filteredCars.length
-  //   );
-  //   // const catalog = document.getElementById("catalogList");
-  //   // catalog?.scrollIntoView({behavior: "smooth"});
-  //   setItemOffset(newOffset);
-  //   setCurrentItems(filteredCars.slice(newOffset, maxItemsPerPage));
-  //   setCurrentPage(selectedPage);
-  // };
-
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const toggleFilters = () => {
-    setIsFiltersOpen(!isFiltersOpen);
-  };
+  // const toggleFilters = () => {
+  //   setIsFiltersOpen(!isFiltersOpen);
+  // };
 
   const closeSelectedFilter = (filter: string) => {
     if (filter === "brand") {
@@ -1261,6 +952,15 @@ export default function Catalog({
   //     console.log("Nio");
   //   }
   // };
+  const nextNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const prevPrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+  useEffect(() => {
+    console.log(currentPage);
+  }, [currentPage]);
 
   return (
     <div className={style.catalog}>
@@ -1334,56 +1034,13 @@ export default function Catalog({
             seats={seats}
             fuel={fuel}
             transmission={transmission}
-            founted={totalCars}
+            totalCars={totalCars}
+            filtredCars={filtredCars}
             clearFilterArg={clearFiltersArg}
             closeSelectedFilter={(filter) => closeSelectedFilter(filter)}
           />
 
           <div className={style.catalogPagination}>
-            {/* {isLoading ? (
-              [...new Array(6)].map(() =>
-                window.innerWidth > 450 ? <Skeleton /> : <SkeletonMobile />
-              )
-            ) : filteredCars.length > 0 ? (
-              currentItems.map((car, index) => (
-                <div className={style.bigCrad__wrapper}>
-                  <BigCard
-                    key={index}
-                    id={car.id}
-                    selectedCurrency={selectedCurrency}
-                    usdValue={usdValue}
-                    eurValue={eurValue}
-                    index={index}
-                    brand={car.brand}
-                    model={car.model}
-                    price={car.price}
-                    fuel={car.fuel}
-                    owners={car.owners}
-                    location={car.location}
-                    mileage={car.mileage}
-                    description={car.description}
-                    previewIMG={car.imageUrl}
-                    // onLoad={() => setIsLoading(false)}
-                  />
-                  {admin && (
-                    <DeleteCar
-                      deleteCarFunc={() => onClickDelete(car.id, car.index)}
-                      id={car.id}
-                    />
-                  )}
-
-                  {openPassword && (
-                    <input
-                      type="text"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  )}
-                </div>
-              ))
-            ) : (
-              <h2>No cars</h2>
-            )} */}
             {loaded
               ? cars.map((car: any, index: any) => (
                   <BigCard
@@ -1407,32 +1064,18 @@ export default function Catalog({
                 ))
               : [...new Array(5)].map(() => <Skeleton />)}
           </div>
-          <button onClick={checkPreviousPage} disabled={currentPage === 1}>
-            назад
-          </button>
-          <button onClick={fetchNextPage}>вперед</button>
-          {/* <ReactPaginate
-            className={style.paginateBar}
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={3}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            breakLabel="..."
-            breakClassName="page-item-break"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            activeClassName="active"
-            renderOnZeroPageCount={null}
-            initialPage={currentPage}
-          /> */}
+
+          <div className={style.buttons}>
+            <button onClick={prevPrevPage} disabled={currentPage === 1}>
+              назад
+            </button>
+            {[...new Array(pages)].map((_, index) => (
+              <span key={index} onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </span>
+            ))}
+            <button onClick={nextNextPage}>вперед</button>
+          </div>
         </div>
       </div>
     </div>

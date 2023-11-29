@@ -6,6 +6,9 @@ import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
 import Skeleton from "components/ui/Skeleton/Skeleton";
 import {useAuth} from "hooks/use-auth";
+
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 interface Props {
   id: string;
   index: number;
@@ -60,11 +63,32 @@ Props) {
   // to={`${isAuth ? `/details/${car.id}` : `/login`}`}
 
   // to={`/details/${id}`}
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  useEffect(() => {
+    const image = new Image();
+    image.onload = () => {
+      setImageLoaded(true);
+    };
+    image.src = previewIMG; // Подставьте свой путь к изображению из carData
+  }, [previewIMG]);
+
+  //   <img
+  //   className={style.bigCard__img}
+  //   data-src={previewIMG}
+  //   loading="lazy"
+  // />
   return (
     <NavLink to={`${isAuth ? `/details/${id}` : `/login`}`}>
       <div className={style.bigCard}>
         <div className={style.bigCard__image}>
-          <img className={style.bigCard__img} src={previewIMG} loading="lazy" />
+          <LazyLoadImage
+            className={style.bigCard__img}
+            effect="blur" // Добавляет эффект размытия
+            src={previewIMG}
+            alt="Car Preview"
+          />
         </div>
         <div className={style.bigCard__information}>
           <div className={style.information__top}>
