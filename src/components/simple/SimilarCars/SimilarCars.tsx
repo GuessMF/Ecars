@@ -102,10 +102,8 @@ export default function SimilarCars({
       );
 
       // Исключаем машину по ID
-      //  console.log(cars);
 
       cars = cars.filter((car) => car.id !== excludedCarId);
-      console.log(cars);
 
       if (cars.length <= 2) {
         setSimilarCars(cars);
@@ -120,7 +118,7 @@ export default function SimilarCars({
         let carsByModel = modelSnapshot.docs.map(
           (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
         );
-        console.log(carsByModel);
+
         // Исключаем машину по ID
         carsByModel = carsByModel.filter((car) => car.id !== excludedCarId);
         const randNum1 = Math.floor(Math.random() * cars.length);
@@ -165,8 +163,9 @@ export default function SimilarCars({
     <div className={style.similarCars}>
       {similarCars.map((car: any, i) => {
         return (
-          <NavLink to={`/details/${car.id}`}>
+          <NavLink to={`/details/${car.id}`} key={`navlink_${i}`}>
             <MeduimCard
+              key={`medium_${i}`}
               image={car.imageUrls[0]}
               brand={car.brand}
               model={car.model}

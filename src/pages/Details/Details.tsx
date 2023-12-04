@@ -16,6 +16,7 @@ import {Swiper as SwiperCore} from "swiper/types";
 import {collection, query, getDocs} from "firebase/firestore";
 import FullWidthImg from "./FullWidthImg";
 import SimilarCars from "components/simple/SimilarCars/SimilarCars";
+import Cookies from "universal-cookie";
 
 interface DateObject {
   year: number;
@@ -45,6 +46,7 @@ interface Car {
   imageUrl: string;
   exportStatus: string;
   dateObj: DateObject;
+  color: string;
 }
 
 interface DetailsProps {
@@ -60,9 +62,6 @@ export default function Details({
   const swiperRef = useRef<SwiperCore>();
   const navigate = useNavigate();
   const black: string = "#1A1A1A";
-  // const [carData, setCarData] = useState(null);
-
-  // const [cars, setCars] = useState<Car[]>([]);
 
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>();
@@ -80,7 +79,6 @@ export default function Details({
           })
         );
         setPhotoURLs(urls);
-        // console.log(photoURLs);
       } catch (error) {
         console.error("Error loading photos from Firebase:", error);
       }
@@ -90,66 +88,8 @@ export default function Details({
     loadPhotosFromFirebase(currentIndex);
   }, [id]);
 
-  // const [currentCar, setCurrentCar] = useState<{
-  //   brand: string;
-  //   model: string;
-  //   price: number;
-  //   year: number;
-  //   mileage: number;
-  //   transmission: string;
-  //   fuel: string;
-  //   wheels: number;
-  //   vehicleType: string;
-  //   engineCapacity: number;
-  //   owners: string;
-  //   seats: number;
-  //   color: string;
-  //   interior: string;
-  //   location: string;
-  //   exportStatus: string;
-  //   description: string;
-  //   dateObj: DateObject;
-  // } | null>(null);
   const [currentCar, setCurrentCar] = useState<Car>();
   const [liked, setLiked] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   fetch("https://65378b85bb226bb85dd365a6.mockapi.io/cars")
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((json) => {
-  //       const foundObject = json.find((item: {id: string}) => item.id === id);
-  //       if (foundObject) {
-  //         // console.log("Найденный объект:", foundObject);
-  //         setCurrentCar({
-  //           brand: foundObject.brand,
-  //           model: foundObject.model,
-  //           price: foundObject.price,
-  //           year: foundObject.year,
-  //           transmission: foundObject.transmission,
-  //           owners: foundObject.owners,
-  //           fuel: foundObject.fuel,
-  //           wheels: foundObject.wheels,
-  //           color: foundObject.color,
-  //           vehicleType: foundObject.vehicleType,
-  //           engineCapacity: foundObject.engineCapacity,
-  //           seats: foundObject.seats,
-  //           interior: foundObject.interior,
-  //           location: foundObject.location,
-  //           exportStatus: foundObject.exportStatus,
-  //           mileage: foundObject.mileage,
-  //           description: foundObject.description,
-  //           dateObj: foundObject.dateObj,
-  //         });
-  //       } else {
-  //         console.log("Объект с id", id, "не найден.");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Произошла ошибка при получении данных:", error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     fetchFirstPage();
@@ -179,11 +119,18 @@ export default function Details({
   );
   const userIdValue = userId; // userId уже содержит id, поэтому дополнительный ? и .id не нужны
 
+  const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
-    if (!userIdValue) {
+    if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, [userIdValue]);
+  }, []);
+
+  // useEffect(() => {
+  //   if (!userIdValue) {
+  //     navigate("/login");
+  //   }
+  // }, [userIdValue]);
 
   const addLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -201,30 +148,20 @@ export default function Details({
         );
 
         if (existingCarIndex !== -1) {
-          // Если автомобиль уже лайкнут, удаляем его из массива
           currentLikedCars.splice(existingCarIndex, 1);
           await setDoc(likedDocRef, {
             likedCars: currentLikedCars,
           });
-
-          //  console.log("Автомобиль удален из массива likedCars!");
         } else {
           const updatedLikedCars = [...currentLikedCars, id].filter(Boolean);
           await setDoc(likedDocRef, {
             likedCars: updatedLikedCars,
           });
-
-          // console.log(
-          //   "Новый лайкнутый автомобиль добавлен в массив likedCars!"
-          //  );
         }
       } else {
-        // Если документ не существует, создаем новый с массивом likedCars
         await setDoc(likedDocRef, {
           likedCars: [id],
         });
-
-        //  console.log("Документ с лайкнутыми автомобилями создан!");
       }
     } catch (error) {
       console.error("Ошибка при обновлении документа: ", error);
@@ -403,8 +340,9 @@ export default function Details({
                 </button>
               </div>
               <div className={style.littlePictures}>
-                {photoURLs.map((img, index) => (
+                {photoURLs.map((img, index, id) => (
                   <img
+                    key={img}
                     className={style.little_preview}
                     src={img}
                     onClick={() => setSelectedPhoto(index)}
@@ -445,7 +383,7 @@ export default function Details({
                 </div>
                 <div>
                   <span>Color</span>
-                  <span>{currentCar?.model}</span>
+                  <span>{currentCar?.color}</span>
                 </div>
                 <div>
                   <span>Interior</span> <span>{currentCar?.brand}</span>

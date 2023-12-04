@@ -13,7 +13,8 @@ import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
-// import {useAuth} from "utils/useAuth";
+
+import Cookies from "universal-cookie";
 
 const version: string = "little";
 
@@ -21,6 +22,8 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [userId, setUserId] = useState<string>("");
+
+  const cookies = new Cookies(null, {path: "/"});
   const {isAuth, email, displayName} = useAuth();
   const navigate = useNavigate();
   const toggleSidebar = () => {
@@ -41,12 +44,9 @@ export default function Header() {
     signOut(auth)
       .then(() => {
         dispatch(removeUser());
-
-        console.log(isAuth);
-        console.log(userId);
       })
       .catch((error) => {
-        console.error("Sign out error:", error);
+        // console.error("Sign out error:", error);
       });
   };
 
@@ -141,7 +141,7 @@ export default function Header() {
             </div>
           )}
         </div>
-        {userId ? (
+        {isAuth ? (
           <NavLink to={`/sell/${userId}`}>
             <GetAquote version={version} />
           </NavLink>

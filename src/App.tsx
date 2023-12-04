@@ -26,20 +26,39 @@ import {RootState} from "./store";
 import {useNavigate} from "react-router-dom";
 import {useParams} from "react-router-dom";
 import UserPage from "pages/UserPage/UserPage";
+import {useAuth} from "hooks/use-auth";
+import Cookies from "universal-cookie";
 
+// import firebase from "firebase/app";
+// import "firebase/auth";
 function App() {
   const [currentExchange, setCurrentExchange] = useState<any>(null);
   const dispatch = useAppDispatch();
   const [userId, setUserId] = useState<string>("");
-  // console.log(userId);
-  // const userId = useSelector((state: RootState) => state.user.id);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const cookies = new Cookies(null, {path: "/"});
 
   const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
 
   const [usdValue, setUsdValue] = useState<number>(0);
   const [eurValue, setEurValue] = useState<number>(0);
+
+  // const authenticateUser = () => {
+  //   firebase
+  //     .auth()
+  //     .signInWithEmailAndPassword(email, password)
+  //     .then((userCredential) => {
+  //       // После успешной аутентификации сохраняем данные пользователя в localStorage
+  //       localStorage.setItem(
+  //         "currentUser",
+  //         JSON.stringify(userCredential.user)
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       // Обработка ошибок аутентификации
+  //     });
+  // };
 
   // const userIdCatch= async()=>{
   // try {
@@ -64,9 +83,9 @@ function App() {
             token: user.refreshToken,
           })
         );
-        //push
+        cookies.set("auth", "true");
       } else {
-        console.log("no user");
+        cookies.set("auth", "false");
       }
     });
 
@@ -93,24 +112,6 @@ function App() {
 
     fetchExchangeRates();
   }, []);
-
-  const handleCurrencyChange = (currencyCode: string) => {
-    setSelectedCurr(currencyCode);
-  };
-
-  const redirectToUserPage = () => {
-    if (userId) {
-      navigate(`/per/${userId}`);
-    } else {
-      navigate(`/login`);
-    }
-  };
-
-  // <Route path="/per/:userID" element={<PersonalPage userID={userId} />} />
-
-  //<Route path="per/:userID" element={<UserRoute />} />
-
-  //   <Route path="/per/:userId" element={<PersonalPage userID={userId} />} />
 
   return (
     <div className={style.app}>

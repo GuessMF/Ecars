@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
 import style from "./__userPage.module.scss";
 import BigCard from "components/smart/BigCard/BigCard";
+import Cookies from "universal-cookie";
 import {
   query,
   orderBy,
@@ -45,17 +46,19 @@ export default function UserPage({userID}: Props) {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
+  const cookies = new Cookies(null, {path: "/"});
+  useEffect(() => {
+    if (!cookies.get("auth")) {
+      navigate("/login");
+    }
+  }, []);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userID) {
       fetchSalingCars();
-    } else {
-      // alert("NoUser!");
-      navigate("/login");
     }
-    console.log(userID + " vverh");
   }, [userID]);
 
   useEffect(() => {
@@ -63,9 +66,6 @@ export default function UserPage({userID}: Props) {
       if (isAuth && displayName) {
         setUserName(displayName);
         setLoading(false);
-        console.log("USER NAME" + userName);
-        console.log(isAuth + " is Auth");
-        console.log(userID + " userId");
       }
       // else {
       //   navigate("/");
@@ -74,7 +74,6 @@ export default function UserPage({userID}: Props) {
       //   navigate("/");
       // }
     };
-    console.log(isAuth);
 
     fetchData();
   }, [isAuth, displayName, loading]);
@@ -98,7 +97,7 @@ export default function UserPage({userID}: Props) {
 
   return (
     <div className={style.userPage}>
-      <h3>
+      <div className={style.header}>
         {loading ? (
           // Отображение скелетона (заглушки) во время ожидания данных о пользователе
           <h1>Заглушка</h1> // Здесь может быть ваш компонент скелетона
@@ -106,7 +105,7 @@ export default function UserPage({userID}: Props) {
           // Отображение имени пользователя после его получения
           <p>Пользователь: {userName}</p>
         )}
-      </h3>
+      </div>
       <h4>Your cars are on sale:</h4>
       <div className={style.wrapper}>
         {loaded &&

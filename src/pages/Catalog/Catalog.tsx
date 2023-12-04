@@ -9,6 +9,8 @@ import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
 import {Query} from "firebase/firestore";
 import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
+import ScrollToTop from "utils/scrollToTop";
+
 import "../../firebase";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {
@@ -27,6 +29,7 @@ import {
 } from "firebase/firestore";
 import {db} from "../../firebase";
 import {start} from "repl";
+import firebase from "firebase/app";
 
 interface CatalogProps {
   selectedCurrency: string;
@@ -64,8 +67,6 @@ export default function Catalog({
   // const yearMileagePrice = `${newCarData.year}-${newCarData.mileage}-${newCarData.price}`;
   // newCarData.yearMileagePrice = yearMileagePrice;
 
-  // console.log(newCarData);
-  // console.log(yearMileagePrice);
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue
@@ -122,7 +123,7 @@ export default function Catalog({
 
   const newLocationParam = () => {
     let location = locationParam;
-    console.log(location);
+
     if (locationParam == "Saint-Petersburg") {
       location = "SaintPetersburg";
     }
@@ -138,7 +139,6 @@ export default function Catalog({
     if (mileageParam == "New") {
       setMinMileageValue(1);
       setMaxMileageValue(99);
-      console.log(mileageParam);
     } else if (mileageParam == "Used") {
       setMinMileageValue(100);
     }
@@ -167,6 +167,10 @@ export default function Catalog({
     Yellow: false,
     Red: false,
     Green: false,
+    Gold: false,
+    Purple: false,
+
+    Pink: false,
   });
   const [seats, setSeats] = useState({
     TwoSeats: false,
@@ -197,18 +201,14 @@ export default function Catalog({
   const itemsPerPage: number = 5;
   const pages = Math.ceil(totalCars / itemsPerPage);
 
-  const buttons = [];
-  for (let i = 0; i < pages; i++) {
-    buttons.push(i);
-  }
+  // const buttons = [];
+  // for (let i = 0; i < pages; i++) {
+  //   buttons.push(i);
+  // }
 
-  console.log(buttons);
+  // buttons.forEach((i) => {
 
-  buttons.forEach((i) => {
-    console.log(i);
-  });
-
-  console.log(pages);
+  // });
 
   const [cars, setCars] = useState<Car[]>([]);
   const [lastVisibleRefs, setLastVisibleRefs] = useState<
@@ -295,27 +295,42 @@ export default function Catalog({
       const carsRef = collection(db, "cars");
       const firstPrompt = sortType.sort;
       let first = query(carsRef);
-
+      const arrCarTypes = Object.keys(vehicleType).filter(
+        (key) => vehicleType[key]
+      );
+      const arrCities = Object.keys(city).filter((key) => city[key]);
+      const arrOwners = Object.keys(owners).filter((key) => owners[key]);
+      const arrColor = Object.keys(color).filter((key) => color[key]);
       Object.entries(vehicleType).forEach(([carType, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("vehicleType", "==", carType));
+          if (arrCarTypes.length > 0) {
+            first = query(first, where("vehicleType", "in", arrCarTypes));
+          }
         }
       });
+
       Object.entries(city).forEach(([city, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("location", "==", city));
+          if (arrCities.length > 0) {
+            first = query(first, where("location", "in", arrCities));
+          }
         }
       });
 
       Object.entries(owners).forEach(([owners, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("owners", "==", owners));
+          if (arrOwners.length > 0) {
+            first = query(first, where("owners", "in", arrOwners));
+          }
         }
       });
 
       Object.entries(color).forEach(([color, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("color", "==", color));
+          // first = query(first, where("color", "==", color));
+          if (arrColor.length > 0) {
+            first = query(first, where("color", "in", arrColor));
+          }
         }
       });
 
@@ -381,13 +396,10 @@ export default function Catalog({
         currentPage * itemsPerPage - itemsPerPage,
         currentPage * itemsPerPage
       );
-      // console.log(currentPage * 0);
 
-      // console.log(filtredPriceCars.length);
       setTotalCars(filtredPriceCars.length);
       //  setCars(filtredPriceCars);
       setCars(paginatedCars);
-      // console.log(cars);
 
       setFiltredCars(filtredPriceCars.length);
       setLoaded(true);
@@ -395,154 +407,154 @@ export default function Catalog({
       console.error("Error fetching first page: ", error);
     }
   };
-  const nextPage = () => {
-    fetchNextPage(vechicleTypeCheckboxes, cityCheckboxes);
-  };
+  // const nextPage = () => {
+  //   fetchNextPage(vechicleTypeCheckboxes, cityCheckboxes);
+  // };
 
-  const fetchNextPage = async (
-    vehicleType: Record<string, boolean>,
-    city: Record<string, boolean>
-  ) => {
-    try {
-      const carsRef = collection(db, "cars");
-      const lastVisible = lastVisibleRefs[currentPage - 1];
-      if (lastVisible) {
-        let next = query(
-          carsRef,
-          orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
-          startAfter(lastVisible),
-          limit(itemsPerPage)
-        );
+  // const fetchNextPage = async (
+  //   vehicleType: Record<string, boolean>,
+  //   city: Record<string, boolean>
+  // ) => {
+  //   try {
+  //     const carsRef = collection(db, "cars");
+  //     const lastVisible = lastVisibleRefs[currentPage - 1];
+  //     if (lastVisible) {
+  //       let next = query(
+  //         carsRef,
+  //         orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
+  //         startAfter(lastVisible),
+  //         limit(itemsPerPage)
+  //       );
 
-        Object.entries(vehicleType).forEach(([carType, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("vehicleType", "==", carType));
-          }
-        });
+  //       Object.entries(vehicleType).forEach(([carType, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("vehicleType", "==", carType));
+  //         }
+  //       });
 
-        Object.entries(city).forEach(([city, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("location", "==", city));
-          }
-        });
+  //       Object.entries(city).forEach(([city, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("location", "==", city));
+  //         }
+  //       });
 
-        Object.entries(owners).forEach(([owners, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("owners", "==", owners));
-          }
-        });
+  //       Object.entries(owners).forEach(([owners, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("owners", "==", owners));
+  //         }
+  //       });
 
-        Object.entries(color).forEach(([color, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("color", "==", color));
-          }
-        });
+  //       Object.entries(color).forEach(([color, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("color", "==", color));
+  //         }
+  //       });
 
-        Object.entries(seats).forEach(([seats, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("seats", "==", seats));
-          }
-        });
+  //       Object.entries(seats).forEach(([seats, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("seats", "==", seats));
+  //         }
+  //       });
 
-        Object.entries(fuel).forEach(([fuel, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("fuel ", "==", fuel));
-          }
-        });
+  //       Object.entries(fuel).forEach(([fuel, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("fuel ", "==", fuel));
+  //         }
+  //       });
 
-        Object.entries(transmission).forEach(([transmission, isSelected]) => {
-          if (isSelected) {
-            next = query(next, where("transmission ", "==", transmission));
-          }
-        });
+  //       Object.entries(transmission).forEach(([transmission, isSelected]) => {
+  //         if (isSelected) {
+  //           next = query(next, where("transmission ", "==", transmission));
+  //         }
+  //       });
 
-        if (brandFilter) {
-          next = query(next, where("brand", "==", brandFilter));
-        }
+  //       if (brandFilter) {
+  //         next = query(next, where("brand", "==", brandFilter));
+  //       }
 
-        if (modelFilter) {
-          next = query(next, where("model", "==", modelFilter));
-        }
+  //       if (modelFilter) {
+  //         next = query(next, where("model", "==", modelFilter));
+  //       }
 
-        const documentSnapshots = await getDocs(next);
-        const arr: Car[] = [];
-        documentSnapshots.forEach((doc) => {
-          arr.push(doc.data() as Car);
-        });
-        if (documentSnapshots.docs.length > 0) {
-          setLastVisibleRefs([
-            ...lastVisibleRefs,
-            documentSnapshots.docs[
-              documentSnapshots.docs.length - 1
-            ] as DocumentSnapshot<Car>,
-          ]);
-        }
-        setCars(arr);
-        setCurrentPage(currentPage + 1);
-      }
-    } catch (error) {
-      console.error("Error fetching next page: ", error);
-    }
-  };
+  //       const documentSnapshots = await getDocs(next);
+  //       const arr: Car[] = [];
+  //       documentSnapshots.forEach((doc) => {
+  //         arr.push(doc.data() as Car);
+  //       });
+  //       if (documentSnapshots.docs.length > 0) {
+  //         setLastVisibleRefs([
+  //           ...lastVisibleRefs,
+  //           documentSnapshots.docs[
+  //             documentSnapshots.docs.length - 1
+  //           ] as DocumentSnapshot<Car>,
+  //         ]);
+  //       }
+  //       setCars(arr);
+  //       setCurrentPage(currentPage + 1);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching next page: ", error);
+  //   }
+  // };
 
-  const fetchPreviousPage = async () => {
-    try {
-      const carsRef = collection(db, "cars");
-      const lastVisible = lastVisibleRefs[currentPage - 3];
-      if (lastVisible) {
-        const next = query(
-          carsRef,
-          orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
-          startAfter(lastVisible),
-          limit(itemsPerPage)
-        );
+  // const fetchPreviousPage = async () => {
+  //   try {
+  //     const carsRef = collection(db, "cars");
+  //     const lastVisible = lastVisibleRefs[currentPage - 3];
+  //     if (lastVisible) {
+  //       const next = query(
+  //         carsRef,
+  //         orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
+  //         startAfter(lastVisible),
+  //         limit(itemsPerPage)
+  //       );
 
-        const documentSnapshots = await getDocs(next);
-        const arr: Car[] = [];
-        documentSnapshots.forEach((doc) => {
-          arr.push(doc.data() as Car);
-        });
-        if (documentSnapshots.docs.length > 0) {
-          setLastVisibleRefs([
-            ...lastVisibleRefs,
-            documentSnapshots.docs[
-              documentSnapshots.docs.length - 1
-            ] as DocumentSnapshot<Car>,
-          ]);
-        }
-        setCars(arr);
-        setCurrentPage(currentPage - 1);
-      }
-    } catch (error) {
-      console.error("Error fetching next page: ", error);
-    }
-  };
+  //       const documentSnapshots = await getDocs(next);
+  //       const arr: Car[] = [];
+  //       documentSnapshots.forEach((doc) => {
+  //         arr.push(doc.data() as Car);
+  //       });
+  //       if (documentSnapshots.docs.length > 0) {
+  //         setLastVisibleRefs([
+  //           ...lastVisibleRefs,
+  //           documentSnapshots.docs[
+  //             documentSnapshots.docs.length - 1
+  //           ] as DocumentSnapshot<Car>,
+  //         ]);
+  //       }
+  //       setCars(arr);
+  //       setCurrentPage(currentPage - 1);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching next page: ", error);
+  //   }
+  // };
 
-  const checkPreviousPage = () => {
-    if (currentPage == 2) {
-      fetchFirstPage(
-        sortType,
-        brandFilter,
-        modelFilter,
-        vechicleTypeCheckboxes,
-        cityCheckboxes,
-        owners,
-        color,
-        seats,
-        fuel,
-        transmission,
-        minMileageValue,
-        maxMileageValue,
-        minYearValue,
-        maxYearValue,
-        minPriceValue,
-        maxPriceValue
-      );
-      setCurrentPage(currentPage - 1);
-    } else {
-      fetchPreviousPage();
-    }
-  };
+  // const checkPreviousPage = () => {
+  //   if (currentPage == 2) {
+  //     fetchFirstPage(
+  //       sortType,
+  //       brandFilter,
+  //       modelFilter,
+  //       vechicleTypeCheckboxes,
+  //       cityCheckboxes,
+  //       owners,
+  //       color,
+  //       seats,
+  //       fuel,
+  //       transmission,
+  //       minMileageValue,
+  //       maxMileageValue,
+  //       minYearValue,
+  //       maxYearValue,
+  //       minPriceValue,
+  //       maxPriceValue
+  //     );
+  //     setCurrentPage(currentPage - 1);
+  //   } else {
+  //     fetchPreviousPage();
+  //   }
+  // };
 
   //
   //
@@ -615,6 +627,10 @@ export default function Catalog({
     Yellow: boolean;
     Red: boolean;
     Green: boolean;
+    Gold: boolean;
+    Purple: boolean;
+
+    Pink: boolean;
   }
 
   interface SeatsCheckboxes {
@@ -703,6 +719,10 @@ export default function Catalog({
       Yellow: false,
       Red: false,
       Green: false,
+      Gold: false,
+      Purple: false,
+
+      Pink: false,
     });
   };
   const resetSeats = () => {
@@ -896,74 +916,41 @@ export default function Catalog({
       }));
     }
   };
-  // const checkPassword = () => {
-  //   console.log(password);
-  //   if (password === "060606") {
-  //     console.log("You can delete");
-  //   } else {
-  //     console.log("Nio");
-  //   }
-  // };
 
-  // const onClickDelete = async (carId: string, carIndex: string) => {
-  //   setOpenPassword(true);
-  //   if (password === "060606") {
-  //     console.log("You can delete");
-  //     try {
-  //       setOpenPassword(false);
-  //       setPassword("");
-
-  //       const storage = getStorage();
-  //       const storageRef = ref(storage, `cars/${carId}`);
-  //       const imagesList = await list(storageRef);
-  //       const deleteImagePromises = imagesList.items.map(async (imageRef) => {
-  //         try {
-  //           await deleteObject(imageRef);
-  //         } catch (error) {
-  //           console.error(
-  //             `Ошибка при удалении изображения ${imageRef.name}:`,
-  //             error
-  //           );
-  //         }
-  //       });
-  //       await Promise.all(deleteImagePromises);
-
-  //       fetch(`https://65378b85bb226bb85dd365a6.mockapi.io/cars/${carIndex}`, {
-  //         method: "DELETE",
-  //       })
-  //         .then((res) => {
-  //           if (res.ok) {
-  //             return res.json();
-  //           }
-  //         })
-  //         .then((tasks) => {
-  //           console.log(tasks);
-  //         })
-  //         .catch((error) => {});
-
-  //       console.log("Автомобиль удален из базы данных");
-  //     } catch (error) {
-  //       console.error(
-  //         "Ошибка удаления изображений из папки и объекта из базы данных:",
-  //         error
-  //       );
-  //     }
-  //   } else {
-  //     console.log("Nio");
-  //   }
-  // };
   const nextNextPage = () => {
     setCurrentPage(currentPage + 1);
   };
   const prevPrevPage = () => {
     setCurrentPage(currentPage - 1);
   };
+
+  const changePage = (index: number) => {
+    setCurrentPage(index + 1);
+    const catalog = document.getElementById("catalog");
+    if (catalog) {
+      catalog.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(cars);
+  // }, [cars]);
+
+  const prevCarsRef = useRef(cars);
+
   useEffect(() => {
-    console.log(currentPage);
-  }, [currentPage]);
+    if (prevCarsRef.current !== cars) {
+      console.log(cars);
+      prevCarsRef.current = cars;
+    }
+  }, [cars]);
 
   return (
-    <div className={style.catalog}>
+    <div className={style.catalog} id="catalog">
       <h3>Find cars to fit your criteria</h3>
 
       <div className={style.catalog__content}>
@@ -1044,7 +1031,7 @@ export default function Catalog({
             {loaded
               ? cars.map((car: any, index: any) => (
                   <BigCard
-                    key={index}
+                    key={car.id}
                     id={car.id}
                     selectedCurrency={selectedCurrency}
                     usdValue={usdValue}
@@ -1062,19 +1049,28 @@ export default function Catalog({
                     //onLoad={handleLoad}
                   />
                 ))
-              : [...new Array(5)].map(() => <Skeleton />)}
+              : [...new Array(5)].map((_, i) => (
+                  <Skeleton key={`skeleton_${i}`} />
+                ))}
           </div>
 
           <div className={style.buttons}>
             <button onClick={prevPrevPage} disabled={currentPage === 1}>
-              назад
+              Previous
             </button>
             {[...new Array(pages)].map((_, index) => (
-              <span key={index} onClick={() => setCurrentPage(index + 1)}>
+              <span
+                key={index}
+                className={index + 1 == currentPage ? style.currentPage : ""}
+                onClick={() => changePage(index)}
+                //onClick={ScrollToTop}
+              >
                 {index + 1}
               </span>
             ))}
-            <button onClick={nextNextPage}>вперед</button>
+            <button onClick={nextNextPage} disabled={currentPage === pages}>
+              Next
+            </button>
           </div>
         </div>
       </div>

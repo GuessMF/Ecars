@@ -75,29 +75,8 @@ export default function SpecialOffers({
   const {isAuth, email, displayName} = useAuth();
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-  // const [carsDownloaded, setCarsDownloaded] = useState<
-  //   {
-  //     id: string;
-  //     brand: string;
-  //     model: string;
-  //     price: string;
-  //     year: number;
-  //     fuel: string;
-  //     color: string;
-  //     seats: string;
-  //     transmission: string;
-  //     owners: string;
-  //     vehicleType: string;
-  //     location: string;
-  //     description: string;
-  //     mileage: number;
-  //     imageUrl: string;
-  //   }[]
-  // >([]);
 
-  useEffect(() => {
-    //  console.log(isAuth);
-  }, [isAuth]);
+  useEffect(() => {}, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 
   const screenWidth = windowWidth;
@@ -138,9 +117,6 @@ export default function SpecialOffers({
   useEffect(() => {
     fetchSpecialCars();
   }, []);
-  // useEffect(() => {
-  //   console.log(specialCars);
-  // }, [specialCars]);
 
   return (
     <div className={style.specialOffers} id="specialOffers">

@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
+import Cookies from "universal-cookie";
 
 interface Props {
   userID: string;
@@ -52,8 +53,6 @@ interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
 export default function PersonalPage({userID}: Props) {
-  console.log(userID);
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -126,11 +125,12 @@ export default function PersonalPage({userID}: Props) {
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
+  const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
-    if (!userID) {
+    if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, [userID]);
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let imageCounter = 1;
@@ -234,10 +234,8 @@ export default function PersonalPage({userID}: Props) {
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setPopUpErrors(true);
-      console.log(errors);
     } else {
       setLoading(true);
-      console.log("No Errors");
 
       const uploadTasks: Promise<string>[] = [];
       const newId = generateNewId();
@@ -290,7 +288,6 @@ export default function PersonalPage({userID}: Props) {
           special: specialOffer,
         });
 
-        console.log("Автомобиль успешно добавлен!");
         setSent(true);
         setLoading(false);
         setTimeout(() => {
@@ -351,7 +348,6 @@ export default function PersonalPage({userID}: Props) {
     );
     setModels(selectedBrandData ? selectedBrandData.models : []);
   };
-  // console.log(specialOffer);
 
   const hasErrors = Object.keys(formErrors);
 
@@ -456,9 +452,9 @@ export default function PersonalPage({userID}: Props) {
               <option value="Hatchback">Hatchback</option>
               <option value="SUV">SUV (Sport Utility Vehicle)</option>
               <option value="Van">Van</option>
-              <option value="Station Wagon">Station Wagon</option>
+              <option value="StationWagon">Station Wagon</option>
               <option value="Convertible">Convertible</option>
-              <option value="Pick Up">Pick Up</option>
+              <option value="PickUp">Pick Up</option>
             </select>
           </label>
         </div>
@@ -492,14 +488,19 @@ export default function PersonalPage({userID}: Props) {
             Цвет автомобиля:
             <select value={color} onChange={(e) => setColor(e.target.value)}>
               <option value="">Выберите цвет</option>
-              <option value="Black">Black</option>
               <option value="White">White</option>
+              <option value="Black">Black</option>
               <option value="Silver">Silver</option>
-              <option value="Brown">Brown</option>
-              <option value="Orange">Orange</option>
-              <option value="Yellow">Yellow</option>
+              <option value="Gray">Gray</option>
+              <option value="Blue">Blue</option>
               <option value="Red">Red</option>
               <option value="Green">Green</option>
+              <option value="Brown">Brown</option>
+              <option value="Gold">Gold</option>
+              <option value="Purple">Purple</option>
+              <option value="Orange">Orange</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Pink">Pink</option>
             </select>
           </label>
         </div>
@@ -586,11 +587,12 @@ export default function PersonalPage({userID}: Props) {
               onChange={(e) => setLocation(e.target.value)}
             >
               <option value="">Выберите город</option>
-              <option value="Saint-Petersburg">Saint-Petersburg</option>
+              <option value="SaintPetersburg">Saint-Petersburg</option>
               <option value="Moscow">Moscow</option>
               <option value="Almaty">Almaty</option>
               <option value="Minsk">Minsk</option>
-              <option value="Abu Dhabi">Abu Dhabi</option>
+              <option value="Dubai">Dubai</option>
+              <option value="AbuDhabi">Abu Dhabi</option>
               <option value="Shanghai">Shanghai</option>
             </select>
           </label>
@@ -601,11 +603,11 @@ export default function PersonalPage({userID}: Props) {
             Владельцы:
             <select value={owners} onChange={(e) => setOwners(e.target.value)}>
               <option value="">Количество владельцев</option>
-              <option value="0">None</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">3+</option>
+              <option value="None">None</option>
+              <option value="One">1</option>
+              <option value="Two">2</option>
+              <option value="Three">3</option>
+              <option value="More">3+</option>
             </select>
           </label>
         </div>

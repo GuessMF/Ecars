@@ -50,7 +50,7 @@ Props) {
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  // console.log(multiplier);
+
   const {isAuth, email, displayName} = useAuth();
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -60,9 +60,6 @@ Props) {
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   const owner = Number(owners);
-  // to={`${isAuth ? `/details/${car.id}` : `/login`}`}
-
-  // to={`/details/${id}`}
 
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -79,6 +76,7 @@ Props) {
   //   data-src={previewIMG}
   //   loading="lazy"
   // />
+
   return (
     <NavLink to={`${isAuth ? `/details/${id}` : `/login`}`}>
       <div className={style.bigCard}>

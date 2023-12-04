@@ -7,6 +7,7 @@ import {db} from "../../firebase";
 import {doc, getDoc} from "firebase/firestore";
 import BigCard from "components/smart/BigCard/BigCard";
 import {useNavigate} from "react-router-dom";
+import Cookies from "universal-cookie";
 
 interface Props {
   userID: string;
@@ -39,6 +40,13 @@ export default function Liked({userID}: Props) {
   const [loadingLiked, setLoadingLiked] = useState(true);
   const navigate = useNavigate();
 
+  const cookies = new Cookies(null, {path: "/"});
+  useEffect(() => {
+    if (!cookies.get("auth")) {
+      navigate("/login");
+    }
+  }, []);
+
   const fetchLiked = async () => {
     const likedRef = collection(db, "likedCars");
     const likedDocRef = doc(likedRef, userID);
@@ -47,42 +55,14 @@ export default function Liked({userID}: Props) {
       if (likedDocSnap.exists()) {
         const likedData = likedDocSnap.data();
         const currentLikedCars = likedData?.likedCars || [];
-        console.log(currentLikedCars);
         setLikedCars(currentLikedCars);
-        const hasMatch = currentLikedCars.some((el: string) => el === userID);
-        //  setLiked(hasMatch);
-        // console.log(hasMatch + " hasMatch");
+        //  const hasMatch = currentLikedCars.some((el: string) => el === userID);
       }
     } catch (error) {
       console.error("Ошибка при скачивании документа: ", error);
     }
   };
 
-  // const fetchCars = async () => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-  //     const querySnapshot = await getDocs(carsRef);
-
-  //     const cars: Car[] = querySnapshot.docs
-  //       .map((doc) => {
-  //         const carData = doc.data() as Car;
-
-  //         if (likedCars.includes('61b7c881-9143-42bd-bff7-ab1b41842d2a')) {
-  //           return carData; // Если ID автомобиля есть в likedCars, добавляем в массив cars
-  //         }
-  //         return null;
-  //       })
-  //       .filter((car) => car !== null) as Car[]; // Фильтруем null значения (авто, которых нет в likedCars)
-
-  //     // Теперь у вас есть массив автомобилей, которые соответствуют likedCars
-  //     console.log(cars);
-
-  //     // setCars(cars);
-  //     // setLoaded(true);
-  //   } catch (error) {
-  //     console.error("Error fetching cars: ", error);
-  //   }
-  // };
   const fetchLikedCarsData = async (likedCars: string[]) => {
     try {
       const otherCarsRef = collection(db, "cars");
@@ -91,7 +71,6 @@ export default function Liked({userID}: Props) {
       const carsData: Car[] = querySnapshot.docs
         .map((doc) => {
           const carData = doc.data() as Car;
-          console.log("Car ID from collection:", carData.id);
 
           if (likedCars.includes(carData.id)) {
             return carData; // Если ID автомобиля есть в likedCars, добавляем в массив carsDat
@@ -100,7 +79,6 @@ export default function Liked({userID}: Props) {
         })
         .filter((car) => car !== null) as Car[]; // Фильтруем null значения (авто, которых нет в likedCars)
       setCars(carsData);
-      console.log("Cars data:", carsData);
 
       // setCars(carsData);
       // setLoaded(true);
@@ -114,8 +92,6 @@ export default function Liked({userID}: Props) {
       if (userID) {
         await fetchLiked(); // Подгрузка данных о лайкнутых автомобилях
         setLoadingLiked(false);
-      } else {
-        navigate("/login");
       }
     };
 
@@ -131,79 +107,6 @@ export default function Liked({userID}: Props) {
 
     fetchData();
   }, [likedCars, loadingLiked]);
-
-  console.log(cars);
-
-  // useEffect(() => {
-  //   if (userID) {
-  //     fetchLiked();
-  //     fetchCars(likedCars);
-  //   }
-  // }, [userID]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (userID) {
-  //       await fetchLiked(); // Подгрузка данных о лайкнутых автомобилях
-  //       if (
-  //         JSON.stringify(prevLikedCars.current) !== JSON.stringify(likedCars)
-  //       ) {
-  //         prevLikedCars.current = likedCars.slice(); // Обновляем предыдущее состояние
-  //         fetchLikedCarsData(likedCars); // Вызываем только если likedCars изменился
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [userID, likedCars]);
-
-  // useEffect(() => {
-  //   console.log(likedCars);
-  // }, [likedCars]);
-
-  //   {likedCars.map((car: any, i) => {
-  //     return (
-
-  //         <NavLink to={`/details/${car.id}`}>
-  //           <LittleCard
-  //             brand={car.brand}
-  //             model={car.model}
-  //             price={car.price}
-  //             fuel={car.fuel}
-  //             mileage={car.mileage}
-  //             owners={car.owners}
-  //             selectedCurrency={selectedCurrency}
-  //             eurValue={eurValue}
-  //             usdValue={usdValue}
-  //             //special={car.special}
-  //             previewIMG={car.imageUrls[0]}
-  //           />
-  //         </NavLink>
-
-  //     );
-  //   })}
-
-  // {likedCars &&
-  //   likedCars.map((car: any, index: any) => (
-  //     <BigCard
-  //       key={index}
-  //       id={car.id}
-  //       selectedCurrency={"USD"}
-  //       usdValue={10}
-  //       eurValue={20}
-  //       index={index}
-  //       brand={car.brand}
-  //       model={car.model}
-  //       price={car.price}
-  //       fuel={car.fuel}
-  //       owners={car.owners}
-  //       location={car.location}
-  //       mileage={car.mileage}
-  //       description={car.description}
-  //       previewIMG={car.imageUrls[0]}
-  //       //onLoad={handleLoad}
-  //     />
-  //   ))}
 
   return (
     <div className={style.liked}>

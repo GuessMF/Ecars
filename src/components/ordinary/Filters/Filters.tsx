@@ -48,6 +48,10 @@ interface ColorCheckboxes {
   Yellow: boolean;
   Red: boolean;
   Green: boolean;
+  Gold: boolean;
+  Purple: boolean;
+
+  Pink: boolean;
 }
 
 interface SeatsCheckboxes {
@@ -345,14 +349,6 @@ FiltersProps) {
               />
               <label htmlFor="StationWagon">Station Wagon</label>
             </li>
-            <li className={style.form_checkbox}>
-              <input
-                className={style.checkbox}
-                type="checkbox"
-                id="checkbox9"
-              />
-              <label htmlFor="checkbox9">Shawn Carter</label>
-            </li>
           </ul>
         </div>
 
@@ -636,17 +632,6 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="Black"
-                    checked={color.Black}
-                    onChange={onColorChange}
-                  />
-                  <label htmlFor="Black">Black</label>
-                </li>
-
-                <li className={style.form_checkbox}>
-                  <input
-                    className={style.checkbox}
-                    type="checkbox"
                     id="White"
                     checked={color.White}
                     onChange={onColorChange}
@@ -658,11 +643,11 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
-                    id="Gray"
-                    checked={color.Gray}
+                    id="Black"
+                    checked={color.Black}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Gray">Gray</label>
+                  <label htmlFor="Black">Black</label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -680,8 +665,18 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
+                    id="Gray"
+                    checked={color.Gray}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Gray">Gray</label>
+                </li>
+
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
                     id="Blue"
-                    // checked={color.Blue}
                     onChange={onColorChange}
                   />
                   <label htmlFor="Blue">Blue</label>
@@ -710,11 +705,65 @@ FiltersProps) {
                   <input
                     className={style.checkbox}
                     type="checkbox"
+                    id="Brown"
+                    checked={color.Brown}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Brown">Brown</label>
+                </li>
+
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
+                    id="Gold"
+                    checked={color.Gold}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Gold">Gold</label>
+                </li>
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
+                    id="Purple"
+                    checked={color.Purple}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Purple">Purple</label>
+                </li>
+
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
+                    id="Orange"
+                    checked={color.Orange}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Orange">Orange</label>
+                </li>
+
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
                     id="Yellow"
                     checked={color.Yellow}
                     onChange={onColorChange}
                   />
                   <label htmlFor="Yellow">Yellow</label>
+                </li>
+
+                <li className={style.form_checkbox}>
+                  <input
+                    className={style.checkbox}
+                    type="checkbox"
+                    id="Pink"
+                    checked={color.Pink}
+                    onChange={onColorChange}
+                  />
+                  <label htmlFor="Pink">Pink</label>
                 </li>
               </ul>
             </div>

@@ -133,22 +133,24 @@ export default function DetailsCTA({
             {formattedPrice}
           </h4>
           <table>
-            <tr>
-              <td>Year</td>
-              <td>{year}</td>
-            </tr>
-            <tr>
-              <td>Mileage</td>
-              <td>{mileage + " km"}</td>
-            </tr>
-            <tr>
-              <td>Location</td>
-              <td>{location}</td>
-            </tr>
-            <tr>
-              <td>Export status</td>
-              <td>{exportStatus}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Year</td>
+                <td>{year}</td>
+              </tr>
+              <tr>
+                <td>Mileage</td>
+                <td>{mileage + " km"}</td>
+              </tr>
+              <tr>
+                <td>Location</td>
+                <td>{location}</td>
+              </tr>
+              <tr>
+                <td>Export status</td>
+                <td>{exportStatus}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <div className={style.info__bottom}>
@@ -197,22 +199,24 @@ export default function DetailsCTA({
           </div>
 
           <table>
-            <tr>
-              <td>Accidents or damage</td>
-              <td>None reported</td>
-            </tr>
-            <tr>
-              <td>Mileage comparison</td>
-              <td>15,000 km</td>
-            </tr>
-            <tr>
-              <td>1-owner vehicle</td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td>Basic maintenance</td>
-              <td>Passed</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Accidents or damage</td>
+                <td>None reported</td>
+              </tr>
+              <tr>
+                <td>Mileage comparison</td>
+                <td>15,000 km</td>
+              </tr>
+              <tr>
+                <td>1-owner vehicle</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Basic maintenance</td>
+                <td>Passed</td>
+              </tr>
+            </tbody>
           </table>
           <div className={style.download}>
             <i>
