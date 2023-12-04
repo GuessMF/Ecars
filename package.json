@@ -1,6 +1,6 @@
 {
   "name": "ecars",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "homepage": "https://GuessMF.github.io/Ecars",
   "private": true,
   "dependencies": {
@@ -55,6 +55,7 @@
     "stream-browserify": "^3.0.0",
     "swiper": "^10.2.0",
     "tls": "^0.0.1",
+    "universal-cookie": "^6.1.1",
     "url": "^0.11.3",
     "url-polyfill": "^1.1.12",
     "util": "^0.12.5",
