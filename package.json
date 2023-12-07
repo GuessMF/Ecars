@@ -1,6 +1,6 @@
 {
   "name": "ecars",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "homepage": "https://GuessMF.github.io/Ecars",
   "private": true,
   "dependencies": {
@@ -9,6 +9,8 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
     "@types/fs-extra": "^11.0.3",
+    "@types/imagemin": "^8.0.5",
+    "@types/imagemin-webp": "^7.0.3",
     "@types/jest": "^29.5.5",
     "@types/node": "^20.6.2",
     "@types/react": "^18.2.12",
@@ -30,6 +32,8 @@
     "https-browserify": "^1.0.0",
     "image-compressor": "^2.0.3",
     "image-conversion": "^2.1.1",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^8.0.0",
     "net": "^1.0.2",
     "node-libs-browser": "^2.2.1",
     "node-polyfill-webpack-plugin": "^2.0.1",
