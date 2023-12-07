@@ -131,6 +131,8 @@ export default function Liked({userID}: Props) {
               description={car.description}
               previewIMG={car.imageUrls[0]}
               //onLoad={handleLoad}
+              onClickDelete={() => console.log()}
+              onClickCheck={() => console.log()}
             />
           ))}
       </div>

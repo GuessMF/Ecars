@@ -20,7 +20,16 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
-
+import {doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
+import {
+  ref,
+  listAll,
+  getDownloadURL,
+  getStorage,
+  deleteObject,
+  getMetadata,
+} from "firebase/storage";
+import PopUpDel from "./PopUpDel";
 interface Props {
   userID: string;
 }
@@ -46,13 +55,19 @@ export default function UserPage({userID}: Props) {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
   const {isAuth, email, displayName} = useAuth();
+  const [popUpDel, setPopUpDel] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
+  const [carName, setCarName] = useState<string>("");
+
+  const [deletedItems, setDeletedItems] = useState([]);
+
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
     if (!cookies.get("auth")) {
       navigate("/login");
     }
   }, []);
-
+  const storage = getStorage();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,12 +82,6 @@ export default function UserPage({userID}: Props) {
         setUserName(displayName);
         setLoading(false);
       }
-      // else {
-      //   navigate("/");
-      // }
-      //  else if (!isAuth) {
-      //   navigate("/");
-      // }
     };
 
     fetchData();
@@ -94,9 +103,50 @@ export default function UserPage({userID}: Props) {
       console.error("Error fetching first page: ", error);
     }
   };
+  const onDelClick = async (carId: string, carName: string) => {
+    console.log(carName);
+    if (password === carName) {
+      console.log("Можно удалять");
+    } else {
+      console.log(password);
+      console.log(carName);
+
+      console.log("Неверный пароль");
+    }
+    // try {
+    //   const carsRef = collection(db, "cars");
+    //   const docRef = doc(carsRef, carId);
+    //   await deleteDoc(docRef);
+    //   const folderRef = ref(storage, `cars/${carId}`);
+    //   const res = await listAll(folderRef);
+    //   const deletePromises = res.items.map((itemRef) => {
+    //     return deleteObject(itemRef);
+    //   });
+    //   await Promise.all(deletePromises);
+    //   setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
+    // } catch (error) {
+    //   console.error("Ошибка удаления:", error);
+    // }
+  };
+
+  // const handleDelete = (password: string) => {
+  //   // ваша логика удаления с паролем
+  //   console.log("Пароль для удаления:", password);
+  //   setPassword(password);
+  // };
+  // console.log(password);
+
+  const onClickCheck = (brand: string) => {
+    setCarName(brand);
+    setPopUpDel(true);
+    console.log(carName);
+  };
+  console.log(password);
 
   return (
     <div className={style.userPage}>
+      {popUpDel && <PopUpDel carName={carName} onConfirmDelete={onDelClick} />}
+
       <div className={style.header}>
         {loading ? (
           // Отображение скелетона (заглушки) во время ожидания данных о пользователе
@@ -126,6 +176,8 @@ export default function UserPage({userID}: Props) {
               mileage={car.mileage}
               description={car.description}
               previewIMG={car.imageUrls[0]}
+              onClickDelete={onDelClick}
+              onClickCheck={onClickCheck}
               //onLoad={handleLoad}
             />
           ))}

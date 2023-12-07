@@ -1047,6 +1047,8 @@ export default function Catalog({
                     description={car.description}
                     previewIMG={car.imageUrls[0]}
                     //onLoad={handleLoad}
+                    onClickDelete={() => console.log()}
+                    onClickCheck={() => console.log()}
                   />
                 ))
               : [...new Array(5)].map((_, i) => (

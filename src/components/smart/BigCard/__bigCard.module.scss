@@ -151,3 +151,15 @@
     }
   }
 }
+.wrapper {
+  position: relative;
+}
+.delBtn {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  background-color: red;
+  border-radius: 8px;
+  width: 70px;
+  height: 25px;
+}

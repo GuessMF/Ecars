@@ -1,0 +1,15 @@
+.popupdel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  //   bottom: 355px;
+  top: 110px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 50%;
+  height: 100vh;
+  z-index: 9995;
+  background-color: rgba(119, 119, 119, 0.6);
+}

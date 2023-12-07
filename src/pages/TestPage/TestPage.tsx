@@ -140,100 +140,6 @@ export default function PersonalPage({userID}: Props) {
     }
   }, []);
 
-  // const convertAndResizeToWebP = async (file: File) => {
-  //   const arrayBuffer = await file.arrayBuffer();
-
-  //   // Преобразование ArrayBuffer в Buffer
-  //   const buffer = Buffer.from(arrayBuffer);
-
-  //   // Конвертация в формат WebP
-  //   const convertedBuffer = await imagemin.buffer(buffer, {
-  //     plugins: [imageminWebp({quality: 75})],
-  //   });
-
-  //   // Изменение размера изображения
-  //   const resizedBuffer = await sharp(convertedBuffer)
-  //     .resize({width: 300}) // Укажите необходимую ширину
-  //     .toBuffer();
-
-  //   // Создание нового файла с измененным именем
-  //   const convertedFile = new File([resizedBuffer], "newFileName.webp", {
-  //     type: "image/webp",
-  //     lastModified: Date.now(),
-  //   });
-
-  //   return convertedFile;
-  // };
-
-  //   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     let imageCounter = 1;
-  //     if (e.target.files) {
-  //       // const newFiles = Array.from(e.target.files).map((file) => {
-  //       //   const renamedFile = new File([file], `${imageCounter}.webp`, {
-  //       //     type: file.type,
-  //       //     lastModified: Date.now(),
-  //       //   });
-  //       //   imageCounter++;
-  //       //   return renamedFile;
-  //       // });
-  //       // const compressedFiles: File[] = [];
-  //       // for (const file of newFiles) {
-  //       //   try {
-  //       //     const compressedFile = await imageConversion.compress(file, {
-  //       //       quality: 0.9,
-  //       //       width: 900,
-  //       //     });
-  //       //     compressedFiles.push(compressedFile as File);
-  //       //   } catch (error) {
-  //       //     console.error("Ошибка при сжатии файла:", error);
-  //       //   }
-  //       // }
-  //       const newFiles = Array.from(e.target.files).map((file) => {
-  //         const renamedFile = new File([file], `${imageCounter}`, {
-  //           type: file.type,
-  //           lastModified: Date.now(),
-  //         });
-  //         console.log(renamedFile);
-  //         imageCounter++;
-  //         return renamedFile;
-  //       });
-
-  //       const compressedFiles: File[] = [];
-  //       for (const file of newFiles) {
-  //         try {
-  //           const compressedFile = await imagemin([file.path], {
-  // 	destination: 'build/images',
-  // 	plugins: [
-  // 		imageminWebp({quality: 50})
-  // 	]
-  // });
-  //           compressedFiles.push(compressedFile);
-  //         } catch (error) {
-  //           console.error("Ошибка при сжатии файла:", error);
-  //         }
-  //       }
-  //        console.log(compressedFiles);
-  //       setSelectedFiles([...selectedFiles, ...newFiles]);
-  //     }
-
-  //     const files = e.target.files;
-  //     if (files) {
-  //       const images: string[] = [];
-
-  //       for (let i = 0; i < files.length; i++) {
-  //         const reader = new FileReader();
-  //         reader.onloadend = () => {
-  //           if (typeof reader.result === "string") {
-  //             images.push(reader.result);
-  //             if (images.length === files.length) {
-  //               setPreviewImages(images);
-  //             }
-  //           }
-  //         };
-  //         reader.readAsDataURL(files[i]);
-  //       }
-  //     }
-  //   };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
@@ -256,11 +162,12 @@ export default function PersonalPage({userID}: Props) {
 
             if (!ctx) return;
 
-            canvas.width = 1200;
-            canvas.height = 710;
-            ctx.drawImage(image, 0, 0, 1200, 710);
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
 
-            const compressedDataURL = canvas.toDataURL("image/webp", 0.9);
+            const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
+
             const blob = await fetch(compressedDataURL).then((res) =>
               res.blob()
             );

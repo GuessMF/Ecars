@@ -71,8 +71,21 @@ export default function Details({
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
       const folderRef = ref(storage, `cars/${currentIndex}`);
+      // const folderRef = ref(storage, `cars`);
+      listAll(folderRef)
+        .then((res) => {
+          res.items.forEach((itemRef) => {
+            console.log("Название файла:", itemRef.name);
+          });
+        })
+        .catch((error) => {
+          console.error("Ошибка получения списка файлов:", error);
+        });
+
       try {
         const photoList = await listAll(folderRef);
+        //  console.log(photoList);
+
         const urls = await Promise.all(
           photoList.items.map(async (photo) => {
             return await getDownloadURL(photo);
