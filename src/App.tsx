@@ -172,7 +172,7 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
 
-        <Route path="/test" element={<TestPage />} />
+        <Route path="/test" element={<TestPage userID={userId} />} />
       </Routes>
       <Footer />
     </div>
