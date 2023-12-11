@@ -432,6 +432,104 @@
     display: block;
     //  margin: 0 0 15px;
     // margin: 0;
+    label {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 90%;
+      align-items: center;
+    }
+    .block_white {
+      background-color: $white;
+      border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_black {
+      background-color: black;
+      // border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_silver {
+      background-color: silver;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_gray {
+      background-color: gray;
+      // border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_blue {
+      background-color: blue;
+      // border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_red {
+      background-color: red;
+      // border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_green {
+      background-color: green;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_brown {
+      background-color: brown;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_gold {
+      background-color: goldenrod;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_purple {
+      background-color: purple;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_orange {
+      background-color: orange;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_yellow {
+      background-color: yellow;
+      //  border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
+    .block_pink {
+      background-color: pink;
+      // border: $gray500 1px solid;
+      border-radius: 100%;
+      width: 15px;
+      height: 15px;
+    }
   }
 
   .more__filters {

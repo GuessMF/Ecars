@@ -484,11 +484,13 @@ export default function PersonalPage({userID}: Props) {
         </div>
 
         <div className={formErrors.color ? style.error : ""} ref={colorRef}>
-          <label>
+          <label className={style.color__label}>
             Цвет автомобиля:
             <select value={color} onChange={(e) => setColor(e.target.value)}>
               <option value="">Выберите цвет</option>
-              <option value="White">White</option>
+              <option value="White">
+                <span>White</span> <div className={style.block__white}></div>
+              </option>
               <option value="Black">Black</option>
               <option value="Silver">Silver</option>
               <option value="Gray">Gray</option>
@@ -566,12 +568,12 @@ export default function PersonalPage({userID}: Props) {
             Колличество мест:
             <select value={seats} onChange={(e) => setSeats(e.target.value)}>
               <option value="">Выберите колличество мест</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
+              <option value="TwoSeats">2</option>
+              <option value="ThreeSeats">3</option>
+              <option value="FourSeats">4</option>
+              <option value="FiveSeats">5</option>
+              <option value="SixSeats">6</option>
+              <option value="SevenSeats">7</option>
             </select>
           </label>
         </div>

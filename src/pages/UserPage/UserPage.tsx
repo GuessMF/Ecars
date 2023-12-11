@@ -48,6 +48,7 @@ interface Car {
   description: string;
   mileage: number;
   imageUrl: string;
+  // testImg: string;
 }
 export default function UserPage({userID}: Props) {
   const [cars, setCars] = useState<Car[]>([]);
@@ -57,7 +58,9 @@ export default function UserPage({userID}: Props) {
   const {isAuth, email, displayName} = useAuth();
   const [popUpDel, setPopUpDel] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [correctPassword, setCorrectPassword] = useState<boolean>(false);
   const [carName, setCarName] = useState<string>("");
+  const [carId, setCarId] = useState<string>("");
 
   const [deletedItems, setDeletedItems] = useState([]);
 
@@ -103,58 +106,66 @@ export default function UserPage({userID}: Props) {
       console.error("Error fetching first page: ", error);
     }
   };
-  const onDelClick = async (carId: string, carName: string) => {
-    console.log(carName);
-    if (password === carName) {
-      console.log("Можно удалять");
-    } else {
-      console.log(password);
-      console.log(carName);
+  const onDelClick = async () => {
+    try {
+      const carsRef = collection(db, "cars");
+      const docRef = doc(carsRef, carId);
+      await deleteDoc(docRef);
+      const folderRef = ref(storage, `cars/${carId}`);
+      const res = await listAll(folderRef);
+      const deletePromises = res.items.map((itemRef) => {
+        return deleteObject(itemRef);
+      });
+      await Promise.all(deletePromises);
+      setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
+      console.log("Deleted" + carId);
+      // setTimeout(() => {
+      setPopUpDel(false);
+      setPassword("");
 
-      console.log("Неверный пароль");
+      // }, 2000);
+    } catch (error) {
+      console.error("Ошибка удаления:", error);
     }
-    // try {
-    //   const carsRef = collection(db, "cars");
-    //   const docRef = doc(carsRef, carId);
-    //   await deleteDoc(docRef);
-    //   const folderRef = ref(storage, `cars/${carId}`);
-    //   const res = await listAll(folderRef);
-    //   const deletePromises = res.items.map((itemRef) => {
-    //     return deleteObject(itemRef);
-    //   });
-    //   await Promise.all(deletePromises);
-    //   setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
-    // } catch (error) {
-    //   console.error("Ошибка удаления:", error);
-    // }
   };
 
-  // const handleDelete = (password: string) => {
-  //   // ваша логика удаления с паролем
-  //   console.log("Пароль для удаления:", password);
-  //   setPassword(password);
-  // };
-  // console.log(password);
-
-  const onClickCheck = (brand: string) => {
-    setCarName(brand);
+  const onClickCheck = (brand: string, id: string) => {
     setPopUpDel(true);
-    console.log(carName);
+    setCarName(brand);
+    setCarId(id);
   };
-  console.log(password);
+
+  const closePopUp = () => {
+    setPopUpDel(false);
+  };
+  const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  useEffect(() => {
+    if (carName === password) {
+      setCorrectPassword(true);
+    } else {
+      setCorrectPassword(false);
+    }
+  }, [password]);
 
   return (
     <div className={style.userPage}>
-      {popUpDel && <PopUpDel carName={carName} onConfirmDelete={onDelClick} />}
+      {popUpDel && (
+        <PopUpDel
+          carName={carName}
+          password={password}
+          correctPassword={correctPassword}
+          onConfirmDelete={onDelClick}
+          onPasswordChange={onPasswordChange}
+          deleteCar={onDelClick}
+          closePopUp={closePopUp}
+        />
+      )}
 
       <div className={style.header}>
-        {loading ? (
-          // Отображение скелетона (заглушки) во время ожидания данных о пользователе
-          <h1>Заглушка</h1> // Здесь может быть ваш компонент скелетона
-        ) : (
-          // Отображение имени пользователя после его получения
-          <p>Пользователь: {userName}</p>
-        )}
+        {loading ? <h1>Заглушка</h1> : <p>Пользователь: {userName}</p>}
       </div>
       <h4>Your cars are on sale:</h4>
       <div className={style.wrapper}>
@@ -175,7 +186,8 @@ export default function UserPage({userID}: Props) {
               location={car.location}
               mileage={car.mileage}
               description={car.description}
-              previewIMG={car.imageUrls[0]}
+              previewIMG={car.previewImage[0]}
+              //   testImg={car.previewImage[0]}
               onClickDelete={onDelClick}
               onClickCheck={onClickCheck}
               //onLoad={handleLoad}

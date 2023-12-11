@@ -70,6 +70,7 @@ export default function Details({
 
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
+      const previewRef = ref(storage, `cars/${currentIndex}/preview/`);
       const folderRef = ref(storage, `cars/${currentIndex}`);
       // const folderRef = ref(storage, `cars`);
       listAll(folderRef)
@@ -81,9 +82,19 @@ export default function Details({
         .catch((error) => {
           console.error("Ошибка получения списка файлов:", error);
         });
+      listAll(previewRef)
+        .then((res) => {
+          res.items.forEach((itemRef) => {
+            console.log("Название файла:", itemRef.name);
+          });
+        })
+        .catch((error) => {
+          console.error("Ошибка получения списка файлов:", error);
+        });
 
       try {
         const photoList = await listAll(folderRef);
+        const previewImage = await listAll(previewRef);
         //  console.log(photoList);
 
         const urls = await Promise.all(
@@ -91,7 +102,14 @@ export default function Details({
             return await getDownloadURL(photo);
           })
         );
-        setPhotoURLs(urls);
+
+        const previewUrl = await Promise.all(
+          previewImage.items.map(async (photo) => {
+            return await getDownloadURL(photo);
+          })
+        );
+        setPhotoURLs((prev) => [...prev, ...previewUrl]);
+        setPhotoURLs((prev) => [...prev, ...urls]);
       } catch (error) {
         console.error("Error loading photos from Firebase:", error);
       }
@@ -138,12 +156,6 @@ export default function Details({
       navigate("/login");
     }
   }, []);
-
-  // useEffect(() => {
-  //   if (!userIdValue) {
-  //     navigate("/login");
-  //   }
-  // }, [userIdValue]);
 
   const addLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -209,25 +221,6 @@ export default function Details({
     }
   }, [userIdValue]);
 
-  // const brandParam =
-  //   currentCar && currentCar.brand ? encodeURIComponent(currentCar.brand) : ""; // Проверяем существование и определяем значение brandParam
-
-  // const searchQuery1 = `?brand=${brandParam}`;
-
-  // const params: { [key: string]: string | number | boolean } = {};
-
-  // if (currentCar && currentCar.brand) {
-  //   params.brand = encodeURIComponent(currentCar.brand);
-  // }
-
-  // if (currentCar && currentCar.year) {
-  //   params.color = encodeURIComponent(currentCar.year);
-  // }
-
-  // // Создаем новый экземпляр URLSearchParams и добавляем параметры
-  // const searchParams = new URLSearchParams(params);
-
-  // const searchQuery = searchParams.toString(); // Получаем строку запроса
   const searchParams1 = new URLSearchParams();
   const searchParams2 = new URLSearchParams();
   const searchParams3 = new URLSearchParams();

@@ -301,6 +301,11 @@ export default function Catalog({
       const arrCities = Object.keys(city).filter((key) => city[key]);
       const arrOwners = Object.keys(owners).filter((key) => owners[key]);
       const arrColor = Object.keys(color).filter((key) => color[key]);
+      const arrSeats = Object.keys(seats).filter((key) => seats[key]);
+      const arrFuel = Object.keys(fuel).filter((key) => fuel[key]);
+      const arrTransmission = Object.keys(transmission).filter(
+        (transmissionKey) => transmission[transmissionKey]
+      );
       Object.entries(vehicleType).forEach(([carType, isSelected]) => {
         if (isSelected) {
           if (arrCarTypes.length > 0) {
@@ -336,19 +341,28 @@ export default function Catalog({
 
       Object.entries(seats).forEach(([seats, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("seats", "==", seats));
+          if (arrSeats.length > 0) {
+            first = query(first, where("seats", "in", arrSeats));
+          }
         }
       });
 
       Object.entries(fuel).forEach(([fuel, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("fuel ", "==", fuel));
+          console.log(fuel);
+          // first = query(first, where("fuel", "==", "Diesel"));
+          if (arrFuel.length > 0) {
+            first = query(first, where("fuel", "in", arrFuel));
+          }
         }
       });
 
       Object.entries(transmission).forEach(([transmission, isSelected]) => {
         if (isSelected) {
-          first = query(first, where("transmission ", "==", transmission));
+          if (arrTransmission.length > 0) {
+            first = query(first, where("transmission", "in", arrTransmission));
+          }
+          // first = query(first, where("transmission ", "==", transmission));
         }
       });
 
@@ -590,6 +604,7 @@ export default function Catalog({
     description: string;
     mileage: number;
     imageUrl: string;
+    testImg: string;
   }
   interface CheckboxState {
     SUV: boolean;
@@ -656,8 +671,9 @@ export default function Catalog({
 
   const resetBrandFilter = () => {
     setBrandFilter("");
+    setModelFilter("");
   };
-  const resetModelFilter = () => {
+  const resetModelsFilter = () => {
     setModelFilter("");
   };
 
@@ -752,7 +768,7 @@ export default function Catalog({
 
   const clearFiltersArg = () => {
     resetBrandFilter();
-    resetModelFilter();
+    resetModelsFilter();
     resetVechicleTypeFilter();
     resetMileage();
     resetYear();
@@ -944,8 +960,8 @@ export default function Catalog({
 
   useEffect(() => {
     if (prevCarsRef.current !== cars) {
-      console.log(cars);
       prevCarsRef.current = cars;
+      console.log(cars);
     }
   }, [cars]);
 
@@ -968,7 +984,7 @@ export default function Catalog({
           onTransmissionchange={handleTransmissionChange}
           brandFilterValue={brandFilter}
           resetBrand={resetBrandFilter}
-          resetModel={resetModelFilter}
+          resetModels={resetModelsFilter}
           resetVechicleType={resetVechicleTypeFilter}
           resetMileage={resetMileage}
           resetYear={resetYear}
@@ -1045,8 +1061,7 @@ export default function Catalog({
                     location={car.location}
                     mileage={car.mileage}
                     description={car.description}
-                    previewIMG={car.imageUrls[0]}
-                    //onLoad={handleLoad}
+                    previewIMG={car.previewImage[0]}
                     onClickDelete={() => console.log()}
                     onClickCheck={() => console.log()}
                   />

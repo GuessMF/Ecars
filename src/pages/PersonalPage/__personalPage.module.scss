@@ -272,6 +272,13 @@
         width: 50%;
       }
     }
+    .color__label {
+      .block__white {
+        background-color: red;
+        width: 10px;
+        height: 10px;
+      }
+    }
   }
   button {
     background-color: $primary500;

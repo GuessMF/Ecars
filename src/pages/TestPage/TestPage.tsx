@@ -66,6 +66,8 @@ export default function PersonalPage({userID}: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedPreview, setSelectedPreview] = useState<File[]>([]);
+
   const [brand, setBrand] = useState<string>("test");
   const [models, setModels] = useState<CarModel[]>([]);
   const [model, setModel] = useState("test");
@@ -84,6 +86,7 @@ export default function PersonalPage({userID}: Props) {
   const [owners, setOwners] = useState<string>("test");
   const [exportStatus, setExportStatus] = useState<string>("test");
   const [description, setDescription] = useState("test");
+  const [fisrtCarPhoto, setFirstCarPhoto] = useState<string>();
 
   const [specialOffer, setSpecialOffer] = useState<boolean>(false);
 
@@ -132,6 +135,8 @@ export default function PersonalPage({userID}: Props) {
   };
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+  //let selectedFiles: File[] = [];
 
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
@@ -182,6 +187,7 @@ export default function PersonalPage({userID}: Props) {
 
             if (compressedFiles.length === files.length) {
               setSelectedFiles(compressedFiles);
+              //  selectedFiles.push(compressedFile);
               setPreviewImages(images);
             }
           };
@@ -192,6 +198,59 @@ export default function PersonalPage({userID}: Props) {
     }
   };
 
+  const handlePreviewChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const compressedFiles: File[] = [];
+    const images: string[] = [];
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      if (reader.result) {
+        const image = new Image();
+        image.src = reader.result as string;
+
+        image.onload = async () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx.drawImage(image, 0, 0);
+
+          const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
+
+          const blob = await fetch(compressedDataURL).then((res) => res.blob());
+
+          const compressedFile = new File([blob], `0.webp`, {
+            type: "image/webp",
+            lastModified: Date.now(),
+          });
+
+          compressedFiles.push(compressedFile);
+          images.push(compressedDataURL);
+
+          if (compressedFiles.length === files.length) {
+            setFirstCarPhoto(images[0]);
+            setSelectedPreview(compressedFiles);
+            // selectedFiles.push(compressedFile);
+            //  setSelectedFiles(compressedFiles);
+            //   setPreviewImages(images);
+          }
+        };
+      }
+    };
+
+    reader.readAsDataURL(file);
+    // }
+  };
   const generateNewId = (): string => {
     return uuidv4();
   };
@@ -199,9 +258,9 @@ export default function PersonalPage({userID}: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (selectedFiles.length < 1) {
-      errors.selectedFiles = "Должно быть добавлено хотя бы 1 фото";
-    }
+    // if (selectedFiles.length < 1) {
+    //   errors.selectedFiles = "Должно быть добавлено хотя бы 1 фото";
+    // }
 
     if (!brand) {
       errors.brand = "Поле Марка обязательно для заполнения";
@@ -276,15 +335,49 @@ export default function PersonalPage({userID}: Props) {
         minutes: currentDate.getMinutes(),
       };
 
-      selectedFiles.forEach((file) => {
-        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+      // selectedPreview.forEach((file)=>{
+      //   const storageForPreview = ref(
+      //     storage,
+      //     `cars/${newId}/preview/${file.name}`
+      //   );
+      //   uploadTasks.push(
+      //     uploadBytes(storageForPreview, file).then(() => getDownloadURL(storageForPreview))
+      //   );
 
-        uploadTasks.push(
-          uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+      // })
+
+      // selectedFiles.forEach((file) => {
+      //   const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+
+      //   uploadTasks.push(
+      //     uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+      //   );
+      // });
+
+      const previewUploadTasks = selectedPreview.map((file) => {
+        const storageForPreview = ref(
+          storage,
+          `cars/${newId}/preview/${file.name}`
+        );
+        return uploadBytes(storageForPreview, file).then(() =>
+          getDownloadURL(storageForPreview)
         );
       });
 
-      const imageUrls = await Promise.all(uploadTasks);
+      // Отдельная группа задач для selectedFiles
+      const filesUploadTasks = selectedFiles.map((file) => {
+        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+        return uploadBytes(storageRef, file).then(() =>
+          getDownloadURL(storageRef)
+        );
+      });
+
+      // const imageUrls = await Promise.all(uploadTasks);
+      // const previewImg = await Promise.all(uploadTasks);
+
+      const previewImg = await Promise.all(previewUploadTasks);
+      const imageUrls = await Promise.all(filesUploadTasks);
+
       const carsRef = collection(db, "cars");
       const newIndex = uuidv4();
       try {
@@ -311,6 +404,7 @@ export default function PersonalPage({userID}: Props) {
           exportStatus: exportStatus,
           description: description,
           dateObj: dateObj,
+          previewImage: previewImg,
           imageUrls: imageUrls,
           special: specialOffer,
         });
@@ -326,6 +420,7 @@ export default function PersonalPage({userID}: Props) {
       }
 
       setSelectedFiles([]);
+      // selectedFiles = [];
       setPreviewImages([]);
       setBrand("");
       setModel("");
@@ -411,6 +506,34 @@ export default function PersonalPage({userID}: Props) {
           ref={selectedFilesRef}
         >
           <label>
+            <span>Превью машины:</span>
+
+            <input
+              type="file"
+              accept="image/*"
+              // multiple
+              onChange={handlePreviewChange}
+            />
+          </label>
+          <div className={style.preview__photos}>
+            {fisrtCarPhoto && (
+              <div>
+                {" "}
+                <img
+                  src={fisrtCarPhoto}
+                  alt={`preview-${fisrtCarPhoto}`}
+                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div
+          className={formErrors.selectedFiles ? style.error : style.photos}
+          ref={selectedFilesRef}
+        >
+          <label>
             <span> Фотография машины:</span>
 
             <input
@@ -422,12 +545,15 @@ export default function PersonalPage({userID}: Props) {
           </label>
           <div className={style.preview__photos}>
             {previewImages.map((preview, index) => (
-              <img
-                key={index}
-                src={preview}
-                alt={`preview-${index}`}
-                style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
-              />
+              <div>
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`preview-${index}`}
+                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
+                />
+                <p>{index}</p>
+              </div>
             ))}
           </div>
         </div>

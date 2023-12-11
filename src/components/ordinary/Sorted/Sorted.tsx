@@ -241,13 +241,21 @@ export default function Sorted({
         {typeArr &&
           typeArr.map((type, index) => (
             <SelectedFilter
+              key={`type ${index}`}
               onClick={() => closeSelectedFilter(type)}
-              params={type}
+              params={
+                type === "PickUp"
+                  ? "Pick Up"
+                  : type === "StationWagon"
+                  ? "Station Wagon"
+                  : type
+              }
             />
           ))}
         {citiesArr &&
           citiesArr.map((city, index) => (
             <SelectedFilter
+              key={`city ${index}`}
               onClick={() => closeSelectedFilter(city)}
               params={
                 city === "SaintPetersburg"
@@ -262,6 +270,7 @@ export default function Sorted({
         {ownersArr &&
           ownersArr.map((owners, index) => (
             <SelectedFilter
+              key={`owners ${index}`}
               onClick={() => closeSelectedFilter(owners)}
               params={owners}
             />
@@ -270,6 +279,7 @@ export default function Sorted({
         {colorArr &&
           colorArr.map((color, index) => (
             <SelectedFilter
+              key={`color ${index}`}
               onClick={() => closeSelectedFilter(color)}
               params={color}
             />
@@ -278,14 +288,30 @@ export default function Sorted({
         {seatsArr &&
           seatsArr.map((seats, index) => (
             <SelectedFilter
+              key={`seats ${index}`}
               onClick={() => closeSelectedFilter(seats)}
-              params={seats}
+              params={
+                seats === "TwoSeats"
+                  ? "Two seats"
+                  : seats === "ThreeSeats"
+                  ? "Three seats"
+                  : seats === "FourSeats"
+                  ? "Four seats"
+                  : seats === "FiveSeats"
+                  ? "Five seats"
+                  : seats === "SixSeats"
+                  ? "Six seats"
+                  : seats === "SevenSeats"
+                  ? "Seven seats"
+                  : seats
+              }
             />
           ))}
 
         {fuelArr &&
           fuelArr.map((fuel, index) => (
             <SelectedFilter
+              key={`fuel ${index}`}
               onClick={() => closeSelectedFilter(fuel)}
               params={fuel}
             />
@@ -293,6 +319,7 @@ export default function Sorted({
         {transmissionArr &&
           transmissionArr.map((transmisision, index) => (
             <SelectedFilter
+              key={`transmission ${index}`}
               onClick={() => closeSelectedFilter(transmisision)}
               params={transmisision}
             />

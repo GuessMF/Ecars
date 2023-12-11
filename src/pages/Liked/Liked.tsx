@@ -31,6 +31,7 @@ interface Car {
   description: string;
   mileage: number;
   imageUrl: string;
+  //  testImg: string;
 }
 
 export default function Liked({userID}: Props) {
@@ -129,7 +130,7 @@ export default function Liked({userID}: Props) {
               location={car.location}
               mileage={car.mileage}
               description={car.description}
-              previewIMG={car.imageUrls[0]}
+              previewIMG={car.previewImage[0]}
               //onLoad={handleLoad}
               onClickDelete={() => console.log()}
               onClickCheck={() => console.log()}

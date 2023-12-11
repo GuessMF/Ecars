@@ -72,6 +72,7 @@ export default function Footer() {
             <ul>
               <li className={style.footer__title}>Cars</li>
               <li
+                className={style.cursor__pointer}
                 onClick={() => {
                   scrollToAnchor("specialOffers");
                 }}
@@ -86,6 +87,7 @@ export default function Footer() {
               </NavLink>
 
               <li
+                className={style.cursor__pointer}
                 onClick={() => {
                   scrollToAnchor("brands");
                 }}

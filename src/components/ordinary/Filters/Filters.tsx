@@ -2,11 +2,12 @@ import React from "react";
 import {CSSTransition} from "react-transition-group";
 import style from "./__filters.module.scss";
 import MoreFilters from "../../ui/MoreFilters/MoreFilters";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
 import carData from "../../../helpers/modelsBrands";
 // import {cars} from "../../helpers/carList";
+
 interface CarModel {
   name: string;
 }
@@ -18,6 +19,8 @@ interface CheckBoxes {
   Convertible: boolean;
   Coupe: boolean;
   Hatchback: boolean;
+  Van: boolean;
+  StationWagon: boolean;
 }
 interface Cities {
   SaintPetersburg: boolean;
@@ -87,7 +90,7 @@ interface FiltersProps {
   onTransmissionchange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   brandFilterValue: string;
   modelFilterValue: string;
-  resetModel: () => void;
+  resetModels: () => void;
   resetBrand: () => void;
   resetVechicleType: () => void;
   resetMileage: () => void;
@@ -142,7 +145,7 @@ export default function Filters({
   modelFilterValue,
   selectedCurrency,
   resetBrand,
-  resetModel,
+  resetModels,
   resetVechicleType,
   resetMileage,
   resetYear,
@@ -190,7 +193,7 @@ FiltersProps) {
     setIsFiltersOpen(false);
   };
   const [brand, setBrand] = useState<string>("");
-  const [model, setModel] = useState<string>("");
+  // const [model, setModel] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
 
   const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -202,8 +205,8 @@ FiltersProps) {
       (item) => item.name === selectedBrand
     );
     setModels(selectedBrandData ? selectedBrandData.models : []);
-    console.log(selectedBrand);
   };
+
   const onBrandSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedBrand: string = event.target.value;
     setBrand(selectedBrand);
@@ -216,7 +219,21 @@ FiltersProps) {
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
-  // onChange={onModelFilterChange}
+
+  const onResetBrand = () => {
+    resetBrand();
+    onResetModels();
+  };
+  const onResetModels = () => {
+    resetModels();
+    setModels([]);
+  };
+  useEffect(() => {
+    if (!modelFilterValue) {
+      onResetModels();
+    }
+  }, [modelFilterValue]);
+
   return (
     <div
       className={`${style.filtersWrapper} ${
@@ -230,7 +247,7 @@ FiltersProps) {
         <div className={style.filters__brand}>
           <div className={style.filters__label}>
             <h6>Brand</h6>
-            <span onClick={() => resetBrand()}>Reset</span>
+            <span onClick={onResetBrand}>Reset</span>
           </div>
 
           <select value={brandFilterValue} onChange={onBrandSelectChange}>
@@ -247,7 +264,7 @@ FiltersProps) {
         <div className={style.filters__model}>
           <div className={style.filters__label}>
             <h6>Model</h6>
-            <span onClick={() => resetModel()}>Reset</span>
+            <span onClick={onResetModels}>Reset</span>
           </div>
 
           <select onChange={onModelFilterChange}>
@@ -337,6 +354,7 @@ FiltersProps) {
                 type="checkbox"
                 id="Van"
                 onChange={onCheckboxChange}
+                checked={checkBoxes1.Van}
               />
               <label htmlFor="Van">Van</label>
             </li>
@@ -346,6 +364,7 @@ FiltersProps) {
                 type="checkbox"
                 id="StationWagon"
                 onChange={onCheckboxChange}
+                checked={checkBoxes1.StationWagon}
               />
               <label htmlFor="StationWagon">Station Wagon</label>
             </li>
@@ -636,7 +655,9 @@ FiltersProps) {
                     checked={color.White}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="White">White</label>
+                  <label htmlFor="White">
+                    White <div className={style.block_white}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -647,7 +668,9 @@ FiltersProps) {
                     checked={color.Black}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Black">Black</label>
+                  <label htmlFor="Black">
+                    Black <div className={style.block_black}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -658,7 +681,9 @@ FiltersProps) {
                     checked={color.Silver}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Silver">Silver</label>
+                  <label htmlFor="Silver">
+                    Silver <div className={style.block_silver}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -669,7 +694,9 @@ FiltersProps) {
                     checked={color.Gray}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Gray">Gray</label>
+                  <label htmlFor="Gray">
+                    Gray <div className={style.block_gray}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -679,7 +706,9 @@ FiltersProps) {
                     id="Blue"
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Blue">Blue</label>
+                  <label htmlFor="Blue">
+                    Blue <div className={style.block_blue}></div>
+                  </label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
@@ -689,7 +718,9 @@ FiltersProps) {
                     checked={color.Red}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Red">Red</label>
+                  <label htmlFor="Red">
+                    Red <div className={style.block_red}></div>
+                  </label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
@@ -699,7 +730,9 @@ FiltersProps) {
                     checked={color.Green}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Green">Green</label>
+                  <label htmlFor="Green">
+                    Green <div className={style.block_green}></div>
+                  </label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
@@ -709,7 +742,9 @@ FiltersProps) {
                     checked={color.Brown}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Brown">Brown</label>
+                  <label htmlFor="Brown">
+                    Brown <div className={style.block_brown}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -720,7 +755,9 @@ FiltersProps) {
                     checked={color.Gold}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Gold">Gold</label>
+                  <label htmlFor="Gold">
+                    Gold <div className={style.block_gold}></div>
+                  </label>
                 </li>
                 <li className={style.form_checkbox}>
                   <input
@@ -730,7 +767,9 @@ FiltersProps) {
                     checked={color.Purple}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Purple">Purple</label>
+                  <label htmlFor="Purple">
+                    Purple <div className={style.block_purple}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -741,7 +780,9 @@ FiltersProps) {
                     checked={color.Orange}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Orange">Orange</label>
+                  <label htmlFor="Orange">
+                    Orange <div className={style.block_orange}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -752,7 +793,9 @@ FiltersProps) {
                     checked={color.Yellow}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Yellow">Yellow</label>
+                  <label htmlFor="Yellow">
+                    Yellow <div className={style.block_yellow}></div>
+                  </label>
                 </li>
 
                 <li className={style.form_checkbox}>
@@ -763,7 +806,9 @@ FiltersProps) {
                     checked={color.Pink}
                     onChange={onColorChange}
                   />
-                  <label htmlFor="Pink">Pink</label>
+                  <label htmlFor="Pink">
+                    Pink <div className={style.block_pink}></div>
+                  </label>
                 </li>
               </ul>
             </div>

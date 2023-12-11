@@ -37,7 +37,7 @@ interface Props {
   usdValue: number;
   eurValue: number;
   onClickDelete: (id: string, carName: string) => void;
-  onClickCheck: (brand: string) => void;
+  onClickCheck: (brand: string, id: string) => void;
 }
 
 export default function BigCard({
@@ -101,6 +101,7 @@ Props) {
       setUserPage(true);
     }
   }, []);
+
   // const folderRef = ref(storage, "cars/");
   // const onDelClick = async () => {
   //   console.log(id);
@@ -176,7 +177,11 @@ Props) {
               <div className={style.information__state}>
                 {location} • {mileage < 20 ? "Brand NEW" : "Used"} • {mileage}{" "}
                 km
-                {owner === 0 ? " " : " • " + owner + " Owners"}
+                {owners === "None"
+                  ? " "
+                  : owners === "One"
+                  ? " • One owner"
+                  : " • " + owners + " Owners"}
               </div>
               <div className={style.information__description}>
                 {description}
@@ -202,7 +207,7 @@ Props) {
       {userPage && (
         <button
           // onClick={() => onClickDelete(id, brand)}
-          onClick={() => onClickCheck(brand)}
+          onClick={() => onClickCheck(brand, id)}
           className={style.delBtn}
         >
           delete
