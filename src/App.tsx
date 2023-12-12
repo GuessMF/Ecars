@@ -159,7 +159,13 @@ function App() {
         />
         <Route
           path="/sell/:userId"
-          element={<PersonalPage userID={userId} />}
+          element={
+            <PersonalPage
+              eurValue={eurValue}
+              usdValue={usdValue}
+              userID={userId}
+            />
+          }
         />
 
         <Route

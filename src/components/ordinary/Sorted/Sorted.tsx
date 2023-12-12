@@ -3,6 +3,9 @@ import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
 import Select, {components} from "react-select";
+import {setSearchTerm} from "store/slices/searchSlice";
+import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
+
 // import StylesConfig from "react-select";
 
 // interface SortType {
@@ -16,6 +19,7 @@ import Select, {components} from "react-select";
 // }
 
 interface FiltersProps {
+  searchValue: string;
   onChangeSortBy: (obj: any) => void;
   sortOption: string;
   isFiltersOpen: boolean;
@@ -39,6 +43,7 @@ interface FiltersProps {
 }
 
 export default function Sorted({
+  searchValue,
   onChangeSortBy,
   sortOption,
   setIsFiltersOpen,
@@ -167,6 +172,13 @@ export default function Sorted({
     );
   };
 
+  const dispatch = useAppDispatch();
+
+  const onCloseSearchValue = () => {
+    setSearchTerm("");
+    dispatch(setSearchTerm(""));
+  };
+
   return (
     <div className={style.sorted}>
       <div className={style.sorted__top}>
@@ -208,6 +220,10 @@ export default function Sorted({
         <span>Filters</span>
       </button>
       <div className={style.sorted__bottom}>
+        {searchValue && (
+          <SelectedFilter onClick={onCloseSearchValue} params={searchValue} />
+        )}
+
         {brand && (
           <SelectedFilter
             onClick={() => closeSelectedFilter("brand")}

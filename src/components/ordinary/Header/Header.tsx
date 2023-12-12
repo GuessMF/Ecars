@@ -11,10 +11,13 @@ import {useNavigate} from "react-router-dom";
 
 import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
-import {useAppDispatch} from "hooks/redux-hooks";
+import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
 import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 
 import Cookies from "universal-cookie";
+import {setSearchTerm} from "store/slices/searchSlice";
+
+//import { useAppDispatch } from "hooks/redux-hooks";
 
 const version: string = "little";
 
@@ -22,9 +25,14 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [openInput, setOpenInput] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const cookies = new Cookies(null, {path: "/"});
   const {isAuth, email, displayName} = useAuth();
+
+  const searchTerm = useAppSelector((state) => state.search.searchTerm);
+
   const navigate = useNavigate();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -50,6 +58,21 @@ export default function Header() {
       });
   };
 
+  const onClickSearch = () => {
+    setOpenInput(!openInput);
+  };
+  const onChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    navigate("/catalog");
+    setSearchValue(e.target.value);
+    dispatch(setSearchTerm(e.target.value));
+  };
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setSearchValue("");
+      setOpenInput(false);
+    }
+  }, [searchTerm]);
   return (
     <div className={style.header}>
       <nav className={style.header__nav}>
@@ -89,7 +112,6 @@ export default function Header() {
         </NavLink>
 
         <div className={style.links}>
-          {" "}
           <li>
             <NavLink to="/catalog" className={style.navLink}>
               All Cars
@@ -102,7 +124,6 @@ export default function Header() {
           </li>
           <li>Blog</li>
           <li>
-            {" "}
             <NavLink to="/test" className={style.navLink}>
               Test
             </NavLink>
@@ -111,7 +132,11 @@ export default function Header() {
       </nav>
       <div className={style.header__formGroup}>
         <div className={style.formGroup__icons}>
-          <Search />
+          {openInput && (
+            <input value={searchValue} onChange={onChangeSearchValue}></input>
+          )}
+
+          <Search onClick={() => onClickSearch()} />
 
           {userId ? (
             <NavLink to={`/liked/${userId}`}>

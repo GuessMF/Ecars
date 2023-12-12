@@ -170,8 +170,10 @@ Props) {
           <div className={style.bigCard__information}>
             <div className={style.information__top}>
               <div className={style.information__name}>
-                <span>{brand}</span>
-                <span>{model}</span>
+                <span>
+                  {brand.charAt(0).toLocaleUpperCase() + brand.slice(1)}
+                </span>
+                <span>{model.toLocaleUpperCase()}</span>
               </div>
 
               <div className={style.information__state}>

@@ -112,11 +112,20 @@ export default function UserPage({userID}: Props) {
       const docRef = doc(carsRef, carId);
       await deleteDoc(docRef);
       const folderRef = ref(storage, `cars/${carId}`);
+      const previewRef = ref(storage, `cars/${carId}/preview/`);
+      const previewRes = await listAll(previewRef);
       const res = await listAll(folderRef);
+
+      const deletePreview = previewRes.items.map((itemRef) => {
+        return deleteObject(itemRef);
+      });
+
       const deletePromises = res.items.map((itemRef) => {
         return deleteObject(itemRef);
       });
+      await Promise.all(deletePreview);
       await Promise.all(deletePromises);
+
       setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
       console.log("Deleted" + carId);
       // setTimeout(() => {
@@ -141,12 +150,19 @@ export default function UserPage({userID}: Props) {
   const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
+  // console.log("Password: " + password);
+  // console.log("CarName: " + carName);
 
   useEffect(() => {
-    if (carName === password) {
-      setCorrectPassword(true);
-    } else {
-      setCorrectPassword(false);
+    //if (carName) {
+    //console.log(carName.length);
+    //  }
+    if (carName.length > 0) {
+      if (carName === password) {
+        setCorrectPassword(true);
+      } else {
+        setCorrectPassword(false);
+      }
     }
   }, [password]);
 

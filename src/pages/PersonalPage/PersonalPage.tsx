@@ -1,19 +1,31 @@
 import React, {useRef, useEffect, useState} from "react";
-import style from "./__personalPage.module.scss";
+import style from "../PersonalPage/__personalPage.module.scss";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import carData from "../../helpers/modelsBrands";
-import PopUpError from "./PopUpError";
-import PopUpSent from "./PopUpSent";
+// import PopUpError from "./PopUpError";
+// import PopUpSent from "./PopUpSent";
+import PopUpError from "pages/PersonalPage/PopUpError";
+import PopUpSent from "pages/PersonalPage/PopUpSent";
 import {Rings} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
 import Cookies from "universal-cookie";
+import * as imageConversion from "image-conversion";
+import sharp from "sharp";
+import imagemin from "imagemin";
+//import imageminWebp from "imagemin-webp";
+import Select from "react-select";
+import OptionTypeBase from "react-select";
+
+import imageminWebp from "imagemin-webp";
 
 interface Props {
   userID: string;
+  eurValue: number;
+  usdValue: number;
 }
 
 interface CarModel {
@@ -24,6 +36,7 @@ interface Errors {
   brand?: string;
   model?: string;
   selectedFiles?: string;
+  selectedPreview?: string;
   price?: string;
   year?: string;
   mileage?: string;
@@ -52,30 +65,38 @@ type DateObject = {
 interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
-export default function PersonalPage({userID}: Props) {
+export default function PersonalPage({userID, usdValue, eurValue}: Props) {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [brand, setBrand] = useState<string>("");
+  const [selectedPreview, setSelectedPreview] = useState<File[]>([]);
+
+  const [brand, setBrand] = useState<string>("test");
   const [models, setModels] = useState<CarModel[]>([]);
-  const [model, setModel] = useState("");
-  const [price, setPrice] = useState<number>(0);
-  const [year, setYear] = useState<number>(0);
-  const [mileage, setMileage] = useState<number>(0);
-  const [transmission, setTransmission] = useState<string>("");
-  const [fuel, setFuel] = useState<string>("");
-  const [wheels, setWheels] = useState<string>("");
-  const [vehicleType, setVehicleType] = useState<string>("");
-  const [engineCapacity, setEngineCapacity] = useState<string>("");
-  const [seats, setSeats] = useState<string>("");
-  const [interior, setInterior] = useState<string>("");
-  const [color, setColor] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [owners, setOwners] = useState<string>("");
-  const [exportStatus, setExportStatus] = useState<string>("");
-  const [description, setDescription] = useState("");
+
+  const [brandAndModel, setBrandAndModel] = useState<string>("");
+  const [model, setModel] = useState("test");
+  const [price, setPrice] = useState<number>(10);
+  const [year, setYear] = useState<number>(2010);
+  const [mileage, setMileage] = useState<number>(10);
+  const [transmission, setTransmission] = useState<string>("test");
+  const [fuel, setFuel] = useState<string>("test");
+  const [wheels, setWheels] = useState<string>("test");
+  const [vehicleType, setVehicleType] = useState<string>("test");
+  const [engineCapacity, setEngineCapacity] = useState<string>("test");
+  const [seats, setSeats] = useState<string>("test");
+  const [interior, setInterior] = useState<string>("test");
+  const [color, setColor] = useState<string>("test");
+  const [location, setLocation] = useState<string>("test");
+  const [owners, setOwners] = useState<string>("test");
+  const [exportStatus, setExportStatus] = useState<string>("test");
+  const [description, setDescription] = useState("test");
+  const [fisrtCarPhoto, setFirstCarPhoto] = useState<string>();
+
+  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
+  const [currentCur, setCurrentCur] = useState<string>("");
 
   const [specialOffer, setSpecialOffer] = useState<boolean>(false);
 
@@ -84,6 +105,7 @@ export default function PersonalPage({userID}: Props) {
   const errors: Errors = {};
 
   const selectedFilesRef = useRef<HTMLDivElement>(null);
+  const selectedPreviewRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
   const modelRef = useRef<HTMLDivElement>(null);
   const vehicleTypeRef = useRef<HTMLDivElement>(null);
@@ -104,6 +126,7 @@ export default function PersonalPage({userID}: Props) {
 
   const refs: Refs = {
     selectedFiles: selectedFilesRef,
+    selectedPreview: selectedPreviewRef,
     brand: brandRef,
     model: modelRef,
     vehicleType: vehicleTypeRef,
@@ -125,6 +148,8 @@ export default function PersonalPage({userID}: Props) {
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
+  //let selectedFiles: File[] = [];
+
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
     if (!cookies.get("auth")) {
@@ -132,45 +157,143 @@ export default function PersonalPage({userID}: Props) {
     }
   }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let imageCounter = 1;
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files).map((file) => {
-        const renamedFile = new File([file], `${imageCounter}.webp`, {
-          type: file.type,
-        });
-        imageCounter++;
-        return renamedFile;
-      });
+  useEffect(() => {
+    setBrandAndModel(
+      `${brand.toLocaleLowerCase()} ${model.toLocaleLowerCase()}`
+    );
+  }, [model]);
 
-      setSelectedFiles([...selectedFiles, ...newFiles]);
-    }
+  useEffect(() => {
+    console.log(brandAndModel);
+  }, [brandAndModel]);
 
+  const toggleMenu = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
+
+  const onClickCurrency = (selectedOption: any) => {
+    setCurrentCur(selectedOption);
+    // onCurrencyChange(selectedOption);
+    console.log(selectedOption);
+    setMenuIsOpen(false);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files) {
-      const images: string[] = [];
+    if (!files) return;
 
-      for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          if (typeof reader.result === "string") {
-            images.push(reader.result);
-            if (images.length === files.length) {
+    const compressedFiles: File[] = [];
+    const images: string[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        if (reader.result) {
+          const image = new Image();
+          image.src = reader.result as string;
+
+          image.onload = async () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            if (!ctx) return;
+
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+
+            const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
+
+            const blob = await fetch(compressedDataURL).then((res) =>
+              res.blob()
+            );
+
+            const compressedFile = new File([blob], `${i + 1}.webp`, {
+              type: "image/webp",
+              lastModified: Date.now(),
+            });
+
+            compressedFiles.push(compressedFile);
+            images.push(compressedDataURL);
+
+            if (compressedFiles.length === files.length) {
+              setSelectedFiles(compressedFiles);
+              //  selectedFiles.push(compressedFile);
               setPreviewImages(images);
             }
-          }
-        };
-        reader.readAsDataURL(files[i]);
-      }
+          };
+        }
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 
+  const handlePreviewChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const compressedFiles: File[] = [];
+    const images: string[] = [];
+
+    const file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      if (reader.result) {
+        const image = new Image();
+        image.src = reader.result as string;
+
+        image.onload = async () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) return;
+
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx.drawImage(image, 0, 0);
+
+          const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
+
+          const blob = await fetch(compressedDataURL).then((res) => res.blob());
+
+          const compressedFile = new File([blob], `0.webp`, {
+            type: "image/webp",
+            lastModified: Date.now(),
+          });
+
+          compressedFiles.push(compressedFile);
+          images.push(compressedDataURL);
+
+          if (compressedFiles.length === files.length) {
+            setFirstCarPhoto(images[0]);
+            setSelectedPreview(compressedFiles);
+            // selectedFiles.push(compressedFile);
+            //  setSelectedFiles(compressedFiles);
+            //   setPreviewImages(images);
+          }
+        };
+      }
+    };
+
+    reader.readAsDataURL(file);
+    // }
+  };
   const generateNewId = (): string => {
     return uuidv4();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (selectedPreview.length < 1) {
+      errors.selectedPreview = "Должно быть добавлено хотя бы 1 фото";
+    }
 
     if (selectedFiles.length < 1) {
       errors.selectedFiles = "Должно быть добавлено хотя бы 1 фото";
@@ -232,6 +355,8 @@ export default function PersonalPage({userID}: Props) {
     }
 
     if (Object.keys(errors).length > 0) {
+      console.log(errors);
+
       setFormErrors(errors);
       setPopUpErrors(true);
     } else {
@@ -249,15 +374,35 @@ export default function PersonalPage({userID}: Props) {
         minutes: currentDate.getMinutes(),
       };
 
-      selectedFiles.forEach((file) => {
-        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
-
-        uploadTasks.push(
-          uploadBytes(storageRef, file).then(() => getDownloadURL(storageRef))
+      const previewUploadTasks = selectedPreview.map((file) => {
+        const storageForPreview = ref(
+          storage,
+          `cars/${newId}/preview/${file.name}`
+        );
+        return uploadBytes(storageForPreview, file).then(() =>
+          getDownloadURL(storageForPreview)
         );
       });
 
-      const imageUrls = await Promise.all(uploadTasks);
+      // Отдельная группа задач для selectedFiles
+      const filesUploadTasks = selectedFiles.map((file) => {
+        const storageRef = ref(storage, `cars/${newId}/${file.name}`);
+        return uploadBytes(storageRef, file).then(() =>
+          getDownloadURL(storageRef)
+        );
+      });
+
+      // const imageUrls = await Promise.all(uploadTasks);
+      // const previewImg = await Promise.all(uploadTasks);
+      console.log("Brand: " + brand);
+      console.log("Model: " + model);
+
+      setBrandAndModel(`${brand} ${model}`);
+      console.log(brandAndModel);
+
+      const previewImg = await Promise.all(previewUploadTasks);
+      const imageUrls = await Promise.all(filesUploadTasks);
+
       const carsRef = collection(db, "cars");
       const newIndex = uuidv4();
       try {
@@ -266,9 +411,15 @@ export default function PersonalPage({userID}: Props) {
           id: newId,
           userId: userID,
           dateAdded: currentDate,
-          brand: brand,
-          model: model,
-          price: price,
+          brand: brand.toLocaleLowerCase(),
+          model: model.toLocaleLowerCase(),
+          brandAndModel: brandAndModel,
+          price:
+            currentCur === "RUB"
+              ? price / usdValue
+              : currentCur === "EUR"
+              ? price / (usdValue / eurValue)
+              : price,
           year: year,
           mileage: mileage,
           transmission: transmission,
@@ -284,6 +435,7 @@ export default function PersonalPage({userID}: Props) {
           exportStatus: exportStatus,
           description: description,
           dateObj: dateObj,
+          previewImage: previewImg,
           imageUrls: imageUrls,
           special: specialOffer,
         });
@@ -299,6 +451,7 @@ export default function PersonalPage({userID}: Props) {
       }
 
       setSelectedFiles([]);
+      // selectedFiles = [];
       setPreviewImages([]);
       setBrand("");
       setModel("");
@@ -371,6 +524,23 @@ export default function PersonalPage({userID}: Props) {
     }
   };
 
+  // const changePrice = (price: number) => {
+
+  //   setPrice(price);
+  //   console.log(price);
+
+  //   // useEffect(() => {
+  //   //   console.log(currentCur);
+  //   //   console.log(price);
+  //   //   if (currentCur === "USD") {
+  //   //     setPrice(price);
+  //   //   }
+  //   //   if (currentCur === "RUB") {
+  //   //     setPrice(price * usdValue);
+  //   //   }
+  //   // }, [currentCur, price]);
+  // };
+
   return (
     <div className={style.login}>
       <h3>Sell your car</h3>
@@ -379,6 +549,34 @@ export default function PersonalPage({userID}: Props) {
       <PopUpSent sent={sent} />
 
       <form onSubmit={handleSubmit} id="form" className={style.form}>
+        <div
+          className={formErrors.selectedPreview ? style.error : style.photos}
+          ref={selectedPreviewRef}
+        >
+          <label>
+            <span>Превью машины:</span>
+
+            <input
+              type="file"
+              accept="image/*"
+              // multiple
+              onChange={handlePreviewChange}
+            />
+          </label>
+          <div className={style.preview__photos}>
+            {fisrtCarPhoto && (
+              <div>
+                {" "}
+                <img
+                  src={fisrtCarPhoto}
+                  alt={`preview-${fisrtCarPhoto}`}
+                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
         <div
           className={formErrors.selectedFiles ? style.error : style.photos}
           ref={selectedFilesRef}
@@ -395,12 +593,15 @@ export default function PersonalPage({userID}: Props) {
           </label>
           <div className={style.preview__photos}>
             {previewImages.map((preview, index) => (
-              <img
-                key={index}
-                src={preview}
-                alt={`preview-${index}`}
-                style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
-              />
+              <div>
+                <img
+                  key={index}
+                  src={preview}
+                  alt={`preview-${index}`}
+                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
+                />
+                <p>{index}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -484,13 +685,11 @@ export default function PersonalPage({userID}: Props) {
         </div>
 
         <div className={formErrors.color ? style.error : ""} ref={colorRef}>
-          <label className={style.color__label}>
+          <label>
             Цвет автомобиля:
             <select value={color} onChange={(e) => setColor(e.target.value)}>
               <option value="">Выберите цвет</option>
-              <option value="White">
-                <span>White</span> <div className={style.block__white}></div>
-              </option>
+              <option value="White">White</option>
               <option value="Black">Black</option>
               <option value="Silver">Silver</option>
               <option value="Gray">Gray</option>
@@ -568,12 +767,12 @@ export default function PersonalPage({userID}: Props) {
             Колличество мест:
             <select value={seats} onChange={(e) => setSeats(e.target.value)}>
               <option value="">Выберите колличество мест</option>
-              <option value="TwoSeats">2</option>
-              <option value="ThreeSeats">3</option>
-              <option value="FourSeats">4</option>
-              <option value="FiveSeats">5</option>
-              <option value="SixSeats">6</option>
-              <option value="SevenSeats">7</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
             </select>
           </label>
         </div>
@@ -656,6 +855,15 @@ export default function PersonalPage({userID}: Props) {
         <div className={formErrors.price ? style.error : ""} ref={priceRef}>
           <label>
             Цена:
+            <select
+              value={currentCur}
+              onChange={(e) => setCurrentCur(e.target.value)}
+            >
+              <option value="">Выберите валюту</option>
+              <option value="USD">USD</option>
+              <option value="RUB">RUB</option>
+              <option value="EUR">EUR</option>
+            </select>
             <input
               type="number"
               value={price}
@@ -665,17 +873,14 @@ export default function PersonalPage({userID}: Props) {
         </div>
 
         <div
-          className={formErrors.description ? style.error : ""}
+          className={formErrors.description ? style.error : style.description}
           ref={descriptionRef}
         >
-          <label>
-            Описание:
-            <input
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </label>
+          <label>Описание:</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
 
         <div

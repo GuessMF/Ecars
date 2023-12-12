@@ -1,9 +1,12 @@
 import React from "react";
 import style from "./__search.module.scss";
 
-export default function Search() {
+interface Props {
+  onClick: () => void;
+}
+export default function Search({onClick}: Props) {
   return (
-    <div className={style.search}>
+    <div className={style.search} onClick={onClick}>
       <svg
         width="18"
         height="18"

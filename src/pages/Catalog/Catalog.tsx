@@ -30,6 +30,7 @@ import {
 import {db} from "../../firebase";
 import {start} from "repl";
 import firebase from "firebase/app";
+import {useAppSelector} from "hooks/redux-hooks";
 
 interface CatalogProps {
   selectedCurrency: string;
@@ -66,6 +67,10 @@ export default function Catalog({
   // };
   // const yearMileagePrice = `${newCarData.year}-${newCarData.mileage}-${newCarData.price}`;
   // newCarData.yearMileagePrice = yearMileagePrice;
+
+  const searchTerm = useAppSelector((state) => state.search.searchTerm);
+
+  // console.log("Search in catalog: " + searchTerm);
 
   let multiplier: number =
     selectedCurrency === "RUB"
@@ -120,6 +125,9 @@ export default function Catalog({
     AbuDhabi: false,
     Shanghai: false,
   });
+  // useEffect(() => {
+  //   setBrandFilter("Acura");
+  // }, []);
 
   const newLocationParam = () => {
     let location = locationParam;
@@ -239,7 +247,8 @@ export default function Catalog({
       minYearValue,
       maxYearValue,
       minPriceValue,
-      maxPriceValue
+      maxPriceValue,
+      searchTerm
     );
 
     if (minMileageValue > 0 || maxMileageValue < 999999) {
@@ -271,6 +280,7 @@ export default function Catalog({
     maxYearValue,
     minPriceValue,
     maxPriceValue,
+    searchTerm,
   ]);
 
   const fetchFirstPage = async (
@@ -289,7 +299,8 @@ export default function Catalog({
     minYear: number,
     maxYear: number,
     minPrice: number,
-    maxPrice: number
+    maxPrice: number,
+    searchTerm: string
   ) => {
     try {
       const carsRef = collection(db, "cars");
@@ -349,8 +360,6 @@ export default function Catalog({
 
       Object.entries(fuel).forEach(([fuel, isSelected]) => {
         if (isSelected) {
-          console.log(fuel);
-          // first = query(first, where("fuel", "==", "Diesel"));
           if (arrFuel.length > 0) {
             first = query(first, where("fuel", "in", arrFuel));
           }
@@ -362,222 +371,136 @@ export default function Catalog({
           if (arrTransmission.length > 0) {
             first = query(first, where("transmission", "in", arrTransmission));
           }
-          // first = query(first, where("transmission ", "==", transmission));
         }
       });
 
-      if (brandFilter) {
-        first = query(first, where("brand", "==", brandFilter));
+      if (searchTerm) {
+        const searchTermLowerCase = searchTerm.toLowerCase();
+
+        const brandQuery = query(
+          collection(db, "cars"),
+          where("brand", ">=", searchTermLowerCase),
+          where("brand", "<", searchTermLowerCase + "\uf8ff")
+        );
+
+        const modelQuery = query(
+          collection(db, "cars"),
+          where("model", ">=", searchTermLowerCase),
+          where("model", "<", searchTermLowerCase + "\uf8ff")
+        );
+
+        const combinedQuery = query(
+          collection(db, "cars"),
+          where("brandAndModel", ">=", searchTermLowerCase),
+          where("brandAndModel", "<", searchTermLowerCase + "\uf8ff")
+        );
+
+        const [brandSnapshot, modelSnapshot, combinedSnapshot] =
+          await Promise.all([
+            getDocs(brandQuery),
+            getDocs(modelQuery),
+            getDocs(combinedQuery),
+          ]);
+
+        const carsFromBrandQuery = brandSnapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+        );
+
+        const carsFromModelQuery = modelSnapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+        );
+
+        const carsFromCombinedQuery = combinedSnapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+        );
+
+        const uniqueCars = new Map();
+
+        [
+          ...carsFromBrandQuery,
+          ...carsFromModelQuery,
+          ...carsFromCombinedQuery,
+        ].forEach((car) => {
+          uniqueCars.set(car.id, car);
+        });
+
+        const mergedCars = Array.from(uniqueCars.values());
+
+        const paginatedCars = mergedCars.slice(
+          currentPage * itemsPerPage - itemsPerPage,
+          currentPage * itemsPerPage
+        );
+
+        setCars(paginatedCars);
+
+        setTotalCars(mergedCars.length);
+        setCars(paginatedCars);
+        setFiltredCars(mergedCars.length);
+        setLoaded(true);
       }
 
-      if (modelFilter) {
-        first = query(first, where("model", "==", modelFilter));
+      if (!searchTerm) {
+        if (brandFilter) {
+          first = query(
+            first,
+            where("brand", "==", brandFilter.toLocaleLowerCase())
+          );
+        }
+
+        if (modelFilter) {
+          first = query(
+            first,
+            where("model", "==", modelFilter.toLocaleLowerCase())
+          );
+        }
+
+        first = query(
+          first,
+          orderBy(firstPrompt, `${sortType.desc ? "desc" : "asc"}`)
+        );
+
+        const querySnapshot = await getDocs(first);
+
+        const cars = querySnapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+        );
+
+        const filtredMileageCars = cars.filter(
+          (car) =>
+            car.mileage <= maxMileageValue && car.mileage >= minMileageValue
+        );
+        const filtredYearCars = filtredMileageCars.filter(
+          (car) => car.year <= maxYearValue && car.year >= minYearValue
+        );
+        const filtredPriceCars = filtredYearCars.filter(
+          (car) =>
+            Number(car.price) * multiplier <= maxPriceValue &&
+            Number(car.price) * multiplier >= minPriceValue
+        );
+
+        if (querySnapshot.docs.length > 0) {
+          setLastVisibleRefs([
+            querySnapshot.docs[
+              querySnapshot.docs.length - 1
+            ] as QueryDocumentSnapshot<Car>,
+          ]);
+        }
+
+        const paginatedCars = filtredPriceCars.slice(
+          currentPage * itemsPerPage - itemsPerPage,
+          currentPage * itemsPerPage
+        );
+
+        setTotalCars(filtredPriceCars.length);
+        setCars(paginatedCars);
+        setFiltredCars(filtredPriceCars.length);
+        setLoaded(true);
       }
-
-      first = query(
-        first,
-        orderBy(firstPrompt, `${sortType.desc ? "desc" : "asc"}`)
-      );
-
-      const querySnapshot = await getDocs(first);
-
-      const cars = querySnapshot.docs.map(
-        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-      );
-
-      const filtredMileageCars = cars.filter(
-        (car) =>
-          car.mileage <= maxMileageValue && car.mileage >= minMileageValue
-      );
-      const filtredYearCars = filtredMileageCars.filter(
-        (car) => car.year <= maxYearValue && car.year >= minYearValue
-      );
-      const filtredPriceCars = filtredYearCars.filter(
-        (car) =>
-          Number(car.price) * multiplier <= maxPriceValue &&
-          Number(car.price) * multiplier >= minPriceValue
-      );
-
-      if (querySnapshot.docs.length > 0) {
-        setLastVisibleRefs([
-          querySnapshot.docs[
-            querySnapshot.docs.length - 1
-          ] as QueryDocumentSnapshot<Car>,
-        ]);
-      }
-
-      const paginatedCars = filtredPriceCars.slice(
-        currentPage * itemsPerPage - itemsPerPage,
-        currentPage * itemsPerPage
-      );
-
-      setTotalCars(filtredPriceCars.length);
-      //  setCars(filtredPriceCars);
-      setCars(paginatedCars);
-
-      setFiltredCars(filtredPriceCars.length);
-      setLoaded(true);
     } catch (error) {
       console.error("Error fetching first page: ", error);
     }
   };
-  // const nextPage = () => {
-  //   fetchNextPage(vechicleTypeCheckboxes, cityCheckboxes);
-  // };
 
-  // const fetchNextPage = async (
-  //   vehicleType: Record<string, boolean>,
-  //   city: Record<string, boolean>
-  // ) => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-  //     const lastVisible = lastVisibleRefs[currentPage - 1];
-  //     if (lastVisible) {
-  //       let next = query(
-  //         carsRef,
-  //         orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
-  //         startAfter(lastVisible),
-  //         limit(itemsPerPage)
-  //       );
-
-  //       Object.entries(vehicleType).forEach(([carType, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("vehicleType", "==", carType));
-  //         }
-  //       });
-
-  //       Object.entries(city).forEach(([city, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("location", "==", city));
-  //         }
-  //       });
-
-  //       Object.entries(owners).forEach(([owners, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("owners", "==", owners));
-  //         }
-  //       });
-
-  //       Object.entries(color).forEach(([color, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("color", "==", color));
-  //         }
-  //       });
-
-  //       Object.entries(seats).forEach(([seats, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("seats", "==", seats));
-  //         }
-  //       });
-
-  //       Object.entries(fuel).forEach(([fuel, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("fuel ", "==", fuel));
-  //         }
-  //       });
-
-  //       Object.entries(transmission).forEach(([transmission, isSelected]) => {
-  //         if (isSelected) {
-  //           next = query(next, where("transmission ", "==", transmission));
-  //         }
-  //       });
-
-  //       if (brandFilter) {
-  //         next = query(next, where("brand", "==", brandFilter));
-  //       }
-
-  //       if (modelFilter) {
-  //         next = query(next, where("model", "==", modelFilter));
-  //       }
-
-  //       const documentSnapshots = await getDocs(next);
-  //       const arr: Car[] = [];
-  //       documentSnapshots.forEach((doc) => {
-  //         arr.push(doc.data() as Car);
-  //       });
-  //       if (documentSnapshots.docs.length > 0) {
-  //         setLastVisibleRefs([
-  //           ...lastVisibleRefs,
-  //           documentSnapshots.docs[
-  //             documentSnapshots.docs.length - 1
-  //           ] as DocumentSnapshot<Car>,
-  //         ]);
-  //       }
-  //       setCars(arr);
-  //       setCurrentPage(currentPage + 1);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching next page: ", error);
-  //   }
-  // };
-
-  // const fetchPreviousPage = async () => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-  //     const lastVisible = lastVisibleRefs[currentPage - 3];
-  //     if (lastVisible) {
-  //       const next = query(
-  //         carsRef,
-  //         orderBy(sortType.sort, `${sortType.desc ? "desc" : "asc"}`),
-  //         startAfter(lastVisible),
-  //         limit(itemsPerPage)
-  //       );
-
-  //       const documentSnapshots = await getDocs(next);
-  //       const arr: Car[] = [];
-  //       documentSnapshots.forEach((doc) => {
-  //         arr.push(doc.data() as Car);
-  //       });
-  //       if (documentSnapshots.docs.length > 0) {
-  //         setLastVisibleRefs([
-  //           ...lastVisibleRefs,
-  //           documentSnapshots.docs[
-  //             documentSnapshots.docs.length - 1
-  //           ] as DocumentSnapshot<Car>,
-  //         ]);
-  //       }
-  //       setCars(arr);
-  //       setCurrentPage(currentPage - 1);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching next page: ", error);
-  //   }
-  // };
-
-  // const checkPreviousPage = () => {
-  //   if (currentPage == 2) {
-  //     fetchFirstPage(
-  //       sortType,
-  //       brandFilter,
-  //       modelFilter,
-  //       vechicleTypeCheckboxes,
-  //       cityCheckboxes,
-  //       owners,
-  //       color,
-  //       seats,
-  //       fuel,
-  //       transmission,
-  //       minMileageValue,
-  //       maxMileageValue,
-  //       minYearValue,
-  //       maxYearValue,
-  //       minPriceValue,
-  //       maxPriceValue
-  //     );
-  //     setCurrentPage(currentPage - 1);
-  //   } else {
-  //     fetchPreviousPage();
-  //   }
-  // };
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
   const [admin, setAdmin] = useState<boolean>(false);
 
   useEffect(() => {
@@ -956,14 +879,14 @@ export default function Catalog({
   //   console.log(cars);
   // }, [cars]);
 
-  const prevCarsRef = useRef(cars);
+  // const prevCarsRef = useRef(cars);
 
-  useEffect(() => {
-    if (prevCarsRef.current !== cars) {
-      prevCarsRef.current = cars;
-      console.log(cars);
-    }
-  }, [cars]);
+  // useEffect(() => {
+  //   if (prevCarsRef.current !== cars) {
+  //     prevCarsRef.current = cars;
+  //     console.log(cars);
+  //   }
+  // }, [cars]);
 
   return (
     <div className={style.catalog} id="catalog">
@@ -1025,6 +948,7 @@ export default function Catalog({
             sortOption="Expensive"
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
+            searchValue={searchTerm}
             brand={brandFilter}
             model={modelFilter}
             mileage={mileageFilter}

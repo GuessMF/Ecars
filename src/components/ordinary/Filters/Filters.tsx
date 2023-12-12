@@ -6,6 +6,7 @@ import {useState, useEffect} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
 import carData from "../../../helpers/modelsBrands";
+import {useAppSelector} from "hooks/redux-hooks";
 // import {cars} from "../../helpers/carList";
 
 interface CarModel {
@@ -194,6 +195,7 @@ FiltersProps) {
   };
   const [brand, setBrand] = useState<string>("");
   // const [model, setModel] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
 
   const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -207,8 +209,34 @@ FiltersProps) {
     setModels(selectedBrandData ? selectedBrandData.models : []);
   };
 
+  // const dispatch = useAppDispatch();
+  const searchTerm = useAppSelector((state) => state.search.searchTerm);
+
+  useEffect(() => {
+    // setSearchValue(searchTerm);
+    const fountedBrand = carData.brands.find(
+      (item) =>
+        item.name ===
+        searchTerm.charAt(0).toLocaleUpperCase() + searchTerm.slice(1)
+    );
+    console.log("founted " + fountedBrand?.name);
+    if (fountedBrand) {
+      setBrand(fountedBrand.name);
+      setModels(fountedBrand ? fountedBrand.models : []);
+      onBrandFilterChange(event);
+    }
+  }, [searchTerm]);
+
   const onBrandSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedBrand: string = event.target.value;
+    console.log(selectedBrand);
+
+    // if (searchTerm) {
+    //   const fountedBrand = carData.brands.find(
+    //     (item) => item.name === searchTerm
+    //   );
+    //   console.log("founted" + fountedBrand);
+    // }
     setBrand(selectedBrand);
     const selectedBrandData = carData.brands.find(
       (item) => item.name === selectedBrand
