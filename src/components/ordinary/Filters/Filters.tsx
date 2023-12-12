@@ -113,10 +113,11 @@ interface FiltersProps {
   fuel: FuelCheckboxes;
   seats: SeatsCheckboxes;
   transmission: TransmissionCheckboxes;
-  minMileageValue: number;
-  maxMileageValue: number;
-  onMinMileageValue: (value: number) => void;
-  onMaxMileageValue: (value: number) => void;
+
+  minMileageValue: string;
+  maxMileageValue: string;
+  onMinMileageValue: (value: string) => void;
+  onMaxMileageValue: (value: string) => void;
 
   //mileageSliderChange: (values: [number, number]) => void;
 
@@ -125,10 +126,10 @@ interface FiltersProps {
   onMinYearValue: (value: number) => void;
   onMaxYearValue: (value: number) => void;
 
-  minPriceValue: number;
-  maxPriceValue: number;
-  onMinPriceValue: (value: number) => void;
-  onMaxPriceValue: (value: number) => void;
+  minPriceValue: string;
+  maxPriceValue: string;
+  onMinPriceValue: (value: string) => void;
+  onMaxPriceValue: (value: string) => void;
 }
 
 export default function Filters({
@@ -223,7 +224,7 @@ FiltersProps) {
     if (fountedBrand) {
       setBrand(fountedBrand.name);
       setModels(fountedBrand ? fountedBrand.models : []);
-      onBrandFilterChange(event);
+      //  onBrandFilterChange(event);
     }
   }, [searchTerm]);
 
@@ -261,6 +262,30 @@ FiltersProps) {
       onResetModels();
     }
   }, [modelFilterValue]);
+
+  const formatMinPrice = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    onMinPriceValue(formattedValue);
+  };
+
+  const formatMaxPrice = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    onMaxPriceValue(formattedValue);
+  };
+
+  const formatMinMileage = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    onMinMileageValue(formattedValue);
+  };
+
+  const formatMaxMileage = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    onMaxMileageValue(formattedValue);
+  };
 
   return (
     <div
@@ -411,25 +436,21 @@ FiltersProps) {
               min="1"
               value={minMileageValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = Number(e.target.value);
-                onMinMileageValue(value);
+                formatMinMileage(e.target.value);
               }}
             />
             <input
-              type="number"
+              type="text"
               placeholder="Max"
-              max="999999"
+              max="999 999"
               value={maxMileageValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) {
-                  onMaxMileageValue(parseInt(value, 10));
-                }
+                formatMaxMileage(e.target.value);
               }}
             />
           </div>
           <div className={style.miliage__slider}>
-            <RangeSlider
+            {/* <RangeSlider
               value={[minMileageValue, maxMileageValue]}
               step={1000}
               defaultValue={[0, 999999]}
@@ -437,6 +458,19 @@ FiltersProps) {
               onChange={(values: [number, number]) => {
                 onMinMileageValue(values[0]);
                 onMaxMileageValue(values[1]);
+              }}
+            /> */}
+            <RangeSlider
+              value={[
+                parseInt(minMileageValue.replace(/\s/g, ""), 10),
+                parseInt(maxMileageValue.replace(/\s/g, ""), 10),
+              ]}
+              step={1000}
+              defaultValue={[0, 999999]}
+              max={999999}
+              onChange={(values: [number, number]) => {
+                formatMinMileage(values[0].toString());
+                formatMaxMileage(values[1].toString());
               }}
             />
           </div>
@@ -449,7 +483,7 @@ FiltersProps) {
           </div>
           <div className={style.filters__min_max}>
             <input
-              type="number"
+              type="text"
               placeholder="Min"
               min={0}
               max={currentYear}
@@ -459,7 +493,7 @@ FiltersProps) {
               }
             />
             <input
-              type="number"
+              type="text"
               placeholder="Max"
               min={0}
               max={currentYear}
@@ -483,33 +517,31 @@ FiltersProps) {
               min="1"
               value={minPriceValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = Number(e.target.value);
-                onMinPriceValue(value);
+                formatMinPrice(e.target.value);
               }}
             />
             <input
-              type="number"
+              type="text"
               placeholder="Max"
-              max="99999999"
+              max="999 999 999"
               value={maxPriceValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) {
-                  //onMaxPriceValue(parseInt(value, 10));
-                  onMaxPriceValue(Number(value));
-                }
+                formatMaxPrice(e.target.value);
               }}
             />
           </div>
           <div className={style.price__slider}>
             <RangeSlider
-              value={[minPriceValue, maxPriceValue]}
+              value={[
+                parseInt(minPriceValue.replace(/\s/g, ""), 10),
+                parseInt(maxPriceValue.replace(/\s/g, ""), 10),
+              ]}
               step={1000}
               defaultValue={[0, 99999999]}
               max={99999999}
               onChange={(values: [number, number]) => {
-                onMinPriceValue(values[0]);
-                onMaxPriceValue(values[1]);
+                formatMinPrice(values[0].toString());
+                formatMaxPrice(values[1].toString());
               }}
             />
           </div>

@@ -6,6 +6,17 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  // overflow-y: scroll;
+  // height: 75vh;
+  // overflow-y: scroll;
+  // position: sticky;
+  // top: 0px;
+  // overflow: hidden;
+  // position: relative;
+  // //overflow-y: scroll;
+
+  // background-color: aqua;
+  // height: 1000px;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -46,7 +57,10 @@
   width: 288px;
   // height: 1082px;
   height: fit-content;
-
+  // height: 75vh;
+  // position: sticky;
+  // top: 100px;
+  // right: 0;
   .filters__label {
     // width: 256px;
     width: 100%;

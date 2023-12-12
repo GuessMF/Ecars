@@ -104,16 +104,16 @@ export default function Catalog({
     Van: false,
     StationWagon: false,
   });
-  const [minMileageValue, setMinMileageValue] = useState<number>(0);
-  const [maxMileageValue, setMaxMileageValue] = useState<number>(999999);
+  const [minMileageValue, setMinMileageValue] = useState<string>("0");
+  const [maxMileageValue, setMaxMileageValue] = useState<string>("999 999");
   const [mileageFilter, setMileageFilter] = useState<boolean>(false);
 
   const [minYearValue, setMinYearValue] = useState<number>(Number(yearParam));
   const [maxYearValue, setMaxYearValue] = useState<number>(currentYear);
   const [yearFilter, setYearFilter] = useState<boolean>(false);
 
-  const [minPriceValue, setMinPriceValue] = useState<number>(0);
-  const [maxPriceValue, setMaxPriceValue] = useState<number>(99999999);
+  const [minPriceValue, setMinPriceValue] = useState<string>("0");
+  const [maxPriceValue, setMaxPriceValue] = useState<string>("99 999 999");
   const [priceFilter, setPriceFilter] = useState<boolean>(false);
 
   const [cityCheckboxes, setCityCheckboxes] = useState<CityCheckboxes>({
@@ -125,9 +125,12 @@ export default function Catalog({
     AbuDhabi: false,
     Shanghai: false,
   });
-  // useEffect(() => {
-  //   setBrandFilter("Acura");
-  // }, []);
+  useEffect(() => {
+    console.log("Max price:" + maxPriceValue);
+    console.log("Min price:" + minPriceValue);
+    const number = parseInt(maxPriceValue.replace(/\s/g, ""), 10);
+    console.log(number);
+  }, [minPriceValue, maxPriceValue]);
 
   const newLocationParam = () => {
     let location = locationParam;
@@ -145,10 +148,10 @@ export default function Catalog({
   };
   const newMileageParam = () => {
     if (mileageParam == "New") {
-      setMinMileageValue(1);
-      setMaxMileageValue(99);
+      setMinMileageValue("1");
+      setMaxMileageValue("99");
     } else if (mileageParam == "Used") {
-      setMinMileageValue(100);
+      setMinMileageValue("100");
     }
   };
   useEffect(() => {
@@ -251,7 +254,10 @@ export default function Catalog({
       searchTerm
     );
 
-    if (minMileageValue > 0 || maxMileageValue < 999999) {
+    if (
+      parseInt(minMileageValue.replace(/\s/g, ""), 10) > 0 ||
+      parseInt(maxMileageValue.replace(/\s/g, ""), 10) < 999999
+    ) {
       setMileageFilter(true);
     } else {
       setMileageFilter(false);
@@ -294,12 +300,12 @@ export default function Catalog({
     seats: Record<string, boolean>,
     fuel: Record<string, boolean>,
     transmission: Record<string, boolean>,
-    minMileage: number,
-    maxMileage: number,
+    minMileage: string,
+    maxMileage: string,
     minYear: number,
     maxYear: number,
-    minPrice: number,
-    maxPrice: number,
+    minPrice: string,
+    maxPrice: string,
     searchTerm: string
   ) => {
     try {
@@ -465,17 +471,22 @@ export default function Catalog({
           (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
         );
 
+        const minMileage = parseInt(minMileageValue.replace(/\s/g, ""), 10);
+        const maxMileage = parseInt(maxMileageValue.replace(/\s/g, ""), 10);
+
         const filtredMileageCars = cars.filter(
-          (car) =>
-            car.mileage <= maxMileageValue && car.mileage >= minMileageValue
+          (car) => car.mileage <= maxMileage && car.mileage >= minMileage
         );
         const filtredYearCars = filtredMileageCars.filter(
           (car) => car.year <= maxYearValue && car.year >= minYearValue
         );
+
+        const minPrice = parseInt(minPriceValue.replace(/\s/g, ""), 10);
+        const maxPrice = parseInt(maxPriceValue.replace(/\s/g, ""), 10);
         const filtredPriceCars = filtredYearCars.filter(
           (car) =>
-            Number(car.price) * multiplier <= maxPriceValue &&
-            Number(car.price) * multiplier >= minPriceValue
+            Number(car.price) * multiplier <= maxPrice &&
+            Number(car.price) * multiplier >= minPrice
         );
 
         if (querySnapshot.docs.length > 0) {
@@ -486,14 +497,20 @@ export default function Catalog({
           ]);
         }
 
+        // const paginatedCars = filtredYearCars.slice(
+        //   currentPage * itemsPerPage - itemsPerPage,
+        //   currentPage * itemsPerPage
+        // );
         const paginatedCars = filtredPriceCars.slice(
           currentPage * itemsPerPage - itemsPerPage,
           currentPage * itemsPerPage
         );
 
+        // setTotalCars(filtredYearCars.length);
         setTotalCars(filtredPriceCars.length);
         setCars(paginatedCars);
         setFiltredCars(filtredPriceCars.length);
+        // setFiltredCars(filtredYearCars.length);
         setLoaded(true);
       }
     } catch (error) {
@@ -613,8 +630,8 @@ export default function Catalog({
     });
   };
   const resetMileage = () => {
-    setMinMileageValue(0);
-    setMaxMileageValue(999999);
+    setMinMileageValue("0");
+    setMaxMileageValue("999 999");
   };
   const resetYear = () => {
     setMinYearValue(1900);
@@ -622,8 +639,8 @@ export default function Catalog({
   };
 
   const resetPrice = () => {
-    setMinPriceValue(0);
-    setMaxPriceValue(99999999);
+    setMinPriceValue("0");
+    setMaxPriceValue("99 999 999");
   };
 
   const resetCity = () => {
@@ -777,11 +794,11 @@ export default function Catalog({
     }));
   };
 
-  const handleMinMileageChange = (value: number) => {
+  const handleMinMileageChange = (value: string) => {
     setMinMileageValue(value);
   };
 
-  const handleMaxMileageChange = (value: number) => {
+  const handleMaxMileageChange = (value: string) => {
     setMaxMileageValue(value);
   };
 
@@ -792,11 +809,11 @@ export default function Catalog({
     setMaxYearValue(value);
   };
 
-  const handleMinPriceChange = (value: number) => {
+  const handleMinPriceChange = (value: string) => {
     setMinPriceValue(value);
   };
 
-  const handleMaxPriceChange = (value: number) => {
+  const handleMaxPriceChange = (value: string) => {
     setMaxPriceValue(value);
   };
 
@@ -813,8 +830,8 @@ export default function Catalog({
       setModelFilter("");
     }
     if (filter === "mileage") {
-      setMinMileageValue(0);
-      setMaxMileageValue(999999);
+      setMinMileageValue("0");
+      setMaxMileageValue("999 999");
     }
     if (filter === "year") {
       setMinYearValue(1900);
@@ -822,8 +839,8 @@ export default function Catalog({
     }
 
     if (filter === "price") {
-      setMinPriceValue(0);
-      setMaxPriceValue(99999999);
+      setMinPriceValue("0");
+      setMaxPriceValue("99 999 999");
     } else {
       setVechicleTypeCheckboxes((prevState) => ({
         ...prevState,

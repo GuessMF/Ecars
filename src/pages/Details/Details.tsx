@@ -17,6 +17,9 @@ import {collection, query, getDocs} from "firebase/firestore";
 import FullWidthImg from "./FullWidthImg";
 import SimilarCars from "components/simple/SimilarCars/SimilarCars";
 import Cookies from "universal-cookie";
+import {LazyLoadImage} from "react-lazy-load-image-component";
+import SkeletonBigImage from "./SkeletonBigImage";
+import SkeletonLittleImage from "./SkeletonLittleImage";
 
 interface DateObject {
   year: number;
@@ -67,7 +70,7 @@ export default function Details({
   const {id} = useParams<{id?: string}>();
 
   const [selectedPhoto, setSelectedPhoto] = useState(0);
-
+  const [imageLoaded, setImageLoaded] = useState(false);
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
       const previewRef = ref(storage, `cars/${currentIndex}/preview/`);
@@ -274,6 +277,42 @@ export default function Details({
     setFullWidth(false);
   };
 
+  useEffect(() => {
+    const image = new Image();
+    image.onload = () => {
+      setImageLoaded(true);
+    };
+    image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
+  }, [photoURLs]);
+
+  // <img src={photoURLs?.[selectedPhoto]} alt="pic" />
+
+  // {imageLoaded ? (
+  //   <LazyLoadImage
+  //     className={style.bigCard__img}
+  //     effect="blur" // Добавляет эффект размытия
+  //     src={photoURLs?.[selectedPhoto]}
+  //     alt="Car Preview"
+  //   />
+  // ) : (
+  //   <SkeletonBigImage />
+  // )}
+
+  // {photoURLs.map((img, index, id) => (
+  //   <img
+  //     key={img}
+  //     className={style.little_preview}
+  //     src={img}
+  //     onClick={() => setSelectedPhoto(index)}
+  //   />
+  // ))}
+  console.log(photoURLs);
+  //   <img
+  //   key={img}
+  //   className={style.little_preview}
+  //   src={img}
+  //   onClick={() => setSelectedPhoto(index)}
+  // />
   return (
     <div className={style.details}>
       {fullWidth && (
@@ -340,20 +379,34 @@ export default function Details({
           <div className={style.content}>
             <div className={style.content__pictures}>
               <div className={style.bigPicture}>
-                <img src={photoURLs?.[selectedPhoto]} alt="pic" />
+                {imageLoaded ? (
+                  <LazyLoadImage
+                    className={style.bigCard__img}
+                    effect="blur" // Добавляет эффект размытия
+                    src={photoURLs?.[selectedPhoto]}
+                    alt="Car Preview"
+                  />
+                ) : (
+                  <SkeletonBigImage />
+                )}
                 <button className={style.fullWidth} onClick={openFullWidthImg}>
                   Full width
                 </button>
               </div>
               <div className={style.littlePictures}>
-                {photoURLs.map((img, index, id) => (
-                  <img
-                    key={img}
-                    className={style.little_preview}
-                    src={img}
-                    onClick={() => setSelectedPhoto(index)}
-                  />
-                ))}
+                {imageLoaded
+                  ? photoURLs.map((img, index, id) => (
+                      <LazyLoadImage
+                        className={style.little_preview}
+                        effect="blur" // Добавляет эффект размытия
+                        src={img}
+                        alt="Car little"
+                        onClick={() => setSelectedPhoto(index)}
+                      />
+                    ))
+                  : [...new Array(8)].map((_, i) => (
+                      <SkeletonLittleImage key={`skeleton_${i}`} />
+                    ))}
               </div>
             </div>
             {window.innerWidth <= 768 && (
