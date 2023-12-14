@@ -6,7 +6,6 @@ import GetAquoteBig from "../../components/ui/GetAquoteBig/GetAquoteBig";
 export default function AboutUs() {
   return (
     <div className={style.aboutUS}>
-      <div className={style.test}>1234</div>
       <div className={style.aboutUS__first}>
         <h1>About Us</h1>
         <span>

@@ -75,31 +75,10 @@ export default function Details({
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
       const previewRef = ref(storage, `cars/${currentIndex}/preview/`);
       const folderRef = ref(storage, `cars/${currentIndex}`);
-      // const folderRef = ref(storage, `cars`);
-      // listAll(folderRef)
-      //   .then((res) => {
-      //     res.items.forEach((itemRef) => {
-      //       //  console.log("Название файла:", itemRef.name);
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     console.error("Ошибка получения списка файлов:", error);
-      //   });
-      // listAll(previewRef)
-      //   .then((res) => {
-      //     res.items.forEach((itemRef) => {
-      //       //  console.log("Название файла:", itemRef.name);
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     console.error("Ошибка получения списка файлов:", error);
-      //   });
 
       try {
         const photoList = await listAll(folderRef);
         const previewImage = await listAll(previewRef);
-        //  console.log(photoList);
-
         const urls = await Promise.all(
           photoList.items.map(async (photo) => {
             return await getDownloadURL(photo);

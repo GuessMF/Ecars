@@ -94,21 +94,6 @@
           border: 6px solid $white; /* отступ вокруг бегунка */
         }
 
-        // &::-webkit-scrollbar {
-        //   width: 3px !important;
-        // }
-
-        // &::-webkit-scrollbar-thumb {
-        //   background-color: #888; /* Цвет полосы прокрутки */
-        // }
-
-        // &::-webkit-scrollbar-track {
-        //   background-color: #f1f1f1; /* Цвет фона полосы прокрутки */
-        // }
-
-        // scrollbar-width: thin; /* Для Firefox */
-        // scrollbar-color: #888 #f1f1f1; /* Для Firefox */
-
         @media (max-width: 450px) {
           overflow-x: scroll;
           height: fit-content;

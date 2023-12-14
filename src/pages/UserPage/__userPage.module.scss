@@ -1,22 +1,110 @@
+@import "../../styles/_var";
+
 .userPage {
-  background-color: antiquewhite;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  //   align-items: center;
+  // gap: 96px;
+  // padding: 96px 108px;
+  padding: 96px $padding108;
+  margin-top: 20px;
+
   .header {
-    padding-left: 50px;
-    font-size: 36px;
-  }
-  h4 {
-    padding-left: 50px;
+    h1 {
+      font-size: 44px;
+      font-family: Inter Tight;
+      font-weight: 600;
+      line-height: 115%;
+      color: $gray900;
+      margin: 0;
+      text-align: left;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+    p {
+      color: var(--Gray-700, #484848);
+      /* Desktop/Body Medium */
+      font-family: Inter;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px; /* 150% */
+    }
+    .sorting {
+      margin-top: 40px;
+      span {
+        color: var(--Gray-900, #1a1a1a);
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 20px; /* 142.857% */
+      }
+      button {
+        //  color: var(--Primary-500, #3c7d46);
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        //font-weight: 500;
+        font-weight: 200;
+        line-height: 20px; /* 142.857% */
+        background: none;
+      }
+      .checked {
+        //background-color: red;
+        color: var(--Primary-500, #3c7d46);
+        font-weight: 600;
+      }
+    }
   }
   .wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
+    //position: relative;
+    margin-top: 20px;
+    h5 {
+      width: 100%;
+    }
+    .otherCars {
+      width: 100%;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 20px;
+      padding-left: 10px;
+      justify-content: space-between;
+      gap: 60px;
+      overflow-x: scroll;
+      &:active {
+        cursor: grabbing;
+      }
+
+      &::-webkit-scrollbar {
+        width: 5px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: $white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: $gray100;
+        border-radius: 20px;
+        border: 6px solid $white;
+      }
+
+      * {
+        // max-width: 300px;
+        //min-width: 280px;
+        // width: 280px;
+      }
+      .littleCard {
+        cursor: pointer;
+      }
+    }
   }
 }

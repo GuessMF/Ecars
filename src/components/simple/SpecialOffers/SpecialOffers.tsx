@@ -175,7 +175,7 @@ export default function SpecialOffers({
                       selectedCurrency={selectedCurrency}
                       eurValue={eurValue}
                       usdValue={usdValue}
-                      //special={car.special}
+                      special={true}
                       previewIMG={car.imageUrls[0]}
                     />
                   </NavLink>

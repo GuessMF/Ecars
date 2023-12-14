@@ -4,8 +4,9 @@ import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
+import {NavLink} from "react-router-dom";
 import style from "./__userPage.module.scss";
-import BigCard from "components/smart/BigCard/BigCard";
+// import BigCard from "components/smart/BigCard/BigCard";
 import Cookies from "universal-cookie";
 import {
   query,
@@ -30,8 +31,17 @@ import {
   getMetadata,
 } from "firebase/storage";
 import PopUpDel from "./PopUpDel";
+import MegaCard from "components/smart/MegaCard/MegaCard";
+import LittleCard from "components/smart/LittleCard/LittleCard";
 interface Props {
   userID: string;
+}
+interface DateObject {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
 }
 interface Car {
   id: string;
@@ -43,11 +53,20 @@ interface Car {
   fuel: string;
   location: string;
   vehicleType: string;
-  year: number;
+  year: string;
   owners: string;
   description: string;
+  color: string;
+  interior: string;
   mileage: number;
   imageUrl: string;
+  transmission: string;
+  wheels: string;
+  seats: string;
+  engineCapacity: string;
+  previewImage: string;
+  dateObj: DateObject;
+
   // testImg: string;
 }
 export default function UserPage({userID}: Props) {
@@ -61,6 +80,9 @@ export default function UserPage({userID}: Props) {
   const [correctPassword, setCorrectPassword] = useState<boolean>(false);
   const [carName, setCarName] = useState<string>("");
   const [carId, setCarId] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("brand");
+
+  const [currentCar, setCurrentCar] = useState<number>(0);
 
   const [deletedItems, setDeletedItems] = useState([]);
 
@@ -77,7 +99,7 @@ export default function UserPage({userID}: Props) {
     if (userID) {
       fetchSalingCars();
     }
-  }, [userID]);
+  }, [userID, sortBy]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,14 +110,14 @@ export default function UserPage({userID}: Props) {
     };
 
     fetchData();
-  }, [isAuth, displayName, loading]);
+  }, [isAuth, displayName, loading, currentCar]);
 
   const fetchSalingCars = async () => {
     try {
       const carsRef = collection(db, "cars");
       let first = query(carsRef);
       first = query(first, where("userId", "==", userID));
-      first = query(first, orderBy("dateAdded", "asc"));
+      first = query(first, orderBy(sortBy, "asc"));
       const querySnapshot = await getDocs(first);
       const cars = querySnapshot.docs.map(
         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
@@ -150,13 +172,8 @@ export default function UserPage({userID}: Props) {
   const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
-  // console.log("Password: " + password);
-  // console.log("CarName: " + carName);
 
   useEffect(() => {
-    //if (carName) {
-    //console.log(carName.length);
-    //  }
     if (carName.length > 0) {
       if (carName === password) {
         setCorrectPassword(true);
@@ -165,6 +182,27 @@ export default function UserPage({userID}: Props) {
       }
     }
   }, [password]);
+
+  // useEffect(() => {
+  //   console.log(currentCar);
+  //   fetchSalingCars();
+  // }, [currentCar]);
+
+  const onClickLittleCard = (index: number) => {
+    setCurrentCar(index);
+
+    window.scrollTo({
+      top: 160,
+      behavior: "smooth",
+    });
+  };
+  const handleSortBy = (value: string) => {
+    setSortBy(value);
+  };
+
+  useEffect(() => {
+    console.log(sortBy);
+  }, [sortBy]);
 
   return (
     <div className={style.userPage}>
@@ -181,34 +219,93 @@ export default function UserPage({userID}: Props) {
       )}
 
       <div className={style.header}>
-        {loading ? <h1>Заглушка</h1> : <p>Пользователь: {userName}</p>}
+        <h1>Personal page</h1>
+        <p>
+          {userName}, welcome to your personal page, here are all the cars that
+          you have for sale
+        </p>
+        <div className={style.sorting}>
+          <span>Sort by:</span>
+          <button
+            onClick={() => handleSortBy("dateAdded")}
+            className={sortBy == "dateAdded" && style.checked}
+          >
+            Date
+          </button>
+          <button
+            onClick={() => handleSortBy("price")}
+            className={sortBy == "price" && style.checked}
+          >
+            Price
+          </button>
+          <button
+            onClick={() => handleSortBy("brand")}
+            className={sortBy == "brand" && style.checked}
+          >
+            Brand
+          </button>
+        </div>
       </div>
-      <h4>Your cars are on sale:</h4>
       <div className={style.wrapper}>
-        {loaded &&
-          cars.map((car: any, index: any) => (
-            <BigCard
-              key={index}
-              id={car.id}
-              selectedCurrency={"USD"}
-              usdValue={10}
-              eurValue={20}
-              index={index}
-              brand={car.brand}
-              model={car.model}
-              price={car.price}
-              fuel={car.fuel}
-              owners={car.owners}
-              location={car.location}
-              mileage={car.mileage}
-              description={car.description}
-              previewIMG={car.previewImage[0]}
-              //   testImg={car.previewImage[0]}
-              onClickDelete={onDelClick}
-              onClickCheck={onClickCheck}
-              //onLoad={handleLoad}
-            />
-          ))}
+        {loaded && (
+          <MegaCard
+            key={"1"}
+            id={cars[currentCar]?.id}
+            selectedCurrency={"USD"}
+            usdValue={10}
+            eurValue={20}
+            index={0}
+            brand={cars[currentCar]?.brand}
+            model={cars[currentCar]?.model}
+            price={cars[currentCar]?.price}
+            fuel={cars[currentCar]?.fuel}
+            owners={cars[currentCar]?.owners}
+            location={cars[currentCar]?.location}
+            type={cars[currentCar]?.vehicleType}
+            color={cars[currentCar]?.color}
+            interior={cars[currentCar]?.interior}
+            year={cars[currentCar]?.year}
+            transmission={cars[currentCar]?.transmission}
+            engineVolume={cars[currentCar]?.engineCapacity}
+            wheels={cars[currentCar]?.wheels}
+            seats={cars[currentCar]?.seats}
+            mileage={cars[currentCar]?.mileage}
+            description={cars[currentCar]?.description}
+            previewIMG={cars[currentCar]?.previewImage[0]}
+            dateObj={cars[currentCar]?.dateObj}
+            onClickDelete={onDelClick}
+            onClickCheck={onClickCheck}
+            // sortBy={sortBy}
+          />
+        )}
+
+        <h5>Other cars you liked:</h5>
+        <div className={style.otherCars}>
+          {loaded &&
+            cars.map(
+              (car: any, index: number) =>
+                index !== currentCar && (
+                  <div
+                    className={style.littleCard}
+                    onClick={() => onClickLittleCard(index)}
+                  >
+                    <LittleCard
+                      brand={car.brand}
+                      model={car.model}
+                      price={car.price}
+                      fuel={car.fuel}
+                      mileage={car.mileage}
+                      owners={car.owners}
+                      special={false}
+                      previewIMG={car.previewImage[0]}
+                      selectedCurrency={"USD"}
+                      usdValue={10}
+                      eurValue={20}
+                    />
+                  </div>
+                )
+            )}
+        </div>
       </div>
     </div>
   );

@@ -87,11 +87,6 @@ Props) {
     image.src = previewIMG; // Подставьте свой путь к изображению из carData
   }, [previewIMG]);
 
-  //   <img
-  //   className={style.bigCard__img}
-  //   data-src={previewIMG}
-  //   loading="lazy"
-  // />
   const locationn = useLocation();
   const pathname = locationn.pathname;
   const userPageIndex = pathname.indexOf("/user-page/");
@@ -101,59 +96,6 @@ Props) {
       setUserPage(true);
     }
   }, []);
-
-  // const folderRef = ref(storage, "cars/");
-  // const onDelClick = async () => {
-  //   console.log(id);
-
-  //   try {
-  //     // const carsRef = collection(db, "cars");
-  //     //  const docRef = doc(carsRef, "test");
-  //     // await deleteDoc(docRef);
-  //   // const desertRef = ref(storage, `test/`);
-  //     // deleteObject(desertRef).then(() => {
-  //     //   return;
-  //     // });
-  //     getMetadata(desertRef)
-  //       .then((metadata) => {
-  //         console.log("Метаданные папки:", metadata);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Ошибка получения метаданных папки:", error);
-  //       });
-
-  //     // console.log("Документ успешно удален");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const onDelClick = async (carId: string) => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-
-  //     const docRef = doc(carsRef, carId);
-  //     await deleteDoc(docRef);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  //   const folderRef = ref(storage, `cars/${carId}`);
-  //   listAll(folderRef)
-  //     .then((res) => {
-  //       const deletePromises = res.items.map((itemRef) => {
-  //         return deleteObject(itemRef);
-  //       });
-
-  //       // Ожидание завершения всех операций удаления
-  //       return Promise.all(deletePromises);
-  //     })
-  //     .then(() => {
-  //       console.log("Все файлы удалены из папки cars/" + carId);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Ошибка удаления файлов:", error);
-  //     });
-  // };
 
   return (
     <div className={style.wrapper}>

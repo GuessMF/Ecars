@@ -542,7 +542,7 @@ export default function PersonalPage({userID, usdValue, eurValue}: Props) {
   // };
 
   return (
-    <div className={style.login}>
+    <div className={style.personalPage}>
       <h3>Sell your car</h3>
 
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}

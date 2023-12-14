@@ -3,12 +3,13 @@ import style from "./__littleCard.module.scss";
 import Details from "../../ui/Details/Details";
 import img from "../../../assets/images/LittleCard/2021_Genesis_GV80_2.5T.webp";
 import Like from "../../ui/Like/Like";
+import Choose from "components/ui/Choose/Choose";
 
 interface Props {
   brand: string;
   model: string;
   price: string;
-  // special: boolean;
+  special: boolean;
   fuel: string;
   mileage: number;
   owners: string;
@@ -24,7 +25,7 @@ export default function LittleCard({
   fuel,
   mileage,
   owners,
-  // special,
+  special,
   previewIMG,
   selectedCurrency,
   eurValue,
@@ -57,7 +58,7 @@ export default function LittleCard({
     <div className={style.littleCard}>
       <div className={style.littleCard__previewImg}>
         <img src={previewIMG} width={200} />
-        <span>SALE -{randomNum}%</span>
+        {special && <span>SALE -{randomNum}%</span>}
       </div>
       <div className={style.littleCard__content}>
         <div className={style.littleCard__top}>
@@ -79,11 +80,13 @@ export default function LittleCard({
             <span className={style.littleCard__newPrice}>
               ${formattedPrice}
             </span>
-            <span className={style.littleCard__oldPrice}>
-              ${formattedOldPrice}
-            </span>
+            {special && (
+              <span className={style.littleCard__oldPrice}>
+                ${formattedOldPrice}
+              </span>
+            )}
           </div>
-          <Details />
+          {special ? <Details /> : <Choose />}
         </div>
       </div>
     </div>
