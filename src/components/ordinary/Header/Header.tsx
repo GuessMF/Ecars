@@ -38,6 +38,8 @@ export default function Header() {
     setIsOpen(!isOpen);
   };
 
+  const userMobile = useAppSelector((state) => state.user.mobile);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -160,7 +162,9 @@ export default function Header() {
 
           {isAuth && (
             <div className={style.user}>
-              <p>{displayName}</p>
+              <p>
+                {displayName ? displayName : userMobile ? userMobile : "No"}
+              </p>
 
               <button onClick={handleLogout}>Выйти</button>
             </div>

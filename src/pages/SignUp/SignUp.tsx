@@ -10,6 +10,9 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendEmailVerification,
 } from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "../../hooks/redux-hooks";
@@ -35,7 +38,7 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [checkBox, setCheckBox] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<Errors>({});
-
+  const auth = getAuth();
   const errors: Errors = {};
 
   const nameRef = useRef<HTMLDivElement>(null);
@@ -90,33 +93,61 @@ export default function SignUp() {
       console.log(errors);
       handleAgreeClick();
     } else {
+      // const auth = getAuth();
+      // createUserWithEmailAndPassword(auth, email, password)
+      //   .then(({user}) => {
+      //     updateProfile(user, {
+      //       displayName: name,
+      //     })
+      //       .then(() => {
+      //         console.log("Profile updated successfully");
+      //       })
+      //       .catch((error) => {
+      //         console.error("Error updating profile:", error);
+      //       });
+      //     dispatch(
+      //       setUser({
+      //         displayName: name,
+      //         email: user.email,
+      //         id: user.uid,
+      //         token: user.refreshToken,
+      //       })
+      //     );
+      //     navigate(`/user-page/${user.uid}`);
+      //     console.log("отправилось");
+      //   })
+      //   .catch(console.error);
+      // console.log(password.length);
+
+      // console.log("registration");
+
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then(({user}) => {
-          updateProfile(user, {
+          // Обновление профиля пользователя
+          return updateProfile(user, {
             displayName: name,
-          })
-            .then(() => {
-              console.log("Profile updated successfully");
-            })
-            .catch((error) => {
-              console.error("Error updating profile:", error);
-            });
-          dispatch(
-            setUser({
-              displayName: name,
-              email: user.email,
-              id: user.uid,
-              token: user.refreshToken,
-            })
-          );
-          navigate(`/user-page/${user.uid}`);
-          console.log("отправилось");
+          });
         })
-        .catch(console.error);
-      console.log(password.length);
-
-      console.log("registration");
+        .then(() => {
+          const user = auth.currentUser;
+          if (user) {
+            // Отправка письма для подтверждения адреса электронной почты
+            return sendEmailVerification(user)
+              .then(() => {
+                console.log("Письмо для подтверждения отправлено.");
+              })
+              .catch((error) => {
+                console.error(
+                  "Ошибка отправки письма для подтверждения:",
+                  error
+                );
+              });
+          }
+        })
+        .catch((error) => {
+          console.error("Ошибка при регистрации:", error);
+        });
     }
   };
 
@@ -147,6 +178,19 @@ export default function SignUp() {
   //
   //
   //
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // Вход успешен, получите данные пользователя из result.user
+      const {displayName, email, photoURL, uid} = result.user || {};
+      console.log("Успешный вход:", displayName, email, photoURL);
+
+      navigate(`/user-page/${uid}`);
+    } catch (error) {
+      console.error("Ошибка входа через Google:", error);
+    }
+  };
 
   return (
     <div className={style.signUp}>
@@ -236,7 +280,7 @@ export default function SignUp() {
           <span className={style.line}>
             <hr /> or <hr />
           </span>
-          <button className={style.googleBtn}>
+          <button className={style.googleBtn} onClick={handleGoogleSignIn}>
             <GoogleIcon /> Authorize with Google
           </button>
         </form>

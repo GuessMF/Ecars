@@ -7,9 +7,11 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
-import {Query} from "firebase/firestore";
-import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
-import ScrollToTop from "utils/scrollToTop";
+
+import carData from "helpers/modelsBrands";
+// import {Query} from "firebase/firestore";
+// import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
+// import ScrollToTop from "utils/scrollToTop";
 
 import "../../firebase";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
@@ -17,10 +19,6 @@ import {
   collection,
   query,
   orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
   getDocs,
   DocumentSnapshot,
   where,
@@ -28,15 +26,10 @@ import {
   DocumentData,
 } from "firebase/firestore";
 import {db} from "../../firebase";
-import {start} from "repl";
-import firebase from "firebase/app";
+// import {start} from "repl";
+// import firebase from "firebase/app";
 import {useAppSelector} from "hooks/redux-hooks";
 
-interface CatalogProps {
-  selectedCurrency: string;
-  eurValue: number;
-  usdValue: number;
-}
 interface SortObj {
   value: string;
   sort: string;
@@ -54,11 +47,7 @@ type CityCheckboxes = {
   Shanghai: boolean;
 };
 
-export default function Catalog({
-  selectedCurrency,
-  eurValue,
-  usdValue,
-}: CatalogProps) {
+export default function Catalog() {
   // const newCarData = {
   //   year: 2023,
   //   mileage: 5000,
@@ -70,7 +59,18 @@ export default function Catalog({
 
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
-  // console.log("Search in catalog: " + searchTerm);
+  // const eur = useAppSelector((state) => state.currValue.eurValue);
+  // const usd = useAppSelector((state) => state.currValue.usdValue);
+  // // console.log(searchTerm);
+
+  // // console.log("Search in catalog: " + searchTerm);
+
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
 
   let multiplier: number =
     selectedCurrency === "RUB"
@@ -125,12 +125,12 @@ export default function Catalog({
     AbuDhabi: false,
     Shanghai: false,
   });
-  useEffect(() => {
-    console.log("Max price:" + maxPriceValue);
-    console.log("Min price:" + minPriceValue);
-    const number = parseInt(maxPriceValue.replace(/\s/g, ""), 10);
-    console.log(number);
-  }, [minPriceValue, maxPriceValue]);
+  // useEffect(() => {
+  //   // console.log("Max price:" + maxPriceValue);
+  //   // console.log("Min price:" + minPriceValue);
+  //  // const number = parseInt(maxPriceValue.replace(/\s/g, ""), 10);
+  //   // console.log(number);
+  // }, [minPriceValue, maxPriceValue]);
 
   const newLocationParam = () => {
     let location = locationParam;
@@ -287,6 +287,7 @@ export default function Catalog({
     minPriceValue,
     maxPriceValue,
     searchTerm,
+    selectedCurrency,
   ]);
 
   const fetchFirstPage = async (
@@ -728,9 +729,48 @@ export default function Catalog({
     setItemOffset(0);
     setCurrentPage(1);
   };
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      setBrandFilter("");
+      setModelFilter("");
+    }
+
+    const fountedBrand = carData.brands.find(
+      (item) =>
+        item.name ===
+        searchTerm.charAt(0).toLocaleUpperCase() + searchTerm.slice(1)
+    );
+
+    if (fountedBrand) {
+      console.log(fountedBrand.name);
+      setBrandFilter(fountedBrand.name);
+    }
+
+    carData.brands.forEach((brand) => {
+      const foundModel = brand.models.find(
+        (model) => model.name.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (foundModel) {
+        setBrandFilter(brand.name);
+        setModelFilter(foundModel.name);
+        // setModelFilter("TEST");
+        console.log(foundModel.name);
+        console.log(modelFilter);
+      }
+    });
+  }, [searchTerm]);
+
+  // useEffect(() => {
+  //   console.log(modelFilter);
+  //   setModelFilter(modelFilter);
+  // }, [modelFilter]);
+
   const handleModelFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
+    console.log(event.target.value);
+
     setModelFilter(event.target.value);
     setItemOffset(0);
     setCurrentPage(1);
@@ -892,19 +932,6 @@ export default function Catalog({
     }
   };
 
-  // useEffect(() => {
-  //   console.log(cars);
-  // }, [cars]);
-
-  // const prevCarsRef = useRef(cars);
-
-  // useEffect(() => {
-  //   if (prevCarsRef.current !== cars) {
-  //     prevCarsRef.current = cars;
-  //     console.log(cars);
-  //   }
-  // }, [cars]);
-
   return (
     <div className={style.catalog} id="catalog">
       <h3>Find cars to fit your criteria</h3>
@@ -948,7 +975,7 @@ export default function Catalog({
           onMinMileageValue={handleMinMileageChange}
           onMaxMileageValue={handleMaxMileageChange}
           // mileageSliderChange={handleMileageSliderChange}
-          selectedCurrency={selectedCurrency}
+          // selectedCurrency={selectedCurrency}
           minYearValue={minYearValue}
           maxYearValue={maxYearValue}
           onMinYearValue={handleMinYearChange}
@@ -965,7 +992,7 @@ export default function Catalog({
             sortOption="Expensive"
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
-            searchValue={searchTerm}
+            // searchValue={searchTerm}
             brand={brandFilter}
             model={modelFilter}
             mileage={mileageFilter}
@@ -990,9 +1017,6 @@ export default function Catalog({
                   <BigCard
                     key={car.id}
                     id={car.id}
-                    selectedCurrency={selectedCurrency}
-                    usdValue={usdValue}
-                    eurValue={eurValue}
                     index={index}
                     brand={car.brand}
                     model={car.model}

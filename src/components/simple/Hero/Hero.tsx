@@ -49,7 +49,7 @@ export default function Hero() {
               <Mobile color={black} />
             </a>
             <a href="mailto:segas95@yandex.ru">
-              <Email color={black} />
+              <Email color={black} email={"segas95@yandex.ru"} />
             </a>
           </div>
         </div>

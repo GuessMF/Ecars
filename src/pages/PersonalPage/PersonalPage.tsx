@@ -13,6 +13,8 @@ import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
 import Cookies from "universal-cookie";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {useAppSelector} from "hooks/redux-hooks";
 import * as imageConversion from "image-conversion";
 import sharp from "sharp";
 import imagemin from "imagemin";
@@ -21,11 +23,10 @@ import Select from "react-select";
 import OptionTypeBase from "react-select";
 
 import imageminWebp from "imagemin-webp";
+import {useAuth} from "hooks/use-auth";
 
 interface Props {
   userID: string;
-  eurValue: number;
-  usdValue: number;
 }
 
 interface CarModel {
@@ -65,7 +66,37 @@ type DateObject = {
 interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
-export default function PersonalPage({userID, usdValue, eurValue}: Props) {
+export default function PersonalPage({userID}: Props) {
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+  const {isAuth, email, displayName} = useAuth();
+  console.log(displayName);
+  console.log(email);
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
+  // const user = useAppSelector((state) => state.user);
+  // console.log(user);
+
+  // const [userEmail, setUserEmail] = useState<string>("");
+  // const [userMobile, setUserMobile] = useState<string>("");
+
+  let multiplier: number =
+    selectedCurrency === "RUB"
+      ? usdValue
+      : selectedCurrency === "EUR"
+      ? usdValue / eurValue
+      : 1;
+
+  // const newPrice = Number(price) * multiplier;
+  // const currentPrice = parseInt(newPrice.toFixed(0));
+
+  // const formattedPrice: string = currentPrice
+  //   .toLocaleString()
+  //   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -149,7 +180,7 @@ export default function PersonalPage({userID, usdValue, eurValue}: Props) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   //let selectedFiles: File[] = [];
-
+  const userMobile = useAppSelector((state) => state.user.mobile);
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
     if (!cookies.get("auth")) {
@@ -163,20 +194,20 @@ export default function PersonalPage({userID, usdValue, eurValue}: Props) {
     );
   }, [model]);
 
-  useEffect(() => {
-    console.log(brandAndModel);
-  }, [brandAndModel]);
+  // useEffect(() => {
+  //   console.log(brandAndModel);
+  // }, [brandAndModel]);
 
   const toggleMenu = () => {
     setMenuIsOpen(!menuIsOpen);
   };
 
-  const onClickCurrency = (selectedOption: any) => {
-    setCurrentCur(selectedOption);
-    // onCurrencyChange(selectedOption);
-    console.log(selectedOption);
-    setMenuIsOpen(false);
-  };
+  // const onClickCurrency = (selectedOption: any) => {
+  //   setCurrentCur(selectedOption);
+  //   // onCurrencyChange(selectedOption);
+  //   console.log(selectedOption);
+  //   setMenuIsOpen(false);
+  // };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -410,6 +441,9 @@ export default function PersonalPage({userID, usdValue, eurValue}: Props) {
           index: newIndex,
           id: newId,
           userId: userID,
+          userName: displayName,
+          userEmail: email,
+          userMobile: userMobile,
           dateAdded: currentDate,
           brand: brand.toLocaleLowerCase(),
           model: model.toLocaleLowerCase(),

@@ -32,6 +32,9 @@ interface Props {
   addLiked: () => void;
   liked: boolean;
   handleLike: () => void;
+  sellerEmail: string | undefined;
+  sellerName: string | undefined;
+  sellerMobile: string | undefined;
 }
 
 export default function DetailsCTA({
@@ -49,6 +52,9 @@ export default function DetailsCTA({
   addLiked,
   liked,
   handleLike,
+  sellerEmail,
+  sellerName,
+  sellerMobile,
 }: Props) {
   const black: string = "#1A1A1A";
   // console.log(dateObj.year);
@@ -178,10 +184,12 @@ export default function DetailsCTA({
             </button>
             <button
               onClick={() =>
-                (window.location.href = `mailto:segas95@yandex.ru`)
+                (window.location.href = `mailto:${
+                  sellerEmail ? sellerEmail : "no email"
+                }`)
               }
             >
-              <Email color={black} />
+              <Email color={black} email={sellerEmail} />
             </button>
           </div>
         </div>

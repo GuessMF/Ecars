@@ -1,9 +1,11 @@
 import React from "react";
 import style from "./__littleCard.module.scss";
 import Details from "../../ui/Details/Details";
-import img from "../../../assets/images/LittleCard/2021_Genesis_GV80_2.5T.webp";
-import Like from "../../ui/Like/Like";
+// import img from "../../../assets/images/LittleCard/2021_Genesis_GV80_2.5T.webp";
+// import Like from "../../ui/Like/Like";
 import Choose from "components/ui/Choose/Choose";
+
+import {useAppSelector} from "hooks/redux-hooks";
 
 interface Props {
   brand: string;
@@ -14,9 +16,6 @@ interface Props {
   mileage: number;
   owners: string;
   previewIMG: string;
-  selectedCurrency: string;
-  eurValue: number;
-  usdValue: number;
 }
 export default function LittleCard({
   brand,
@@ -27,16 +26,22 @@ export default function LittleCard({
   owners,
   special,
   previewIMG,
-  selectedCurrency,
-  eurValue,
-  usdValue,
 }: Props) {
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
+
+  // let multiplier = 1;
 
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -78,11 +83,25 @@ export default function LittleCard({
         <div className={style.littleCard__bottom}>
           <div className={style.littleCard__prices}>
             <span className={style.littleCard__newPrice}>
-              ${formattedPrice}
+              {selectedCurrency == "RUB"
+                ? "₽"
+                : selectedCurrency == "USD"
+                ? "$"
+                : selectedCurrency == "EUR"
+                ? "€"
+                : ""}
+              {formattedPrice}
             </span>
             {special && (
               <span className={style.littleCard__oldPrice}>
-                ${formattedOldPrice}
+                {selectedCurrency == "RUB"
+                  ? "₽"
+                  : selectedCurrency == "USD"
+                  ? "$"
+                  : selectedCurrency == "EUR"
+                  ? "€"
+                  : ""}
+                {formattedOldPrice}
               </span>
             )}
           </div>

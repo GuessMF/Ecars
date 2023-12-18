@@ -21,34 +21,26 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./styles.css";
-import {initializeApp} from "firebase/app";
-import {getStorage, ref, listAll} from "firebase/storage";
-import {getDownloadURL} from "firebase/storage";
-import {getFirestore} from "firebase/firestore";
+// import {initializeApp} from "firebase/app";
+// import {getStorage, ref, listAll} from "firebase/storage";
+// import {getDownloadURL} from "firebase/storage";
+// import {getFirestore} from "firebase/firestore";
+
+// import {useAppSelector} from "hooks/redux-hooks";
+// import {useAppDispatch} from "hooks/redux-hooks";
 
 import {db} from "../../../firebase";
 import {
   collection,
   query,
-  orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
   getDocs,
-  DocumentSnapshot,
   where,
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
-import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+// import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 import {useAuth} from "hooks/use-auth";
 
-interface Props {
-  selectedCurrency: string;
-  eurValue: number;
-  usdValue: number;
-}
 interface Car {
   id: string;
   userId: string;
@@ -67,16 +59,16 @@ interface Car {
   special: boolean;
 }
 
-export default function SpecialOffers({
-  selectedCurrency,
-  eurValue,
-  usdValue,
-}: Props) {
+export default function SpecialOffers() {
   const {isAuth, email, displayName} = useAuth();
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
-  useEffect(() => {}, [isAuth]);
+  // const selectedCurrency = useAppSelector((state) => state.currency);
+  // const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  // const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
+  // useEffect(() => {}, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 
   const screenWidth = windowWidth;
@@ -172,9 +164,6 @@ export default function SpecialOffers({
                       fuel={car.fuel}
                       mileage={car.mileage}
                       owners={car.owners}
-                      selectedCurrency={selectedCurrency}
-                      eurValue={eurValue}
-                      usdValue={usdValue}
                       special={true}
                       previewIMG={car.imageUrls[0]}
                     />

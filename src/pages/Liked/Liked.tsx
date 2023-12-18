@@ -118,9 +118,6 @@ export default function Liked({userID}: Props) {
             <BigCard
               key={index}
               id={car.id}
-              selectedCurrency={"USD"}
-              usdValue={10}
-              eurValue={20}
               index={index}
               brand={car.brand}
               model={car.model}

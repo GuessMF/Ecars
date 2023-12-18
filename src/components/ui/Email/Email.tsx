@@ -3,9 +3,10 @@ import style from "./__email.module.scss";
 
 interface Props {
   color: string;
+  email: string | undefined;
 }
 
-export default function Email({color}: Props) {
+export default function Email({color, email}: Props) {
   return (
     <div className={style.email}>
       <svg
@@ -22,7 +23,7 @@ export default function Email({color}: Props) {
         />
       </svg>
       <span className={style.email__data} style={{color: color}}>
-        segas95@yandex.ru
+        {email}
       </span>
     </div>
   );

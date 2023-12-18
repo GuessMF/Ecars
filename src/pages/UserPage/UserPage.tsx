@@ -7,6 +7,8 @@ import {useAuth} from "hooks/use-auth";
 import {NavLink} from "react-router-dom";
 import style from "./__userPage.module.scss";
 // import BigCard from "components/smart/BigCard/BigCard";
+
+import {useAppSelector} from "hooks/redux-hooks";
 import Cookies from "universal-cookie";
 import {
   query,
@@ -204,6 +206,8 @@ export default function UserPage({userID}: Props) {
     console.log(sortBy);
   }, [sortBy]);
 
+  console.log(cars);
+
   return (
     <div className={style.userPage}>
       {popUpDel && (
@@ -221,39 +225,40 @@ export default function UserPage({userID}: Props) {
       <div className={style.header}>
         <h1>Personal page</h1>
         <p>
-          {userName}, welcome to your personal page, here are all the cars that
-          you have for sale
+          {userName ? userName : "no name"}, welcome to your personal page, here
+          are all the cars that you have for sale
         </p>
-        <div className={style.sorting}>
-          <span>Sort by:</span>
-          <button
-            onClick={() => handleSortBy("dateAdded")}
-            className={sortBy == "dateAdded" && style.checked}
-          >
-            Date
-          </button>
-          <button
-            onClick={() => handleSortBy("price")}
-            className={sortBy == "price" && style.checked}
-          >
-            Price
-          </button>
-          <button
-            onClick={() => handleSortBy("brand")}
-            className={sortBy == "brand" && style.checked}
-          >
-            Brand
-          </button>
-        </div>
+        {cars.length > 0 ? (
+          <div className={style.sorting}>
+            <span>Sort by:</span>
+            <button
+              onClick={() => handleSortBy("dateAdded")}
+              className={sortBy == "dateAdded" && style.checked}
+            >
+              Date
+            </button>
+            <button
+              onClick={() => handleSortBy("price")}
+              className={sortBy == "price" && style.checked}
+            >
+              Price
+            </button>
+            <button
+              onClick={() => handleSortBy("brand")}
+              className={sortBy == "brand" && style.checked}
+            >
+              Brand
+            </button>
+          </div>
+        ) : (
+          <h5>No cars yet</h5>
+        )}
       </div>
       <div className={style.wrapper}>
-        {loaded && (
+        {loaded && cars.length > 0 && (
           <MegaCard
             key={"1"}
             id={cars[currentCar]?.id}
-            selectedCurrency={"USD"}
-            usdValue={10}
-            eurValue={20}
             index={0}
             brand={cars[currentCar]?.brand}
             model={cars[currentCar]?.model}
@@ -275,11 +280,10 @@ export default function UserPage({userID}: Props) {
             dateObj={cars[currentCar]?.dateObj}
             onClickDelete={onDelClick}
             onClickCheck={onClickCheck}
-            // sortBy={sortBy}
           />
         )}
+        {cars.length > 1 && <h5>Other cars you liked:</h5>}
 
-        <h5>Other cars you liked:</h5>
         <div className={style.otherCars}>
           {loaded &&
             cars.map(
@@ -298,9 +302,6 @@ export default function UserPage({userID}: Props) {
                       owners={car.owners}
                       special={false}
                       previewIMG={car.previewImage[0]}
-                      selectedCurrency={"USD"}
-                      usdValue={10}
-                      eurValue={20}
                     />
                   </div>
                 )

@@ -21,6 +21,9 @@ import {Swiper as SwiperCore} from "swiper/types";
 import {collection, query, getDocs} from "firebase/firestore";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+
+import {useAppSelector} from "hooks/redux-hooks";
+
 interface Props {
   id: string;
   index: number;
@@ -33,9 +36,6 @@ interface Props {
   mileage: number;
   description: string;
   previewIMG: string;
-  selectedCurrency: string;
-  usdValue: number;
-  eurValue: number;
   onClickDelete: (id: string, carName: string) => void;
   onClickCheck: (brand: string, id: string) => void;
 }
@@ -52,13 +52,17 @@ export default function BigCard({
   mileage,
   description,
   previewIMG,
-  selectedCurrency,
-  eurValue,
-  usdValue,
   onClickDelete,
   onClickCheck,
 }: // onLoad,
 Props) {
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue

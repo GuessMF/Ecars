@@ -5,9 +5,10 @@ import MoreFilters from "../../ui/MoreFilters/MoreFilters";
 import {useState, useEffect} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
-import carData from "../../../helpers/modelsBrands";
+// import carData from "../../../helpers/modelsBrands";
 import {useAppSelector} from "hooks/redux-hooks";
 // import {cars} from "../../helpers/carList";
+import carData from "../../../helpers/modelsBrands";
 
 interface CarModel {
   name: string;
@@ -105,7 +106,7 @@ interface FiltersProps {
   resetColor: () => void;
   resetSeats: () => void;
   resetTransmission: () => void;
-  selectedCurrency: string;
+  // selectedCurrency: string;
   checkBoxes1: CheckBoxes;
   cities: Cities;
   ownersBoxes: Owners;
@@ -145,7 +146,7 @@ export default function Filters({
   onTransmissionchange,
   brandFilterValue,
   modelFilterValue,
-  selectedCurrency,
+  // selectedCurrency,
   resetBrand,
   resetModels,
   resetVechicleType,
@@ -181,11 +182,13 @@ export default function Filters({
 }: // mileageSliderChange,
 
 FiltersProps) {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (newValue: number) => {
-    setValue(newValue);
-  };
+  // const [value, setValue] = React.useState(0);
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+  // const handleChange = (newValue: number) => {
+  //   setValue(newValue);
+  // };
   const [visible, setVisible] = React.useState(false);
   const handleClick = () => {
     setVisible(!visible);
@@ -195,53 +198,51 @@ FiltersProps) {
     setIsFiltersOpen(false);
   };
   const [brand, setBrand] = useState<string>("");
-  // const [model, setModel] = useState<string>("");
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [model, setModel] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
-
-  const handleBrandChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedBrand = event.target.value;
-    setBrand(selectedBrand);
-
-    // Найти модели для выбранной марки из carData
-    const selectedBrandData = carData.brands.find(
-      (item) => item.name === selectedBrand
-    );
-    setModels(selectedBrandData ? selectedBrandData.models : []);
-  };
-
-  // const dispatch = useAppDispatch();
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
   useEffect(() => {
-    // setSearchValue(searchTerm);
-    const fountedBrand = carData.brands.find(
-      (item) =>
-        item.name ===
-        searchTerm.charAt(0).toLocaleUpperCase() + searchTerm.slice(1)
-    );
-    console.log("founted " + fountedBrand?.name);
-    if (fountedBrand) {
-      setBrand(fountedBrand.name);
-      setModels(fountedBrand ? fountedBrand.models : []);
-      //  onBrandFilterChange(event);
-    }
+    // const fountedBrand = carData.brands.find(
+    //   (item) =>
+    //     item.name ===
+    //     searchTerm.charAt(0).toLocaleUpperCase() + searchTerm.slice(1)
+    // );
+    // if (fountedBrand) {
+    //   console.log(fountedBrand.models);
+    //   setModels(fountedBrand.models);
+    // }
+
+    carData.brands.forEach((brand) => {
+      const foundModel = brand.models.find(
+        (model) => model.name.toLowerCase() === searchTerm.toLowerCase()
+      );
+      if (foundModel) {
+        // setBrandFilter(brand.name);
+        // setModels(foundModel.name);
+      }
+    });
   }, [searchTerm]);
+  useEffect(() => {
+    console.log(brandFilterValue);
+
+    const fountedBrand = carData.brands.find(
+      (item) => item.name === brandFilterValue
+    );
+    if (fountedBrand) {
+      console.log(fountedBrand.models);
+      setModels(fountedBrand.models);
+    }
+  }, [brandFilterValue]);
 
   const onBrandSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedBrand: string = event.target.value;
-    console.log(selectedBrand);
-
-    // if (searchTerm) {
-    //   const fountedBrand = carData.brands.find(
-    //     (item) => item.name === searchTerm
-    //   );
-    //   console.log("founted" + fountedBrand);
-    // }
-    setBrand(selectedBrand);
     const selectedBrandData = carData.brands.find(
       (item) => item.name === selectedBrand
     );
+    console.log(selectedBrand);
+    console.log(selectedBrandData?.models);
+
     setModels(selectedBrandData ? selectedBrandData.models : []);
     onBrandFilterChange(event);
   };
@@ -320,7 +321,7 @@ FiltersProps) {
             <span onClick={onResetModels}>Reset</span>
           </div>
 
-          <select onChange={onModelFilterChange}>
+          <select onChange={onModelFilterChange} value={modelFilterValue}>
             <option value="">Выбери модель</option>
             {models.map((model) => (
               <option key={model.name} value={model.name}>

@@ -13,6 +13,9 @@ import {db} from "../../../firebase";
 import MeduimCard from "components/smart/MediumCard/MeduimCard";
 import {current} from "@reduxjs/toolkit";
 import {NavLink} from "react-router-dom";
+
+import {useAppSelector} from "hooks/redux-hooks";
+
 interface Car {
   id: string;
   userId: string;
@@ -34,20 +37,20 @@ type Props = {
   similarBrand: string | undefined;
   similarModel: string | undefined;
   currentId: string | undefined;
-
-  selectedCurrency: string;
-  eurValue: number;
-  usdValue: number;
 };
 export default function SimilarCars({
   similarBrand,
   similarModel,
   currentId,
-  selectedCurrency,
-  usdValue,
-  eurValue,
 }: Props) {
   const [similarCars, setSimilarCars] = useState<Car[]>([]);
+
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
 
   // const fetchSimilarCars = async (
   //   brand: string | undefined,

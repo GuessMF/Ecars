@@ -11,6 +11,8 @@ import {
   signInWithEmailAndPassword,
   setPersistence,
   browserLocalPersistence,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
@@ -24,16 +26,23 @@ export default function Login() {
   const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState("");
   const {isAuth, displayName} = useAuth();
-  console.log(email);
 
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   onAuthStateChanged(auth, (user) => {
-  //     user && setUserId(user?.uid);
-  //   });
-  // }, []);
+  const auth = getAuth();
 
-  console.log(password);
+  const handleGoogleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // Вход успешен, получите данные пользователя из result.user
+      const {displayName, email, photoURL, uid} = result.user || {};
+      console.log("Успешный вход:", displayName, email, photoURL);
+
+      navigate(`/user-page/${uid}`);
+    } catch (error) {
+      console.error("Ошибка входа через Google:", error);
+    }
+  };
+
   const navigate = useNavigate();
   const handleLogin = (email: string, password: string) => {
     const auth = getAuth();
@@ -112,7 +121,13 @@ export default function Login() {
           <span className={style.line}>
             <hr /> or <hr />
           </span>
-          <button className={style.googleBtn}>
+          <NavLink to="/login-mobile">
+            <button className={style.googleBtn}>
+              Login with mobile number
+            </button>
+          </NavLink>
+
+          <button className={style.googleBtn} onClick={handleGoogleSignIn}>
             <GoogleIcon /> Authorize with Google
           </button>
         </div>

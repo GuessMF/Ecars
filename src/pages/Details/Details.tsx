@@ -20,6 +20,7 @@ import Cookies from "universal-cookie";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import SkeletonBigImage from "./SkeletonBigImage";
 import SkeletonLittleImage from "./SkeletonLittleImage";
+import {useAppSelector} from "hooks/redux-hooks";
 
 interface DateObject {
   year: number;
@@ -50,18 +51,19 @@ interface Car {
   exportStatus: string;
   dateObj: DateObject;
   color: string;
+  userName: string;
+  userEmail: string;
+  userMobile: string;
 }
 
-interface DetailsProps {
-  selectedCurrency: string;
-  eurValue: number;
-  usdValue: number;
-}
-export default function Details({
-  selectedCurrency,
-  eurValue,
-  usdValue,
-}: DetailsProps) {
+export default function Details() {
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
   const swiperRef = useRef<SwiperCore>();
   const navigate = useNavigate();
   const black: string = "#1A1A1A";
@@ -73,6 +75,7 @@ export default function Details({
   const [imageLoaded, setImageLoaded] = useState(false);
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
+      setImageLoaded(false);
       const previewRef = ref(storage, `cars/${currentIndex}/preview/`);
       const folderRef = ref(storage, `cars/${currentIndex}`);
 
@@ -90,8 +93,12 @@ export default function Details({
             return await getDownloadURL(photo);
           })
         );
-        setPhotoURLs((prev) => [...prev, ...previewUrl]);
+        // setPhotoURLs((prev) => [...prev, ...previewUrl]);
+        // setPhotoURLs((prev) => [...prev, ...urls]);
+
+        setPhotoURLs([...previewUrl]);
         setPhotoURLs((prev) => [...prev, ...urls]);
+        setImageLoaded(true);
       } catch (error) {
         console.error("Error loading photos from Firebase:", error);
       }
@@ -106,7 +113,7 @@ export default function Details({
 
   useEffect(() => {
     fetchFirstPage();
-  }, []);
+  }, [id]);
 
   const fetchFirstPage = async () => {
     try {
@@ -264,34 +271,8 @@ export default function Details({
     image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
   }, [photoURLs]);
 
-  // <img src={photoURLs?.[selectedPhoto]} alt="pic" />
-
-  // {imageLoaded ? (
-  //   <LazyLoadImage
-  //     className={style.bigCard__img}
-  //     effect="blur" // Добавляет эффект размытия
-  //     src={photoURLs?.[selectedPhoto]}
-  //     alt="Car Preview"
-  //   />
-  // ) : (
-  //   <SkeletonBigImage />
-  // )}
-
-  // {photoURLs.map((img, index, id) => (
-  //   <img
-  //     key={img}
-  //     className={style.little_preview}
-  //     src={img}
-  //     onClick={() => setSelectedPhoto(index)}
-  //   />
-  // ))}
   console.log(photoURLs);
-  //   <img
-  //   key={img}
-  //   className={style.little_preview}
-  //   src={img}
-  //   onClick={() => setSelectedPhoto(index)}
-  // />
+
   return (
     <div className={style.details}>
       {fullWidth && (
@@ -404,6 +385,9 @@ export default function Details({
                 addLiked={() => addLiked()}
                 liked={liked}
                 handleLike={handleLike}
+                sellerEmail={currentCar?.userEmail}
+                sellerName={currentCar?.userName}
+                sellerMobile={currentCar?.userMobile}
               />
             )}
             <div className={style.content__mainInformation}>
@@ -572,9 +556,6 @@ export default function Details({
                 similarBrand={currentCar?.brand}
                 similarModel={currentCar?.model}
                 currentId={id}
-                selectedCurrency={selectedCurrency}
-                eurValue={eurValue}
-                usdValue={usdValue}
               />
             </div>
           </div>
@@ -595,6 +576,9 @@ export default function Details({
               addLiked={() => addLiked()}
               liked={liked}
               handleLike={handleLike}
+              sellerEmail={currentCar?.userEmail}
+              sellerName={currentCar?.userName}
+              sellerMobile={currentCar?.userMobile}
             />
           )}
         </div>

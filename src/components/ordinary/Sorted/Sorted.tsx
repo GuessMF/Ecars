@@ -19,7 +19,7 @@ import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
 // }
 
 interface FiltersProps {
-  searchValue: string;
+  // searchValue: string;
   onChangeSortBy: (obj: any) => void;
   sortOption: string;
   isFiltersOpen: boolean;
@@ -43,7 +43,7 @@ interface FiltersProps {
 }
 
 export default function Sorted({
-  searchValue,
+  // searchValue,
   onChangeSortBy,
   sortOption,
   setIsFiltersOpen,
@@ -220,9 +220,9 @@ export default function Sorted({
         <span>Filters</span>
       </button>
       <div className={style.sorted__bottom}>
-        {searchValue && (
+        {/* {searchValue && (
           <SelectedFilter onClick={onCloseSearchValue} params={searchValue} />
-        )}
+        )} */}
 
         {brand && (
           <SelectedFilter

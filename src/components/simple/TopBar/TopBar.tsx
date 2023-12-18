@@ -1,41 +1,42 @@
 import React, {useRef} from "react";
 import Email from "../../ui/Email/Email";
 import Mobile from "../../ui/Mobile/Mobile";
-import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
-import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
-import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
-import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
+// import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
+// import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
+// import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
+// import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
 import Select from "react-select";
-
+import {useAppSelector} from "hooks/redux-hooks";
+import {useAppDispatch} from "hooks/redux-hooks";
 import style from "./__topBar.module.scss";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
+
+import {setCurrencyTerm} from "store/slices/currencySlice";
 
 const white: string = "#FFFFFFB2";
 const color: string = "rgba(255, 255, 255, 0.7)";
 const opacity: string = "1";
 
-interface TopBarProps {
-  eurValue: number;
-  usdValue: number;
-  selectedCurrency: string;
-  onCurrencyChange: (obj: any) => void;
-}
+// interface TopBarProps {
+//   eurValue: number;
+//   usdValue: number;
+//   selectedCurrency: string;
+//   onCurrencyChange: (obj: any) => void;
+// }
 
-export default function TopBar({
-  eurValue,
-  usdValue,
-
-  onCurrencyChange,
-}: TopBarProps) {
+export default function TopBar() {
   // const handleCurrencyChange = (currencyCode: string) => {
   //   onCurrencyChange(currencyCode);
   // };
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+  const dispatch = useAppDispatch();
   const [menuIsOpen, setMenuIsOpen] = React.useState(false);
   const toggleMenu = () => {
     setMenuIsOpen(!menuIsOpen);
   };
 
-  const selectRef = useRef(null);
+  // const selectRef = useRef(null);
 
   const options = [
     {value: "RUB", label: "RUB"},
@@ -46,8 +47,10 @@ export default function TopBar({
   const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
   const onClickCurrency = (selectedOption: any) => {
     setSelectedCurrency(selectedOption);
-    onCurrencyChange(selectedOption);
-    console.log(selectedOption);
+    console.log(selectedOption.value);
+
+    // onCurrencyChange(selectedOption);
+    dispatch(setCurrencyTerm(selectedOption.value));
     setMenuIsOpen(false);
   };
   return (
@@ -63,7 +66,7 @@ export default function TopBar({
 
         <Mobile color={white} />
         <div className={style.logos}>
-          <Email color={white} />
+          <Email color={white} email={"segas95@yandex.ru"} />
         </div>
         {selectedCurrency?.value === "USD"
           ? selectedCurrency?.value + `: ${usdValue}`

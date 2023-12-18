@@ -6,7 +6,7 @@ import SkeletonMegaImage from "./SkeletonMegaImage";
 import {NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {LazyLoadImage} from "react-lazy-load-image-component";
-
+import {useAppSelector} from "hooks/redux-hooks";
 import {doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {db, storage} from "../../../firebase";
@@ -40,9 +40,6 @@ interface Props {
   wheels: string;
   seats: string;
   dateObj: DateObject;
-  selectedCurrency: string;
-  usdValue: number;
-  eurValue: number;
 
   onClickDelete: (id: string, carName: string) => void;
   onClickCheck: (brand: string, id: string) => void;
@@ -74,6 +71,27 @@ export default function MegaCard({
   dateObj,
 }: // sortBy,
 Props) {
+  const selectedCurrency = useAppSelector(
+    (state) => state.currency.currencyTerm
+  );
+
+  const usdValue = useAppSelector((state) => state.currValue.usdValue);
+  const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
+  let multiplier: number =
+    selectedCurrency === "RUB"
+      ? usdValue
+      : selectedCurrency === "EUR"
+      ? usdValue / eurValue
+      : 1;
+
+  const newPrice = Number(price) * multiplier;
+  const currentPrice = parseInt(newPrice.toFixed(0));
+
+  const formattedPrice: string = currentPrice
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -177,8 +195,8 @@ Props) {
       </div>
       <div className={style.information}>
         <div className={style.topInformation}>
-          <h3>{brand.charAt(0).toLocaleUpperCase() + brand.slice(1)}</h3>
-          <h3>{model.toLocaleUpperCase()}</h3>
+          <h3>{brand?.charAt(0).toLocaleUpperCase() + brand?.slice(1)}</h3>
+          <h3>{model?.toLocaleUpperCase()}</h3>
           <h3>{year}</h3>
         </div>
         <div className={style.mainInformation}>
@@ -186,11 +204,11 @@ Props) {
             <div>
               <span>Brand</span>{" "}
               <span>
-                {brand.charAt(0).toLocaleUpperCase() + brand.slice(1)}
+                {brand?.charAt(0).toLocaleUpperCase() + brand?.slice(1)}
               </span>
             </div>
             <div>
-              <span>Model</span> <span>{model.toLocaleUpperCase()}</span>
+              <span>Model</span> <span>{model?.toLocaleUpperCase()}</span>
             </div>
 
             <div>
@@ -251,7 +269,17 @@ Props) {
           </span>
         </div>
 
-        <span className={style.price}>$ {price}</span>
+        <span className={style.price}>
+          {" "}
+          {selectedCurrency === "RUB"
+            ? `₽ `
+            : selectedCurrency === "USD"
+            ? "$ "
+            : selectedCurrency === "EUR"
+            ? "€ "
+            : ""}{" "}
+          {formattedPrice}
+        </span>
         <div className={style.buttons}>
           <button className={style.visit} onClick={onClickVisitPage}>
             Visit page

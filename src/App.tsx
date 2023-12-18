@@ -21,53 +21,32 @@ import Liked from "pages/Liked/Liked";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
-import {useSelector} from "react-redux";
-import {RootState} from "./store";
-import {useNavigate} from "react-router-dom";
-import {useParams} from "react-router-dom";
+//import {useSelector} from "react-redux";
+//import {RootState} from "./store";
+//import {useNavigate} from "react-router-dom";
+//import {useParams} from "react-router-dom";
 import UserPage from "pages/UserPage/UserPage";
-import {useAuth} from "hooks/use-auth";
+//import {useAuth} from "hooks/use-auth";
 import Cookies from "universal-cookie";
+import {setCurrencyTerm} from "store/slices/currencySlice";
 
-// import firebase from "firebase/app";
-// import "firebase/auth";
+import {setCurrValue} from "./store/slices/currValueSlice";
+import {useAppSelector} from "hooks/redux-hooks";
+import LoginMobile from "pages/LoginMobile/LoginMobile";
+
 function App() {
-  const [currentExchange, setCurrentExchange] = useState<any>(null);
   const dispatch = useAppDispatch();
   const [userId, setUserId] = useState<string>("");
 
-  // const navigate = useNavigate();
   const cookies = new Cookies(null, {path: "/"});
-
+  const currencyTerm = useAppSelector((state) => state.currency.currencyTerm);
   const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
 
   const [usdValue, setUsdValue] = useState<number>(0);
   const [eurValue, setEurValue] = useState<number>(0);
 
-  // const authenticateUser = () => {
-  //   firebase
-  //     .auth()
-  //     .signInWithEmailAndPassword(email, password)
-  //     .then((userCredential) => {
-  //       // После успешной аутентификации сохраняем данные пользователя в localStorage
-  //       localStorage.setItem(
-  //         "currentUser",
-  //         JSON.stringify(userCredential.user)
-  //       );
-  //     })
-  //     .catch((error) => {
-  //       // Обработка ошибок аутентификации
-  //     });
-  // };
-
-  // const userIdCatch= async()=>{
-  // try {
-
-  // } catch (error) {
-
-  // }
-
-  // }
+  const ususer = useAppSelector((state) => state.user);
+  console.log(ususer.mobile);
 
   useEffect(() => {
     const auth = getAuth();
@@ -75,9 +54,12 @@ function App() {
       user && setUserId(user?.uid);
 
       if (user) {
+        console.log(user.phoneNumber);
+
         dispatch(
           setUser({
             displayName: user.displayName,
+            mobile: user.phoneNumber,
             email: user.email,
             id: user.uid,
             token: user.refreshToken,
@@ -95,16 +77,12 @@ function App() {
           "https://www.cbr-xml-daily.ru/daily_json.js"
         );
         const data = await response.json();
-
-        Object.keys(data.Valute).map((currencyCode: string) =>
-          data.Valute[currencyCode].CharCode === "USD"
-            ? setUsdValue(data.Valute[currencyCode].Value)
-            : data.Valute[currencyCode].CharCode === "EUR"
-            ? setEurValue(data.Valute[currencyCode].Value)
-            : 0
+        dispatch(
+          setCurrValue({
+            eurValue: data.Valute.EUR.Value,
+            usdValue: data.Valute.USD.Value,
+          })
         );
-
-        setCurrentExchange(data.Valute);
       } catch (error) {
         console.error("Error fetching exchange rates:", error);
       }
@@ -116,56 +94,16 @@ function App() {
   return (
     <div className={style.app}>
       <ScrollToTop />
-      <TopBar
-        eurValue={eurValue}
-        usdValue={usdValue}
-        selectedCurrency={selectedCurr}
-        onCurrencyChange={(selectedCurrency) =>
-          setSelectedCurr(selectedCurrency.value)
-        }
-      />
+      <TopBar />
       <Header />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Homepage
-              selectedCurrency={selectedCurr}
-              eurValue={eurValue}
-              usdValue={usdValue}
-            />
-          }
-        />
-        <Route
-          path="/catalog"
-          element={
-            <Catalog
-              selectedCurrency={selectedCurr}
-              eurValue={eurValue}
-              usdValue={usdValue}
-            />
-          }
-        />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/catalog" element={<Catalog />} />
         <Route path="/aboutUs" element={<AboutUs />} />
-        <Route
-          path="/details/:id"
-          element={
-            <Details
-              selectedCurrency={selectedCurr}
-              eurValue={eurValue}
-              usdValue={usdValue}
-            />
-          }
-        />
+        <Route path="/details/:id" element={<Details />} />
         <Route
           path="/sell/:userId"
-          element={
-            <PersonalPage
-              eurValue={eurValue}
-              usdValue={usdValue}
-              userID={userId}
-            />
-          }
+          element={<PersonalPage userID={userId} />}
         />
 
         <Route
@@ -175,10 +113,11 @@ function App() {
 
         <Route path="/liked/:userId" element={<Liked userID={userId} />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/login-mobile" element={<LoginMobile />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
 
-        <Route path="/test" element={<TestPage userID={userId} />} />
+        <Route path="/test" element={<TestPage />} />
       </Routes>
       <Footer />
     </div>
