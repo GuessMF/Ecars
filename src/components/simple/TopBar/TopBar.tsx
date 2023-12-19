@@ -1,10 +1,7 @@
 import React, {useRef} from "react";
 import Email from "../../ui/Email/Email";
 import Mobile from "../../ui/Mobile/Mobile";
-// import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
-// import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
-// import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
-// import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
+
 import Select from "react-select";
 import {useAppSelector} from "hooks/redux-hooks";
 import {useAppDispatch} from "hooks/redux-hooks";

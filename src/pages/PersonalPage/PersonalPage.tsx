@@ -20,17 +20,40 @@ import sharp from "sharp";
 import imagemin from "imagemin";
 //import imageminWebp from "imagemin-webp";
 import Select from "react-select";
-import OptionTypeBase from "react-select";
+import CustomSelect from "components/smart/CustomSelect/CustomSelect";
+//import {OptionTypeBase, GroupBase} from "react-select";
+//import OptionTypeBase from "react-select";
 
 import imageminWebp from "imagemin-webp";
+
+import {ReactComponent as PlusIcon} from "./plusIcon.svg";
+import {ReactComponent as ChangeImage} from "./changeImage.svg";
+import {ReactComponent as DeleteIcon} from "./deleteIcon.svg";
 import {useAuth} from "hooks/use-auth";
 
+// interface CarBrand {
+//   name: string;
+//   models: CarModel[];
+// }
 interface Props {
   userID: string;
 }
 
 interface CarModel {
   name: string;
+}
+
+// interface CarModel {
+//   name: string;
+// }
+
+interface CarBrand {
+  name: string;
+  models: CarModel[];
+}
+
+interface CarData {
+  brands: CarBrand[];
 }
 
 interface Errors {
@@ -63,6 +86,11 @@ type DateObject = {
   minutes: number;
 };
 
+interface OptionType {
+  value: string;
+  label: string;
+}
+
 interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
@@ -71,12 +99,39 @@ export default function PersonalPage({userID}: Props) {
     (state) => state.currency.currencyTerm
   );
   const {isAuth, email, displayName} = useAuth();
-  console.log(displayName);
-  console.log(email);
+  // console.log(displayName);
+  // console.log(email);
+  const [userName, setUserName] = useState<string>("");
+
+  // const options: GroupBase<{value: string; label: string}>[] = [
+  //   {
+  //     label: "Group 1",
+  //     options: [
+  //       {value: "value1", label: "Option 1"},
+  //       {value: "value2", label: "Option 2"},
+  //     ],
+  //   },
+  //   {
+  //     label: "Group 2",
+  //     options: [
+  //       {value: "value3", label: "Option 3"},
+  //       {value: "value4", label: "Option 4"},
+  //     ],
+  //   },
+  // ];
+
+  useEffect(() => {
+    if (displayName) {
+      setUserName(displayName);
+    }
+  }, [displayName]);
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
-
+  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
+  const toggleMenu = () => {
+    setMenuIsOpen(!menuIsOpen);
+  };
   // const user = useAppSelector((state) => state.user);
   // console.log(user);
 
@@ -107,6 +162,9 @@ export default function PersonalPage({userID}: Props) {
   const [brand, setBrand] = useState<string>("test");
   const [models, setModels] = useState<CarModel[]>([]);
 
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
+
   const [brandAndModel, setBrandAndModel] = useState<string>("");
   const [model, setModel] = useState("test");
   const [price, setPrice] = useState<number>(10);
@@ -126,7 +184,7 @@ export default function PersonalPage({userID}: Props) {
   const [description, setDescription] = useState("test");
   const [fisrtCarPhoto, setFirstCarPhoto] = useState<string>();
 
-  const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
+  // const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const [currentCur, setCurrentCur] = useState<string>("");
 
   const [specialOffer, setSpecialOffer] = useState<boolean>(false);
@@ -134,6 +192,9 @@ export default function PersonalPage({userID}: Props) {
   const [formErrors, setFormErrors] = useState<Errors>({});
   const [popUpErrors, setPopUpErrors] = useState<boolean>(false);
   const errors: Errors = {};
+
+  const previewPicker = useRef<HTMLInputElement>(null);
+  const photosPicker = useRef<HTMLInputElement>(null);
 
   const selectedFilesRef = useRef<HTMLDivElement>(null);
   const selectedPreviewRef = useRef<HTMLDivElement>(null);
@@ -198,9 +259,9 @@ export default function PersonalPage({userID}: Props) {
   //   console.log(brandAndModel);
   // }, [brandAndModel]);
 
-  const toggleMenu = () => {
-    setMenuIsOpen(!menuIsOpen);
-  };
+  // const toggleMenu = () => {
+  //   setMenuIsOpen(!menuIsOpen);
+  // };
 
   // const onClickCurrency = (selectedOption: any) => {
   //   setCurrentCur(selectedOption);
@@ -575,71 +636,260 @@ export default function PersonalPage({userID}: Props) {
   //   // }, [currentCur, price]);
   // };
 
+  const pickPreview = () => {
+    previewPicker.current?.click();
+  };
+
+  const pickPhotos = () => {
+    photosPicker.current?.click();
+  };
+
+  // useEffect(() => {
+  //   console.log(selectedFiles);
+  //   console.log(selectedPreview);
+  // }, [selectedFiles, selectedPreview]);
+
+  const rechangePreview = () => {
+    setSelectedPreview([]);
+  };
+
+  const deleteAddedPhoto = (index: number) => {
+    // const currentIndex = index
+    console.log(index);
+    console.log(selectedFiles);
+    // const newArr = selectedFiles.filter((file: File[]) => file !== index);
+    //   console.log(newArr);
+
+    // delete selectedFiles[index];
+    // delete previewImages[index];
+  };
+
+  useEffect(() => {
+    console.log(selectedFiles);
+    console.log(previewImages);
+  }, [previewImages, selectedFiles]);
+
+  const brands = [
+    {value: "Acura", label: "Acura"},
+    {value: "Bmw", label: "Bmw"},
+    {value: "Jaguar", label: "Jaguar"},
+  ];
+  const modelss = [
+    {value: "3313", label: "3131"},
+    {value: "33333", label: "33333"},
+    {value: "Ja44gu44ar", label: "Jag444uar"},
+  ];
+
+  const mapCarBrandToOptionType = (brand: CarBrand): OptionType => ({
+    value: brand.name,
+    label: brand.name,
+  });
+
+  const brandOptions: OptionType[] = carData.brands.map(
+    mapCarBrandToOptionType
+  );
+
+  useEffect(() => {
+    console.log(brands);
+    console.log(carData.brands);
+  }, []);
+
+  const handleNewBrandChange = (brand: string) => {
+    setSelectedBrand(brand);
+
+    const selectedCarBrand = carData.brands.find(
+      (carBrand) => carBrand.name === brand
+    );
+
+    if (selectedCarBrand) {
+      const models: CarModel[] = selectedCarBrand.models;
+
+      const options: OptionType[] = models.map((model) => ({
+        value: model.name,
+        label: model.name,
+      }));
+
+      setModelsOptions(options);
+    }
+  };
+
   return (
     <div className={style.personalPage}>
-      <h3>Sell your car</h3>
+      <div className={style.header}>
+        <h1>Sell your car</h1>
+        <p>
+          {userName.charAt(0).toLocaleUpperCase() + userName.slice(1)}, here you
+          can fill in the card of the car you are going to sell.
+        </p>
+      </div>
 
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
       <PopUpSent sent={sent} />
 
-      <form onSubmit={handleSubmit} id="form" className={style.form}>
+      <form
+        //  onSubmit={handleSubmit}
+        id="form"
+        className={style.form}
+      >
         <div
-          className={formErrors.selectedPreview ? style.error : style.photos}
+          className={formErrors.selectedPreview ? style.error : style.preview}
           ref={selectedPreviewRef}
         >
           <label>
-            <span>Превью машины:</span>
+            {selectedPreview.length < 1 ? (
+              <div className={style.carPreview}>
+                <h3>Car preview</h3>
+
+                <button onClick={pickPreview}>
+                  <PlusIcon />
+                </button>
+              </div>
+            ) : (
+              <div className={style.preview__photo}>
+                {fisrtCarPhoto && (
+                  <img src={fisrtCarPhoto} alt={`preview-${fisrtCarPhoto}`} />
+                )}
+              </div>
+            )}
 
             <input
+              className={style.hidden}
+              ref={previewPicker}
               type="file"
               accept="image/*"
-              // multiple
               onChange={handlePreviewChange}
             />
           </label>
-          <div className={style.preview__photos}>
-            {fisrtCarPhoto && (
-              <div>
-                {" "}
-                <img
-                  src={fisrtCarPhoto}
-                  alt={`preview-${fisrtCarPhoto}`}
-                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
-                />
-              </div>
-            )}
-          </div>
+
+          {selectedPreview.length > 0 && (
+            <button
+              onClick={rechangePreview}
+              className={style.rechangePreviewBtn}
+            >
+              <ChangeImage />
+            </button>
+          )}
         </div>
 
         <div
           className={formErrors.selectedFiles ? style.error : style.photos}
           ref={selectedFilesRef}
         >
-          <label>
-            <span> Фотография машины:</span>
+          {selectedFiles.length < 1 && (
+            <label>
+              <h3>Сar photos</h3>
+              <button onClick={pickPhotos} className={style.addPhotos}>
+                <PlusIcon />
+              </button>
 
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileChange}
-            />
-          </label>
-          <div className={style.preview__photos}>
-            {previewImages.map((preview, index) => (
-              <div>
-                <img
-                  key={index}
-                  src={preview}
-                  alt={`preview-${index}`}
-                  style={{maxWidth: "100px", maxHeight: "100px", margin: "5px"}}
-                />
-                <p>{index}</p>
-              </div>
-            ))}
-          </div>
+              <input
+                className={style.hidden}
+                ref={photosPicker}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+              />
+            </label>
+          )}
+
+          {selectedFiles.length > 0 && (
+            <div className={style.preview__photos}>
+              {previewImages.map((preview, index) => (
+                <div className={style.previewPhoto}>
+                  <button
+                    className={style.deletePhoto}
+                    onClick={() => deleteAddedPhoto(index)}
+                  >
+                    <DeleteIcon />
+                  </button>
+                  <img
+                    key={index}
+                    src={preview}
+                    alt={`preview-${index}`}
+                    // className={index !== 0 && style.opacity}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
+        <table>
+          <tr>
+            <td className={style.tableTitle}>Brand</td>
+            <td>
+              <CustomSelect options={brandOptions} />
+              {/* <CustomSelect
+        options={carData.brands.map((brand) => ({ value: brand.name, label: brand.name }))}
+        onChange={(selectedOption) => handleBrandChange(selectedOption.value)}
+      /> */}
+              {/* <CustomSelect
+                options={carData.brands.map((brand) => ({
+                  value: brand.name,
+                  label: brand.name,
+                }))}
+                onChange={handleNewBrandChange}
+              /> */}
+            </td>
+
+            <td className={style.tableTitle}>Interior</td>
+            <td> {/* <CustomSelect options={modelss} /> */}</td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Model</td>
+            <td>
+              {" "}
+              <CustomSelect options={modelsOptions} />
+            </td>
+
+            <td className={style.tableTitle}>Wheels</td>
+            <td>{/* <CustomSelect /> */}</td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Year</td>
+            <td> {/* <CustomSelect /> */}</td>
+            <td className={style.tableTitle}>Seats</td>
+            <td>{/* <CustomSelect /> */}</td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Color</td>
+            <td>{/* <CustomSelect /> */}</td>
+
+            <td className={style.tableTitle}>Location</td>
+            <td> {/* <CustomSelect /> */}</td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Gearbox</td>
+            <td> {/* <CustomSelect /> */}</td>
+
+            <td className={style.tableTitle}>Export</td>
+            <td> {/* <CustomSelect /> */}</td>
+          </tr>
+
+          <tr>
+            <td className={style.tableTitle}>Fuel</td>
+            <td> {/* <CustomSelect /> */}</td>
+
+            <td className={style.tableTitle}>Owners</td>
+            <td> {/* <CustomSelect /> */}</td>
+          </tr>
+
+          <tr>
+            <td className={style.tableTitle}>Engine value</td>
+            <td> {/* <CustomSelect /> */}</td>
+
+            <td className={style.tableTitle}>Mileage</td>
+            <td> {/* <CustomSelect /> */}</td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Vehicle Type</td>
+            <td> {/* <CustomSelect /> */}</td>
+
+            <td className={style.tableTitle}>Special</td>
+            <td> {/* <CustomSelect /> */}</td>
+          </tr>
+        </table>
         <div className={formErrors.brand ? style.error : ""} ref={brandRef}>
           <label>
             <span>Марка:</span>
@@ -932,7 +1182,11 @@ export default function PersonalPage({userID}: Props) {
           </label>
         </div>
 
-        <button type="submit" className={loading ? style.button__load : ""}>
+        <button
+          //  type="submit"
+          onClick={handleSubmit}
+          className={loading ? style.button__load : ""}
+        >
           {loading ? (
             <Rings
               height="48"

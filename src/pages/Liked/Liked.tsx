@@ -43,12 +43,19 @@ export default function Liked({userID}: Props) {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [likedCars, setLikedCars] = useState<string[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
+  const [totalCars, setTotalCars] = useState<number>(0);
   const [loadingLiked, setLoadingLiked] = useState(true);
   const [sortBy, setSortBy] = useState<string>("brand");
   const {isAuth, email, displayName} = useAuth();
   const [sortSetting, setSortSetting] = useState<string | undefined>("asc");
   const [userName, setUserName] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  // const pages = Math.ceil(totalCars / itemsPerPage);
+
+  const itemsPerPage: number = 4;
+  const pages = Math.ceil(totalCars / itemsPerPage);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const navigate = useNavigate();
 
   const cookies = new Cookies(null, {path: "/"});
@@ -91,7 +98,14 @@ export default function Liked({userID}: Props) {
           return null;
         })
         .filter((car) => car !== null) as Car[];
-      setCars(carsData);
+
+      setTotalCars(carsData.length);
+      const paginatedCars = carsData.slice(
+        currentPage * itemsPerPage - itemsPerPage,
+        currentPage * itemsPerPage
+      );
+
+      setCars(paginatedCars);
     } catch (error) {
       console.error("Error fetching liked cars data: ", error);
     }
@@ -127,7 +141,7 @@ export default function Liked({userID}: Props) {
     };
 
     fetchData();
-  }, [likedCars, loadingLiked, sortBy, sortSetting]);
+  }, [likedCars, loadingLiked, sortBy, sortSetting, currentPage]);
 
   const handleSortBy = (value: string) => {
     if (sortBy === value) {
@@ -141,10 +155,30 @@ export default function Liked({userID}: Props) {
     }
   };
 
+  const nextNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+  const prevPrevPage = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const changePage = (index: number) => {
+    setCurrentPage(index + 1);
+    const catalog = document.getElementById("likedCatalog");
+    if (catalog) {
+      catalog.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+  };
+
   return (
-    <div className={style.liked}>
+    <div className={style.liked} id="likedCatalog">
       <div className={style.header}>
         <h1>Cars you liked</h1>
+
         <p>
           {userName.charAt(0).toLocaleUpperCase() + userName.slice(1)}, welcome
           to your liked page, this shows the cars you've liked.
@@ -215,6 +249,23 @@ export default function Liked({userID}: Props) {
             </NavLink>
             // />
           ))}
+      </div>
+      <div className={style.buttons}>
+        <button onClick={prevPrevPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        {[...new Array(pages)].map((_, index) => (
+          <span
+            key={index}
+            className={index + 1 == currentPage ? style.currentPage : ""}
+            onClick={() => changePage(index)}
+          >
+            {index + 1}
+          </span>
+        ))}
+        <button onClick={nextNextPage} disabled={currentPage === pages}>
+          Next
+        </button>
       </div>
     </div>
   );

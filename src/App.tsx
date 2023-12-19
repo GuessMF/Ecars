@@ -39,14 +39,13 @@ function App() {
   const [userId, setUserId] = useState<string>("");
 
   const cookies = new Cookies(null, {path: "/"});
-  const currencyTerm = useAppSelector((state) => state.currency.currencyTerm);
-  const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
+  // const currencyTerm = useAppSelector((state) => state.currency.currencyTerm);
+  // const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
 
-  const [usdValue, setUsdValue] = useState<number>(0);
-  const [eurValue, setEurValue] = useState<number>(0);
+  // const [usdValue, setUsdValue] = useState<number>(0);
+  // const [eurValue, setEurValue] = useState<number>(0);
 
-  const ususer = useAppSelector((state) => state.user);
-  console.log(ususer.mobile);
+  // const ususer = useAppSelector((state) => state.user);
 
   useEffect(() => {
     const auth = getAuth();
@@ -54,8 +53,6 @@ function App() {
       user && setUserId(user?.uid);
 
       if (user) {
-        console.log(user.phoneNumber);
-
         dispatch(
           setUser({
             displayName: user.displayName,

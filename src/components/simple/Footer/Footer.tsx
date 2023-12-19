@@ -10,6 +10,7 @@ import Mobile from "../../ui/Mobile/Mobile";
 import Email from "../../ui/Email/Email";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
 import {NavLink} from "react-router-dom";
+import Select from "react-select";
 
 const white: string = "#FFFFFFB2";
 const black: string = "#1A1A1A";
@@ -20,6 +21,12 @@ export default function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathName = location.pathname;
+
+  const options = [
+    {value: "RUB", label: "RUB"},
+    {value: "USD", label: "USD"},
+    {value: "EUR", label: "EUR"},
+  ];
 
   const scrollToAnchor = (anchorID: string) => {
     if (pathName == "/") {

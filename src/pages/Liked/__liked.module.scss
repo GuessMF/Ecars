@@ -9,7 +9,9 @@
   // gap: 96px;
   // padding: 96px 108px;
   padding: 96px $padding108;
+
   margin-top: 20px;
+  //border: black 1px solid;
 
   .header {
     h1 {
@@ -84,5 +86,32 @@
   }
   .icon {
     width: 12px;
+  }
+  .buttons {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    // padding-bottom: 15px;
+    // border: black 1px solid;
+
+    span {
+      border: black 1px solid;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .currentPage {
+      background-color: $primary500;
+      color: $white;
+      border: 1px solid $primary500;
+    }
+    button {
+      border: black 1px solid;
+      border: 1px solid $outline1;
+      border-radius: 8px;
+    }
   }
 }
