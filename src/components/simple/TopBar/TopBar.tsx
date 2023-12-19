@@ -64,7 +64,7 @@ export default function TopBar() {
           <SocialIcons color={color} opacity={opacity} />
         </div>
 
-        <Mobile color={white} />
+        <Mobile color={white} number={"+79214003269"} />
         <div className={style.logos}>
           <Email color={white} email={"segas95@yandex.ru"} />
         </div>

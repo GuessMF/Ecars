@@ -176,6 +176,21 @@
           border-bottom-right-radius: 8px;
         }
       }
+      .contactsOneBtn {
+        width: 100%;
+        button {
+          width: 100%;
+          border: $outline1 1px solid;
+          padding: 14px 24px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background-color: $white;
+          border-radius: 8px;
+          margin-top: 30px;
+        }
+      }
     }
   }
   .CTA__inspection {

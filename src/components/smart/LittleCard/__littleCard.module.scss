@@ -99,6 +99,19 @@
         font-size: 12px;
         line-height: 16px;
       }
+      .littleCard__location {
+        // display: flex;
+        // flex-direction: row;
+        margin-top: 5px;
+        gap: 8px;
+        list-style: none;
+        color: $gray700;
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+      }
     }
 
     .littleCard__bottom {
@@ -119,7 +132,7 @@
           font-family: "Inter";
           font-style: normal;
           font-weight: 600;
-          font-size: 16px;
+          font-size: 14px;
           line-height: 20px;
         }
         .littleCard__oldPrice {
@@ -129,7 +142,7 @@
           font-family: "Inter";
           font-style: normal;
           font-weight: 400;
-          font-size: 14px;
+          font-size: 12px;
           line-height: 18px;
           text-wrap: nowrap;
         }

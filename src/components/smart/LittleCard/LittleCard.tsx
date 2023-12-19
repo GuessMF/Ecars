@@ -16,6 +16,7 @@ interface Props {
   mileage: number;
   owners: string;
   previewIMG: string;
+  location: string;
 }
 export default function LittleCard({
   brand,
@@ -26,6 +27,7 @@ export default function LittleCard({
   owners,
   special,
   previewIMG,
+  location,
 }: Props) {
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
@@ -59,6 +61,17 @@ export default function LittleCard({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   // <Like />
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+
+  const formatedBrand = capitalizeWords(brand);
+
   return (
     <div className={style.littleCard}>
       <div className={style.littleCard__previewImg}>
@@ -68,8 +81,8 @@ export default function LittleCard({
       <div className={style.littleCard__content}>
         <div className={style.littleCard__top}>
           <div className={style.littleCard__name}>
-            <span>{brand}</span>
-            <span>{model}</span>
+            <span>{formatedBrand}</span>
+            <span>{model.toLocaleUpperCase()}</span>
           </div>
           <span className={style.littleCard__state}>
             <li>{owners === "0" || mileage < 100 ? "New" : "Used"}</li>
@@ -77,6 +90,14 @@ export default function LittleCard({
             <li>{mileage} km</li>
             <li>•</li>
             <li>{fuel}</li>
+          </span>
+          <span className={style.littleCard__location}>
+            {" "}
+            {location === "SaintPetersburg"
+              ? "Saint-Petersburg"
+              : location === "AbuDhabi"
+              ? "Abu Dhabi"
+              : location}
           </span>
         </div>
 
@@ -89,7 +110,7 @@ export default function LittleCard({
                 ? "$"
                 : selectedCurrency == "EUR"
                 ? "€"
-                : ""}
+                : ""}{" "}
               {formattedPrice}
             </span>
             {special && (
@@ -100,7 +121,7 @@ export default function LittleCard({
                   ? "$"
                   : selectedCurrency == "EUR"
                   ? "€"
-                  : ""}
+                  : ""}{" "}
                 {formattedOldPrice}
               </span>
             )}

@@ -7,7 +7,8 @@ import {useAuth} from "hooks/use-auth";
 import {NavLink} from "react-router-dom";
 import style from "./__userPage.module.scss";
 // import BigCard from "components/smart/BigCard/BigCard";
-
+import ArrowUp from "./arrowUp.webp";
+import ArrowDown from "./arrowDown.webp";
 import {useAppSelector} from "hooks/redux-hooks";
 import Cookies from "universal-cookie";
 import {
@@ -19,6 +20,7 @@ import {
   limit,
   getDocs,
   DocumentSnapshot,
+  OrderByDirection,
   where,
   QueryDocumentSnapshot,
   DocumentData,
@@ -84,6 +86,8 @@ export default function UserPage({userID}: Props) {
   const [carId, setCarId] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("brand");
 
+  const [sortSetting, setSortSetting] = useState<string | undefined>("asc");
+
   const [currentCar, setCurrentCar] = useState<number>(0);
 
   const [deletedItems, setDeletedItems] = useState([]);
@@ -101,7 +105,7 @@ export default function UserPage({userID}: Props) {
     if (userID) {
       fetchSalingCars();
     }
-  }, [userID, sortBy]);
+  }, [userID, sortBy, sortSetting]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +123,7 @@ export default function UserPage({userID}: Props) {
       const carsRef = collection(db, "cars");
       let first = query(carsRef);
       first = query(first, where("userId", "==", userID));
-      first = query(first, orderBy(sortBy, "asc"));
+      first = query(first, orderBy(sortBy, sortSetting as OrderByDirection));
       const querySnapshot = await getDocs(first);
       const cars = querySnapshot.docs.map(
         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
@@ -198,15 +202,26 @@ export default function UserPage({userID}: Props) {
       behavior: "smooth",
     });
   };
+  // const handleSortBy = (value: string) => {
+  //   setSortBy(value);
+  // };
   const handleSortBy = (value: string) => {
-    setSortBy(value);
+    if (sortBy === value) {
+      if (sortSetting === "asc") {
+        setSortSetting("desc");
+      } else {
+        setSortSetting("asc");
+      }
+    } else {
+      setSortBy(value);
+    }
   };
 
-  useEffect(() => {
-    console.log(sortBy);
-  }, [sortBy]);
+  // useEffect(() => {
+  //   console.log(sortBy);
+  // }, [sortBy]);
 
-  console.log(cars);
+  // console.log(cars);
 
   return (
     <div className={style.userPage}>
@@ -225,29 +240,51 @@ export default function UserPage({userID}: Props) {
       <div className={style.header}>
         <h1>Personal page</h1>
         <p>
-          {userName ? userName : "no name"}, welcome to your personal page, here
-          are all the cars that you have for sale
+          {userName
+            ? userName.charAt(0).toLocaleUpperCase() + userName.slice(1)
+            : "no name"}
+          , welcome to your personal page, here are all the cars that you have
+          for sale
         </p>
         {cars.length > 0 ? (
           <div className={style.sorting}>
             <span>Sort by:</span>
+
             <button
               onClick={() => handleSortBy("dateAdded")}
-              className={sortBy == "dateAdded" && style.checked}
+              className={sortBy === "dateAdded" ? style.checked : ""}
             >
               Date
+              {sortBy === "dateAdded" &&
+                (sortSetting === "asc" ? (
+                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                ) : (
+                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
+                ))}
             </button>
             <button
               onClick={() => handleSortBy("price")}
-              className={sortBy == "price" && style.checked}
+              className={sortBy === "price" ? style.checked : ""}
             >
               Price
+              {sortBy === "price" &&
+                (sortSetting === "asc" ? (
+                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                ) : (
+                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
+                ))}
             </button>
             <button
               onClick={() => handleSortBy("brand")}
-              className={sortBy == "brand" && style.checked}
+              className={sortBy === "brand" ? style.checked : ""}
             >
               Brand
+              {sortBy === "brand" &&
+                (sortSetting === "asc" ? (
+                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                ) : (
+                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
+                ))}
             </button>
           </div>
         ) : (
@@ -302,6 +339,7 @@ export default function UserPage({userID}: Props) {
                       owners={car.owners}
                       special={false}
                       previewIMG={car.previewImage[0]}
+                      location={car.location}
                     />
                   </div>
                 )

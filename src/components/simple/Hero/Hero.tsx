@@ -46,7 +46,7 @@ export default function Hero() {
 
           <div>
             <a href="https://wa.me/+79214003269">
-              <Mobile color={black} />
+              <Mobile color={black} number={"+79214003269"} />
             </a>
             <a href="mailto:segas95@yandex.ru">
               <Email color={black} email={"segas95@yandex.ru"} />

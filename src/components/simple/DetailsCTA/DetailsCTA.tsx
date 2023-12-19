@@ -101,6 +101,23 @@ export default function DetailsCTA({
   //   addLiked();
   // };
   // console.log(liked);
+  let formatedBrand;
+  let formatedModel;
+
+  if (brand) {
+    const capitalizeWords = (brand: string) => {
+      const words = brand.toLowerCase().split(" ");
+      const capitalizeWords = words.map((word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      });
+      return capitalizeWords.join(" ");
+    };
+
+    formatedBrand = capitalizeWords(brand);
+  }
+  if (model) {
+    formatedModel = model.toLocaleUpperCase();
+  }
 
   return (
     <div
@@ -123,9 +140,9 @@ export default function DetailsCTA({
             </span>
           </div>
           <h5>
-            {brand}
+            {formatedBrand}
             <br />
-            {model}
+            {formatedModel}
           </h5>
           <h4>
             {selectedCurrency === "RUB"
@@ -150,7 +167,13 @@ export default function DetailsCTA({
               </tr>
               <tr>
                 <td>Location</td>
-                <td>{location}</td>
+                <td>
+                  {location === "SaintPetersburg"
+                    ? "Saint-Petersburg"
+                    : location === "AbuDhabi"
+                    ? "Abu Dhabi"
+                    : location}
+                </td>
               </tr>
               <tr>
                 <td>Export status</td>
@@ -174,23 +197,34 @@ export default function DetailsCTA({
           >
             Check availability
           </button>
-          <div className={style.contacts}>
-            <button
-              onClick={() =>
-                window.open("https://wa.me/+79214003269", "_blank")
-              }
-            >
-              <Mobile color={black} />
-            </button>
-            <button
-              onClick={() =>
-                (window.location.href = `mailto:${
-                  sellerEmail ? sellerEmail : "no email"
-                }`)
-              }
-            >
-              <Email color={black} email={sellerEmail} />
-            </button>
+          <div
+            className={
+              sellerEmail && sellerMobile
+                ? style.contacts
+                : style.contactsOneBtn
+            }
+          >
+            {sellerMobile && (
+              <button
+                onClick={() =>
+                  window.open(`https://wa.me/${sellerMobile}`, "_blank")
+                }
+              >
+                <Mobile color={black} number={sellerMobile} />
+              </button>
+            )}
+
+            {sellerEmail && (
+              <button
+                onClick={() =>
+                  (window.location.href = `mailto:${
+                    sellerEmail ? sellerEmail : ""
+                  }`)
+                }
+              >
+                <Email color={black} email={sellerEmail} />
+              </button>
+            )}
           </div>
         </div>
       </div>

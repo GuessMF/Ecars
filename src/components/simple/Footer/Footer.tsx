@@ -101,7 +101,7 @@ export default function Footer() {
               <li className={style.footer__title}>Contacts</li>
               <li>
                 <a href="https://wa.me/+79214003269">
-                  <Mobile color={black} />
+                  <Mobile color={black} number={"+79214003269"} />
                 </a>
               </li>
               <li>

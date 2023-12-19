@@ -12,7 +12,7 @@ export default function ContactUsBig() {
       <span>
         Contact us for auto import assistance or to learn more about us
       </span>
-      <Mobile color={color} />
+      <Mobile color={color} number={"+79214003269"} />
       <Email color={color} email={"segas95@yandex.ru"} />
     </div>
   );

@@ -2,9 +2,10 @@ import React from "react";
 import style from "./__mobile.module.scss";
 interface Props {
   color: string;
+  number: string | undefined;
 }
 
-export default function Mobile({color}: Props) {
+export default function Mobile({color, number}: Props) {
   return (
     <div className={style.mobile}>
       <svg
@@ -21,7 +22,7 @@ export default function Mobile({color}: Props) {
         />
       </svg>
       <span className={style.mobile__data} style={{color: color}}>
-        +7 921 400 32 69
+        {number}
       </span>
     </div>
   );

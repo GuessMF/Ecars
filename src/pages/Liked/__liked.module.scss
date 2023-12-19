@@ -1,24 +1,88 @@
+@import "../../styles/_var";
+
 .liked {
   width: 100%;
   height: fit-content;
-  padding-top: 100px;
-  padding-bottom: 100px;
-
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  // align-items: center;
-  h2 {
-    // text;
-    margin-bottom: 50px;
+  // gap: 96px;
+  // padding: 96px 108px;
+  padding: 96px $padding108;
+  margin-top: 20px;
+
+  .header {
+    h1 {
+      font-size: 44px;
+      font-family: Inter Tight;
+      font-weight: 600;
+      line-height: 115%;
+      color: $gray900;
+      margin: 0;
+      text-align: left;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+    p {
+      color: var(--Gray-700, #484848);
+      /* Desktop/Body Medium */
+      font-family: Inter;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 24px; /* 150% */
+    }
+    .sorting {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: row;
+
+      span {
+        color: var(--Gray-900, #1a1a1a);
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 20px; /* 142.857% */
+      }
+      button {
+        //  color: var(--Primary-500, #3c7d46);
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        //font-weight: 500;
+        font-weight: 200;
+        line-height: 20px; /* 142.857% */
+        background: none;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+      }
+      .checked {
+        //background-color: red;
+        color: var(--Primary-500, #3c7d46);
+        font-weight: 600;
+      }
+    }
   }
   .wrapper {
     display: flex;
     // flex-direction: row;
     // flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    // gap: 10px;
+    margin-top: 20px;
+    a {
+      text-decoration: none;
+    }
+  }
+  .icon {
+    width: 12px;
   }
 }

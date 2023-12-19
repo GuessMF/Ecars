@@ -101,6 +101,19 @@ Props) {
     }
   }, []);
 
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+
+  const formatedBrand = capitalizeWords(brand);
+  const formattedMileage: string = mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
   return (
     <div className={style.wrapper}>
       <NavLink to={`${isAuth ? `/details/${id}` : `/login`}`}>
@@ -116,15 +129,17 @@ Props) {
           <div className={style.bigCard__information}>
             <div className={style.information__top}>
               <div className={style.information__name}>
-                <span>
-                  {brand.charAt(0).toLocaleUpperCase() + brand.slice(1)}
-                </span>
+                <span>{formatedBrand}</span>
                 <span>{model.toLocaleUpperCase()}</span>
               </div>
 
               <div className={style.information__state}>
-                {location} • {mileage < 20 ? "Brand NEW" : "Used"} • {mileage}{" "}
-                km
+                {location === "SaintPetersburg"
+                  ? "Saint-Petersburg"
+                  : location === "AbuDhabi"
+                  ? "Abu Dhabi"
+                  : location}{" "}
+                • {mileage < 20 ? "Brand NEW" : "Used"} • {formattedMileage} km
                 {owners === "None"
                   ? " "
                   : owners === "One"

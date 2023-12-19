@@ -54,6 +54,7 @@ interface Car {
   userName: string;
   userEmail: string;
   userMobile: string;
+  interior: string;
 }
 
 export default function Details() {
@@ -133,6 +134,25 @@ export default function Details() {
   let mileage: string | undefined = currentCar?.mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
+  let formatedBrand;
+  let formatedModel;
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+
+  if (currentCar?.brand) {
+    formatedBrand = capitalizeWords(currentCar.brand);
+  }
+
+  if (currentCar?.model) {
+    formatedModel = currentCar.model.toLocaleUpperCase();
+  }
 
   const userId = useSelector(
     (state: RootState) => (state.user as {id: string})?.id
@@ -271,7 +291,7 @@ export default function Details() {
     image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
   }, [photoURLs]);
 
-  console.log(photoURLs);
+  console.log(currentCar?.owners);
 
   return (
     <div className={style.details}>
@@ -302,7 +322,12 @@ export default function Details() {
         >
           <span>
             {currentCar?.mileage && currentCar?.mileage < 100 ? "New" : "Used"}{" "}
-            cars for sale in {currentCar?.location}
+            cars for sale in{" "}
+            {currentCar?.location === "AbuDhabi"
+              ? "Abu Dhabi"
+              : currentCar?.location === "SaintPetersburg"
+              ? "Saint-Petersburg"
+              : currentCar?.location}
           </span>
         </Link>
 
@@ -316,7 +341,7 @@ export default function Details() {
             search: searchQuery6,
           }}
         >
-          <span>{currentCar?.brand}</span>
+          <span>{formatedBrand}</span>
         </Link>
 
         <i>
@@ -330,7 +355,7 @@ export default function Details() {
           }}
         >
           <span>
-            {currentCar?.brand} {currentCar?.model}
+            {formatedBrand} {formatedModel}
           </span>
         </Link>
       </div>
@@ -393,32 +418,31 @@ export default function Details() {
             <div className={style.content__mainInformation}>
               <div className={style.left__information}>
                 <div>
-                  <span>Make</span> <span>{currentCar?.brand}</span>
+                  <span>Brand</span> <span>{formatedBrand}</span>
                 </div>
                 <div>
-                  <span>Model</span> <span>{currentCar?.model}</span>
+                  <span>Model</span> <span>{formatedModel}</span>
                 </div>
 
                 <div>
                   <span>Vehicle type</span>
-                  <span>{currentCar?.vehicleType}</span>
+                  <span>
+                    {currentCar?.vehicleType === "StationWagon"
+                      ? "Station Wagon"
+                      : currentCar?.vehicleType === "PickUp"
+                      ? "Pick Up"
+                      : currentCar?.vehicleType}
+                  </span>
                 </div>
                 <div>
                   <span>Color</span>
                   <span>{currentCar?.color}</span>
                 </div>
                 <div>
-                  <span>Interior</span> <span>{currentCar?.brand}</span>
+                  <span>Interior</span> <span>{currentCar?.interior}</span>
                 </div>
                 <div>
-                  <span>Owners</span>{" "}
-                  <span>
-                    {currentCar?.owners === "0"
-                      ? "None"
-                      : currentCar?.owners
-                      ? "4"
-                      : "3+"}
-                  </span>
+                  <span>Owners</span> <span>{currentCar?.owners}</span>
                 </div>
 
                 <div>
@@ -449,7 +473,14 @@ export default function Details() {
                 </div>
 
                 <div>
-                  <span>Location</span> <span>{currentCar?.location}</span>
+                  <span>Location</span>{" "}
+                  <span>
+                    {currentCar?.location === "AbuDhabi"
+                      ? "Abu Dhabi"
+                      : currentCar?.location === "SaintPetersburg"
+                      ? "Saint-Petersburg"
+                      : currentCar?.location}
+                  </span>
                 </div>
               </div>
             </div>
@@ -460,7 +491,7 @@ export default function Details() {
                 <div>MORE</div>
               ) : null}
             </div>
-            <div className={style.content__features}>
+            {/* <div className={style.content__features}>
               <h5>Features</h5>
               <div className={style.features}>
                 {" "}
@@ -507,7 +538,7 @@ export default function Details() {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
             <ContactUsBlock />
             <div className={style.content__quick_links}>
               <h5>Quick links</h5>
@@ -518,7 +549,7 @@ export default function Details() {
                     search: searchQuery1,
                   }}
                 >
-                  {currentCar?.brand} {currentCar?.model} {currentCar?.year}
+                  {formatedBrand} {formatedModel} {currentCar?.year}
                 </Link>
 
                 <Link
@@ -527,8 +558,12 @@ export default function Details() {
                     search: searchQuery2,
                   }}
                 >
-                  {currentCar?.brand} {currentCar?.model} for sale in{" "}
-                  {currentCar?.location}
+                  {formatedBrand} {formatedModel} for sale in{" "}
+                  {currentCar?.location === "AbuDhabi"
+                    ? "Abu Dhabi"
+                    : currentCar?.location === "SaintPetersburg"
+                    ? "Saint-Petersburg"
+                    : currentCar?.location}
                 </Link>
 
                 <Link
@@ -537,7 +572,12 @@ export default function Details() {
                     search: searchQuery3,
                   }}
                 >
-                  {currentCar?.brand} for sale in {currentCar?.location}
+                  {formatedBrand} for sale in{" "}
+                  {currentCar?.location === "AbuDhabi"
+                    ? "Abu Dhabi"
+                    : currentCar?.location === "SaintPetersburg"
+                    ? "Saint-Petersburg"
+                    : currentCar?.location}
                 </Link>
 
                 <Link
@@ -546,7 +586,12 @@ export default function Details() {
                     search: searchQuery4,
                   }}
                 >
-                  All cars for sale in {currentCar?.location}
+                  All cars for sale in{" "}
+                  {currentCar?.location === "AbuDhabi"
+                    ? "Abu Dhabi"
+                    : currentCar?.location === "SaintPetersburg"
+                    ? "Saint-Petersburg"
+                    : currentCar?.location}
                 </Link>
               </div>
             </div>

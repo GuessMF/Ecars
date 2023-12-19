@@ -166,6 +166,7 @@ export default function SpecialOffers() {
                       owners={car.owners}
                       special={true}
                       previewIMG={car.imageUrls[0]}
+                      location={car.location}
                     />
                   </NavLink>
                 </SwiperSlide>

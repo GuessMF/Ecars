@@ -43,6 +43,23 @@ export default function MeduimCard({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
+  const formattedMileage: string = mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
+  let formatedBrand;
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+  if (brand) {
+    formatedBrand = capitalizeWords(brand);
+  }
+
   return (
     <div className={style.mediumCard}>
       <div className={style.mediumCard__img}>
@@ -51,20 +68,17 @@ export default function MeduimCard({
 
       <div className={style.information}>
         <div className={style.brandModel}>
-          <span>{brand}</span>
-          <span>{model}</span>
+          <span>{formatedBrand}</span>
+          <span>{model.toLocaleUpperCase()}</span>
+          <span>{year}</span>
         </div>
         <div className={style.ownersYearMileage}>
-          <span>{year}</span>
-
           <span>{Number(mileage) < 100 ? " New" : "Used"}</span>
-          <span>{mileage} Km</span>
+          <span>{formattedMileage} Km</span>
           <span>{fuel}</span>
         </div>
         <div className={style.prices}>
-          {" "}
           <span>
-            {" "}
             {selectedCurrency === "RUB"
               ? `₽ `
               : selectedCurrency === "USD"

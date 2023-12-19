@@ -127,7 +127,7 @@ export default function LoginMobile() {
             <span>Mobile</span>
 
             <input
-              type="text"
+              type="tel"
               placeholder="Phone number"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -137,23 +137,23 @@ export default function LoginMobile() {
             </button>
           </div>
 
-          {codeSended && (
-            <div className={style.password}>
-              <div>
-                <span>Code</span>
-              </div>
-
-              <input
-                type="text"
-                placeholder="your code"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-              <button onClick={handleVerifyCode} className={style.loginBtn}>
-                Confirm
-              </button>
+          {/* {codeSended && ( */}
+          <div className={style.password}>
+            <div>
+              <span>Code</span>
             </div>
-          )}
+
+            <input
+              type="text"
+              placeholder="Your SMS code"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+            />
+            <button onClick={handleVerifyCode} className={style.loginBtn}>
+              Confirm
+            </button>
+          </div>
+          {/* )}*/}
 
           <span className={style.line}>
             <hr /> or <hr />

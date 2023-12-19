@@ -92,6 +92,23 @@ Props) {
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
+  let formatedBrand;
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+  if (brand) {
+    formatedBrand = capitalizeWords(brand);
+  }
+
+  const formattedMileage: string = mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -195,17 +212,14 @@ Props) {
       </div>
       <div className={style.information}>
         <div className={style.topInformation}>
-          <h3>{brand?.charAt(0).toLocaleUpperCase() + brand?.slice(1)}</h3>
+          <h3>{formatedBrand}</h3>
           <h3>{model?.toLocaleUpperCase()}</h3>
           <h3>{year}</h3>
         </div>
         <div className={style.mainInformation}>
           <div className={style.left__information}>
             <div>
-              <span>Brand</span>{" "}
-              <span>
-                {brand?.charAt(0).toLocaleUpperCase() + brand?.slice(1)}
-              </span>
+              <span>Brand</span> <span>{formatedBrand}</span>
             </div>
             <div>
               <span>Model</span> <span>{model?.toLocaleUpperCase()}</span>
@@ -227,7 +241,7 @@ Props) {
             </div>
 
             <div>
-              <span>Mileage</span> <span>{mileage} Km</span>
+              <span>Mileage</span> <span>{formattedMileage} Km</span>
             </div>
           </div>
           <div className={style.right__information}>
