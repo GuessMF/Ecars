@@ -120,12 +120,14 @@ input {
     border: $gray100 1px solid;
     border-radius: 8px;
 
+    overflow: hidden;
+
     label {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      // width: 100%;
+      //width: 100%;
       //  width: auto;
       // border: none !important;
       //  border: black 1px solid;
@@ -175,7 +177,8 @@ input {
         padding: 0;
         border: none;
         border-radius: 8px;
-        width: fit-content;
+        //width: fit-content;
+        width: 100%;
         //  border: black 1px solid;
         margin: 0 auto;
         img {
@@ -278,10 +281,14 @@ input {
       }
 
       .previewPhoto {
-        width: 400px;
+        //  width: 400px;
+        //  width: fit-content;
+        width: 150px;
         height: 50px;
         min-width: 150px;
-        height: 100%;
+        //  max-height: 150px;
+        //max-height: fit-content;
+        height: fit-content;
         overflow: hidden;
         display: flex;
         justify-content: center;
@@ -291,19 +298,15 @@ input {
         border-radius: 8px;
         //  width: fit-content;
         position: relative;
+        border: black 1px solid;
 
         img {
           border-radius: 8px;
-          width: 100%;
-          // min-width: 300px;
 
-          //max-width: 100%;
-          //  max-height: 100%;
+          width: 150px;
           object-fit: contain;
         }
-        // .opacity {
-        //   opacity: 0.8;
-        // }
+
         .deletePhoto {
           position: absolute;
           top: 5px;
@@ -322,6 +325,20 @@ input {
             background-color: $gray300;
           }
         }
+      }
+    }
+  }
+  .priceBox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 8px;
+    .price {
+      //border: black 1px solid;
+      border-radius: 8px;
+      input {
+        margin-left: 20px;
+        margin-right: 20px;
       }
     }
   }
@@ -442,20 +459,46 @@ input {
   // background-color: aqua;
   display: flex;
   flex-direction: column !important;
+  justify-content: center;
+  // align-items: center;
   label {
   }
-
-  textarea {
-    resize: none;
-    width: 100%;
-    height: 100px;
+  .descriptionBox {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    textarea {
+      resize: none;
+      width: 100%;
+      height: 100px;
+      border: none;
+      border: $gray100 1px solid;
+      border-radius: 8px;
+    }
   }
 }
+
 .error {
   border: 1px solid red !important;
-  flex-direction: column;
-  height: fit-content;
+  border-radius: 8px !important;
+  // flex-direction: column;
+  // height: fit-content;
 }
+// .errorPreview {
+//   display: flex;
+//   justify-content: center;
+//   flex-direction: column;
+//   height: fit-content;
+//   height: 600px;
+//   position: relative;
+//   border: $gray100 1px solid;
+//   border-radius: 8px;
+
+//   overflow: hidden;
+//   border: red 1px solid;
+// }
 
 // .error__selectedFiles {
 //   border: 1px solid red;

@@ -13,18 +13,18 @@ import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
 import Cookies from "universal-cookie";
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+//import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAppSelector} from "hooks/redux-hooks";
-import * as imageConversion from "image-conversion";
-import sharp from "sharp";
-import imagemin from "imagemin";
+//import * as imageConversion from "image-conversion";
+//import sharp from "sharp";
+//import imagemin from "imagemin";
 //import imageminWebp from "imagemin-webp";
-import Select from "react-select";
+//import Select from "react-select";
 import CustomSelect from "components/smart/CustomSelect/CustomSelect";
 //import {OptionTypeBase, GroupBase} from "react-select";
 //import OptionTypeBase from "react-select";
 
-import imageminWebp from "imagemin-webp";
+//import imageminWebp from "imagemin-webp";
 
 import {ReactComponent as PlusIcon} from "./plusIcon.svg";
 import {ReactComponent as ChangeImage} from "./changeImage.svg";
@@ -51,6 +51,9 @@ interface CarBrand {
   name: string;
   models: CarModel[];
 }
+interface OtherOptions {
+  value: string;
+}
 
 interface CarData {
   brands: CarBrand[];
@@ -68,7 +71,7 @@ interface Errors {
   fuel?: string;
   wheels?: string;
   vehicleType?: string;
-  engineCapacity?: string;
+  engineValue?: string;
   seats?: string;
   interior?: string;
   color?: string;
@@ -76,6 +79,7 @@ interface Errors {
   owners?: string;
   exportStatus?: string;
   description?: string;
+  priceCurrency?: string;
 }
 
 type DateObject = {
@@ -99,26 +103,8 @@ export default function PersonalPage({userID}: Props) {
     (state) => state.currency.currencyTerm
   );
   const {isAuth, email, displayName} = useAuth();
-  // console.log(displayName);
-  // console.log(email);
-  const [userName, setUserName] = useState<string>("");
 
-  // const options: GroupBase<{value: string; label: string}>[] = [
-  //   {
-  //     label: "Group 1",
-  //     options: [
-  //       {value: "value1", label: "Option 1"},
-  //       {value: "value2", label: "Option 2"},
-  //     ],
-  //   },
-  //   {
-  //     label: "Group 2",
-  //     options: [
-  //       {value: "value3", label: "Option 3"},
-  //       {value: "value4", label: "Option 4"},
-  //     ],
-  //   },
-  // ];
+  const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
     if (displayName) {
@@ -128,10 +114,10 @@ export default function PersonalPage({userID}: Props) {
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
-  const [menuIsOpen, setMenuIsOpen] = React.useState(false);
-  const toggleMenu = () => {
-    setMenuIsOpen(!menuIsOpen);
-  };
+  // const [menuIsOpen, setMenuIsOpen] = React.useState(false);
+  // const toggleMenu = () => {
+  //   setMenuIsOpen(!menuIsOpen);
+  // };
   // const user = useAppSelector((state) => state.user);
   // console.log(user);
 
@@ -155,37 +141,46 @@ export default function PersonalPage({userID}: Props) {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [firstClick, setFirstClick] = useState<boolean>(false);
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedPreview, setSelectedPreview] = useState<File[]>([]);
 
-  const [brand, setBrand] = useState<string>("test");
-  const [models, setModels] = useState<CarModel[]>([]);
+  const [currency, setCurrency] = useState<string>("");
 
-  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
+  // const [brand, setBrand] = useState<OptionType[]>([]);
+  //const [models, setModels] = useState<CarModel[]>([]);
+
+  // const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
 
   const [brandAndModel, setBrandAndModel] = useState<string>("");
-  const [model, setModel] = useState("test");
-  const [price, setPrice] = useState<number>(10);
-  const [year, setYear] = useState<number>(2010);
-  const [mileage, setMileage] = useState<number>(10);
-  const [transmission, setTransmission] = useState<string>("test");
-  const [fuel, setFuel] = useState<string>("test");
-  const [wheels, setWheels] = useState<string>("test");
-  const [vehicleType, setVehicleType] = useState<string>("test");
-  const [engineCapacity, setEngineCapacity] = useState<string>("test");
-  const [seats, setSeats] = useState<string>("test");
-  const [interior, setInterior] = useState<string>("test");
-  const [color, setColor] = useState<string>("test");
-  const [location, setLocation] = useState<string>("test");
-  const [owners, setOwners] = useState<string>("test");
-  const [exportStatus, setExportStatus] = useState<string>("test");
-  const [description, setDescription] = useState("test");
+  const [model, setModel] = useState("");
+  const [price, setPrice] = useState<string>("");
+  // const [year, setYear] = useState<number>(2010);
+  const [year, setYear] = useState<string>("");
+  // const [mileage, setMileage] = useState<number>(10);
+  const [mileage, setMileage] = useState<string>("");
+  const [transmission, setTransmission] = useState<string>("");
+  const [fuel, setFuel] = useState<string>("");
+  const [wheels, setWheels] = useState<string>("");
+  const [vehicleType, setVehicleType] = useState<string>("");
+
+  // const [engineCapacity, setEngineCapacity] = useState<string>("test");
+  const [engineValue, setEngineValue] = useState<string>("");
+
+  const [seats, setSeats] = useState<string>("");
+  const [interior, setInterior] = useState<string>("");
+  const [color, setColor] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [owners, setOwners] = useState<string>("");
+  const [exportStatus, setExportStatus] = useState<string>("");
+  const [description, setDescription] = useState("");
   const [fisrtCarPhoto, setFirstCarPhoto] = useState<string>();
 
   // const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-  const [currentCur, setCurrentCur] = useState<string>("");
+  // const [currentCur, setCurrentCur] = useState<string>("");
 
   const [specialOffer, setSpecialOffer] = useState<boolean>(false);
 
@@ -198,23 +193,24 @@ export default function PersonalPage({userID}: Props) {
 
   const selectedFilesRef = useRef<HTMLDivElement>(null);
   const selectedPreviewRef = useRef<HTMLDivElement>(null);
-  const brandRef = useRef<HTMLDivElement>(null);
-  const modelRef = useRef<HTMLDivElement>(null);
-  const vehicleTypeRef = useRef<HTMLDivElement>(null);
-  const fuelRef = useRef<HTMLDivElement>(null);
-  const engineCapacityRef = useRef<HTMLDivElement>(null);
-  const colorRef = useRef<HTMLDivElement>(null);
-  const interiorRef = useRef<HTMLDivElement>(null);
-  const transmissionRef = useRef<HTMLDivElement>(null);
-  const wheelsRef = useRef<HTMLDivElement>(null);
-  const seatsRef = useRef<HTMLDivElement>(null);
-  const locationRef = useRef<HTMLDivElement>(null);
-  const ownersRef = useRef<HTMLDivElement>(null);
-  const exportStatusRef = useRef<HTMLDivElement>(null);
-  const yearRef = useRef<HTMLDivElement>(null);
-  const mileageRef = useRef<HTMLDivElement>(null);
-  const priceRef = useRef<HTMLDivElement>(null);
+  const brandRef = useRef<HTMLTableCellElement>(null);
+  const modelRef = useRef<HTMLTableCellElement>(null);
+  const vehicleTypeRef = useRef<HTMLTableCellElement>(null);
+  const fuelRef = useRef<HTMLTableCellElement>(null);
+  const engineValueRef = useRef<HTMLTableCellElement>(null);
+  const colorRef = useRef<HTMLTableCellElement>(null);
+  const interiorRef = useRef<HTMLTableCellElement>(null);
+  const transmissionRef = useRef<HTMLTableCellElement>(null);
+  const wheelsRef = useRef<HTMLTableCellElement>(null);
+  const seatsRef = useRef<HTMLTableCellElement>(null);
+  const locationRef = useRef<HTMLTableCellElement>(null);
+  const ownersRef = useRef<HTMLTableCellElement>(null);
+  const exportStatusRef = useRef<HTMLTableCellElement>(null);
+  const yearRef = useRef<HTMLTableCellElement>(null);
+  const mileageRef = useRef<HTMLTableCellElement>(null);
+  const priceRef = useRef<HTMLTableCellElement>(null);
   const descriptionRef = useRef<HTMLDivElement>(null);
+  const priceCurrencyRef = useRef<HTMLDivElement>(null);
 
   const refs: Refs = {
     selectedFiles: selectedFilesRef,
@@ -223,7 +219,7 @@ export default function PersonalPage({userID}: Props) {
     model: modelRef,
     vehicleType: vehicleTypeRef,
     fuel: fuelRef,
-    engineCapacity: engineCapacityRef,
+    engineValue: engineValueRef,
     color: colorRef,
     interior: interiorRef,
     transmission: transmissionRef,
@@ -236,6 +232,7 @@ export default function PersonalPage({userID}: Props) {
     mileage: mileageRef,
     price: priceRef,
     description: descriptionRef,
+    priceCurrency: priceCurrencyRef,
   };
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -380,9 +377,7 @@ export default function PersonalPage({userID}: Props) {
     return uuidv4();
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const checkErrors = () => {
     if (selectedPreview.length < 1) {
       errors.selectedPreview = "Должно быть добавлено хотя бы 1 фото";
     }
@@ -405,8 +400,8 @@ export default function PersonalPage({userID}: Props) {
     if (!fuel) {
       errors.fuel = "Поле модель должна быть заполнена";
     }
-    if (!engineCapacity) {
-      errors.engineCapacity = "Поле модель должна быть заполнена";
+    if (!engineValue) {
+      errors.engineValue = "Поле модель должна быть заполнена";
     }
     if (!color) {
       errors.color = "Поле модель должна быть заполнена";
@@ -445,9 +440,30 @@ export default function PersonalPage({userID}: Props) {
     if (!description) {
       errors.description = "Поле модель должна быть заполнена";
     }
+    if (!currency) {
+      errors.priceCurrency = "выберите валюту";
+    }
+  };
+  useEffect(() => {
+    console.log("Price:   " + price);
+
+    const newPrice =
+      currency === "RUB"
+        ? Number(price) / usdValue
+        : currency === "EUR"
+        ? Number(price) / (usdValue / eurValue)
+        : Number(price);
+
+    console.log("New price:  " + newPrice);
+    console.log(parseInt(price.replace(/\s/g, ""), 10));
+  }, [price]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFirstClick(true);
+    checkErrors();
 
     if (Object.keys(errors).length > 0) {
-      console.log(errors);
+      // console.log(errors);
 
       setFormErrors(errors);
       setPopUpErrors(true);
@@ -486,11 +502,11 @@ export default function PersonalPage({userID}: Props) {
 
       // const imageUrls = await Promise.all(uploadTasks);
       // const previewImg = await Promise.all(uploadTasks);
-      console.log("Brand: " + brand);
-      console.log("Model: " + model);
+      // console.log("Brand: " + brand);
+      // console.log("Model: " + model);
 
       setBrandAndModel(`${brand} ${model}`);
-      console.log(brandAndModel);
+      //console.log(brandAndModel);
 
       const previewImg = await Promise.all(previewUploadTasks);
       const imageUrls = await Promise.all(filesUploadTasks);
@@ -509,19 +525,21 @@ export default function PersonalPage({userID}: Props) {
           brand: brand.toLocaleLowerCase(),
           model: model.toLocaleLowerCase(),
           brandAndModel: brandAndModel,
+
           price:
-            currentCur === "RUB"
-              ? price / usdValue
-              : currentCur === "EUR"
-              ? price / (usdValue / eurValue)
-              : price,
+            currency === "RUB"
+              ? parseInt(price.replace(/\s/g, ""), 10) / usdValue
+              : currency === "EUR"
+              ? parseInt(price.replace(/\s/g, ""), 10) / (usdValue / eurValue)
+              : parseInt(price.replace(/\s/g, ""), 10),
+          // price: price,
           year: year,
-          mileage: mileage,
+          mileage: parseInt(mileage.replace(/\s/g, ""), 10),
           transmission: transmission,
           fuel: fuel,
           wheels: wheels,
           vehicleType: vehicleType,
-          engineCapacity: engineCapacity,
+          engineCapacity: engineValue,
           seats: seats,
           owners: owners,
           color: color,
@@ -549,12 +567,16 @@ export default function PersonalPage({userID}: Props) {
       // selectedFiles = [];
       setPreviewImages([]);
       setBrand("");
+      // setBrand([]);
       setModel("");
-      setPrice(0);
-      setYear(0);
+      setPrice("");
+      // setYear(0);
+      setYear("");
       setTransmission("");
-      setEngineCapacity("");
-      setMileage(0);
+      // setEngineCapacity("");
+      setEngineValue("");
+      // setMileage(0);
+      setMileage("1");
       setFuel("");
       setWheels("");
       setVehicleType("");
@@ -569,33 +591,33 @@ export default function PersonalPage({userID}: Props) {
     }
   };
 
-  const handleEngineCapacityChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    let input = e.target.value;
-    const regex = /^(\d+(\.\d{0,1})?)?$/;
-    if (
-      regex.test(input) &&
-      parseFloat(input) >= 0.1 &&
-      parseFloat(input) <= 9.9
-    ) {
-      if (input.length === 1) {
-        input += ".";
-      }
-      setEngineCapacity(input);
-    } else {
-      setEngineCapacity("");
-    }
-  };
+  // const handleEngineCapacityChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   let input = e.target.value;
+  //   const regex = /^(\d+(\.\d{0,1})?)?$/;
+  //   if (
+  //     regex.test(input) &&
+  //     parseFloat(input) >= 0.1 &&
+  //     parseFloat(input) <= 9.9
+  //   ) {
+  //     if (input.length === 1) {
+  //       input += ".";
+  //     }
+  //     setEngineCapacity(input);
+  //   } else {
+  //     setEngineCapacity("");
+  //   }
+  // };
 
-  const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedBrand = e.target.value;
-    setBrand(selectedBrand);
-    const selectedBrandData = carData.brands.find(
-      (item) => item.name === selectedBrand
-    );
-    setModels(selectedBrandData ? selectedBrandData.models : []);
-  };
+  // const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedBrand = e.target.value;
+  //   // setBrand(selectedBrand);
+  //   const selectedBrandData = carData.brands.find(
+  //     (item) => item.name === selectedBrand
+  //   );
+  //   setModels(selectedBrandData ? selectedBrandData.models : []);
+  // };
 
   const hasErrors = Object.keys(formErrors);
 
@@ -635,6 +657,7 @@ export default function PersonalPage({userID}: Props) {
   //   //   }
   //   // }, [currentCur, price]);
   // };
+  //console.log("Selected brand: " + selectedBrand);
 
   const pickPreview = () => {
     previewPicker.current?.click();
@@ -644,11 +667,6 @@ export default function PersonalPage({userID}: Props) {
     photosPicker.current?.click();
   };
 
-  // useEffect(() => {
-  //   console.log(selectedFiles);
-  //   console.log(selectedPreview);
-  // }, [selectedFiles, selectedPreview]);
-
   const rechangePreview = () => {
     setSelectedPreview([]);
   };
@@ -656,47 +674,54 @@ export default function PersonalPage({userID}: Props) {
   const deleteAddedPhoto = (index: number) => {
     // const currentIndex = index
     console.log(index);
-    console.log(selectedFiles);
+    // console.log(selectedFiles);
     // const newArr = selectedFiles.filter((file: File[]) => file !== index);
     //   console.log(newArr);
-
     // delete selectedFiles[index];
     // delete previewImages[index];
   };
-
-  useEffect(() => {
-    console.log(selectedFiles);
-    console.log(previewImages);
-  }, [previewImages, selectedFiles]);
-
-  const brands = [
-    {value: "Acura", label: "Acura"},
-    {value: "Bmw", label: "Bmw"},
-    {value: "Jaguar", label: "Jaguar"},
-  ];
-  const modelss = [
-    {value: "3313", label: "3131"},
-    {value: "33333", label: "33333"},
-    {value: "Ja44gu44ar", label: "Jag444uar"},
-  ];
 
   const mapCarBrandToOptionType = (brand: CarBrand): OptionType => ({
     value: brand.name,
     label: brand.name,
   });
 
+  // const mapOptionType = (value: CarBrand): OptionType => ({
+  //   value: value.name,
+  //   label: value.name,
+  // });
+  const mapOthersOptions = (type: OtherOptions): OptionType => ({
+    value: type.value,
+    label: type.value,
+  });
+
   const brandOptions: OptionType[] = carData.brands.map(
     mapCarBrandToOptionType
   );
 
-  useEffect(() => {
-    console.log(brands);
-    console.log(carData.brands);
-  }, []);
+  const fuelOptions: OptionType[] = carData.fuels.map(mapOthersOptions);
+  const yearOptions: OptionType[] = carData.years.map(mapOthersOptions);
+  const colorOptions: OptionType[] = carData.colors.map(mapOthersOptions);
+  const transmissionOptions: OptionType[] =
+    carData.transmissions.map(mapOthersOptions);
+
+  const vehicleOptions: OptionType[] =
+    carData.vehicleType.map(mapOthersOptions);
+
+  const interiorOptions: OptionType[] = carData.interior.map(mapOthersOptions);
+  const wheelsOptions: OptionType[] = carData.wheels.map(mapOthersOptions);
+  const seatsOptions: OptionType[] = carData.seats.map(mapOthersOptions);
+  const locationOptions: OptionType[] = carData.location.map(mapOthersOptions);
+  const exportStatusOptions: OptionType[] =
+    carData.exportStatus.map(mapOthersOptions);
+  const ownersOptions: OptionType[] = carData.owners.map(mapOthersOptions);
+  const engineValueOptions: OptionType[] =
+    carData.engineValue.map(mapOthersOptions);
+
+  const currencyOptions: OptionType[] = carData.currency.map(mapOthersOptions);
 
   const handleNewBrandChange = (brand: string) => {
-    setSelectedBrand(brand);
-
+    setBrand(brand);
     const selectedCarBrand = carData.brands.find(
       (carBrand) => carBrand.name === brand
     );
@@ -712,6 +737,125 @@ export default function PersonalPage({userID}: Props) {
       setModelsOptions(options);
     }
   };
+
+  const formatMileage = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    setMileage(formattedValue);
+  };
+
+  const formatPrice = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    setPrice(formattedValue);
+  };
+
+  // useEffect(() => {
+  //   onModelChange("");
+  // }, [brand]);
+
+  const onModelChange = (value: string) => {
+    console.log(value);
+    setModel(value);
+  };
+  const onYearChange = (year: string) => {
+    setYear(year);
+    console.log("Year :" + year);
+  };
+
+  const onColorChange = (color: string) => {
+    setColor(color);
+    console.log("Color :" + color);
+  };
+  const onTransmissionChange = (transmission: string) => {
+    setTransmission(transmission);
+    console.log("Transmission :" + transmission);
+  };
+
+  const onFuelChange = (fuel: string) => {
+    setFuel(fuel);
+    console.log("Fuel :" + fuel);
+  };
+
+  const onEngineValueChange = (engineValue: string) => {
+    setEngineValue(engineValue);
+    console.log("EngineValue :" + engineValue);
+  };
+
+  const onVehicleTypeChange = (vehicleType: string) => {
+    setVehicleType(vehicleType);
+    console.log("Vehicle Type :" + vehicleType);
+  };
+
+  const onInteriorChange = (interior: string) => {
+    setInterior(interior);
+    console.log("Interior :" + interior);
+  };
+
+  const onWheelsChange = (wheels: string) => {
+    setWheels(wheels);
+    console.log("Wheels :" + wheels);
+  };
+
+  const onSeatsChange = (seats: string) => {
+    setSeats(seats);
+    console.log("Seats :" + seats);
+  };
+
+  const onLocationChange = (location: string) => {
+    setLocation(location);
+    console.log("Location :" + location);
+  };
+
+  const onExportStatusChange = (exportStatus: string) => {
+    setExportStatus(exportStatus);
+    console.log("Export Status :" + exportStatus);
+  };
+
+  const onOwnersChange = (owners: string) => {
+    setOwners(owners);
+    console.log("Owners :" + owners);
+  };
+  const onCurrencyChange = (currency: string) => {
+    setCurrency(currency);
+    // console.log("Owners :" + owners);
+  };
+
+  useEffect(() => {
+    if (firstClick) {
+      // console.log(errors);
+
+      // setFormErrors(errors);
+      // setPopUpErrors(true);
+      checkErrors();
+      setFormErrors(errors);
+    }
+  }, [
+    selectedPreview,
+    selectedFiles,
+    brand,
+    model,
+    year,
+    color,
+    transmission,
+    fuel,
+    engineValue,
+    vehicleType,
+    interior,
+    wheels,
+    seats,
+    location,
+    exportStatus,
+    owners,
+    mileage,
+    description,
+    price,
+    currency,
+  ]);
+
+  // useEffect(() => {
+  //   console.log(formErrors);
+  // }, [formErrors]);
 
   return (
     <div className={style.personalPage}>
@@ -732,7 +876,11 @@ export default function PersonalPage({userID}: Props) {
         className={style.form}
       >
         <div
-          className={formErrors.selectedPreview ? style.error : style.preview}
+          className={
+            formErrors.selectedPreview
+              ? `${style.preview} ${style.error}`
+              : style.preview
+          }
           ref={selectedPreviewRef}
         >
           <label>
@@ -772,7 +920,12 @@ export default function PersonalPage({userID}: Props) {
         </div>
 
         <div
-          className={formErrors.selectedFiles ? style.error : style.photos}
+          className={
+            formErrors.selectedFiles
+              ? `${style.photos} ${style.error}`
+              : style.photos
+          }
+          // className={formErrors.selectedFiles ? style.error : style.photos}
           ref={selectedFilesRef}
         >
           {selectedFiles.length < 1 && (
@@ -818,360 +971,226 @@ export default function PersonalPage({userID}: Props) {
         <table>
           <tr>
             <td className={style.tableTitle}>Brand</td>
-            <td>
-              <CustomSelect options={brandOptions} />
-              {/* <CustomSelect
-        options={carData.brands.map((brand) => ({ value: brand.name, label: brand.name }))}
-        onChange={(selectedOption) => handleBrandChange(selectedOption.value)}
-      /> */}
-              {/* <CustomSelect
-                options={carData.brands.map((brand) => ({
-                  value: brand.name,
-                  label: brand.name,
-                }))}
+            <td className={formErrors.brand ? style.error : ""} ref={brandRef}>
+              <CustomSelect
                 onChange={handleNewBrandChange}
-              /> */}
+                options={brandOptions}
+              />
             </td>
 
             <td className={style.tableTitle}>Interior</td>
-            <td> {/* <CustomSelect options={modelss} /> */}</td>
+            <td
+              className={formErrors.interior ? style.error : ""}
+              ref={brandRef}
+            >
+              <CustomSelect
+                onChange={onInteriorChange}
+                options={interiorOptions}
+              />
+            </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Model</td>
-            <td>
-              {" "}
-              <CustomSelect options={modelsOptions} />
+            <td className={formErrors.model ? style.error : ""} ref={modelRef}>
+              <CustomSelect onChange={onModelChange} options={modelsOptions} />
             </td>
 
             <td className={style.tableTitle}>Wheels</td>
-            <td>{/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.wheels ? style.error : ""}
+              ref={wheelsRef}
+            >
+              <CustomSelect onChange={onWheelsChange} options={wheelsOptions} />
+            </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Year</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td className={formErrors.year ? style.error : ""} ref={yearRef}>
+              <CustomSelect onChange={onYearChange} options={yearOptions} />
+            </td>
             <td className={style.tableTitle}>Seats</td>
-            <td>{/* <CustomSelect /> */}</td>
+            <td className={formErrors.seats ? style.error : ""} ref={seatsRef}>
+              <CustomSelect onChange={onSeatsChange} options={seatsOptions} />
+            </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Color</td>
-            <td>{/* <CustomSelect /> */}</td>
+            <td className={formErrors.color ? style.error : ""} ref={colorRef}>
+              <CustomSelect onChange={onColorChange} options={colorOptions} />
+            </td>
 
             <td className={style.tableTitle}>Location</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.location ? style.error : ""}
+              ref={locationRef}
+            >
+              <CustomSelect
+                onChange={onLocationChange}
+                options={locationOptions}
+              />
+            </td>
           </tr>
           <tr>
-            <td className={style.tableTitle}>Gearbox</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td className={style.tableTitle}>Transmission</td>
+            <td
+              className={formErrors.transmission ? style.error : ""}
+              ref={transmissionRef}
+            >
+              <CustomSelect
+                onChange={onTransmissionChange}
+                options={transmissionOptions}
+              />
+            </td>
 
             <td className={style.tableTitle}>Export</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.exportStatus ? style.error : ""}
+              ref={exportStatusRef}
+            >
+              <CustomSelect
+                onChange={onExportStatusChange}
+                options={exportStatusOptions}
+              />
+            </td>
           </tr>
 
           <tr>
             <td className={style.tableTitle}>Fuel</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
+              <CustomSelect onChange={onFuelChange} options={fuelOptions} />
+            </td>
 
             <td className={style.tableTitle}>Owners</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.owners ? style.error : ""}
+              ref={ownersRef}
+            >
+              <CustomSelect onChange={onOwnersChange} options={ownersOptions} />
+            </td>
           </tr>
 
           <tr>
             <td className={style.tableTitle}>Engine value</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.engineValue ? style.error : ""}
+              ref={engineValueRef}
+            >
+              <CustomSelect
+                onChange={onEngineValueChange}
+                options={engineValueOptions}
+              />
+            </td>
 
             <td className={style.tableTitle}>Mileage</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.mileage ? style.error : ""}
+              ref={mileageRef}
+            >
+              <input
+                type="text"
+                placeholder="Min"
+                min="1"
+                // max="999999"
+                maxLength={7}
+                value={mileage}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  formatMileage(e.target.value);
+                }}
+              />
+            </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Vehicle Type</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+              className={formErrors.vehicleType ? style.error : ""}
+              ref={vehicleTypeRef}
+            >
+              <CustomSelect
+                onChange={onVehicleTypeChange}
+                options={vehicleOptions}
+              />
+            </td>
 
             <td className={style.tableTitle}>Special</td>
-            <td> {/* <CustomSelect /> */}</td>
+            <td
+            // className={formErrors.special ? style.error : ""}
+            >
+              <input
+                type="checkbox"
+                checked={specialOffer}
+                // value={specialOffer}
+                onChange={(e) => setSpecialOffer(e.target.checked)}
+              />
+            </td>
           </tr>
         </table>
-        <div className={formErrors.brand ? style.error : ""} ref={brandRef}>
-          <label>
-            <span>Марка:</span>
 
-            <select value={brand} onChange={handleBrandChange}>
-              <option value="">Выберите Марку</option>
-              {carData.brands.map((brand) => {
-                return (
-                  <option key={brand.name} value={brand.name}>
-                    {brand.name}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.model ? style.error : ""} ref={modelRef}>
-          <label>
-            <span>Модель:</span>
-            <select onChange={(e) => setModel(e.target.value)}>
-              <option value="">Выбери модель</option>
-              {models.map((model) => (
-                <option key={model.name} value={model.name}>
-                  {model.name}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div
+          // className={formErrors.description ? style.error : style.description}
+          className={style.description}
+          // ref={descriptionRef}
+        >
+          <h4>Description:</h4>
+          <div
+            className={
+              formErrors.description
+                ? `${style.descriptionBox} ${style.error}`
+                : style.descriptionBox
+            }
+            ref={descriptionRef}
+          >
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
         </div>
 
         <div
-          className={formErrors.vehicleType ? style.error : ""}
-          ref={vehicleTypeRef}
+          className={style.priceBox}
+          // className={formErrors.price ? style.error : style.price}
+          // ref={priceRef}
         >
-          <label>
-            Тип кузова:
-            <select
-              value={vehicleType}
-              onChange={(e) => setVehicleType(e.target.value)}
-            >
-              <option value="">Тип кузова</option>
-              <option value="Sedan">Sedan</option>
-              <option value="Coupe">Coupe</option>
-              <option value="Hatchback">Hatchback</option>
-              <option value="SUV">SUV (Sport Utility Vehicle)</option>
-              <option value="Van">Van</option>
-              <option value="StationWagon">Station Wagon</option>
-              <option value="Convertible">Convertible</option>
-              <option value="PickUp">Pick Up</option>
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
-          <label>
-            Топливо:
-            <select value={fuel} onChange={(e) => setFuel(e.target.value)}>
-              <option value="">Вид топлива</option>
-              <option value="Gasoline">Gasoline</option>
-              <option value="Diesel">Diesel</option>
-              <option value="Hybrid">Hybrid</option>
-              <option value="Electric">Electric</option>
-            </select>
-          </label>
-        </div>
-        <div className={formErrors.engineCapacity ? style.error : ""}>
-          <label>
-            Обьем двигателя:
+          <h5>Price: </h5>
+          <div
+            className={formErrors.price ? style.error : style.price}
+            ref={priceRef}
+          >
             <input
               type="text"
-              value={engineCapacity}
-              onChange={handleEngineCapacityChange}
-              placeholder="Введите число (макс. 9.9)"
-            />
-          </label>
-        </div>
-
-        <div className={formErrors.color ? style.error : ""} ref={colorRef}>
-          <label>
-            Цвет автомобиля:
-            <select value={color} onChange={(e) => setColor(e.target.value)}>
-              <option value="">Выберите цвет</option>
-              <option value="White">White</option>
-              <option value="Black">Black</option>
-              <option value="Silver">Silver</option>
-              <option value="Gray">Gray</option>
-              <option value="Blue">Blue</option>
-              <option value="Red">Red</option>
-              <option value="Green">Green</option>
-              <option value="Brown">Brown</option>
-              <option value="Gold">Gold</option>
-              <option value="Purple">Purple</option>
-              <option value="Orange">Orange</option>
-              <option value="Yellow">Yellow</option>
-              <option value="Pink">Pink</option>
-            </select>
-          </label>
-        </div>
-        <div
-          className={formErrors.interior ? style.error : ""}
-          ref={interiorRef}
-        >
-          <label>
-            Цвет интерьера:
-            <select
-              value={interior}
-              onChange={(e) => setInterior(e.target.value)}
-            >
-              <option value="">Выберите цвет</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Brown">Brown</option>
-              <option value="Orange">Orange</option>
-              <option value="Yellow">Yellow</option>
-              <option value="Red">Red</option>
-            </select>
-          </label>
-        </div>
-
-        <div
-          className={formErrors.transmission ? style.error : ""}
-          ref={transmissionRef}
-        >
-          <label>
-            Трансмиссия:
-            <select
-              value={transmission}
-              onChange={(e) => setTransmission(e.target.value)}
-            >
-              <option value="">Выберите трансмиссию</option>
-              <option value="Automatic">Automatic</option>
-              <option value="Manual">Manual</option>
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.wheels ? style.error : ""} ref={wheelsRef}>
-          <label>
-            Размер колес:
-            <select value={wheels} onChange={(e) => setWheels(e.target.value)}>
-              <option value="">Размер колес</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-              <option value="18">18</option>
-              <option value="19">19</option>
-              <option value="20">20</option>
-              <option value="21">21</option>
-              <option value="22">22</option>
-              <option value="23">23</option>
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.seats ? style.error : ""} ref={seatsRef}>
-          <label>
-            Колличество мест:
-            <select value={seats} onChange={(e) => setSeats(e.target.value)}>
-              <option value="">Выберите колличество мест</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-            </select>
-          </label>
-        </div>
-
-        <div
-          className={formErrors.location ? style.error : ""}
-          ref={locationRef}
-        >
-          <label>
-            Местоположение:
-            <select
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            >
-              <option value="">Выберите город</option>
-              <option value="SaintPetersburg">Saint-Petersburg</option>
-              <option value="Moscow">Moscow</option>
-              <option value="Almaty">Almaty</option>
-              <option value="Minsk">Minsk</option>
-              <option value="Dubai">Dubai</option>
-              <option value="AbuDhabi">Abu Dhabi</option>
-              <option value="Shanghai">Shanghai</option>
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.owners ? style.error : ""} ref={ownersRef}>
-          <label>
-            Владельцы:
-            <select value={owners} onChange={(e) => setOwners(e.target.value)}>
-              <option value="">Количество владельцев</option>
-              <option value="None">None</option>
-              <option value="One">1</option>
-              <option value="Two">2</option>
-              <option value="Three">3</option>
-              <option value="More">3+</option>
-            </select>
-          </label>
-        </div>
-
-        <div
-          className={formErrors.exportStatus ? style.error : ""}
-          ref={exportStatusRef}
-        >
-          <label>
-            Export status:
-            <select
-              value={exportStatus}
-              onChange={(e) => setExportStatus(e.target.value)}
-            >
-              <option value="">Выберите export status</option>
-              <option value="Can be exported">Can be exported</option>
-              <option value="Can't be exported">Can't be exported</option>
-            </select>
-          </label>
-        </div>
-
-        <div className={formErrors.year ? style.error : ""} ref={yearRef}>
-          <label>
-            Год выпуска:
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(parseInt(e.target.value, 10))}
-            />
-          </label>
-        </div>
-
-        <div className={formErrors.mileage ? style.error : ""} ref={mileageRef}>
-          <label>
-            Пробег:
-            <input
-              type="number"
-              value={mileage}
-              onChange={(e) => setMileage(parseInt(e.target.value, 10))}
-            />
-          </label>
-        </div>
-
-        <div className={formErrors.price ? style.error : ""} ref={priceRef}>
-          <label>
-            Цена:
-            <select
-              value={currentCur}
-              onChange={(e) => setCurrentCur(e.target.value)}
-            >
-              <option value="">Выберите валюту</option>
-              <option value="USD">USD</option>
-              <option value="RUB">RUB</option>
-              <option value="EUR">EUR</option>
-            </select>
-            <input
-              type="number"
+              placeholder="Min"
+              min="1"
+              className={style.price}
+              // max="999999"
+              maxLength={currency === "RUB" ? 11 : 10}
               value={price}
-              onChange={(e) => setPrice(parseInt(e.target.value, 10))}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                formatPrice(e.target.value);
+              }}
             />
-          </label>
+          </div>
+
+          <div
+            className={
+              formErrors.priceCurrency
+                ? `${style.priceCurrency} ${style.error}`
+                : style.priceCurrency
+            }
+            ref={priceCurrencyRef}
+          >
+            <CustomSelect
+              // value={currencyOptions[0]}
+              onChange={onCurrencyChange}
+              options={currencyOptions}
+            />
+          </div>
         </div>
 
-        <div
-          className={formErrors.description ? style.error : style.description}
-          ref={descriptionRef}
-        >
-          <label>Описание:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <div
+        {/* <div
           className={formErrors.description ? style.error : ""}
           // ref={specialRef}
         >
-          <label>
+        <label>
             Special:
             <input
               type="checkbox"
@@ -1179,8 +1198,8 @@ export default function PersonalPage({userID}: Props) {
               // value={specialOffer}
               onChange={(e) => setSpecialOffer(e.target.checked)}
             />
-          </label>
-        </div>
+          </label> 
+        </div> */}
 
         <button
           //  type="submit"

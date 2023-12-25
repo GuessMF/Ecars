@@ -6,9 +6,25 @@ interface CarBrand {
   name: string;
   models: CarModel[];
 }
+interface OtherTypes {
+  value: string;
+}
 
 interface CarData {
   brands: CarBrand[];
+  fuels: OtherTypes[];
+  years: OtherTypes[];
+  colors: OtherTypes[];
+  transmissions: OtherTypes[];
+  vehicleType: OtherTypes[];
+  interior: OtherTypes[];
+  wheels: OtherTypes[];
+  seats: OtherTypes[];
+  location: OtherTypes[];
+  exportStatus: OtherTypes[];
+  owners: OtherTypes[];
+  engineValue: OtherTypes[];
+  currency: OtherTypes[];
 }
 
 const carData: CarData = {
@@ -160,29 +176,105 @@ const carData: CarData = {
       models: [{name: "XC90"}, {name: "S90"}, {name: "XC70"}, {name: "S80"}],
     },
   ],
+  fuels: [
+    {value: "Gasoline"},
+    {value: "Diesel"},
+    {value: "Hybrid"},
+    {value: "Electric"},
+  ],
+  years: [],
+  colors: [
+    {value: "White"},
+    {value: "Black"},
+    {value: "Silver"},
+    {value: "Gray"},
+    {value: "Blue"},
+    {value: "Red"},
+    {value: "Green"},
+    {value: "Brown"},
+    {value: "Gold"},
+    {value: "Purple"},
+    {value: "Orange"},
+    {value: "Yellow"},
+    {value: "Pink"},
+  ],
+  transmissions: [{value: "Automatic"}, {value: "Manual"}],
+  vehicleType: [
+    {value: "SUV"},
+    {value: "Sedan"},
+    {value: "Hatchback"},
+    {value: "Coupe"},
+    {value: "StationWagon"},
+    {value: "Van"},
+    {value: "Convertible"},
+    {value: "PickUp"},
+  ],
+
+  interior: [
+    {value: "Black"},
+    {value: "White"},
+    {value: "Brown"},
+    {value: "Orange"},
+    {value: "Yellow"},
+    {value: "Red"},
+  ],
+  wheels: [
+    {value: "14"},
+    {value: "15"},
+    {value: "16"},
+    {value: "17"},
+    {value: "18"},
+    {value: "19"},
+    {value: "20"},
+    {value: "21"},
+    {value: "22"},
+    {value: "23"},
+  ],
+  seats: [
+    {value: "2"},
+    {value: "3"},
+    {value: "4"},
+    {value: "5"},
+    {value: "6"},
+    {value: "7"},
+  ],
+  location: [
+    {value: "SaintPetersburg"},
+    {value: "Moscow"},
+    {value: "Almaty"},
+    {value: "Minsk"},
+    {value: "Dubai"},
+    {value: "AbuDhabi"},
+    {value: "Shanghai"},
+  ],
+  exportStatus: [{value: "Can be exported"}, {value: "Can't be exported"}],
+  owners: [
+    {value: "None"},
+    {value: "One"},
+    {value: "Two"},
+    {value: "Three"},
+    {value: "More"},
+  ],
+  engineValue: [],
+  currency: [{value: "RUB"}, {value: "USD"}, {value: "EUR"}],
 };
 
-// Acura
-// Alfa Romeo
-// Aston Martin
-// Audi
-// Bentley
-// BMW
-// Ferrari
-// Ford
-// Infiniti
-// Jaguar
-// Land Rover
-// Lexus
-// Maserati
-// Maybach
-// Mercedes Benz
-// Nissan
-// Porsche
-// Rolls Royce
-// Tesla
-// Toyota
-// Volkswagen
-// Volvo
+const createYears = () => {
+  const startValue = new Date().getFullYear();
+  const endValue = 1980;
+  for (let i = startValue; i >= endValue; i--) {
+    carData.years.push({value: i.toString()});
+  }
+};
+
+const createEngineValue = () => {
+  const startValue = 0.1;
+  const endValue = 10;
+  for (let i = startValue; i <= endValue; i += 0.1) {
+    carData.engineValue.push({value: i.toFixed(1)});
+  }
+};
+createYears();
+createEngineValue();
 
 export default carData;

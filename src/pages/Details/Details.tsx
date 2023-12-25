@@ -292,6 +292,7 @@ export default function Details() {
   }, [photoURLs]);
 
   console.log(currentCar?.owners);
+  console.log(currentCar?.price);
 
   return (
     <div className={style.details}>

@@ -222,6 +222,8 @@ export default function Catalog() {
   // });
 
   const [cars, setCars] = useState<Car[]>([]);
+  console.log(cars);
+
   const [lastVisibleRefs, setLastVisibleRefs] = useState<
     DocumentSnapshot<Car>[]
   >([]);
