@@ -10,6 +10,9 @@ import {useAppSelector} from "hooks/redux-hooks";
 import {doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {db, storage} from "../../../firebase";
+import CustomSelect from "../CustomSelect/CustomSelect";
+import CustomSelect2 from "../CustomSelect2/CustomSelect2";
+import carData from "helpers/modelsBrands";
 
 interface DateObject {
   year: number;
@@ -18,6 +21,23 @@ interface DateObject {
   hours: number;
   minutes: number;
 }
+
+interface CarModel {
+  name: string;
+}
+
+interface CarBrand {
+  name: string;
+  models: CarModel[];
+}
+interface OptionType {
+  value: string;
+  label: string;
+}
+interface OtherOptions {
+  value: string;
+}
+
 interface Props {
   id: string;
   index: number;
@@ -36,10 +56,11 @@ interface Props {
   previewIMG: string;
   transmission: string;
   engineVolume: string;
-
+  exportStatus: string;
   wheels: string;
   seats: string;
   dateObj: DateObject;
+  special: boolean;
 
   onClickDelete: (id: string, carName: string) => void;
   onClickCheck: (brand: string, id: string) => void;
@@ -66,15 +87,41 @@ export default function MegaCard({
   seats,
   location,
   description,
+  exportStatus,
+  special,
   onClickDelete,
   onClickCheck,
   dateObj,
 }: // sortBy,
 Props) {
+  const [edition, setEdition] = useState<boolean>(false);
+  // console.log(brand);
+  // console.log(model);
+
+  const [brandAndModel, setBrandAndModel] = useState<string>("");
+  const [newBrand, setNewBrand] = useState<string>(brand);
+  const [newModel, setNewModel] = useState(model);
+  const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
+  const [newPricee, setNewPricee] = useState<string>("");
+  const [newYear, setNewYear] = useState<string>(year);
+  const [newMileage, setNewMileage] = useState<string>("");
+  const [newTransmission, setNewTransmission] = useState<string>(transmission);
+  const [newFuel, setNewFuel] = useState<string>(fuel);
+  const [newWheels, setNewWheels] = useState<string>(wheels);
+  const [newVehicleType, setNewVehicleType] = useState<string>(type);
+  const [newEngineValue, setNewEngineValue] = useState<string>(engineVolume);
+  const [newSeats, setNewSeats] = useState<string>(seats);
+  const [newInterior, setNewInterior] = useState<string>(interior);
+  const [newColor, setNewColor] = useState<string>(color);
+  const [newLocation, setNewLocation] = useState<string>(location);
+  const [newOwners, setNewOwners] = useState<string>(owners);
+  const [newExportStatus, setNewExportStatus] = useState<string>(exportStatus);
+  const [newDescription, setNewDescription] = useState(description);
+
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
   );
-
+  const [newCurrency, setNewCurrency] = useState<string>(selectedCurrency);
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
 
@@ -92,7 +139,7 @@ Props) {
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  let formatedBrand;
+  let formatedBrand: string;
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");
@@ -101,9 +148,22 @@ Props) {
     });
     return capitalizeWords.join(" ");
   };
-  if (brand) {
+
+  useEffect(() => {
     formatedBrand = capitalizeWords(brand);
-  }
+  }, []);
+  // if (brand) {
+  //   formatedBrand = capitalizeWords(brand);
+  // }
+
+  //   useEffect(() => {
+  //    // console.log("eeee");
+  //     if (brand) {
+  //   //    console.log(formatedBrand);
+  //       setNewBrand(formatedBrand);
+  //  //     console.log(newBrand);
+  //     }
+  //   }, []);
 
   const formattedMileage: string = mileage
     .toLocaleString()
@@ -181,6 +241,169 @@ Props) {
     11: "November",
     12: "December",
   };
+
+  const onClickEdit = () => {
+    setEdition(true);
+
+    console.log(id);
+  };
+
+  useEffect(() => {
+    console.log("Edition: " + edition);
+  }, [edition]);
+
+  const test = () => {};
+
+  // useEffect(() => {
+  //   // setNewBrand(formatedBrand);
+  //   setNewYear("1999");
+  // }, []);
+
+  const mapCarBrandToOptionType = (brand: CarBrand): OptionType => ({
+    value: brand.name,
+    label: brand.name,
+  });
+  const mapOthersOptions = (type: OtherOptions): OptionType => ({
+    value: type.value,
+    label: type.value,
+  });
+  const brandOptions: OptionType[] = carData.brands.map(
+    mapCarBrandToOptionType
+  );
+
+  const fuelOptions: OptionType[] = carData.fuels.map(mapOthersOptions);
+  const yearOptions: OptionType[] = carData.years.map(mapOthersOptions);
+  const colorOptions: OptionType[] = carData.colors.map(mapOthersOptions);
+  const transmissionOptions: OptionType[] =
+    carData.transmissions.map(mapOthersOptions);
+
+  const vehicleOptions: OptionType[] =
+    carData.vehicleType.map(mapOthersOptions);
+
+  const interiorOptions: OptionType[] = carData.interior.map(mapOthersOptions);
+  const wheelsOptions: OptionType[] = carData.wheels.map(mapOthersOptions);
+  const seatsOptions: OptionType[] = carData.seats.map(mapOthersOptions);
+  const locationOptions: OptionType[] = carData.location.map(mapOthersOptions);
+  const exportStatusOptions: OptionType[] =
+    carData.exportStatus.map(mapOthersOptions);
+  const ownersOptions: OptionType[] = carData.owners.map(mapOthersOptions);
+  const engineValueOptions: OptionType[] =
+    carData.engineValue.map(mapOthersOptions);
+  const currencyOptions: OptionType[] = carData.currency.map(mapOthersOptions);
+
+  const handleNewBrandChange = (brand: string) => {
+    setNewBrand(brand);
+    console.log("v func " + brand);
+
+    const selectedCarBrand = carData.brands.find(
+      (carBrand) => carBrand.name === brand
+    );
+
+    if (selectedCarBrand) {
+      const models: CarModel[] = selectedCarBrand.models;
+
+      const options: OptionType[] = models.map((model) => ({
+        value: model.name,
+        label: model.name,
+      }));
+
+      setModelsOptions(options);
+    }
+  };
+  useEffect(() => {
+    console.log("new options");
+    console.log(brand);
+    const selectedCarBrand = carData.brands.find(
+      (carBrand) => carBrand.name === brand
+    );
+    if (selectedCarBrand) {
+      const models: CarModel[] = selectedCarBrand.models;
+
+      const options: OptionType[] = models.map((model) => ({
+        value: model.name,
+        label: model.name,
+      }));
+
+      setModelsOptions(options);
+
+      console.log(options);
+    }
+
+    setNewModel(model);
+  }, [edition]);
+
+  const onModelChange = (value: string) => {
+    // console.log(value);
+    setNewModel(value);
+  };
+  const onYearChange = (year: string) => {
+    setNewYear(year);
+    console.log("Year :" + year);
+  };
+
+  const onColorChange = (color: string) => {
+    setNewColor(color);
+    console.log("Color :" + color);
+  };
+  const onTransmissionChange = (transmission: string) => {
+    setNewTransmission(transmission);
+    console.log("Transmission :" + transmission);
+  };
+
+  const onFuelChange = (fuel: string) => {
+    setNewFuel(fuel);
+    console.log("Fuel :" + fuel);
+  };
+
+  const onEngineValueChange = (engineValue: string) => {
+    setNewEngineValue(engineValue);
+    console.log("EngineValue :" + engineValue);
+  };
+
+  const onVehicleTypeChange = (vehicleType: string) => {
+    setNewVehicleType(vehicleType);
+    console.log("Vehicle Type :" + vehicleType);
+  };
+
+  const onInteriorChange = (interior: string) => {
+    setNewInterior(interior);
+    console.log("Interior :" + interior);
+  };
+
+  const onWheelsChange = (wheels: string) => {
+    setNewWheels(wheels);
+    console.log("Wheels :" + wheels);
+  };
+
+  const onSeatsChange = (seats: string) => {
+    setNewSeats(seats);
+    console.log("Seats :" + seats);
+  };
+
+  const onLocationChange = (location: string) => {
+    setNewLocation(location);
+    console.log("Location :" + location);
+  };
+
+  const onExportStatusChange = (exportStatus: string) => {
+    setNewExportStatus(exportStatus);
+    console.log("Export Status :" + exportStatus);
+  };
+
+  const onOwnersChange = (owners: string) => {
+    setNewOwners(owners);
+    console.log("Owners :" + owners);
+  };
+  const formatPrice = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    setNewPricee(formattedValue);
+  };
+  const onCurrencyChange = (currency: string) => {
+    setNewCurrency(currency);
+    // console.log("Owners :" + owners);
+  };
+
   return (
     <div className={style.megaCard}>
       <div className={style.previewBigImage}>
@@ -210,71 +433,322 @@ Props) {
               <SkeletonSmallImage key={`skeleton_${i}`} />
             ))}
       </div>
+
       <div className={style.information}>
         <div className={style.topInformation}>
-          <h3>{formatedBrand}</h3>
+          {/* <h3>{formatedBrand}</h3> */}
           <h3>{model?.toLocaleUpperCase()}</h3>
           <h3>{year}</h3>
         </div>
-        <div className={style.mainInformation}>
-          <div className={style.left__information}>
-            <div>
-              <span>Brand</span> <span>{formatedBrand}</span>
-            </div>
-            <div>
-              <span>Model</span> <span>{model?.toLocaleUpperCase()}</span>
-            </div>
 
-            <div>
-              <span>Vehicle type</span>
-              <span>{type}</span>
-            </div>
-            <div>
-              <span>Color</span>
-              <span>{color}</span>
-            </div>
-            <div>
-              <span>Interior</span> <span>{interior}</span>
-            </div>
-            <div>
-              <span>Owners</span> <span>{owners}</span>
-            </div>
+        <table>
+          <tr>
+            <td className={style.tableTitle}>Brand</td>
+            <td
+            // className={formErrors.brand ? style.error : ""}
+            //ref={brandRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newBrand}
+                  onChange={handleNewBrandChange}
+                  options={brandOptions}
+                />
+              ) : (
+                <span>{brand}</span>
+              )}
+            </td>
 
-            <div>
-              <span>Mileage</span> <span>{formattedMileage} Km</span>
-            </div>
-          </div>
-          <div className={style.right__information}>
-            <div>
-              <span>Year</span> <span>{year}</span>
-            </div>
-            <div>
-              <span>Gearbox</span> <span>{transmission}</span>
-            </div>
-            <div>
-              <span>Engine Volume</span> <span>{engineVolume} L</span>
-            </div>
+            <td className={style.tableTitle}>Interior</td>
+            <td
+            // className={formErrors.interior ? style.error : ""}
+            // ref={brandRef}
+            >
+              {/* <CustomSelect
+                onChange={onInteriorChange}
+                options={interiorOptions}
+              /> */}
+              {edition ? (
+                <CustomSelect2
+                  value={newInterior}
+                  onChange={onInteriorChange}
+                  options={interiorOptions}
+                />
+              ) : (
+                <span>{interior}</span>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Model</td>
+            <td
+            //className={formErrors.model ? style.error : ""}
+            // ref={modelRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newModel}
+                  onChange={onModelChange}
+                  options={modelsOptions}
+                />
+              ) : (
+                <span>{model.toLocaleUpperCase()}</span>
+              )}
+            </td>
 
-            <div>
-              <span>Fuel</span> <span>{fuel}</span>
-            </div>
-            <div>
-              <span>Wheels</span> <span>{wheels}</span>
-            </div>
+            <td className={style.tableTitle}>Wheels</td>
+            <td
+            //className={formErrors.wheels ? style.error : ""}
+            //  ref={wheelsRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newWheels}
+                  onChange={onWheelsChange}
+                  options={wheelsOptions}
+                />
+              ) : (
+                <span>{wheels}</span>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Year</td>
+            <td
+            // className={formErrors.year ? style.error : ""}
+            // ref={yearRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newYear}
+                  onChange={onYearChange}
+                  options={yearOptions}
+                />
+              ) : (
+                <span>{year}</span>
+              )}
+            </td>
+            <td className={style.tableTitle}>Seats</td>
+            <td
+            // className={formErrors.seats ? style.error : ""}
+            // ref={seatsRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newSeats}
+                  onChange={onSeatsChange}
+                  options={seatsOptions}
+                />
+              ) : (
+                <span>{seats}</span>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Color</td>
+            <td
+            // className={formErrors.color ? style.error : ""}
+            //ref={colorRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newColor}
+                  onChange={onColorChange}
+                  options={colorOptions}
+                />
+              ) : (
+                <span>{color}</span>
+              )}
+            </td>
 
-            <div>
-              <span>Seats</span> <span>{seats}</span>
-            </div>
+            <td className={style.tableTitle}>Location</td>
+            <td
+            //  className={formErrors.location ? style.error : ""}
+            // ref={locationRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newLocation}
+                  onChange={onLocationChange}
+                  options={locationOptions}
+                />
+              ) : (
+                <span>{location}</span>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Transmission</td>
+            <td
+            // className={formErrors.transmission ? style.error : ""}
+            //  ref={transmissionRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newTransmission}
+                  onChange={onTransmissionChange}
+                  options={transmissionOptions}
+                />
+              ) : (
+                <span>{transmission}</span>
+              )}
+            </td>
 
-            <div>
-              <span>Location</span> <span>{location}</span>
-            </div>
+            <td className={style.tableTitle}>Export</td>
+            <td
+            // className={formErrors.exportStatus ? style.error : ""}
+            // ref={exportStatusRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newExportStatus}
+                  onChange={onExportStatusChange}
+                  options={exportStatusOptions}
+                />
+              ) : (
+                <span>{exportStatus}</span>
+              )}
+            </td>
+          </tr>
+
+          <tr>
+            <td className={style.tableTitle}>Fuel</td>
+            <td
+            // className={formErrors.fuel ? style.error : ""}
+            /// ref={fuelRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newFuel}
+                  onChange={onFuelChange}
+                  options={fuelOptions}
+                />
+              ) : (
+                <span>{fuel}</span>
+              )}
+            </td>
+            <td className={style.tableTitle}>Owners</td>
+            <td
+            //  className={formErrors.owners ? style.error : ""}
+            // ref={ownersRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newOwners}
+                  onChange={onOwnersChange}
+                  options={ownersOptions}
+                />
+              ) : (
+                <span>{owners}</span>
+              )}
+            </td>
+          </tr>
+
+          <tr>
+            <td className={style.tableTitle}>Engine value</td>
+            <td
+            //className={formErrors.engineValue ? style.error : ""}
+            // ref={engineValueRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newEngineValue}
+                  onChange={onEngineValueChange}
+                  options={engineValueOptions}
+                />
+              ) : (
+                <span>{engineVolume} L</span>
+              )}
+            </td>
+
+            <td className={style.tableTitle}>Mileage</td>
+            <td
+            //  className={formErrors.mileage ? style.error : ""}
+            //ref={mileageRef}
+            >
+              {edition ? (
+                <input
+                  type="text"
+                  placeholder="Min"
+                  min="1"
+                  // max="999999"
+                  maxLength={7}
+                  value={mileage}
+                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  //   formatMileage(e.target.value);
+                  // }}
+                />
+              ) : (
+                <span>{mileage} Км</span>
+              )}
+            </td>
+          </tr>
+          <tr>
+            <td className={style.tableTitle}>Vehicle Type</td>
+            <td
+            //  className={formErrors.vehicleType ? style.error : ""}
+            // ref={vehicleTypeRef}
+            >
+              {edition ? (
+                <CustomSelect
+                  value={newVehicleType}
+                  onChange={onVehicleTypeChange}
+                  options={vehicleOptions}
+                />
+              ) : (
+                <span>{type}</span>
+              )}
+            </td>
+
+            <td className={style.tableTitle}>Special</td>
+            <td
+            // className={formErrors.special ? style.error : ""}
+            >
+              {edition ? (
+                <input
+                  type="checkbox"
+                  // checked={specialOffer}
+                  // value={specialOffer}
+                  // onChange={(e) => setSpecialOffer(e.target.checked)}
+                />
+              ) : (
+                <span>{special ? "Yes" : "No"}</span>
+              )}
+            </td>
+          </tr>
+        </table>
+
+        <div
+          // className={formErrors.description ? style.error : style.description}
+          className={style.description}
+          // ref={descriptionRef}
+        >
+          <h4>Description:</h4>
+          <div
+            // className={
+            //   formErrors.description
+            //     ? `${style.descriptionBox} ${style.error}`
+            //     : style.descriptionBox
+            // }
+            //  ref={descriptionRef}
+            className={style.descriptionBox}
+          >
+            {edition ? (
+              <textarea
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                //onChange={(e) => setNewDescription(e.target.value)}
+              />
+            ) : (
+              <span>{newDescription}</span>
+            )}
           </div>
         </div>
-        <div className={style.description}>
+
+        {/* <div className={style.description}>
           <h6>Description:</h6>
           <span> {description}</span>
-        </div>
+        </div> */}
         <div className={style.added}>
           <h6>Added:</h6>
           <span>
@@ -283,28 +757,58 @@ Props) {
           </span>
         </div>
 
-        <span className={style.price}>
-          {" "}
-          {selectedCurrency === "RUB"
-            ? `₽ `
-            : selectedCurrency === "USD"
-            ? "$ "
-            : selectedCurrency === "EUR"
-            ? "€ "
-            : ""}{" "}
-          {formattedPrice}
-        </span>
+        {edition ? (
+          <div className={style.priceBox}>
+            <CustomSelect
+              // value={currencyOptions[0]}
+              value={newCurrency}
+              onChange={onCurrencyChange}
+              options={currencyOptions}
+            />
+            <input
+              type="text"
+              placeholder="Min"
+              min="1"
+              className={style.price}
+              // max="999999"
+              maxLength={newCurrency === "RUB" ? 11 : 10}
+              value={newPricee}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                formatPrice(e.target.value);
+              }}
+            />
+          </div>
+        ) : (
+          <span className={style.price}>
+            {selectedCurrency === "RUB"
+              ? `₽ `
+              : selectedCurrency === "USD"
+              ? "$ "
+              : selectedCurrency === "EUR"
+              ? "€ "
+              : ""}
+            {formattedPrice}
+          </span>
+        )}
+
         <div className={style.buttons}>
-          <button className={style.visit} onClick={onClickVisitPage}>
-            Visit page
+          {!edition && (
+            <button className={style.visit} onClick={onClickVisitPage}>
+              Visit page
+            </button>
+          )}
+
+          <button className={style.edit} onClick={onClickEdit}>
+            {edition ? "Confirm" : "Edit"}
           </button>
-          <button className={style.edit}>Edit</button>
-          <button
-            className={style.delete}
-            onClick={() => onClickCheck(brand, id)}
-          >
-            Delete
-          </button>
+          {!edition && (
+            <button
+              className={style.delete}
+              onClick={() => onClickCheck(brand, id)}
+            >
+              Delete
+            </button>
+          )}
         </div>
       </div>
     </div>

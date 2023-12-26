@@ -686,10 +686,6 @@ export default function PersonalPage({userID}: Props) {
     label: brand.name,
   });
 
-  // const mapOptionType = (value: CarBrand): OptionType => ({
-  //   value: value.name,
-  //   label: value.name,
-  // });
   const mapOthersOptions = (type: OtherOptions): OptionType => ({
     value: type.value,
     label: type.value,
@@ -973,6 +969,7 @@ export default function PersonalPage({userID}: Props) {
             <td className={style.tableTitle}>Brand</td>
             <td className={formErrors.brand ? style.error : ""} ref={brandRef}>
               <CustomSelect
+                value={brand}
                 onChange={handleNewBrandChange}
                 options={brandOptions}
               />
@@ -984,6 +981,7 @@ export default function PersonalPage({userID}: Props) {
               ref={brandRef}
             >
               <CustomSelect
+                value={interior}
                 onChange={onInteriorChange}
                 options={interiorOptions}
               />
@@ -992,7 +990,11 @@ export default function PersonalPage({userID}: Props) {
           <tr>
             <td className={style.tableTitle}>Model</td>
             <td className={formErrors.model ? style.error : ""} ref={modelRef}>
-              <CustomSelect onChange={onModelChange} options={modelsOptions} />
+              <CustomSelect
+                value={model}
+                onChange={onModelChange}
+                options={modelsOptions}
+              />
             </td>
 
             <td className={style.tableTitle}>Wheels</td>
@@ -1000,23 +1002,39 @@ export default function PersonalPage({userID}: Props) {
               className={formErrors.wheels ? style.error : ""}
               ref={wheelsRef}
             >
-              <CustomSelect onChange={onWheelsChange} options={wheelsOptions} />
+              <CustomSelect
+                value={wheels}
+                onChange={onWheelsChange}
+                options={wheelsOptions}
+              />
             </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Year</td>
             <td className={formErrors.year ? style.error : ""} ref={yearRef}>
-              <CustomSelect onChange={onYearChange} options={yearOptions} />
+              <CustomSelect
+                value={year}
+                onChange={onYearChange}
+                options={yearOptions}
+              />
             </td>
             <td className={style.tableTitle}>Seats</td>
             <td className={formErrors.seats ? style.error : ""} ref={seatsRef}>
-              <CustomSelect onChange={onSeatsChange} options={seatsOptions} />
+              <CustomSelect
+                value={seats}
+                onChange={onSeatsChange}
+                options={seatsOptions}
+              />
             </td>
           </tr>
           <tr>
             <td className={style.tableTitle}>Color</td>
             <td className={formErrors.color ? style.error : ""} ref={colorRef}>
-              <CustomSelect onChange={onColorChange} options={colorOptions} />
+              <CustomSelect
+                value={color}
+                onChange={onColorChange}
+                options={colorOptions}
+              />
             </td>
 
             <td className={style.tableTitle}>Location</td>
@@ -1025,6 +1043,7 @@ export default function PersonalPage({userID}: Props) {
               ref={locationRef}
             >
               <CustomSelect
+                value={location}
                 onChange={onLocationChange}
                 options={locationOptions}
               />
@@ -1037,6 +1056,7 @@ export default function PersonalPage({userID}: Props) {
               ref={transmissionRef}
             >
               <CustomSelect
+                value={transmission}
                 onChange={onTransmissionChange}
                 options={transmissionOptions}
               />
@@ -1048,6 +1068,7 @@ export default function PersonalPage({userID}: Props) {
               ref={exportStatusRef}
             >
               <CustomSelect
+                value={exportStatus}
                 onChange={onExportStatusChange}
                 options={exportStatusOptions}
               />
@@ -1057,7 +1078,11 @@ export default function PersonalPage({userID}: Props) {
           <tr>
             <td className={style.tableTitle}>Fuel</td>
             <td className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
-              <CustomSelect onChange={onFuelChange} options={fuelOptions} />
+              <CustomSelect
+                value={fuel}
+                onChange={onFuelChange}
+                options={fuelOptions}
+              />
             </td>
 
             <td className={style.tableTitle}>Owners</td>
@@ -1065,7 +1090,11 @@ export default function PersonalPage({userID}: Props) {
               className={formErrors.owners ? style.error : ""}
               ref={ownersRef}
             >
-              <CustomSelect onChange={onOwnersChange} options={ownersOptions} />
+              <CustomSelect
+                value={owners}
+                onChange={onOwnersChange}
+                options={ownersOptions}
+              />
             </td>
           </tr>
 
@@ -1076,6 +1105,7 @@ export default function PersonalPage({userID}: Props) {
               ref={engineValueRef}
             >
               <CustomSelect
+                value={engineValue}
                 onChange={onEngineValueChange}
                 options={engineValueOptions}
               />
@@ -1106,6 +1136,7 @@ export default function PersonalPage({userID}: Props) {
               ref={vehicleTypeRef}
             >
               <CustomSelect
+                value={vehicleType}
                 onChange={onVehicleTypeChange}
                 options={vehicleOptions}
               />
@@ -1180,6 +1211,7 @@ export default function PersonalPage({userID}: Props) {
           >
             <CustomSelect
               // value={currencyOptions[0]}
+              value={currency}
               onChange={onCurrencyChange}
               options={currencyOptions}
             />

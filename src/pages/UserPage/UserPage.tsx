@@ -10,6 +10,8 @@ import style from "./__userPage.module.scss";
 import ArrowUp from "./arrowUp.webp";
 import ArrowDown from "./arrowDown.webp";
 import {useAppSelector} from "hooks/redux-hooks";
+
+import CustomSelect from "components/smart/CustomSelect/CustomSelect";
 import Cookies from "universal-cookie";
 import {
   query,
@@ -69,7 +71,9 @@ interface Car {
   seats: string;
   engineCapacity: string;
   previewImage: string;
+  exportStatus: string;
   dateObj: DateObject;
+  special: boolean;
 
   // testImg: string;
 }
@@ -315,6 +319,8 @@ export default function UserPage({userID}: Props) {
             description={cars[currentCar]?.description}
             previewIMG={cars[currentCar]?.previewImage[0]}
             dateObj={cars[currentCar]?.dateObj}
+            exportStatus={cars[currentCar]?.exportStatus}
+            special={cars[currentCar]?.special}
             onClickDelete={onDelClick}
             onClickCheck={onClickCheck}
           />

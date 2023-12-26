@@ -30,8 +30,8 @@ interface CarData {
 const carData: CarData = {
   brands: [
     {
-      name: "Acura",
-      models: [{name: "MDX"}, {name: "RDX"}, {name: "RSX"}],
+      name: "acura",
+      models: [{name: "mdx"}, {name: "rdx"}, {name: "rsx"}],
     },
     {
       name: "Alfa Romeo",

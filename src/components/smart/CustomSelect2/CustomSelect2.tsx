@@ -1,46 +1,3 @@
-// import React, {useEffect} from "react";
-// import Select from "react-select";
-
-// type OptionType = {
-//   value: string;
-//   label: string;
-// };
-
-// type CustomSelectProps = {
-//   options: OptionType[];
-//   onChange: (value: string) => void;
-// };
-
-// const CustomSelect: React.FC<CustomSelectProps> = ({options, onChange}) => {
-//   const transformedOptions: {value: string; label: string}[] = options.map(
-//     (option) => ({
-//       value: option.value,
-//       label: option.label,
-//     })
-//   );
-
-//   const initialOption = transformedOptions.find(
-//     (option) => option.value === ""
-//   );
-
-//   const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
-
-//   const onClickCurrency = (selectedOption: any) => {
-//     setSelectedCurrency(selectedOption);
-//     onChange(selectedOption.value);
-//   };
-
-//   return (
-//     <Select
-//       value={selectedCurrency}
-//       options={transformedOptions}
-//       onChange={onClickCurrency}
-//     />
-//   );
-// };
-
-// export default CustomSelect;
-
 import React, {useEffect} from "react";
 import Select from "react-select";
 
@@ -55,7 +12,7 @@ type CustomSelectProps = {
   onChange: (value: string) => void;
 };
 
-const CustomSelect: React.FC<CustomSelectProps> = ({
+const CustomSelect2: React.FC<CustomSelectProps> = ({
   value,
   options,
   onChange,
@@ -66,8 +23,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
       label: option.label,
     })
   );
-  console.log(value);
-
+  // console.log(value);
   const initialOption = transformedOptions.find(
     (option) => option.value === value
   );
@@ -97,4 +53,4 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   );
 };
 
-export default CustomSelect;
+export default CustomSelect2;
