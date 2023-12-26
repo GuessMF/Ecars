@@ -224,13 +224,13 @@ FiltersProps) {
     });
   }, [searchTerm]);
   useEffect(() => {
-    console.log(brandFilterValue);
+    //  console.log(brandFilterValue);
 
     const fountedBrand = carData.brands.find(
       (item) => item.name === brandFilterValue
     );
     if (fountedBrand) {
-      console.log(fountedBrand.models);
+      //  console.log(fountedBrand.models);
       setModels(fountedBrand.models);
     }
   }, [brandFilterValue]);
@@ -240,8 +240,8 @@ FiltersProps) {
     const selectedBrandData = carData.brands.find(
       (item) => item.name === selectedBrand
     );
-    console.log(selectedBrand);
-    console.log(selectedBrandData?.models);
+    // console.log(selectedBrand);
+    // console.log(selectedBrandData?.models);
 
     setModels(selectedBrandData ? selectedBrandData.models : []);
     onBrandFilterChange(event);

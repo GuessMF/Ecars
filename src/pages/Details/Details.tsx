@@ -291,8 +291,8 @@ export default function Details() {
     image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
   }, [photoURLs]);
 
-  console.log(currentCar?.owners);
-  console.log(currentCar?.price);
+  // console.log(currentCar?.owners);
+  // console.log(currentCar?.price);
 
   const changeLittlePhoto = (index: number) => {
     window.scrollTo({

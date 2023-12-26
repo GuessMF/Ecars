@@ -88,6 +88,12 @@ export default function Catalog() {
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
 
+  // useEffect(() => {
+  //   console.log(brandParam);
+  //   console.log(yearParam);
+  //   console.log(modelParam);
+  // }, []);
+
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
 
@@ -222,7 +228,7 @@ export default function Catalog() {
   // });
 
   const [cars, setCars] = useState<Car[]>([]);
-  console.log(cars);
+  // console.log(cars);
 
   const [lastVisibleRefs, setLastVisibleRefs] = useState<
     DocumentSnapshot<Car>[]
@@ -291,6 +297,30 @@ export default function Catalog() {
     searchTerm,
     selectedCurrency,
   ]);
+
+  // useEffect(() => {
+  //   // console.log("srabotal");
+  // }, [
+  //   currentPage,
+  //   sortType,
+  //   //brandFilter,
+  //   // modelFilter,
+  //   vechicleTypeCheckboxes,
+  //   cityCheckboxes,
+  //   owners,
+  //   color,
+  //   seats,
+  //   fuel,
+  //   transmission,
+  //   minMileageValue,
+  //   maxMileageValue,
+  //   minYearValue,
+  //   maxYearValue,
+  //   minPriceValue,
+  //   maxPriceValue,
+  //   searchTerm,
+  //   selectedCurrency,
+  // ]);
 
   const fetchFirstPage = async (
     sortType: SortObj,
@@ -384,6 +414,7 @@ export default function Catalog() {
       });
 
       if (searchTerm) {
+        //  console.log("Есть search Term");
         const searchTermLowerCase = searchTerm.toLowerCase();
 
         const brandQuery = query(
@@ -449,10 +480,15 @@ export default function Catalog() {
       }
 
       if (!searchTerm) {
+        // console.log("Нет search Term");
+
         if (brandFilter) {
+          //  console.log("Brand Filter: " + brandFilter);
+
           first = query(
             first,
-            where("brand", "==", brandFilter.toLocaleLowerCase())
+            // where("brand", "==", brandFilter.toLocaleLowerCase())
+            where("brand", "==", brandFilter)
           );
         }
 
@@ -473,6 +509,8 @@ export default function Catalog() {
         const cars = querySnapshot.docs.map(
           (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
         );
+
+        // console.log(cars);
 
         const minMileage = parseInt(minMileageValue.replace(/\s/g, ""), 10);
         const maxMileage = parseInt(maxMileageValue.replace(/\s/g, ""), 10);
@@ -733,10 +771,12 @@ export default function Catalog() {
   };
 
   useEffect(() => {
-    if (searchTerm === "") {
-      setBrandFilter("");
-      setModelFilter("");
-    }
+    //   if (searchTerm === "") {
+    //     console.log(searchTerm);
+
+    //     // setBrandFilter("");
+    //     // setModelFilter("");
+    //   }
 
     const fountedBrand = carData.brands.find(
       (item) =>
@@ -768,7 +808,7 @@ export default function Catalog() {
   const handleModelFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    console.log(event.target.value);
+    //  console.log(event.target.value);
 
     setModelFilter(event.target.value);
     setItemOffset(0);
@@ -995,6 +1035,10 @@ export default function Catalog() {
             brand={brandFilter}
             model={modelFilter}
             mileage={mileageFilter}
+            minYear={minYearValue}
+            maxYear={maxYearValue}
+            minMileage={minMileageValue}
+            maxMileage={maxMileageValue}
             date={yearFilter}
             price={priceFilter}
             type={vechicleTypeCheckboxes}

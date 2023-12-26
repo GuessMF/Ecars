@@ -30,6 +30,10 @@ interface FiltersProps {
   model: string;
   mileage: boolean;
   date: boolean;
+  minYear: number;
+  maxYear: number;
+  minMileage: string;
+  maxMileage: string;
   price: boolean;
   type: {[key: string]: boolean};
   cities: {[key: string]: boolean};
@@ -53,6 +57,10 @@ export default function Sorted({
   model,
   mileage,
   date,
+  minYear,
+  maxYear,
+  minMileage,
+  maxMileage,
   price,
   type,
   cities,
@@ -179,6 +187,38 @@ export default function Sorted({
     dispatch(setSearchTerm(""));
   };
 
+  const formatedYear: string =
+    minYear == maxYear
+      ? `${minYear.toString()}`
+      : `${minYear.toString()} - ${maxYear.toString()}`;
+
+  let formatedBrand: string;
+  let formatedModel;
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+
+  // if (brand) {
+  formatedBrand = capitalizeWords(brand);
+  // }
+
+  // console.log(minMileage);
+  // console.log(maxMileage);
+  // if (minMileage == maxMileage) {
+  //   console.log("RAVNO");
+  // }
+
+  const formatedMileage: string =
+    minMileage == maxMileage
+      ? `${maxMileage} Km`
+      : `${minMileage} Km - ${maxMileage} Km`;
+  // console.log(formatedMileage);
+
   return (
     <div className={style.sorted}>
       <div className={style.sorted__top}>
@@ -227,7 +267,7 @@ export default function Sorted({
         {brand && (
           <SelectedFilter
             onClick={() => closeSelectedFilter("brand")}
-            params={brand}
+            params={formatedBrand}
           />
         )}
         {model && (
@@ -239,13 +279,13 @@ export default function Sorted({
         {mileage && (
           <SelectedFilter
             onClick={() => closeSelectedFilter("mileage")}
-            params={"mileage"}
+            params={formatedMileage}
           />
         )}
         {date && (
           <SelectedFilter
             onClick={() => closeSelectedFilter("year")}
-            params={"year"}
+            params={formatedYear}
           />
         )}
         {price && (

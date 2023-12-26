@@ -145,31 +145,19 @@ export default function PersonalPage({userID}: Props) {
   const [sent, setSent] = useState<boolean>(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedPreview, setSelectedPreview] = useState<File[]>([]);
-
   const [currency, setCurrency] = useState<string>("");
-
   const [brand, setBrand] = useState<string>("");
-  // const [brand, setBrand] = useState<OptionType[]>([]);
-  //const [models, setModels] = useState<CarModel[]>([]);
-
-  // const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
-
   const [brandAndModel, setBrandAndModel] = useState<string>("");
   const [model, setModel] = useState("");
   const [price, setPrice] = useState<string>("");
-  // const [year, setYear] = useState<number>(2010);
   const [year, setYear] = useState<string>("");
-  // const [mileage, setMileage] = useState<number>(10);
   const [mileage, setMileage] = useState<string>("");
   const [transmission, setTransmission] = useState<string>("");
   const [fuel, setFuel] = useState<string>("");
   const [wheels, setWheels] = useState<string>("");
   const [vehicleType, setVehicleType] = useState<string>("");
-
-  // const [engineCapacity, setEngineCapacity] = useState<string>("test");
   const [engineValue, setEngineValue] = useState<string>("");
-
   const [seats, setSeats] = useState<string>("");
   const [interior, setInterior] = useState<string>("");
   const [color, setColor] = useState<string>("");
@@ -178,14 +166,12 @@ export default function PersonalPage({userID}: Props) {
   const [exportStatus, setExportStatus] = useState<string>("");
   const [description, setDescription] = useState("");
   const [fisrtCarPhoto, setFirstCarPhoto] = useState<string>();
-
-  // const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-  // const [currentCur, setCurrentCur] = useState<string>("");
-
   const [specialOffer, setSpecialOffer] = useState<boolean>(false);
-
   const [formErrors, setFormErrors] = useState<Errors>({});
   const [popUpErrors, setPopUpErrors] = useState<boolean>(false);
+
+  const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
+
   const errors: Errors = {};
 
   const previewPicker = useRef<HTMLInputElement>(null);
@@ -270,7 +256,7 @@ export default function PersonalPage({userID}: Props) {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-
+    setLoadingPhoto(true);
     const compressedFiles: File[] = [];
     const images: string[] = [];
 
@@ -310,7 +296,10 @@ export default function PersonalPage({userID}: Props) {
             if (compressedFiles.length === files.length) {
               setSelectedFiles(compressedFiles);
               //  selectedFiles.push(compressedFile);
+
               setPreviewImages(images);
+              setLoadingPhoto(false);
+              console.log("фото загружено");
             }
           };
         }
@@ -325,7 +314,7 @@ export default function PersonalPage({userID}: Props) {
   ) => {
     const files = e.target.files;
     if (!files) return;
-
+    setLoadingPhoto(true);
     const compressedFiles: File[] = [];
     const images: string[] = [];
 
@@ -362,6 +351,7 @@ export default function PersonalPage({userID}: Props) {
           if (compressedFiles.length === files.length) {
             setFirstCarPhoto(images[0]);
             setSelectedPreview(compressedFiles);
+            setLoadingPhoto(false);
             // selectedFiles.push(compressedFile);
             //  setSelectedFiles(compressedFiles);
             //   setPreviewImages(images);
@@ -445,7 +435,7 @@ export default function PersonalPage({userID}: Props) {
     }
   };
   useEffect(() => {
-    console.log("Price:   " + price);
+    // console.log("Price:   " + price);
 
     const newPrice =
       currency === "RUB"
@@ -454,8 +444,8 @@ export default function PersonalPage({userID}: Props) {
         ? Number(price) / (usdValue / eurValue)
         : Number(price);
 
-    console.log("New price:  " + newPrice);
-    console.log(parseInt(price.replace(/\s/g, ""), 10));
+    // console.log("New price:  " + newPrice);
+    // console.log(parseInt(price.replace(/\s/g, ""), 10));
   }, [price]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -672,13 +662,17 @@ export default function PersonalPage({userID}: Props) {
   };
 
   const deleteAddedPhoto = (index: number) => {
-    // const currentIndex = index
-    console.log(index);
-    // console.log(selectedFiles);
-    // const newArr = selectedFiles.filter((file: File[]) => file !== index);
-    //   console.log(newArr);
-    // delete selectedFiles[index];
-    // delete previewImages[index];
+    setSelectedFiles((prevFiles) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles.splice(index, 1);
+      return updatedFiles;
+    });
+
+    setPreviewImages((prevImages) => {
+      const updatedPreviews = [...prevImages];
+      updatedPreviews.splice(index, 1);
+      return updatedPreviews;
+    });
   };
 
   const mapCarBrandToOptionType = (brand: CarBrand): OptionType => ({
@@ -850,8 +844,8 @@ export default function PersonalPage({userID}: Props) {
   ]);
 
   // useEffect(() => {
-  //   console.log(formErrors);
-  // }, [formErrors]);
+  //   console.log(loadedLittlePhotos);
+  // }, [loadedLittlePhotos]);
 
   return (
     <div className={style.personalPage}>
@@ -883,10 +877,22 @@ export default function PersonalPage({userID}: Props) {
             {selectedPreview.length < 1 ? (
               <div className={style.carPreview}>
                 <h3>Car preview</h3>
-
-                <button onClick={pickPreview}>
-                  <PlusIcon />
-                </button>
+                {loadingPhoto ? (
+                  <Rings
+                    height="80"
+                    width="500"
+                    color="#4fa94d"
+                    // radius="6"
+                    // wrapperStyle={{}}
+                    wrapperClass={style.loader}
+                    visible={true}
+                    // ariaLabel="rings-loading"
+                  />
+                ) : (
+                  <button onClick={pickPreview}>
+                    <PlusIcon />
+                  </button>
+                )}
               </div>
             ) : (
               <div className={style.preview__photo}>
@@ -927,9 +933,22 @@ export default function PersonalPage({userID}: Props) {
           {selectedFiles.length < 1 && (
             <label>
               <h3>Сar photos</h3>
-              <button onClick={pickPhotos} className={style.addPhotos}>
-                <PlusIcon />
-              </button>
+              {loadingPhoto ? (
+                <Rings
+                  height="80"
+                  width="500"
+                  color="#4fa94d"
+                  // radius="6"
+                  // wrapperStyle={{}}
+                  wrapperClass={style.loader}
+                  visible={true}
+                  // ariaLabel="rings-loading"
+                />
+              ) : (
+                <button onClick={pickPhotos} className={style.addPhotos}>
+                  <PlusIcon />
+                </button>
+              )}
 
               <input
                 className={style.hidden}
