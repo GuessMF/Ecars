@@ -294,6 +294,14 @@ export default function Details() {
   console.log(currentCar?.owners);
   console.log(currentCar?.price);
 
+  const changeLittlePhoto = (index: number) => {
+    window.scrollTo({
+      top: 40,
+      behavior: "smooth",
+    });
+    setSelectedPhoto(index);
+  };
+
   return (
     <div className={style.details}>
       {fullWidth && (
@@ -387,7 +395,7 @@ export default function Details() {
                         effect="blur" // Добавляет эффект размытия
                         src={img}
                         alt="Car little"
-                        onClick={() => setSelectedPhoto(index)}
+                        onClick={() => changeLittlePhoto(index)}
                       />
                     ))
                   : [...new Array(8)].map((_, i) => (
@@ -492,54 +500,7 @@ export default function Details() {
                 <div>MORE</div>
               ) : null}
             </div>
-            {/* <div className={style.content__features}>
-              <h5>Features</h5>
-              <div className={style.features}>
-                {" "}
-                <div className={style.features_left}>
-                  {" "}
-                  <span>Interior</span>
-                  <ul>
-                    <li>Air conditioning</li>
-                    <li>Bluetooth system</li>
-                    <li>Climate control</li>
-                    <li>Cooled front seats</li>
-                    <li>Cruise control</li>
-                    <li>Heated seats</li>
-                    <li>Leather seats</li>
-                    <li>Sunroof</li>
-                    <li>Navigation system</li>
-                    <li>Power locks</li>
-                    <li>Power seats</li>
-                    <li>Power windows</li>
-                    <li>Premium sound system</li>
-                    <li>Tuner/radio</li>
-                    <li>Rear camera</li>
-                  </ul>
-                </div>
-                <div className={style.features_right}>
-                  <span>Exterior</span>
-                  <ul>
-                    <li>Rear camera</li>
-                    <li>Keyless go</li>
-                    <li>Performance tyres</li>
-                    <li>Premium paint</li>
-                  </ul>
-                  <span>Security & Environment</span>
-                  <ul>
-                    <li>4WD</li>
-                    <li>ABS</li>
-                    <li>Adaptive lighting</li>
-                    <li>Airbags (front and side)</li>
-                    <li>Tinted windows</li>
-                    <li>All wheel drive</li>
-                    <li>Adaptive cruise control</li>
-                    <li>Traction control</li>
-                    <li>Differential lock</li>
-                  </ul>
-                </div>
-              </div>
-            </div> */}
+
             <ContactUsBlock />
             <div className={style.content__quick_links}>
               <h5>Quick links</h5>

@@ -73,6 +73,7 @@ interface Car {
   previewImage: string;
   exportStatus: string;
   dateObj: DateObject;
+  dateEdited: DateObject;
   special: boolean;
 
   // testImg: string;
@@ -88,13 +89,14 @@ export default function UserPage({userID}: Props) {
   const [correctPassword, setCorrectPassword] = useState<boolean>(false);
   const [carName, setCarName] = useState<string>("");
   const [carId, setCarId] = useState<string>("");
-  const [sortBy, setSortBy] = useState<string>("brand");
+  const [sortBy, setSortBy] = useState<string>("dateAdded");
 
-  const [sortSetting, setSortSetting] = useState<string | undefined>("asc");
+  const [sortSetting, setSortSetting] = useState<string | undefined>("desc");
 
   const [currentCar, setCurrentCar] = useState<number>(0);
 
   const [deletedItems, setDeletedItems] = useState([]);
+  const [edition, setEdition] = useState<boolean>(false);
 
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
@@ -159,10 +161,13 @@ export default function UserPage({userID}: Props) {
       await Promise.all(deletePromises);
 
       setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
-      console.log("Deleted" + carId);
-      // setTimeout(() => {
+
       setPopUpDel(false);
       setPassword("");
+      window.scrollTo({
+        top: 200,
+        behavior: "smooth",
+      });
 
       // }, 2000);
     } catch (error) {
@@ -193,13 +198,9 @@ export default function UserPage({userID}: Props) {
     }
   }, [password]);
 
-  // useEffect(() => {
-  //   console.log(currentCar);
-  //   fetchSalingCars();
-  // }, [currentCar]);
-
   const onClickLittleCard = (index: number) => {
     setCurrentCar(index);
+    setEdition(false);
 
     window.scrollTo({
       top: 160,
@@ -221,11 +222,9 @@ export default function UserPage({userID}: Props) {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(sortBy);
-  // }, [sortBy]);
-
-  // console.log(cars);
+  const changeEdition = (value: boolean) => {
+    setEdition(value);
+  };
 
   return (
     <div className={style.userPage}>
@@ -298,6 +297,8 @@ export default function UserPage({userID}: Props) {
       <div className={style.wrapper}>
         {loaded && cars.length > 0 && (
           <MegaCard
+            edition={edition}
+            onChangeEdition={changeEdition}
             key={"1"}
             id={cars[currentCar]?.id}
             index={0}
@@ -319,6 +320,7 @@ export default function UserPage({userID}: Props) {
             description={cars[currentCar]?.description}
             previewIMG={cars[currentCar]?.previewImage[0]}
             dateObj={cars[currentCar]?.dateObj}
+            dateEdited={cars[currentCar]?.dateEdited}
             exportStatus={cars[currentCar]?.exportStatus}
             special={cars[currentCar]?.special}
             onClickDelete={onDelClick}

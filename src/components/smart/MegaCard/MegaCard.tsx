@@ -7,12 +7,14 @@ import {NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import {useAppSelector} from "hooks/redux-hooks";
-import {doc, setDoc, getDoc} from "firebase/firestore";
+import {updateDoc, doc, setDoc, getDoc} from "firebase/firestore";
 import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {db, storage} from "../../../firebase";
+import {collection} from "firebase/firestore";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import CustomSelect2 from "../CustomSelect2/CustomSelect2";
 import carData from "helpers/modelsBrands";
+// import { updateDoc, doc } from 'firebase/firestore';
 
 interface DateObject {
   year: number;
@@ -39,6 +41,8 @@ interface OtherOptions {
 }
 
 interface Props {
+  edition: boolean;
+  onChangeEdition: (value: boolean) => void;
   id: string;
   index: number;
   brand: string;
@@ -60,6 +64,7 @@ interface Props {
   wheels: string;
   seats: string;
   dateObj: DateObject;
+  dateEdited: DateObject;
   special: boolean;
 
   onClickDelete: (id: string, carName: string) => void;
@@ -69,6 +74,8 @@ interface Props {
 }
 
 export default function MegaCard({
+  edition,
+  onChangeEdition,
   id,
   previewIMG,
   brand,
@@ -92,11 +99,12 @@ export default function MegaCard({
   onClickDelete,
   onClickCheck,
   dateObj,
+  dateEdited,
 }: // sortBy,
 Props) {
-  const [edition, setEdition] = useState<boolean>(false);
-  // console.log(brand);
-  // console.log(model);
+  const formattedMileage: string = mileage
+    .toLocaleString()
+    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   const [brandAndModel, setBrandAndModel] = useState<string>("");
   const [newBrand, setNewBrand] = useState<string>(brand);
@@ -104,7 +112,7 @@ Props) {
   const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
   const [newPricee, setNewPricee] = useState<string>("");
   const [newYear, setNewYear] = useState<string>(year);
-  const [newMileage, setNewMileage] = useState<string>("");
+  const [newMileage, setNewMileage] = useState<string>(formattedMileage);
   const [newTransmission, setNewTransmission] = useState<string>(transmission);
   const [newFuel, setNewFuel] = useState<string>(fuel);
   const [newWheels, setNewWheels] = useState<string>(wheels);
@@ -116,6 +124,7 @@ Props) {
   const [newLocation, setNewLocation] = useState<string>(location);
   const [newOwners, setNewOwners] = useState<string>(owners);
   const [newExportStatus, setNewExportStatus] = useState<string>(exportStatus);
+  const [newSpecial, setNewSpecial] = useState<boolean>(special);
   const [newDescription, setNewDescription] = useState(description);
 
   const selectedCurrency = useAppSelector(
@@ -139,7 +148,9 @@ Props) {
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  let formatedBrand: string;
+  // let formatedBrand: string;
+  let formatedBrand;
+  let formatedModel;
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");
@@ -149,25 +160,13 @@ Props) {
     return capitalizeWords.join(" ");
   };
 
-  useEffect(() => {
+  if (brand) {
     formatedBrand = capitalizeWords(brand);
-  }, []);
-  // if (brand) {
+  }
+
+  // useEffect(() => {
   //   formatedBrand = capitalizeWords(brand);
-  // }
-
-  //   useEffect(() => {
-  //    // console.log("eeee");
-  //     if (brand) {
-  //   //    console.log(formatedBrand);
-  //       setNewBrand(formatedBrand);
-  //  //     console.log(newBrand);
-  //     }
-  //   }, []);
-
-  const formattedMileage: string = mileage
-    .toLocaleString()
-    .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+  // }, []);
 
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
@@ -242,22 +241,86 @@ Props) {
     12: "December",
   };
 
-  const onClickEdit = () => {
-    setEdition(true);
+  const updateCar = async () => {
+    const docId = id;
+    const carsRef = collection(db, "cars");
+    const carDocRef = doc(carsRef, docId);
 
-    console.log(id);
+    const currentDate: Date = new Date();
+    const dateEdited: DateObject = {
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth() + 1,
+      day: currentDate.getDate(),
+      hours: currentDate.getHours(),
+      minutes: currentDate.getMinutes(),
+    };
+    try {
+      await updateDoc(carDocRef, {
+        brand: newBrand,
+        model: newModel,
+        brandAndModel: `${newBrand} ${newModel}`,
+        color: newColor,
+        description: newDescription,
+        engineCapacity: newEngineValue,
+        exportStatus: newExportStatus,
+        fuel: newFuel,
+        interior: newInterior,
+        location: newLocation,
+        mileage: parseInt(newMileage.replace(/\s/g, ""), 10),
+        owners: newOwners,
+        price:
+          newCurrency === "RUB"
+            ? parseInt(newPricee.replace(/\s/g, ""), 10) / usdValue
+            : newCurrency === "EUR"
+            ? parseInt(newPricee.replace(/\s/g, ""), 10) / (usdValue / eurValue)
+            : parseInt(newPricee.replace(/\s/g, ""), 10),
+        // price: "test",
+        seats: newSeats,
+        special: newSpecial,
+        transmission: newTransmission,
+        vehicleType: newVehicleType,
+        wheels: newWheels,
+        year: newYear,
+        dateEdited: dateEdited,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    console.log("Edition: " + edition);
-  }, [edition]);
-
-  const test = () => {};
-
-  // useEffect(() => {
-  //   // setNewBrand(formatedBrand);
-  //   setNewYear("1999");
-  // }, []);
+  const onClickEdit = () => {
+    if (!edition) {
+      onChangeEdition(true);
+      setNewBrand(brand);
+      setNewModel(model);
+      setNewYear(year);
+      setNewColor(color);
+      setNewTransmission(transmission);
+      setNewFuel(fuel);
+      setNewEngineValue(engineVolume);
+      setNewVehicleType(type);
+      setNewInterior(interior);
+      setNewWheels(wheels);
+      setNewSeats(seats);
+      setNewLocation(location);
+      setNewExportStatus(exportStatus);
+      setNewOwners(owners);
+      setNewMileage(formattedMileage);
+      setNewSpecial(special);
+      setNewDescription(description);
+      setNewPricee(formattedPrice);
+    } else {
+      onChangeEdition(false);
+      updateCar();
+      //  setSent(true);
+      alert("Zaglushka");
+      // setLoading(false);
+      setTimeout(() => {
+        // setSent(false);
+        navigate(`/details/${id}`);
+      }, 2000);
+    }
+  };
 
   const mapCarBrandToOptionType = (brand: CarBrand): OptionType => ({
     value: brand.name,
@@ -293,8 +356,6 @@ Props) {
 
   const handleNewBrandChange = (brand: string) => {
     setNewBrand(brand);
-    console.log("v func " + brand);
-
     const selectedCarBrand = carData.brands.find(
       (carBrand) => carBrand.name === brand
     );
@@ -311,8 +372,6 @@ Props) {
     }
   };
   useEffect(() => {
-    console.log("new options");
-    console.log(brand);
     const selectedCarBrand = carData.brands.find(
       (carBrand) => carBrand.name === brand
     );
@@ -325,74 +384,59 @@ Props) {
       }));
 
       setModelsOptions(options);
-
-      console.log(options);
     }
 
     setNewModel(model);
   }, [edition]);
 
   const onModelChange = (value: string) => {
-    // console.log(value);
     setNewModel(value);
   };
   const onYearChange = (year: string) => {
     setNewYear(year);
-    console.log("Year :" + year);
   };
 
   const onColorChange = (color: string) => {
     setNewColor(color);
-    console.log("Color :" + color);
   };
   const onTransmissionChange = (transmission: string) => {
     setNewTransmission(transmission);
-    console.log("Transmission :" + transmission);
   };
 
   const onFuelChange = (fuel: string) => {
     setNewFuel(fuel);
-    console.log("Fuel :" + fuel);
   };
 
   const onEngineValueChange = (engineValue: string) => {
     setNewEngineValue(engineValue);
-    console.log("EngineValue :" + engineValue);
   };
 
   const onVehicleTypeChange = (vehicleType: string) => {
     setNewVehicleType(vehicleType);
-    console.log("Vehicle Type :" + vehicleType);
   };
 
   const onInteriorChange = (interior: string) => {
     setNewInterior(interior);
-    console.log("Interior :" + interior);
   };
 
   const onWheelsChange = (wheels: string) => {
     setNewWheels(wheels);
-    console.log("Wheels :" + wheels);
   };
 
   const onSeatsChange = (seats: string) => {
     setNewSeats(seats);
-    console.log("Seats :" + seats);
   };
 
   const onLocationChange = (location: string) => {
     setNewLocation(location);
-    console.log("Location :" + location);
   };
 
   const onExportStatusChange = (exportStatus: string) => {
     setNewExportStatus(exportStatus);
-    console.log("Export Status :" + exportStatus);
   };
 
   const onOwnersChange = (owners: string) => {
     setNewOwners(owners);
-    console.log("Owners :" + owners);
   };
   const formatPrice = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
@@ -401,7 +445,12 @@ Props) {
   };
   const onCurrencyChange = (currency: string) => {
     setNewCurrency(currency);
-    // console.log("Owners :" + owners);
+  };
+
+  const formatMileage = (value: string) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    const formattedValue = Number(cleanedValue).toLocaleString();
+    setNewMileage(formattedValue);
   };
 
   return (
@@ -436,7 +485,7 @@ Props) {
 
       <div className={style.information}>
         <div className={style.topInformation}>
-          {/* <h3>{formatedBrand}</h3> */}
+          <h3>{formatedBrand}</h3>
           <h3>{model?.toLocaleUpperCase()}</h3>
           <h3>{year}</h3>
         </div>
@@ -455,7 +504,7 @@ Props) {
                   options={brandOptions}
                 />
               ) : (
-                <span>{brand}</span>
+                <span>{formatedBrand}</span>
               )}
             </td>
 
@@ -673,13 +722,13 @@ Props) {
                   min="1"
                   // max="999999"
                   maxLength={7}
-                  value={mileage}
-                  // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  //   formatMileage(e.target.value);
-                  // }}
+                  value={newMileage}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    formatMileage(e.target.value);
+                  }}
                 />
               ) : (
-                <span>{mileage} Км</span>
+                <span>{formattedMileage} Км</span>
               )}
             </td>
           </tr>
@@ -707,9 +756,9 @@ Props) {
               {edition ? (
                 <input
                   type="checkbox"
-                  // checked={specialOffer}
-                  // value={specialOffer}
-                  // onChange={(e) => setSpecialOffer(e.target.checked)}
+                  checked={newSpecial}
+                  // value={newSpecial}
+                  onChange={(e) => setNewSpecial(e.target.checked)}
                 />
               ) : (
                 <span>{special ? "Yes" : "No"}</span>
@@ -753,9 +802,19 @@ Props) {
           <h6>Added:</h6>
           <span>
             {dateObj?.day} {dateObj && monthNames[dateObj?.month]},{" "}
-            {dateObj?.year}{" "}
+            {dateObj?.year} {dateObj?.hours}:{dateObj?.minutes}
           </span>
         </div>
+
+        {dateEdited && (
+          <div className={style.added}>
+            <h6>Last edited:</h6>
+            <span>
+              {dateEdited?.day} {dateEdited && monthNames[dateEdited?.month]},{" "}
+              {dateEdited?.year} {dateEdited?.hours}:{dateEdited?.minutes}
+            </span>
+          </div>
+        )}
 
         {edition ? (
           <div className={style.priceBox}>

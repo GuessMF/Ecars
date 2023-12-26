@@ -745,7 +745,7 @@ export default function Catalog() {
     );
 
     if (fountedBrand) {
-      console.log(fountedBrand.name);
+      // console.log(fountedBrand.name);
       setBrandFilter(fountedBrand.name);
     }
 
@@ -756,9 +756,6 @@ export default function Catalog() {
       if (foundModel) {
         setBrandFilter(brand.name);
         setModelFilter(foundModel.name);
-        // setModelFilter("TEST");
-        console.log(foundModel.name);
-        console.log(modelFilter);
       }
     });
   }, [searchTerm]);
