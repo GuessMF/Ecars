@@ -256,56 +256,62 @@ export default function PersonalPage({userID}: Props) {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    setLoadingPhoto(true);
-    const compressedFiles: File[] = [];
-    const images: string[] = [];
+    if (files.length > 20) {
+      alert("Меньше 20 нужно");
+      return;
+      // e.target.files = null;
+    } else {
+      setLoadingPhoto(true);
+      const compressedFiles: File[] = [];
+      const images: string[] = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const reader = new FileReader();
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
 
-      reader.onload = async () => {
-        if (reader.result) {
-          const image = new Image();
-          image.src = reader.result as string;
+        reader.onload = async () => {
+          if (reader.result) {
+            const image = new Image();
+            image.src = reader.result as string;
 
-          image.onload = async () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+            image.onload = async () => {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
 
-            if (!ctx) return;
+              if (!ctx) return;
 
-            canvas.width = image.width;
-            canvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
+              canvas.width = image.width;
+              canvas.height = image.height;
+              ctx.drawImage(image, 0, 0);
 
-            const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
+              const compressedDataURL = canvas.toDataURL("image/webp", 0.7);
 
-            const blob = await fetch(compressedDataURL).then((res) =>
-              res.blob()
-            );
+              const blob = await fetch(compressedDataURL).then((res) =>
+                res.blob()
+              );
 
-            const compressedFile = new File([blob], `${i + 1}.webp`, {
-              type: "image/webp",
-              lastModified: Date.now(),
-            });
+              const compressedFile = new File([blob], `${i + 1}.webp`, {
+                type: "image/webp",
+                lastModified: Date.now(),
+              });
 
-            compressedFiles.push(compressedFile);
-            images.push(compressedDataURL);
+              compressedFiles.push(compressedFile);
+              images.push(compressedDataURL);
 
-            if (compressedFiles.length === files.length) {
-              setSelectedFiles(compressedFiles);
-              //  selectedFiles.push(compressedFile);
+              if (compressedFiles.length === files.length) {
+                setSelectedFiles(compressedFiles);
+                //  selectedFiles.push(compressedFile);
 
-              setPreviewImages(images);
-              setLoadingPhoto(false);
-              console.log("фото загружено");
-            }
-          };
-        }
-      };
+                setPreviewImages(images);
+                setLoadingPhoto(false);
+                console.log("фото загружено");
+              }
+            };
+          }
+        };
 
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      }
     }
   };
 

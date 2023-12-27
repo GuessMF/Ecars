@@ -9,11 +9,18 @@ import "rsuite/dist/rsuite.css";
 import {useAppSelector} from "hooks/redux-hooks";
 // import {cars} from "../../helpers/carList";
 import carData from "../../../helpers/modelsBrands";
+import CustomSelect from "components/smart/CustomSelect/CustomSelect";
 
 interface CarModel {
   name: string;
 }
-
+interface OptionType {
+  value: string;
+  label: string;
+}
+interface OtherOptions {
+  value: string;
+}
 interface CheckBoxes {
   SUV: boolean;
   Sedan: boolean;
@@ -200,19 +207,55 @@ FiltersProps) {
   const [brand, setBrand] = useState<string>("");
   const [model, setModel] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
+  const [minYear, setMinYear] = useState<string>("");
+  const [maxYear, setMaxYear] = useState<string>("");
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
-  useEffect(() => {
-    // const fountedBrand = carData.brands.find(
-    //   (item) =>
-    //     item.name ===
-    //     searchTerm.charAt(0).toLocaleUpperCase() + searchTerm.slice(1)
-    // );
-    // if (fountedBrand) {
-    //   console.log(fountedBrand.models);
-    //   setModels(fountedBrand.models);
-    // }
+  const mapOthersOptions = (type: OtherOptions): OptionType => ({
+    value: type.value,
+    label: type.value,
+  });
+  const yearOptions: OptionType[] = carData.years.map(mapOthersOptions);
+  const [newYearOptions, setNewYearOptions] = useState<OptionType[]>([]);
+  // useEffect(() => {
+  //   setNewYearOptions(yearOptions);
+  // }, []);
 
+  const onMinYearChange = (year: string) => {
+    setMinYear(year);
+    onMinYearValue(parseInt(year, 10));
+  };
+  const onMaxYearChange = (year: string) => {
+    setMaxYear(year);
+    onMaxYearValue(parseInt(year, 10));
+  };
+
+  // useEffect(() => {
+  //   // if (maxYearValue < minYearValue) {
+  //   const updatedYearOptions = carData.years
+  //     .filter((year) => parseInt(year.value, 10) <= parseInt(maxYear, 10))
+  //     .map(mapOthersOptions);
+  //   setNewYearOptions(updatedYearOptions);
+  //   //  }
+  // }, [maxYear]);
+
+  useEffect(() => {
+    // if (maxYearValue < minYearValue) {
+    const updatedYearOptions = carData.years
+      .filter((year) => parseInt(year.value, 10) >= minYearValue)
+      .map(mapOthersOptions);
+    setNewYearOptions(updatedYearOptions);
+    // console.log(newYearOptions);
+    // console.log(minYearValue);
+    // console.log(parseInt(minYear, 10));
+    if (minYearValue > maxYearValue) {
+      onMaxYearValue(minYearValue);
+      setMaxYear(minYearValue.toString());
+    }
+    //  }
+  }, [minYear]);
+
+  useEffect(() => {
     carData.brands.forEach((brand) => {
       const foundModel = brand.models.find(
         (model) => model.name.toLowerCase() === searchTerm.toLowerCase()
@@ -502,6 +545,20 @@ FiltersProps) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onMaxYearValue(parseInt(e.target.value, 10))
               }
+            />
+          </div>
+          <div className={style.filters__min_max}>
+            <CustomSelect
+              value={minYearValue.toLocaleString()}
+              onChange={onMinYearChange}
+              // options={yearOptions}
+              options={yearOptions}
+            />
+            <CustomSelect
+              //value={maxYearValue.toLocaleString()}
+              value={maxYear}
+              onChange={onMaxYearChange}
+              options={newYearOptions}
             />
           </div>
         </div>

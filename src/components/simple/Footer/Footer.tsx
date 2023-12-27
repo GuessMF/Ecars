@@ -46,6 +46,18 @@ export default function Footer() {
     }
   };
 
+  const onClickUsedCars = () => {
+    // console.log("Used Cars");
+    // navigate("/catalog");
+    // console.log(pathName);
+    if (pathName === "/catalog") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className={style.footer}>
       <div className={style.footer__content}>
@@ -89,7 +101,7 @@ export default function Footer() {
               <NavLink to="/catalog?mileage=New">
                 <li>New cars</li>
               </NavLink>
-              <NavLink to="/catalog?mileage=Used">
+              <NavLink to="/catalog?mileage=Used" onClick={onClickUsedCars}>
                 <li>Used cars</li>
               </NavLink>
 

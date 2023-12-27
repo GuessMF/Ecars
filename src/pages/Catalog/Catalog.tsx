@@ -83,7 +83,7 @@ export default function Catalog() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
-  const yearParam = searchParams.get("year") || "";
+  const yearParam = searchParams.get("year") || "2000";
   const modelParam = searchParams.get("model") || "";
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
