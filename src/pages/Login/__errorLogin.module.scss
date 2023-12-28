@@ -1,0 +1,32 @@
+@import "../../styles/_var";
+
+.errorLogin {
+  position: absolute;
+  top: 100px;
+  background-color: rgba(119, 119, 119, 0.9);
+  left: 50%;
+  transform: translateX(-50%);
+  height: 280px;
+  width: 400px;
+  border: $gray300 1px solid;
+  border-radius: 8px;
+  .wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    h3 {
+      color: $white;
+    }
+    p {
+      color: $white;
+    }
+    button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+  }
+}

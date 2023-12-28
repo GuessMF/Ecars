@@ -7,6 +7,7 @@ import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
 import Skeleton from "components/ui/Skeleton/Skeleton";
 import {useAuth} from "hooks/use-auth";
+import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 import {doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
 import {
   ref,
@@ -71,6 +72,24 @@ Props) {
       : 1;
 
   const {isAuth, email, displayName} = useAuth();
+  const [userId, setUserId] = useState<string>("");
+
+  const [submitedEmail, setSubmitedEmail] = useState<boolean>(false);
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+        } else {
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+          }
+        }
+      }
+    });
+  }, []);
+
   const [userPage, setUserPage] = useState<boolean>(false);
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -116,7 +135,7 @@ Props) {
 
   return (
     <div className={style.wrapper}>
-      <NavLink to={`${isAuth ? `/details/${id}` : `/login`}`}>
+      <NavLink to={`${userId ? `/details/${id}` : `/login`}`}>
         <div className={style.bigCard}>
           <div className={style.bigCard__image}>
             <LazyLoadImage

@@ -44,7 +44,7 @@ export default function TopBar() {
   const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
   const onClickCurrency = (selectedOption: any) => {
     setSelectedCurrency(selectedOption);
-    console.log(selectedOption.value);
+    //  console.log(selectedOption.value);
 
     // onCurrencyChange(selectedOption);
     dispatch(setCurrencyTerm(selectedOption.value));
@@ -133,9 +133,6 @@ export default function TopBar() {
               onMenuOpen={toggleMenu}
             />
           </span>
-          {/**  <button onClick={() => handleCurrencyChange("USD")}>USD</button>
-          <button onClick={() => handleCurrencyChange("EUR")}>EUR</button>
-          <button onClick={() => handleCurrencyChange("RUB")}>RUB</button> */}
         </div>
         <svg
           className={style.question_logo}

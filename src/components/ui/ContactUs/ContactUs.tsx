@@ -10,6 +10,7 @@ export default function ContactUs({version}: Props) {
       className={
         version == "light" ? style.contactUsLight : style.contactUsDark
       }
+      onClick={() => window.open("https://t.me/+79214003269", "_blank")}
     >
       Contact Us
     </button>

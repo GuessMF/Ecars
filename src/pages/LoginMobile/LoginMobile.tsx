@@ -38,14 +38,35 @@ export default function LoginMobile() {
     useState<ConfirmationResult | null>(null);
 
   const user = useAppSelector((state) => state.user);
-  useEffect(() => {
-    if (user.id) {
-      navigate(`/user-page/${user.id}`);
-    }
-  }, [user]);
-  console.log(user.id);
+  // useEffect(() => {
+  //   if (user.id) {
+  //     navigate(`/user-page/${user.id}`);
+  //   }
+  // }, [user]);
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+          //  console.log(user.uid);
+        } else {
+          // Пользователь не подтвердил email
+          // Здесь можно предпринять действия, например, отображение сообщения об ошибке или предложение повторно отправить письмо с подтверждением
+          console.log(user.phoneNumber);
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+            navigate(`/user-page/${user.uid}`);
+          }
+          //  console.log("Email не подтвержден");
+          //  console.log(userId);
+        }
+      }
+    });
+  }, []);
+
+  const [phoneNumber, setPhoneNumber] = useState<string>("+7");
   const [verificationCode, setVerificationCode] = useState("");
   const [codeSended, setCodeSended] = useState<boolean>(false);
   const [verificationId, setVerificationId] = useState("");
@@ -81,7 +102,7 @@ export default function LoginMobile() {
       }
 
       await confirmationResult.confirm(verificationCode);
-      console.log("Пользователь успешно аутентифицирован");
+      //  console.log("Пользователь успешно аутентифицирован");
       const userCredential = await confirmationResult?.confirm(
         verificationCode
       );
@@ -96,8 +117,8 @@ export default function LoginMobile() {
         // phoneNumber - номер телефона
         // displayName - имя пользователя (если задано)
 
-        console.log("Номер телефона:", phoneNumber);
-        console.log("Имя пользователя:", displayName);
+        //  console.log("Номер телефона:", phoneNumber);
+        // console.log("Имя пользователя:", displayName);
       }
     } catch (error) {
       console.error("Ошибка верификации кода подтверждения:", error);
@@ -110,7 +131,7 @@ export default function LoginMobile() {
       const result = await signInWithPopup(auth, provider);
       // Вход успешен, получите данные пользователя из result.user
       const {displayName, email, photoURL, uid} = result.user || {};
-      console.log("Успешный вход:", displayName, email, photoURL);
+      // console.log("Успешный вход:", displayName, email, photoURL);
 
       navigate(`/user-page/${uid}`);
     } catch (error) {
@@ -118,41 +139,78 @@ export default function LoginMobile() {
     }
   };
 
+  const onChangeMobile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //console.log(phoneNumber);
+    const value = event.target.value;
+    // const formattedValue = formatPhoneNumber(event.target.value);
+    setPhoneNumber(event.target.value);
+  };
+
+  // const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const inputValue = event.target.value;
+
+  //   // Проверка на изменение только цифр (удаляем все нецифровые символы)
+  //   const digitsOnly = inputValue.replace(/\D/g, "");
+
+  //   // Проверяем, что введенные цифры соответствуют ожидаемому формату номера
+  //   const phoneNumberRegex = /^7[0-9]{10}$/;
+  //   if (digitsOnly.match(phoneNumberRegex)) {
+  //     const formattedNumber = formatPhoneNumber(digitsOnly);
+  //     setPhoneNumber(formattedNumber);
+  //   }
+  // };
+
+  useEffect(() => {
+    // console.log(phoneNumber);
+    // console.log(phoneNumber.length);
+    if (phoneNumber.length < 2) {
+      setPhoneNumber("+7");
+    }
+  }, [phoneNumber]);
+
   return (
     <div className={style.login}>
       <div className={style.wrapper}>
         <h1>Login mobile</h1>
         <div className={style.form}>
-          <div className={style.email}>
-            <span>Mobile</span>
+          {!codeSended && (
+            <div className={style.email}>
+              <span>Mobile</span>
 
-            <input
-              type="tel"
-              placeholder="Phone number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <button onClick={handleSendCode} className={style.loginBtn}>
-              Send Code
-            </button>
-          </div>
+              <input
+                type="tel"
+                // placeholder="Phone number"
+                placeholder="+ddd"
+                maxLength={18}
+                value={phoneNumber}
+                onChange={onChangeMobile}
+                // onChange={handlePhoneChange}
+              />
+              <button onClick={handleSendCode} className={style.loginBtn}>
+                Send Code
+              </button>
+            </div>
+          )}
 
           {/* {codeSended && ( */}
-          <div className={style.password}>
-            <div>
-              <span>Code</span>
-            </div>
+          {codeSended && (
+            <div className={style.password}>
+              <div>
+                <span>Code was sent to {phoneNumber}</span>
+              </div>
 
-            <input
-              type="text"
-              placeholder="Your SMS code"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-            />
-            <button onClick={handleVerifyCode} className={style.loginBtn}>
-              Confirm
-            </button>
-          </div>
+              <input
+                type="text"
+                placeholder="Your SMS code"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+              />
+              <button onClick={handleVerifyCode} className={style.loginBtn}>
+                Confirm
+              </button>
+            </div>
+          )}
+
           {/* )}*/}
 
           <span className={style.line}>

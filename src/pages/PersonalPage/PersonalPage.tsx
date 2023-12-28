@@ -3,8 +3,7 @@ import style from "../PersonalPage/__personalPage.module.scss";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import carData from "../../helpers/modelsBrands";
-// import PopUpError from "./PopUpError";
-// import PopUpSent from "./PopUpSent";
+
 import PopUpError from "pages/PersonalPage/PopUpError";
 import PopUpSent from "pages/PersonalPage/PopUpSent";
 import {Rings} from "react-loader-spinner";
@@ -13,18 +12,8 @@ import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
 import {doc, setDoc} from "firebase/firestore";
 import Cookies from "universal-cookie";
-//import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useAppSelector} from "hooks/redux-hooks";
-//import * as imageConversion from "image-conversion";
-//import sharp from "sharp";
-//import imagemin from "imagemin";
-//import imageminWebp from "imagemin-webp";
-//import Select from "react-select";
 import CustomSelect from "components/smart/CustomSelect/CustomSelect";
-//import {OptionTypeBase, GroupBase} from "react-select";
-//import OptionTypeBase from "react-select";
-
-//import imageminWebp from "imagemin-webp";
 
 import {ReactComponent as PlusIcon} from "./plusIcon.svg";
 import {ReactComponent as ChangeImage} from "./changeImage.svg";
@@ -119,7 +108,6 @@ export default function PersonalPage({userID}: Props) {
   //   setMenuIsOpen(!menuIsOpen);
   // };
   // const user = useAppSelector((state) => state.user);
-  // console.log(user);
 
   // const [userEmail, setUserEmail] = useState<string>("");
   // const [userMobile, setUserMobile] = useState<string>("");
@@ -238,10 +226,6 @@ export default function PersonalPage({userID}: Props) {
     );
   }, [model]);
 
-  // useEffect(() => {
-  //   console.log(brandAndModel);
-  // }, [brandAndModel]);
-
   // const toggleMenu = () => {
   //   setMenuIsOpen(!menuIsOpen);
   // };
@@ -304,7 +288,6 @@ export default function PersonalPage({userID}: Props) {
 
                 setPreviewImages(images);
                 setLoadingPhoto(false);
-                console.log("фото загружено");
               }
             };
           }
@@ -496,13 +479,7 @@ export default function PersonalPage({userID}: Props) {
         );
       });
 
-      // const imageUrls = await Promise.all(uploadTasks);
-      // const previewImg = await Promise.all(uploadTasks);
-      // console.log("Brand: " + brand);
-      // console.log("Model: " + model);
-
       setBrandAndModel(`${brand} ${model}`);
-      //console.log(brandAndModel);
 
       const previewImg = await Promise.all(previewUploadTasks);
       const imageUrls = await Promise.all(filesUploadTasks);
@@ -618,7 +595,8 @@ export default function PersonalPage({userID}: Props) {
   const hasErrors = Object.keys(formErrors);
 
   const handleAgreeClick = () => {
-    const scrollTopOffset = 100;
+    // const scrollTopOffset = 100;
+    const scrollTopOffset = 150;
     setPopUpErrors(false);
     const fieldName = hasErrors[0];
     const fieldRef = refs[fieldName];
@@ -637,24 +615,6 @@ export default function PersonalPage({userID}: Props) {
     }
   };
 
-  // const changePrice = (price: number) => {
-
-  //   setPrice(price);
-  //   console.log(price);
-
-  //   // useEffect(() => {
-  //   //   console.log(currentCur);
-  //   //   console.log(price);
-  //   //   if (currentCur === "USD") {
-  //   //     setPrice(price);
-  //   //   }
-  //   //   if (currentCur === "RUB") {
-  //   //     setPrice(price * usdValue);
-  //   //   }
-  //   // }, [currentCur, price]);
-  // };
-  //console.log("Selected brand: " + selectedBrand);
-
   const pickPreview = () => {
     previewPicker.current?.click();
   };
@@ -665,6 +625,8 @@ export default function PersonalPage({userID}: Props) {
 
   const rechangePreview = () => {
     setSelectedPreview([]);
+
+    previewPicker.current?.click();
   };
 
   const deleteAddedPhoto = (index: number) => {
@@ -751,78 +713,60 @@ export default function PersonalPage({userID}: Props) {
   // }, [brand]);
 
   const onModelChange = (value: string) => {
-    console.log(value);
     setModel(value);
   };
   const onYearChange = (year: string) => {
     setYear(year);
-    console.log("Year :" + year);
   };
 
   const onColorChange = (color: string) => {
     setColor(color);
-    console.log("Color :" + color);
   };
   const onTransmissionChange = (transmission: string) => {
     setTransmission(transmission);
-    console.log("Transmission :" + transmission);
   };
 
   const onFuelChange = (fuel: string) => {
     setFuel(fuel);
-    console.log("Fuel :" + fuel);
   };
 
   const onEngineValueChange = (engineValue: string) => {
     setEngineValue(engineValue);
-    console.log("EngineValue :" + engineValue);
   };
 
   const onVehicleTypeChange = (vehicleType: string) => {
     setVehicleType(vehicleType);
-    console.log("Vehicle Type :" + vehicleType);
   };
 
   const onInteriorChange = (interior: string) => {
     setInterior(interior);
-    console.log("Interior :" + interior);
   };
 
   const onWheelsChange = (wheels: string) => {
     setWheels(wheels);
-    console.log("Wheels :" + wheels);
   };
 
   const onSeatsChange = (seats: string) => {
     setSeats(seats);
-    console.log("Seats :" + seats);
   };
 
   const onLocationChange = (location: string) => {
     setLocation(location);
-    console.log("Location :" + location);
   };
 
   const onExportStatusChange = (exportStatus: string) => {
     setExportStatus(exportStatus);
-    console.log("Export Status :" + exportStatus);
   };
 
   const onOwnersChange = (owners: string) => {
     setOwners(owners);
-    console.log("Owners :" + owners);
   };
   const onCurrencyChange = (currency: string) => {
     setCurrency(currency);
-    // console.log("Owners :" + owners);
   };
 
   useEffect(() => {
     if (firstClick) {
-      // console.log(errors);
-
-      // setFormErrors(errors);
-      // setPopUpErrors(true);
       checkErrors();
       setFormErrors(errors);
     }
@@ -849,10 +793,6 @@ export default function PersonalPage({userID}: Props) {
     currency,
   ]);
 
-  // useEffect(() => {
-  //   console.log(loadedLittlePhotos);
-  // }, [loadedLittlePhotos]);
-
   return (
     <div className={style.personalPage}>
       <div className={style.header}>
@@ -866,7 +806,7 @@ export default function PersonalPage({userID}: Props) {
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
       <PopUpSent sent={sent} />
 
-      <form
+      <div
         //  onSubmit={handleSubmit}
         id="form"
         className={style.form}
@@ -895,9 +835,19 @@ export default function PersonalPage({userID}: Props) {
                     // ariaLabel="rings-loading"
                   />
                 ) : (
-                  <button onClick={pickPreview}>
-                    <PlusIcon />
-                  </button>
+                  <div>
+                    {" "}
+                    <button onClick={pickPreview}>
+                      <PlusIcon />
+                    </button>
+                    <input
+                      className={style.hidden}
+                      ref={previewPicker}
+                      type="file"
+                      accept="image/*"
+                      onChange={handlePreviewChange}
+                    />
+                  </div>
                 )}
               </div>
             ) : (
@@ -907,14 +857,6 @@ export default function PersonalPage({userID}: Props) {
                 )}
               </div>
             )}
-
-            <input
-              className={style.hidden}
-              ref={previewPicker}
-              type="file"
-              accept="image/*"
-              onChange={handlePreviewChange}
-            />
           </label>
 
           {selectedPreview.length > 0 && (
@@ -970,7 +912,10 @@ export default function PersonalPage({userID}: Props) {
           {selectedFiles.length > 0 && (
             <div className={style.preview__photos}>
               {previewImages.map((preview, index) => (
-                <div className={style.previewPhoto}>
+                <div
+                  className={style.previewPhoto}
+                  key={`previewbox indexx ${index}`}
+                >
                   <button
                     className={style.deletePhoto}
                     onClick={() => deleteAddedPhoto(index)}
@@ -978,7 +923,7 @@ export default function PersonalPage({userID}: Props) {
                     <DeleteIcon />
                   </button>
                   <img
-                    key={index}
+                    key={`little prev ${index}`}
                     src={preview}
                     alt={`preview-${index}`}
                     // className={index !== 0 && style.opacity}
@@ -990,195 +935,209 @@ export default function PersonalPage({userID}: Props) {
         </div>
 
         <table>
-          <tr>
-            <td className={style.tableTitle}>Brand</td>
-            <td className={formErrors.brand ? style.error : ""} ref={brandRef}>
-              <CustomSelect
-                value={brand}
-                onChange={handleNewBrandChange}
-                options={brandOptions}
-              />
-            </td>
+          <tbody>
+            <tr>
+              <td className={style.tableTitle}>Brand</td>
+              <td
+                className={formErrors.brand ? style.error : ""}
+                ref={brandRef}
+              >
+                <CustomSelect
+                  value={brand}
+                  onChange={handleNewBrandChange}
+                  options={brandOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Interior</td>
-            <td
-              className={formErrors.interior ? style.error : ""}
-              ref={brandRef}
-            >
-              <CustomSelect
-                value={interior}
-                onChange={onInteriorChange}
-                options={interiorOptions}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className={style.tableTitle}>Model</td>
-            <td className={formErrors.model ? style.error : ""} ref={modelRef}>
-              <CustomSelect
-                value={model}
-                onChange={onModelChange}
-                options={modelsOptions}
-              />
-            </td>
+              <td className={style.tableTitle}>Interior</td>
+              <td
+                className={formErrors.interior ? style.error : ""}
+                ref={brandRef}
+              >
+                <CustomSelect
+                  value={interior}
+                  onChange={onInteriorChange}
+                  options={interiorOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Model</td>
+              <td
+                className={formErrors.model ? style.error : ""}
+                ref={modelRef}
+              >
+                <CustomSelect
+                  value={model}
+                  onChange={onModelChange}
+                  options={modelsOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Wheels</td>
-            <td
-              className={formErrors.wheels ? style.error : ""}
-              ref={wheelsRef}
-            >
-              <CustomSelect
-                value={wheels}
-                onChange={onWheelsChange}
-                options={wheelsOptions}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className={style.tableTitle}>Year</td>
-            <td className={formErrors.year ? style.error : ""} ref={yearRef}>
-              <CustomSelect
-                value={year}
-                onChange={onYearChange}
-                options={yearOptions}
-              />
-            </td>
-            <td className={style.tableTitle}>Seats</td>
-            <td className={formErrors.seats ? style.error : ""} ref={seatsRef}>
-              <CustomSelect
-                value={seats}
-                onChange={onSeatsChange}
-                options={seatsOptions}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className={style.tableTitle}>Color</td>
-            <td className={formErrors.color ? style.error : ""} ref={colorRef}>
-              <CustomSelect
-                value={color}
-                onChange={onColorChange}
-                options={colorOptions}
-              />
-            </td>
+              <td className={style.tableTitle}>Wheels</td>
+              <td
+                className={formErrors.wheels ? style.error : ""}
+                ref={wheelsRef}
+              >
+                <CustomSelect
+                  value={wheels}
+                  onChange={onWheelsChange}
+                  options={wheelsOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Year</td>
+              <td className={formErrors.year ? style.error : ""} ref={yearRef}>
+                <CustomSelect
+                  value={year}
+                  onChange={onYearChange}
+                  options={yearOptions}
+                />
+              </td>
+              <td className={style.tableTitle}>Seats</td>
+              <td
+                className={formErrors.seats ? style.error : ""}
+                ref={seatsRef}
+              >
+                <CustomSelect
+                  value={seats}
+                  onChange={onSeatsChange}
+                  options={seatsOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Color</td>
+              <td
+                className={formErrors.color ? style.error : ""}
+                ref={colorRef}
+              >
+                <CustomSelect
+                  value={color}
+                  onChange={onColorChange}
+                  options={colorOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Location</td>
-            <td
-              className={formErrors.location ? style.error : ""}
-              ref={locationRef}
-            >
-              <CustomSelect
-                value={location}
-                onChange={onLocationChange}
-                options={locationOptions}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className={style.tableTitle}>Transmission</td>
-            <td
-              className={formErrors.transmission ? style.error : ""}
-              ref={transmissionRef}
-            >
-              <CustomSelect
-                value={transmission}
-                onChange={onTransmissionChange}
-                options={transmissionOptions}
-              />
-            </td>
+              <td className={style.tableTitle}>Location</td>
+              <td
+                className={formErrors.location ? style.error : ""}
+                ref={locationRef}
+              >
+                <CustomSelect
+                  value={location}
+                  onChange={onLocationChange}
+                  options={locationOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Transmission</td>
+              <td
+                className={formErrors.transmission ? style.error : ""}
+                ref={transmissionRef}
+              >
+                <CustomSelect
+                  value={transmission}
+                  onChange={onTransmissionChange}
+                  options={transmissionOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Export</td>
-            <td
-              className={formErrors.exportStatus ? style.error : ""}
-              ref={exportStatusRef}
-            >
-              <CustomSelect
-                value={exportStatus}
-                onChange={onExportStatusChange}
-                options={exportStatusOptions}
-              />
-            </td>
-          </tr>
+              <td className={style.tableTitle}>Export</td>
+              <td
+                className={formErrors.exportStatus ? style.error : ""}
+                ref={exportStatusRef}
+              >
+                <CustomSelect
+                  value={exportStatus}
+                  onChange={onExportStatusChange}
+                  options={exportStatusOptions}
+                />
+              </td>
+            </tr>
 
-          <tr>
-            <td className={style.tableTitle}>Fuel</td>
-            <td className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
-              <CustomSelect
-                value={fuel}
-                onChange={onFuelChange}
-                options={fuelOptions}
-              />
-            </td>
+            <tr>
+              <td className={style.tableTitle}>Fuel</td>
+              <td className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
+                <CustomSelect
+                  value={fuel}
+                  onChange={onFuelChange}
+                  options={fuelOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Owners</td>
-            <td
-              className={formErrors.owners ? style.error : ""}
-              ref={ownersRef}
-            >
-              <CustomSelect
-                value={owners}
-                onChange={onOwnersChange}
-                options={ownersOptions}
-              />
-            </td>
-          </tr>
+              <td className={style.tableTitle}>Owners</td>
+              <td
+                className={formErrors.owners ? style.error : ""}
+                ref={ownersRef}
+              >
+                <CustomSelect
+                  value={owners}
+                  onChange={onOwnersChange}
+                  options={ownersOptions}
+                />
+              </td>
+            </tr>
 
-          <tr>
-            <td className={style.tableTitle}>Engine value</td>
-            <td
-              className={formErrors.engineValue ? style.error : ""}
-              ref={engineValueRef}
-            >
-              <CustomSelect
-                value={engineValue}
-                onChange={onEngineValueChange}
-                options={engineValueOptions}
-              />
-            </td>
+            <tr>
+              <td className={style.tableTitle}>Engine value</td>
+              <td
+                className={formErrors.engineValue ? style.error : ""}
+                ref={engineValueRef}
+              >
+                <CustomSelect
+                  value={engineValue}
+                  onChange={onEngineValueChange}
+                  options={engineValueOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Mileage</td>
-            <td
-              className={formErrors.mileage ? style.error : ""}
-              ref={mileageRef}
-            >
-              <input
-                type="text"
-                placeholder="Min"
-                min="1"
-                // max="999999"
-                maxLength={7}
-                value={mileage}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  formatMileage(e.target.value);
-                }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td className={style.tableTitle}>Vehicle Type</td>
-            <td
-              className={formErrors.vehicleType ? style.error : ""}
-              ref={vehicleTypeRef}
-            >
-              <CustomSelect
-                value={vehicleType}
-                onChange={onVehicleTypeChange}
-                options={vehicleOptions}
-              />
-            </td>
+              <td className={style.tableTitle}>Mileage</td>
+              <td
+                className={formErrors.mileage ? style.error : ""}
+                ref={mileageRef}
+              >
+                <input
+                  type="text"
+                  placeholder="Min"
+                  min="1"
+                  // max="999999"
+                  maxLength={7}
+                  value={mileage}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    formatMileage(e.target.value);
+                  }}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Vehicle Type</td>
+              <td
+                className={formErrors.vehicleType ? style.error : ""}
+                ref={vehicleTypeRef}
+              >
+                <CustomSelect
+                  value={vehicleType}
+                  onChange={onVehicleTypeChange}
+                  options={vehicleOptions}
+                />
+              </td>
 
-            <td className={style.tableTitle}>Special</td>
-            <td
-            // className={formErrors.special ? style.error : ""}
-            >
-              <input
-                type="checkbox"
-                checked={specialOffer}
-                // value={specialOffer}
-                onChange={(e) => setSpecialOffer(e.target.checked)}
-              />
-            </td>
-          </tr>
+              <td className={style.tableTitle}>Special</td>
+              <td
+              // className={formErrors.special ? style.error : ""}
+              >
+                <input
+                  type="checkbox"
+                  checked={specialOffer}
+                  // value={specialOffer}
+                  onChange={(e) => setSpecialOffer(e.target.checked)}
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <div
@@ -1278,7 +1237,7 @@ export default function PersonalPage({userID}: Props) {
             "Добавить машину"
           )}
         </button>
-      </form>
+      </div>
     </div>
   );
 }

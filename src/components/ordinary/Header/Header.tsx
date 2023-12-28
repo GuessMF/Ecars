@@ -45,7 +45,15 @@ export default function Header() {
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      user && setUserId(user?.uid);
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+        } else {
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+          }
+        }
+      }
     });
   }, []);
 
@@ -72,9 +80,16 @@ export default function Header() {
   useEffect(() => {
     if (searchTerm === "") {
       setSearchValue("");
-      setOpenInput(false);
+      // setOpenInput(false);
     }
   }, [searchTerm]);
+
+  const onClickCloseSearch = () => {
+    setSearchValue("");
+    dispatch(setSearchTerm(""));
+    setOpenInput(false);
+  };
+
   return (
     <div className={style.header}>
       <nav className={style.header__nav}>
@@ -135,7 +150,10 @@ export default function Header() {
       <div className={style.header__formGroup}>
         <div className={style.formGroup__icons}>
           {openInput && (
-            <input value={searchValue} onChange={onChangeSearchValue}></input>
+            <div className={style.searchBox}>
+              <input value={searchValue} onChange={onChangeSearchValue} />
+              <button onClick={onClickCloseSearch}>x</button>
+            </div>
           )}
 
           <Search onClick={() => onClickSearch()} />
@@ -149,8 +167,18 @@ export default function Header() {
               <Liked />
             </NavLink>
           )}
-
+          {/* 
           {isAuth ? (
+            <NavLink to={`/user-page/${userId}`}>
+              <Profile />
+            </NavLink>
+          ) : (
+            <NavLink to={`/login`}>
+              <Profile />
+            </NavLink>
+          )} */}
+
+          {userId ? (
             <NavLink to={`/user-page/${userId}`}>
               <Profile />
             </NavLink>
@@ -160,17 +188,29 @@ export default function Header() {
             </NavLink>
           )}
 
-          {isAuth && (
+          {/* {isAuth && (
             <div className={style.user}>
               <p>
+                {userId && (displayName ? displayName : userMobile)}
                 {displayName ? displayName : userMobile ? userMobile : "No"}
+              </p>
+
+              <button onClick={handleLogout}>Выйти</button>
+            </div>
+          )} */}
+
+          {userId && (
+            <div className={style.user}>
+              <p>
+                {userId && (displayName ? displayName : userMobile)}
+                {/* {displayName ? displayName : userMobile ? userMobile : "No"} */}
               </p>
 
               <button onClick={handleLogout}>Выйти</button>
             </div>
           )}
         </div>
-        {isAuth ? (
+        {userId ? (
           <NavLink to={`/sell/${userId}`}>
             <GetAquote version={version} />
           </NavLink>

@@ -3,6 +3,7 @@ import userReducer from "./slices/userSlice";
 import searchReducer from "./slices/searchSlice";
 import currencyReducer from "./slices/currencySlice";
 import currValueReducer from "./slices/currValueSlice";
+import currentCcatalogPageReducer from "./slices/currentCatalogPageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     search: searchReducer,
     currency: currencyReducer,
     currValue: currValueReducer,
+    currentCatalogPage: currentCcatalogPageReducer,
   },
 });
 

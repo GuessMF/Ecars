@@ -40,6 +40,7 @@ import {
 } from "firebase/firestore";
 // import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 import {useAuth} from "hooks/use-auth";
+import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 
 interface Car {
   id: string;
@@ -61,6 +62,22 @@ interface Car {
 
 export default function SpecialOffers() {
   const {isAuth, email, displayName} = useAuth();
+  const [userId, setUserId] = useState<string>("");
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+        } else {
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+          }
+        }
+      } else {
+      }
+    });
+  }, []);
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
@@ -156,7 +173,7 @@ export default function SpecialOffers() {
             {specialCars.map((car: any, i) => {
               return (
                 <SwiperSlide key={car.price} virtualIndex={i}>
-                  <NavLink to={`${isAuth ? `/details/${car.id}` : `/login`}`}>
+                  <NavLink to={`${userId ? `/details/${car.id}` : `/login`}`}>
                     <LittleCard
                       brand={car.brand}
                       model={car.model}

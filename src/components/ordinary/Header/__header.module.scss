@@ -103,6 +103,17 @@
           display: none;
         }
       }
+
+      .searchBox {
+        border: black 1px solid;
+        position: relative;
+        button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 5px;
+        }
+      }
     }
   }
 }

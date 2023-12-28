@@ -5,9 +5,11 @@ import {ReactComponent as CheckMarkDetails} from "../../../assets/icons/checkMar
 import {ReactComponent as DownloadIcon} from "../../../assets/icons/downloadIcon.svg";
 import {ReactComponent as LikeIcon} from "../../../assets/icons/likeIcon.svg";
 import {ReactComponent as ShareIcon} from "../../../assets/icons/shareIcon.svg";
-
+import {useNavigate, useLocation} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import Email from "../../../components/ui/Email/Email";
 import Mobile from "../../../components/ui/Mobile/Mobile";
+import {Navigate} from "react-router-dom";
 
 interface DateObject {
   year: number;
@@ -29,6 +31,7 @@ interface Props {
   selectedCurrency: string;
   usdValue: number;
   eurValue: number;
+  owners: string | undefined;
   addLiked: () => void;
   liked: boolean;
   handleLike: () => void;
@@ -49,6 +52,7 @@ export default function DetailsCTA({
   selectedCurrency,
   usdValue,
   eurValue,
+  owners,
   addLiked,
   liked,
   handleLike,
@@ -60,7 +64,7 @@ export default function DetailsCTA({
   // console.log(dateObj.year);
 
   // const [likeded, setLikeded] = useState<boolean>(liked);
-
+  // const navigate = useNavigate();
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue
@@ -118,6 +122,16 @@ export default function DetailsCTA({
   if (model) {
     formatedModel = model.toLocaleUpperCase();
   }
+
+  const onClickBook = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+  // const onClickLearnMore = () => {
+  //   navigate("/aboutUs");
+  // };
 
   return (
     <div
@@ -248,10 +262,21 @@ export default function DetailsCTA({
               </tr>
               <tr>
                 <td>Mileage comparison</td>
-                <td>15,000 km</td>
+                <td>{mileage} km</td>
               </tr>
               <tr>
-                <td>1-owner vehicle</td>
+                <td>
+                  {owners === "None"
+                    ? "No owners"
+                    : owners === "One"
+                    ? "1-owner"
+                    : owners === "Two"
+                    ? "2-owners"
+                    : owners === "Three"
+                    ? "3-owners"
+                    : "3+ owners"}{" "}
+                  vehicle
+                </td>
                 <td>Yes</td>
               </tr>
               <tr>
@@ -260,12 +285,12 @@ export default function DetailsCTA({
               </tr>
             </tbody>
           </table>
-          <div className={style.download}>
+          {/* <div className={style.download}>
             <i>
               <DownloadIcon />
             </i>
             <span> Download the basic report</span>
-          </div>
+          </div> */}
         </div>
         <div className={style.full_inspection}>
           <span>Full Inspection</span>
@@ -274,8 +299,8 @@ export default function DetailsCTA({
             lots of photos and videos of the car to help you make that important
             purchase.
           </p>
-          <button>Book a full inspection</button>
-          <a href="">Learn more about the full inspection</a>
+          <button onClick={onClickBook}>Book a full inspection</button>
+          <NavLink to="/aboutUs">Learn more about the full inspection</NavLink>
         </div>
         <div className={style.CTA__added}>
           <span>Added:</span>

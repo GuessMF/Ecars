@@ -23,7 +23,15 @@ export default function Hero() {
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      user && setUserId(user?.uid);
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+        } else {
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+          }
+        }
+      }
     });
   }, []);
 

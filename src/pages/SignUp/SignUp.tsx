@@ -37,6 +37,9 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [checkBox, setCheckBox] = useState<boolean>(false);
+  const [firstClick, setFirstClick] = useState<boolean>(false);
+
+  const [emailSent, setEmailSent] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<Errors>({});
   const auth = getAuth();
   const errors: Errors = {};
@@ -62,10 +65,7 @@ export default function SignUp() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Submit Clicked");
-
+  const checkErrors = () => {
     if (!name) {
       errors.name = "Поле имя обязательно для заполнения";
     }
@@ -87,40 +87,20 @@ export default function SignUp() {
     if (!checkBox) {
       errors.checkBox = "Необходимо согласиться";
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFirstClick(true);
+    console.log("Submit Clicked");
+
+    checkErrors();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       //  setPopUpErrors(true);
       console.log(errors);
       handleAgreeClick();
     } else {
-      // const auth = getAuth();
-      // createUserWithEmailAndPassword(auth, email, password)
-      //   .then(({user}) => {
-      //     updateProfile(user, {
-      //       displayName: name,
-      //     })
-      //       .then(() => {
-      //         console.log("Profile updated successfully");
-      //       })
-      //       .catch((error) => {
-      //         console.error("Error updating profile:", error);
-      //       });
-      //     dispatch(
-      //       setUser({
-      //         displayName: name,
-      //         email: user.email,
-      //         id: user.uid,
-      //         token: user.refreshToken,
-      //       })
-      //     );
-      //     navigate(`/user-page/${user.uid}`);
-      //     console.log("отправилось");
-      //   })
-      //   .catch(console.error);
-      // console.log(password.length);
-
-      // console.log("registration");
-
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then(({user}) => {
@@ -135,6 +115,7 @@ export default function SignUp() {
             // Отправка письма для подтверждения адреса электронной почты
             return sendEmailVerification(user)
               .then(() => {
+                setEmailSent(true);
                 console.log("Письмо для подтверждения отправлено.");
               })
               .catch((error) => {
@@ -150,6 +131,17 @@ export default function SignUp() {
         });
     }
   };
+
+  useEffect(() => {
+    if (firstClick) {
+      // console.log(errors);
+
+      // setFormErrors(errors);
+      // setPopUpErrors(true);
+      checkErrors();
+      setFormErrors(errors);
+    }
+  }, [name, email, password, confirmPassword, checkBox]);
 
   const hasErrors = Object.keys(formErrors);
   const handleAgreeClick = () => {
@@ -192,99 +184,128 @@ export default function SignUp() {
     }
   };
 
+  const removeCharacters = (email: string) => {
+    const atIndex = email.indexOf("@"); // Находим индекс символа @
+
+    if (atIndex !== -1) {
+      const domain = email.split("@")[1]; // Разбиваем строку по @ и берем вторую часть
+      return domain; // Возвращаем только часть после символа @
+    }
+
+    return email; // Если символ @ не найден, возвращаем исходную строку
+  };
+
+  const formatedMail = removeCharacters(email);
+
   return (
     <div className={style.signUp}>
-      <div className={style.wrapper}>
-        <h1>Sing Up</h1>
+      {emailSent ? (
+        <div className={style.needConfirmEmail}>
+          <h3>Successful registration</h3>
+          <p>Mail was sent to {email}</p>
+          <p>
+            To complete your registration please visit your email and follow the
+            link in the{" "}
+            <span
+              onClick={() => window.open(`https:${formatedMail}`, "_blank")}
+            >
+              email
+            </span>
+          </p>
+        </div>
+      ) : (
+        <div className={style.wrapper}>
+          <h1>Sing Up</h1>
 
-        <form className={style.form} onSubmit={handleSubmit}>
-          <div className={style.name} ref={nameRef}>
-            <span>Full name</span>
-            <input
-              type="name"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`${formErrors.name ? style.error : ""}`}
-            />
-          </div>
-
-          <div className={style.email} ref={emailRef}>
-            <span>Email address</span>
-            <input
-              type="email"
-              value={email}
-              placeholder="example@mail.com"
-              onChange={(e) => setEmail(e.target.value)}
-              className={`${formErrors.email ? style.error : ""}`}
-            />
-          </div>
-
-          <div className={style.password} ref={passwordRef}>
-            <div>
-              <span>Password</span>
+          <form className={style.form} onSubmit={handleSubmit}>
+            <div className={style.name} ref={nameRef}>
+              <span>Full name</span>
+              <input
+                type="name"
+                placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={`${formErrors.name ? style.error : ""}`}
+              />
             </div>
-            <input
-              type="password"
-              value={password}
-              placeholder="Your password"
-              onChange={(e) => setPassword(e.target.value)}
-              className={`${formErrors.password ? style.error : ""}`}
-            />
-            <span className={style.limit}>At least 8 characters</span>
-          </div>
 
-          <div className={style.password} ref={confirmPasswordRef}>
-            <div>
-              <span>Confirm password</span>
+            <div className={style.email} ref={emailRef}>
+              <span>Email address</span>
+              <input
+                type="email"
+                value={email}
+                placeholder="example@mail.com"
+                onChange={(e) => setEmail(e.target.value)}
+                className={`${formErrors.email ? style.error : ""}`}
+              />
             </div>
-            <input
-              type="password"
-              value={confirmPassword}
-              placeholder="Re-type password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`${formErrors.confirmPassword ? style.error : ""}`}
-            />
-          </div>
 
-          <div
-            className={
-              formErrors.checkBox ? style.errorCheckBox : style.termsPolicy
-            }
-            ref={checkBoxRef}
-          >
-            <input
-              type="checkbox"
-              name=""
-              id=""
-              checked={checkBox}
-              onChange={() => setCheckBox(!checkBox)}
-            />
-            <div>
-              I agree to the <span>Terms of Service</span> and{" "}
-              <span>Privacy Policy</span>
+            <div className={style.password} ref={passwordRef}>
+              <div>
+                <span>Password</span>
+              </div>
+              <input
+                type="password"
+                value={password}
+                placeholder="Your password"
+                onChange={(e) => setPassword(e.target.value)}
+                className={`${formErrors.password ? style.error : ""}`}
+              />
+              <span className={style.limit}>At least 8 characters</span>
             </div>
-          </div>
 
-          <button type="submit" className={style.signUpBtn}>
-            Sign Up
-          </button>
+            <div className={style.password} ref={confirmPasswordRef}>
+              <div>
+                <span>Confirm password</span>
+              </div>
+              <input
+                type="password"
+                value={confirmPassword}
+                placeholder="Re-type password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={`${formErrors.confirmPassword ? style.error : ""}`}
+              />
+            </div>
 
-          <div className={style.login}>
-            Already have an account?
-            <NavLink to="/login" className={style.navLink}>
-              <span>Login</span>
-            </NavLink>
-          </div>
+            <div
+              className={
+                formErrors.checkBox ? style.errorCheckBox : style.termsPolicy
+              }
+              ref={checkBoxRef}
+            >
+              <input
+                type="checkbox"
+                name=""
+                id=""
+                checked={checkBox}
+                onChange={() => setCheckBox(!checkBox)}
+              />
+              <div>
+                I agree to the <span>Terms of Service</span> and{" "}
+                <span>Privacy Policy</span>
+              </div>
+            </div>
 
-          <span className={style.line}>
-            <hr /> or <hr />
-          </span>
-          <button className={style.googleBtn} onClick={handleGoogleSignIn}>
-            <GoogleIcon /> Authorize with Google
-          </button>
-        </form>
-      </div>
+            <button type="submit" className={style.signUpBtn}>
+              Sign Up
+            </button>
+
+            <div className={style.login}>
+              Already have an account?
+              <NavLink to="/login" className={style.navLink}>
+                <span>Login</span>
+              </NavLink>
+            </div>
+
+            <span className={style.line}>
+              <hr /> or <hr />
+            </span>
+            <button className={style.googleBtn} onClick={handleGoogleSignIn}>
+              <GoogleIcon /> Authorize with Google
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

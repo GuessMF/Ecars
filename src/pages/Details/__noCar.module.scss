@@ -1,0 +1,37 @@
+@import "../../styles/_var";
+
+.noCar {
+  //border: black 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 49vh;
+  p {
+    color: $gray900;
+    /* Desktop/Body Medium */
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+    a {
+      color: $primary500;
+      text-decoration: none;
+    }
+  }
+}
+.loader {
+  //  background-color: red;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  cursor: not-allowed;
+}

@@ -7,7 +7,8 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
-
+import {setCurrentCatalogPage} from "store/slices/currentCatalogPageSlice";
+import {useAppDispatch} from "hooks/redux-hooks";
 import carData from "helpers/modelsBrands";
 // import {Query} from "firebase/firestore";
 // import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
@@ -48,29 +49,19 @@ type CityCheckboxes = {
 };
 
 export default function Catalog() {
-  // const newCarData = {
-  //   year: 2023,
-  //   mileage: 5000,
-  //   price: 25000,
-  //   // ... другие данные
-  // };
-  // const yearMileagePrice = `${newCarData.year}-${newCarData.mileage}-${newCarData.price}`;
-  // newCarData.yearMileagePrice = yearMileagePrice;
-
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
-
-  // const eur = useAppSelector((state) => state.currValue.eurValue);
-  // const usd = useAppSelector((state) => state.currValue.usdValue);
-  // // console.log(searchTerm);
-
-  // // console.log("Search in catalog: " + searchTerm);
-
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
   );
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
+
+  const currentCatalogPage = useAppSelector(
+    (state) => state.currentCatalogPage.currentCatalogPage
+  );
+
+  const dispatch = useAppDispatch();
 
   let multiplier: number =
     selectedCurrency === "RUB"
@@ -88,17 +79,13 @@ export default function Catalog() {
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
 
-  // useEffect(() => {
-  //   console.log(brandParam);
-  //   console.log(yearParam);
-  //   console.log(modelParam);
-  // }, []);
-
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
 
   const ownersParam = searchParams.get("owners") || "";
-  const [brandFilter, setBrandFilter] = useState<string>(brandParam);
+  const [brandFilter, setBrandFilter] = useState<string>(
+    brandParam.toLocaleLowerCase()
+  );
   const [modelFilter, setModelFilter] = useState<string>(modelParam);
   const [vechicleTypeCheckboxes, setVechicleTypeCheckboxes] = useState({
     SUV: false,
@@ -131,12 +118,17 @@ export default function Catalog() {
     AbuDhabi: false,
     Shanghai: false,
   });
-  // useEffect(() => {
-  //   // console.log("Max price:" + maxPriceValue);
-  //   // console.log("Min price:" + minPriceValue);
-  //  // const number = parseInt(maxPriceValue.replace(/\s/g, ""), 10);
-  //   // console.log(number);
-  // }, [minPriceValue, maxPriceValue]);
+
+  useEffect(() => {
+    if (mileageParam === "Used") {
+      setMinMileageValue("100");
+      setMaxMileageValue("999 999");
+    }
+    if (mileageParam === "New") {
+      setMinMileageValue("1");
+      setMaxMileageValue("99");
+    }
+  }, [location]);
 
   const newLocationParam = () => {
     let location = locationParam;
@@ -214,7 +206,8 @@ export default function Catalog() {
   const [totalCars, setTotalCars] = useState<number>(0);
   const [filtredCars, setFiltredCars] = useState<number>(0);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
+
   const itemsPerPage: number = 5;
   const pages = Math.ceil(totalCars / itemsPerPage);
 
@@ -228,7 +221,6 @@ export default function Catalog() {
   // });
 
   const [cars, setCars] = useState<Car[]>([]);
-  // console.log(cars);
 
   const [lastVisibleRefs, setLastVisibleRefs] = useState<
     DocumentSnapshot<Car>[]
@@ -277,7 +269,8 @@ export default function Catalog() {
       setYearFilter(false);
     }
   }, [
-    currentPage,
+    // currentPage,
+    currentCatalogPage,
     sortType,
     brandFilter,
     modelFilter,
@@ -297,30 +290,6 @@ export default function Catalog() {
     searchTerm,
     selectedCurrency,
   ]);
-
-  // useEffect(() => {
-  //   // console.log("srabotal");
-  // }, [
-  //   currentPage,
-  //   sortType,
-  //   //brandFilter,
-  //   // modelFilter,
-  //   vechicleTypeCheckboxes,
-  //   cityCheckboxes,
-  //   owners,
-  //   color,
-  //   seats,
-  //   fuel,
-  //   transmission,
-  //   minMileageValue,
-  //   maxMileageValue,
-  //   minYearValue,
-  //   maxYearValue,
-  //   minPriceValue,
-  //   maxPriceValue,
-  //   searchTerm,
-  //   selectedCurrency,
-  // ]);
 
   const fetchFirstPage = async (
     sortType: SortObj,
@@ -414,7 +383,6 @@ export default function Catalog() {
       });
 
       if (searchTerm) {
-        //  console.log("Есть search Term");
         const searchTermLowerCase = searchTerm.toLowerCase();
 
         const brandQuery = query(
@@ -467,8 +435,10 @@ export default function Catalog() {
         const mergedCars = Array.from(uniqueCars.values());
 
         const paginatedCars = mergedCars.slice(
-          currentPage * itemsPerPage - itemsPerPage,
-          currentPage * itemsPerPage
+          // currentPage * itemsPerPage - itemsPerPage,
+          // currentPage * itemsPerPage
+          currentCatalogPage * itemsPerPage - itemsPerPage,
+          currentCatalogPage * itemsPerPage
         );
 
         setCars(paginatedCars);
@@ -480,11 +450,7 @@ export default function Catalog() {
       }
 
       if (!searchTerm) {
-        // console.log("Нет search Term");
-
         if (brandFilter) {
-          //  console.log("Brand Filter: " + brandFilter);
-
           first = query(
             first,
             // where("brand", "==", brandFilter.toLocaleLowerCase())
@@ -509,8 +475,6 @@ export default function Catalog() {
         const cars = querySnapshot.docs.map(
           (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
         );
-
-        // console.log(cars);
 
         const minMileage = parseInt(minMileageValue.replace(/\s/g, ""), 10);
         const maxMileage = parseInt(maxMileageValue.replace(/\s/g, ""), 10);
@@ -543,8 +507,11 @@ export default function Catalog() {
         //   currentPage * itemsPerPage
         // );
         const paginatedCars = filtredPriceCars.slice(
-          currentPage * itemsPerPage - itemsPerPage,
-          currentPage * itemsPerPage
+          // currentPage * itemsPerPage - itemsPerPage,
+          // currentPage * itemsPerPage
+
+          currentCatalogPage * itemsPerPage - itemsPerPage,
+          currentCatalogPage * itemsPerPage
         );
 
         // setTotalCars(filtredYearCars.length);
@@ -767,17 +734,11 @@ export default function Catalog() {
   ) => {
     setBrandFilter(event.target.value);
     setItemOffset(0);
-    setCurrentPage(1);
+    // setCurrentPage(1);
+    dispatch(setCurrentCatalogPage(1));
   };
 
   useEffect(() => {
-    //   if (searchTerm === "") {
-    //     console.log(searchTerm);
-
-    //     // setBrandFilter("");
-    //     // setModelFilter("");
-    //   }
-
     const fountedBrand = carData.brands.find(
       (item) =>
         item.name ===
@@ -785,7 +746,6 @@ export default function Catalog() {
     );
 
     if (fountedBrand) {
-      // console.log(fountedBrand.name);
       setBrandFilter(fountedBrand.name);
     }
 
@@ -800,19 +760,13 @@ export default function Catalog() {
     });
   }, [searchTerm]);
 
-  // useEffect(() => {
-  //   console.log(modelFilter);
-  //   setModelFilter(modelFilter);
-  // }, [modelFilter]);
-
   const handleModelFilterChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    //  console.log(event.target.value);
-
     setModelFilter(event.target.value);
     setItemOffset(0);
-    setCurrentPage(1);
+    dispatch(setCurrentCatalogPage(1));
+    // setCurrentPage(1);
   };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkboxId = event.target.id as keyof CheckboxState;
@@ -953,14 +907,18 @@ export default function Catalog() {
   };
 
   const nextNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    // setCurrentPage(currentPage + 1);
+    dispatch(setCurrentCatalogPage(currentCatalogPage + 1));
   };
   const prevPrevPage = () => {
-    setCurrentPage(currentPage - 1);
+    // setCurrentPage(currentPage - 1);
+    dispatch(setCurrentCatalogPage(currentCatalogPage - 1));
   };
 
   const changePage = (index: number) => {
-    setCurrentPage(index + 1);
+    // setCurrentPage(index + 1);
+
+    dispatch(setCurrentCatalogPage(index + 1));
     const catalog = document.getElementById("catalog");
     if (catalog) {
       catalog.scrollIntoView({
@@ -1080,20 +1038,31 @@ export default function Catalog() {
           </div>
 
           <div className={style.buttons}>
-            <button onClick={prevPrevPage} disabled={currentPage === 1}>
+            <button
+              onClick={prevPrevPage}
+              //disabled={currentPage === 1}
+              disabled={currentCatalogPage === 1}
+            >
               Previous
             </button>
             {[...new Array(pages)].map((_, index) => (
               <span
                 key={index}
-                className={index + 1 == currentPage ? style.currentPage : ""}
+                // className={index + 1 == currentPage ? style.currentPage : ""}
+                className={
+                  index + 1 == currentCatalogPage ? style.currentPage : ""
+                }
                 onClick={() => changePage(index)}
                 //onClick={ScrollToTop}
               >
                 {index + 1}
               </span>
             ))}
-            <button onClick={nextNextPage} disabled={currentPage === pages}>
+            <button
+              onClick={nextNextPage}
+              //   disabled={currentPage === pages}
+              disabled={currentCatalogPage === pages}
+            >
               Next
             </button>
           </div>

@@ -21,6 +21,8 @@ import {LazyLoadImage} from "react-lazy-load-image-component";
 import SkeletonBigImage from "./SkeletonBigImage";
 import SkeletonLittleImage from "./SkeletonLittleImage";
 import {useAppSelector} from "hooks/redux-hooks";
+import NoCar from "./NoCar";
+import {useLocation} from "react-router-dom";
 
 interface DateObject {
   year: number;
@@ -68,12 +70,14 @@ export default function Details() {
   const swiperRef = useRef<SwiperCore>();
   const navigate = useNavigate();
   const black: string = "#1A1A1A";
-
+  const [auto, setAuto] = useState<boolean>(false);
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>();
 
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     const loadPhotosFromFirebase = async (currentIndex?: string) => {
       setImageLoaded(false);
@@ -124,7 +128,12 @@ export default function Details() {
       const cars = querySnapshot.docs.map((doc) => doc.data() as Car);
       const foundCar = cars.find((car) => car.id === id);
       if (foundCar !== undefined) {
+        setAuto(true);
+
         setCurrentCar(foundCar);
+        setLoading(false);
+      } else {
+        setAuto(false);
       }
     } catch (error) {
       console.error("Error fetching first page: ", error);
@@ -291,9 +300,6 @@ export default function Details() {
     image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
   }, [photoURLs]);
 
-  // console.log(currentCar?.owners);
-  // console.log(currentCar?.price);
-
   const changeLittlePhoto = (index: number) => {
     window.scrollTo({
       top: 40,
@@ -301,6 +307,14 @@ export default function Details() {
     });
     setSelectedPhoto(index);
   };
+  useEffect(() => {
+    if (photoURLs.length < 1) {
+      setAuto(false);
+    } else {
+      setAuto(true);
+    }
+  }, [photoURLs]);
+  const location = useLocation();
 
   return (
     <div className={style.details}>
@@ -310,72 +324,75 @@ export default function Details() {
           handleClose={closeFullWidthImg}
         />
       )}
+      {auto && (
+        <div className={style.topNavigation}>
+          <Link
+            to={{
+              pathname: "/catalog",
+            }}
+          >
+            <span>Home</span>
+          </Link>
+          <i>
+            <RightArrow />
+          </i>
 
-      <div className={style.topNavigation}>
-        <Link
-          to={{
-            pathname: "/catalog",
-          }}
-        >
-          <span>Home</span>
-        </Link>
-        <i>
-          <RightArrow />
-        </i>
+          <Link
+            to={{
+              pathname: "/catalog",
+              search: searchQuery5,
+            }}
+          >
+            <span>
+              {currentCar?.mileage && currentCar?.mileage < 100
+                ? "New"
+                : "Used"}{" "}
+              cars for sale in{" "}
+              {currentCar?.location === "AbuDhabi"
+                ? "Abu Dhabi"
+                : currentCar?.location === "SaintPetersburg"
+                ? "Saint-Petersburg"
+                : currentCar?.location}
+            </span>
+          </Link>
 
-        <Link
-          to={{
-            pathname: "/catalog",
-            search: searchQuery5,
-          }}
-        >
-          <span>
-            {currentCar?.mileage && currentCar?.mileage < 100 ? "New" : "Used"}{" "}
-            cars for sale in{" "}
-            {currentCar?.location === "AbuDhabi"
-              ? "Abu Dhabi"
-              : currentCar?.location === "SaintPetersburg"
-              ? "Saint-Petersburg"
-              : currentCar?.location}
-          </span>
-        </Link>
+          <i>
+            <RightArrow />
+          </i>
 
-        <i>
-          <RightArrow />
-        </i>
+          <Link
+            to={{
+              pathname: "/catalog",
+              search: searchQuery6,
+            }}
+          >
+            <span>{formatedBrand}</span>
+          </Link>
 
-        <Link
-          to={{
-            pathname: "/catalog",
-            search: searchQuery6,
-          }}
-        >
-          <span>{formatedBrand}</span>
-        </Link>
+          <i>
+            <RightArrow />
+          </i>
 
-        <i>
-          <RightArrow />
-        </i>
-
-        <Link
-          to={{
-            pathname: "/catalog",
-            search: searchQuery7,
-          }}
-        >
-          <span>
-            {formatedBrand} {formatedModel}
-          </span>
-        </Link>
-      </div>
-      {currentCar !== null ? (
+          <Link
+            to={{
+              pathname: "/catalog",
+              search: searchQuery7,
+            }}
+          >
+            <span>
+              {formatedBrand} {formatedModel}
+            </span>
+          </Link>
+        </div>
+      )}
+      {auto ? (
         <div className={style.details__main}>
           <div className={style.content}>
             <div className={style.content__pictures}>
               <div className={style.bigPicture}>
                 {imageLoaded ? (
                   <LazyLoadImage
-                    className={style.bigCard__img}
+                    // className={style.bigCard__img}
                     effect="blur" // Добавляет эффект размытия
                     src={photoURLs?.[selectedPhoto]}
                     alt="Car Preview"
@@ -391,6 +408,7 @@ export default function Details() {
                 {imageLoaded
                   ? photoURLs.map((img, index, id) => (
                       <LazyLoadImage
+                        key={`load img${index}`}
                         className={style.little_preview}
                         effect="blur" // Добавляет эффект размытия
                         src={img}
@@ -412,6 +430,7 @@ export default function Details() {
                 exportStatus={currentCar?.exportStatus}
                 year={currentCar?.year}
                 mileage={mileage}
+                owners={currentCar?.owners}
                 dateObj={currentCar?.dateObj}
                 selectedCurrency={selectedCurrency}
                 usdValue={usdValue}
@@ -576,6 +595,7 @@ export default function Details() {
               exportStatus={currentCar?.exportStatus}
               year={currentCar?.year}
               mileage={mileage}
+              owners={currentCar?.owners}
               dateObj={currentCar?.dateObj}
               selectedCurrency={selectedCurrency}
               usdValue={usdValue}
@@ -590,12 +610,10 @@ export default function Details() {
           )}
         </div>
       ) : (
-        <p>Данные не загружены</p>
+        <NoCar founted={auto} loading={loading} />
       )}
 
-      {/* <div className={style.testGAPI}>
-        <Skeleton />
-      </div> */}
+      {/*  */}
     </div>
   );
 }
