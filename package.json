@@ -1,6 +1,6 @@
 {
   "name": "ecars",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "homepage": "https://GuessMF.github.io/Ecars",
   "private": true,
   "dependencies": {
