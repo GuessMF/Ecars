@@ -3,6 +3,7 @@ import React, {useRef, useEffect, useState} from "react";
 import style from "./__loginMobile.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
+import {Rings} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 
@@ -25,6 +26,7 @@ import {onAuthStateChanged} from "firebase/auth";
 import {useAuth} from "hooks/use-auth";
 import firebase from "firebase/app";
 import {useAppSelector} from "hooks/redux-hooks";
+import ErrorLoginMobile from "./ErrorLoginMobile";
 
 export default function LoginMobile() {
   const dispatch = useAppDispatch();
@@ -69,28 +71,43 @@ export default function LoginMobile() {
   const [phoneNumber, setPhoneNumber] = useState<string>("+7");
   const [verificationCode, setVerificationCode] = useState("");
   const [codeSended, setCodeSended] = useState<boolean>(false);
+  const [clicked, setClicked] = useState<boolean>(false);
   const [verificationId, setVerificationId] = useState("");
   const [error, setError] = useState("");
+  const [invalidNumber, setInvalidNumber] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const auth = getAuth();
 
-  const handleSendCode = async () => {
-    const appVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "invisible",
-      languageCode: "it",
-    });
+  // useEffect(() => {
+  //   console.log("ntghfdd");
+  // }, [invalidNumber]);
 
-    try {
-      const result = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        appVerifier
-      );
-      setConfirmationResult(result); // Обновляем состояние после отправки кода
-      setCodeSended(true);
-    } catch (error) {
-      console.error("Ошибка отправки кода:", error);
+  const handleSendCode = async () => {
+    console.log("clicked");
+    console.log(phoneNumber.length);
+    if (phoneNumber.length !== 12) {
+      setInvalidNumber(true);
+      setError("Invalid number");
+    } else {
+      setClicked(true);
+
+      const appVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        languageCode: "it",
+      });
+
+      try {
+        const result = await signInWithPhoneNumber(
+          auth,
+          phoneNumber,
+          appVerifier
+        );
+        setConfirmationResult(result); // Обновляем состояние после отправки кода
+        setCodeSended(true);
+      } catch (error) {
+        console.error("Ошибка отправки кода:", error);
+      }
     }
   };
 
@@ -167,9 +184,14 @@ export default function LoginMobile() {
       setPhoneNumber("+7");
     }
   }, [phoneNumber]);
+  const closeError = () => {
+    setError("");
+    setPhoneNumber("+7");
+  };
 
   return (
     <div className={style.login}>
+      {error && <ErrorLoginMobile error={error} closePopUp={closeError} />}
       <div className={style.wrapper}>
         <h1>Login mobile</h1>
         <div className={style.form}>
@@ -187,7 +209,21 @@ export default function LoginMobile() {
                 // onChange={handlePhoneChange}
               />
               <button onClick={handleSendCode} className={style.loginBtn}>
-                Send Code
+                {/* Send Code */}
+                {clicked ? (
+                  <Rings
+                    height="24"
+                    width="500"
+                    color="#4fa94d"
+                    // radius="6"
+                    // wrapperStyle={{}}
+                    wrapperClass={style.loader}
+                    visible={true}
+                    // ariaLabel="rings-loading"
+                  />
+                ) : (
+                  "Send Code"
+                )}
               </button>
             </div>
           )}
@@ -220,7 +256,6 @@ export default function LoginMobile() {
             <GoogleIcon /> Authorize with Google
           </button>
         </div>
-        {error && <p>{error}</p>}
       </div>
 
       {/* Это ваш контейнер для reCAPTCHA */}
