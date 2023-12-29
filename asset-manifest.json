@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.85c687dc.css",
-    "main.js": "/static/js/main.68dff911.js",
+    "main.css": "/static/css/main.cf9fc1bb.css",
+    "main.js": "/static/js/main.86caff5a.js",
     "static/media/hero.webp": "/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/manAndWoman-mobile.webp": "/static/media/manAndWoman-mobile.f3007c55a8afd85edccd.webp",
@@ -36,11 +36,11 @@
     "static/media/leftArrow.svg": "/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/menu-line.svg": "/static/media/menu-line.931d577bebdae05398c69c4abf24fbf1.svg",
     "static/media/downArrowIcon.svg": "/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
-    "main.85c687dc.css.map": "/static/css/main.85c687dc.css.map",
-    "main.68dff911.js.map": "/static/js/main.68dff911.js.map"
+    "main.cf9fc1bb.css.map": "/static/css/main.cf9fc1bb.css.map",
+    "main.86caff5a.js.map": "/static/js/main.86caff5a.js.map"
   },
   "entrypoints": [
-    "static/css/main.85c687dc.css",
-    "static/js/main.68dff911.js"
+    "static/css/main.cf9fc1bb.css",
+    "static/js/main.86caff5a.js"
   ]
 }
