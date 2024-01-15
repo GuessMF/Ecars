@@ -1,13 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.cf9fc1bb.css",
-    "main.js": "/static/js/main.86caff5a.js",
+    "main.css": "/static/css/main.d75cfb6d.css",
+    "main.js": "/static/js/main.52b0fed5.js",
+    "static/media/happy.webp": "/static/media/happy.0462807e355c4b672d97.webp",
     "static/media/hero.webp": "/static/media/hero.a056c9963d3f199e8378.webp",
     "static/media/manAndWoman.webp": "/static/media/manAndWoman.be52ae437e3434376d59.webp",
     "static/media/manAndWoman-mobile.webp": "/static/media/manAndWoman-mobile.f3007c55a8afd85edccd.webp",
     "static/media/manAndWoman-tablet.webp": "/static/media/manAndWoman-tablet.7804f02c67cd7c89243f.webp",
     "static/media/hero-tablet.webp": "/static/media/hero-tablet.45b5bcb67d48582ce2c8.webp",
     "static/media/hero-mobile.webp": "/static/media/hero-mobile.afe12161c397e257de28.webp",
+    "static/media/sorry.webp": "/static/media/sorry.ce3bd048425baf8a4c62.webp",
     "static/media/ourMission.webp": "/static/media/ourMission.45895a59560716c96771.webp",
     "static/media/Logo.svg": "/static/media/Logo.e39f0d0df8db57ab1515b09f467c66f8.svg",
     "static/media/question.svg": "/static/media/question.51b1d93e7e701fecac33cbd44332824c.svg",
@@ -26,6 +28,7 @@
     "static/media/arrowUp.webp": "/static/media/arrowUp.dbbde396a6954f114291.webp",
     "static/media/close.svg": "/static/media/close.77226dd752c97ec0e5aa927c2cf8e804.svg",
     "static/media/star.svg": "/static/media/star.041c45793a3fc261d278d72ce0c4f66b.svg",
+    "static/media/closeIcon.svg": "/static/media/closeIcon.63c8f9a3616fc511365bdf41e405fbc3.svg",
     "static/media/deleteIcon.svg": "/static/media/deleteIcon.68fc2976e48db44e7db5205321b54ec9.svg",
     "static/media/allCarsIcon.svg": "/static/media/allCarsIcon.982dae679e89852d55e55c3e86cf22a7.svg",
     "static/media/arrow-left-line.svg": "/static/media/arrow-left-line.79f617c00962ae4164406b469929b754.svg",
@@ -36,11 +39,11 @@
     "static/media/leftArrow.svg": "/static/media/leftArrow.63cabb5fd4701dd221c42c2f0677c972.svg",
     "static/media/menu-line.svg": "/static/media/menu-line.931d577bebdae05398c69c4abf24fbf1.svg",
     "static/media/downArrowIcon.svg": "/static/media/downArrowIcon.1293eaa9f241295b92e3fea7269ce32b.svg",
-    "main.cf9fc1bb.css.map": "/static/css/main.cf9fc1bb.css.map",
-    "main.86caff5a.js.map": "/static/js/main.86caff5a.js.map"
+    "main.d75cfb6d.css.map": "/static/css/main.d75cfb6d.css.map",
+    "main.52b0fed5.js.map": "/static/js/main.52b0fed5.js.map"
   },
   "entrypoints": [
-    "static/css/main.cf9fc1bb.css",
-    "static/js/main.86caff5a.js"
+    "static/css/main.d75cfb6d.css",
+    "static/js/main.52b0fed5.js"
   ]
 }
