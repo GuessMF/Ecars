@@ -14,6 +14,7 @@ import {collection} from "firebase/firestore";
 import CustomSelect from "../CustomSelect/CustomSelect";
 
 import carData from "helpers/modelsBrands";
+import Edited from "./Edited";
 // import { updateDoc, doc } from 'firebase/firestore';
 
 interface DateObject {
@@ -126,6 +127,7 @@ Props) {
   const [newExportStatus, setNewExportStatus] = useState<string>(exportStatus);
   const [newSpecial, setNewSpecial] = useState<boolean>(special);
   const [newDescription, setNewDescription] = useState(description);
+  const [edited, setEdited] = useState<boolean>(false);
 
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
@@ -289,6 +291,12 @@ Props) {
   };
 
   const onClickEdit = () => {
+    console.log("edit");
+    window.scrollTo({
+      top: 200,
+      behavior: "smooth",
+    });
+
     if (!edition) {
       onChangeEdition(true);
       setNewBrand(brand);
@@ -312,11 +320,8 @@ Props) {
     } else {
       onChangeEdition(false);
       updateCar();
-      //  setSent(true);
-      alert("Zaglushka");
-      // setLoading(false);
+      setEdited(true);
       setTimeout(() => {
-        // setSent(false);
         navigate(`/details/${id}`);
       }, 2000);
     }
@@ -455,6 +460,8 @@ Props) {
 
   return (
     <div className={style.megaCard}>
+      {edited && <Edited />}
+
       <div className={style.previewBigImage}>
         {imageLoaded ? (
           <LazyLoadImage

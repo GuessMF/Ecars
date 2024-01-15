@@ -8,6 +8,7 @@ import style from "./__header.module.scss";
 import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-line.svg";
 import Sidebar from "../Sidebar/Sidebar";
 import {useNavigate} from "react-router-dom";
+import {ReactComponent as CloseIcon} from "./closeIcon.svg";
 
 import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
@@ -152,7 +153,9 @@ export default function Header() {
           {openInput && (
             <div className={style.searchBox}>
               <input value={searchValue} onChange={onChangeSearchValue} />
-              <button onClick={onClickCloseSearch}>x</button>
+              <button onClick={onClickCloseSearch}>
+                <CloseIcon />
+              </button>
             </div>
           )}
 
@@ -167,16 +170,6 @@ export default function Header() {
               <Liked />
             </NavLink>
           )}
-          {/* 
-          {isAuth ? (
-            <NavLink to={`/user-page/${userId}`}>
-              <Profile />
-            </NavLink>
-          ) : (
-            <NavLink to={`/login`}>
-              <Profile />
-            </NavLink>
-          )} */}
 
           {userId ? (
             <NavLink to={`/user-page/${userId}`}>
@@ -187,17 +180,6 @@ export default function Header() {
               <Profile />
             </NavLink>
           )}
-
-          {/* {isAuth && (
-            <div className={style.user}>
-              <p>
-                {userId && (displayName ? displayName : userMobile)}
-                {displayName ? displayName : userMobile ? userMobile : "No"}
-              </p>
-
-              <button onClick={handleLogout}>Выйти</button>
-            </div>
-          )} */}
 
           {userId && (
             <div className={style.user}>
@@ -219,6 +201,30 @@ export default function Header() {
             <GetAquote version={version} />
           </NavLink>
         )}
+      </div>
+      <div className={style.header__formGroup__mobile}>
+        <Search onClick={() => onClickSearch()} />
+
+        <div className={style.formGroup__icons}>
+          {openInput && (
+            <div className={style.searchBox}>
+              <input value={searchValue} onChange={onChangeSearchValue} />
+              <button onClick={onClickCloseSearch}>
+                <CloseIcon />
+              </button>
+            </div>
+          )}
+
+          {userId ? (
+            <NavLink to={`/sell/${userId}`}>
+              <GetAquote version={version} />
+            </NavLink>
+          ) : (
+            <NavLink to={`/login`}>
+              <GetAquote version={version} />
+            </NavLink>
+          )}
+        </div>
       </div>
     </div>
   );

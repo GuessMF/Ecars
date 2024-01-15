@@ -7,6 +7,7 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
+import Sorry from "../../assets/images/sorry.webp";
 import {setCurrentCatalogPage} from "store/slices/currentCatalogPageSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 import carData from "helpers/modelsBrands";
@@ -25,11 +26,13 @@ import {
   where,
   QueryDocumentSnapshot,
   DocumentData,
+  QueryConstraint,
 } from "firebase/firestore";
 import {db} from "../../firebase";
 // import {start} from "repl";
 // import firebase from "firebase/app";
 import {useAppSelector} from "hooks/redux-hooks";
+import {log} from "console";
 
 interface SortObj {
   value: string;
@@ -78,6 +81,11 @@ export default function Catalog() {
   const modelParam = searchParams.get("model") || "";
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
+  let requestCounter: number = 0;
+
+  // useEffect(() => {
+  //   console.log(requestCounter + " Request");
+  // }, [requestCounter]);
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
@@ -263,7 +271,7 @@ export default function Catalog() {
       setMileageFilter(false);
     }
 
-    if (minYearValue > 1900 || maxYearValue < 2023) {
+    if (minYearValue > 2000 || maxYearValue < currentYear) {
       setYearFilter(true);
     } else {
       setYearFilter(false);
@@ -329,6 +337,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrCarTypes.length > 0) {
             first = query(first, where("vehicleType", "in", arrCarTypes));
+            requestCounter++;
           }
         }
       });
@@ -337,6 +346,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrCities.length > 0) {
             first = query(first, where("location", "in", arrCities));
+            requestCounter++;
           }
         }
       });
@@ -345,6 +355,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrOwners.length > 0) {
             first = query(first, where("owners", "in", arrOwners));
+            requestCounter++;
           }
         }
       });
@@ -354,6 +365,7 @@ export default function Catalog() {
           // first = query(first, where("color", "==", color));
           if (arrColor.length > 0) {
             first = query(first, where("color", "in", arrColor));
+            requestCounter++;
           }
         }
       });
@@ -362,6 +374,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrSeats.length > 0) {
             first = query(first, where("seats", "in", arrSeats));
+            requestCounter++;
           }
         }
       });
@@ -370,6 +383,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrFuel.length > 0) {
             first = query(first, where("fuel", "in", arrFuel));
+            requestCounter++;
           }
         }
       });
@@ -378,6 +392,7 @@ export default function Catalog() {
         if (isSelected) {
           if (arrTransmission.length > 0) {
             first = query(first, where("transmission", "in", arrTransmission));
+            requestCounter++;
           }
         }
       });
@@ -642,7 +657,7 @@ export default function Catalog() {
     setMaxMileageValue("999 999");
   };
   const resetYear = () => {
-    setMinYearValue(1900);
+    setMinYearValue(2000);
     setMaxYearValue(currentYear);
   };
 
@@ -650,6 +665,7 @@ export default function Catalog() {
     setMinPriceValue("0");
     setMaxPriceValue("99 999 999");
   };
+  // console.log(minYearValue);
 
   const resetCity = () => {
     setCityCheckboxes({
@@ -866,10 +882,10 @@ export default function Catalog() {
       setMinMileageValue("0");
       setMaxMileageValue("999 999");
     }
-    if (filter === "year") {
-      setMinYearValue(1900);
-      setMaxYearValue(currentYear);
-    }
+    // if (filter === "year") {
+    //   setMinYearValue(2000);
+    //   setMaxYearValue(currentYear);
+    // }
 
     if (filter === "price") {
       setMinPriceValue("0");
@@ -928,6 +944,8 @@ export default function Catalog() {
       });
     }
   };
+
+  // console.log(cars.length);
 
   return (
     <div className={style.catalog} id="catalog">
@@ -1036,36 +1054,43 @@ export default function Catalog() {
                   <Skeleton key={`skeleton_${i}`} />
                 ))}
           </div>
-
-          <div className={style.buttons}>
-            <button
-              onClick={prevPrevPage}
-              //disabled={currentPage === 1}
-              disabled={currentCatalogPage === 1}
-            >
-              Previous
-            </button>
-            {[...new Array(pages)].map((_, index) => (
-              <span
-                key={index}
-                // className={index + 1 == currentPage ? style.currentPage : ""}
-                className={
-                  index + 1 == currentCatalogPage ? style.currentPage : ""
-                }
-                onClick={() => changePage(index)}
-                //onClick={ScrollToTop}
+          {cars.length > 0 ? (
+            <div className={style.buttons}>
+              <button
+                onClick={prevPrevPage}
+                //disabled={currentPage === 1}
+                disabled={currentCatalogPage === 1}
               >
-                {index + 1}
-              </span>
-            ))}
-            <button
-              onClick={nextNextPage}
-              //   disabled={currentPage === pages}
-              disabled={currentCatalogPage === pages}
-            >
-              Next
-            </button>
-          </div>
+                Previous
+              </button>
+              {[...new Array(pages)].map((_, index) => (
+                <span
+                  key={index}
+                  // className={index + 1 == currentPage ? style.currentPage : ""}
+                  className={
+                    index + 1 == currentCatalogPage ? style.currentPage : ""
+                  }
+                  onClick={() => changePage(index)}
+                  //onClick={ScrollToTop}
+                >
+                  {index + 1}
+                </span>
+              ))}
+              <button
+                onClick={nextNextPage}
+                //   disabled={currentPage === pages}
+                disabled={currentCatalogPage === pages}
+              >
+                Next
+              </button>
+            </div>
+          ) : (
+            <div className={style.noCars}>
+              {" "}
+              <h4>We are sorry, but we don't have a car like that here yet.</h4>
+              <img src={Sorry} alt="sorry-image" />
+            </div>
+          )}
         </div>
       </div>
     </div>

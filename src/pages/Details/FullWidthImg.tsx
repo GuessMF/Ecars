@@ -9,7 +9,7 @@ type Props = {
 export default function FullWidthImg({imgSrc, handleClose}: Props) {
   return (
     <div className={style.fullWidthImg}>
-      <button onClick={handleClose}>Close Btn</button>
+      <button onClick={handleClose}>Close</button>
       <img src={imgSrc} alt="wide img" />
     </div>
   );

@@ -3,7 +3,7 @@
 .liked {
   width: 100%;
   height: fit-content;
-  min-height: 60vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   // gap: 96px;
@@ -11,7 +11,7 @@
   padding: 96px $padding108;
 
   margin-top: 20px;
-  //border: black 1px solid;
+  // border: black 1px solid;
 
   .header {
     h1 {

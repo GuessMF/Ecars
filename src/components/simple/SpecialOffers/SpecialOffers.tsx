@@ -14,20 +14,12 @@ import {Swiper as SwiperCore} from "swiper/types";
 import {Autoplay, Pagination, Navigation} from "swiper/modules";
 import {Virtual} from "swiper/modules";
 
-import {useSwiper} from "swiper/react";
 import "swiper/css/virtual";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./styles.css";
-// import {initializeApp} from "firebase/app";
-// import {getStorage, ref, listAll} from "firebase/storage";
-// import {getDownloadURL} from "firebase/storage";
-// import {getFirestore} from "firebase/firestore";
-
-// import {useAppSelector} from "hooks/redux-hooks";
-// import {useAppDispatch} from "hooks/redux-hooks";
 
 import {db} from "../../../firebase";
 import {

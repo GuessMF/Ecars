@@ -196,7 +196,31 @@ FiltersProps) {
   // const handleChange = (newValue: number) => {
   //   setValue(newValue);
   // };
+  console.log(minYearValue + "  11");
+  console.log(maxYearValue + "  22");
+
   const [visible, setVisible] = React.useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Очистка слушателя событий при размонтировании компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth <= 450) {
+      setVisible(true);
+    }
+  }, [windowWidth]);
+
   const handleClick = () => {
     setVisible(!visible);
   };
@@ -207,8 +231,15 @@ FiltersProps) {
   const [brand, setBrand] = useState<string>("");
   const [model, setModel] = useState<string>("");
   const [models, setModels] = useState<CarModel[]>([]);
-  const [minYear, setMinYear] = useState<string>("");
-  const [maxYear, setMaxYear] = useState<string>("");
+  const [minYear, setMinYear] = useState<string>(minYearValue.toString());
+
+  const [maxYear, setMaxYear] = useState<string>(maxYearValue.toString());
+
+  // useEffect(() => {
+  //   setMinYear(minYearValue.toString());
+  //   setMaxYear(maxYearValue.toString());
+  // }, [minYearValue, maxYearValue]);
+
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
   const mapOthersOptions = (type: OtherOptions): OptionType => ({
@@ -254,6 +285,13 @@ FiltersProps) {
     }
     //  }
   }, [minYear]);
+
+  const newResetYear = () => {
+    resetYear();
+
+    onMinYearChange("2000");
+    onMaxYearChange("2024");
+  };
 
   useEffect(() => {
     carData.brands.forEach((brand) => {
@@ -307,6 +345,20 @@ FiltersProps) {
     }
   }, [modelFilterValue]);
 
+  // let formatedBrand: string;
+  // let formatedModel;
+
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
+
+  // if (brand) {
+  // formatedBrand = capitalizeWords(brand);
+
   const formatMinPrice = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
     const formattedValue = Number(cleanedValue).toLocaleString();
@@ -340,6 +392,7 @@ FiltersProps) {
       <button className={style.filters__closeBtn} onClick={closeFilters}>
         X
       </button>
+
       <div className={style.filters}>
         <div className={style.filters__brand}>
           <div className={style.filters__label}>
@@ -350,9 +403,10 @@ FiltersProps) {
           <select value={brandFilterValue} onChange={onBrandSelectChange}>
             <option value="">Select Brand</option>
             {carData.brands.map((brand) => {
+              const formatedBrand = capitalizeWords(brand.name);
               return (
                 <option key={brand.name} value={brand.name}>
-                  {brand.name}
+                  {formatedBrand}
                 </option>
               );
             })}
@@ -366,11 +420,14 @@ FiltersProps) {
 
           <select onChange={onModelFilterChange} value={modelFilterValue}>
             <option value="">Выбери модель</option>
-            {models.map((model) => (
-              <option key={model.name} value={model.name}>
-                {model.name}
-              </option>
-            ))}
+            {models.map((model) => {
+              const formatedModel = model.name.toUpperCase();
+              return (
+                <option key={model.name} value={model.name}>
+                  {formatedModel}
+                </option>
+              );
+            })}
           </select>
         </div>
 
@@ -523,9 +580,9 @@ FiltersProps) {
         <div className={style.filters__year}>
           <div className={style.filters__label}>
             <h6>Year</h6>
-            <span onClick={() => resetYear()}>Reset</span>
+            <span onClick={() => newResetYear()}>Reset</span>
           </div>
-          <div className={style.filters__min_max}>
+          {/* <div className={style.filters__min_max}>
             <input
               type="text"
               placeholder="Min"
@@ -546,15 +603,17 @@ FiltersProps) {
                 onMaxYearValue(parseInt(e.target.value, 10))
               }
             />
-          </div>
+          </div> */}
           <div className={style.filters__min_max}>
             <CustomSelect
-              value={minYearValue.toLocaleString()}
+              key={`minYear-${minYearValue}`}
+              value={minYear}
               onChange={onMinYearChange}
               // options={yearOptions}
               options={yearOptions}
             />
             <CustomSelect
+              key={`maxYear-${maxYearValue}`}
               //value={maxYearValue.toLocaleString()}
               value={maxYear}
               onChange={onMaxYearChange}

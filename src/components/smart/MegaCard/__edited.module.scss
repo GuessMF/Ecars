@@ -1,0 +1,20 @@
+.Edited {
+  position: fixed;
+  z-index: 99999;
+  border: black 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+  background-color: white;
+  width: 100svw;
+  height: 100svh;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  //   width: 50%;
+  img {
+    width: 25%;
+  }
+}

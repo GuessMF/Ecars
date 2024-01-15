@@ -708,6 +708,13 @@ export default function PersonalPage({userID}: Props) {
     setPrice(formattedValue);
   };
 
+  const capitalizeWords = (brand: string) => {
+    const words = brand.toLowerCase().split(" ");
+    const capitalizeWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizeWords.join(" ");
+  };
   // useEffect(() => {
   //   onModelChange("");
   // }, [brand]);
@@ -943,9 +950,11 @@ export default function PersonalPage({userID}: Props) {
                 ref={brandRef}
               >
                 <CustomSelect
+                  key={`brand-${brand}`}
                   value={brand}
                   onChange={handleNewBrandChange}
                   options={brandOptions}
+                  // options={brandOptions.map((brandName) => capitalizeWords(brandName))}
                 />
               </td>
 
@@ -1101,7 +1110,7 @@ export default function PersonalPage({userID}: Props) {
               >
                 <input
                   type="text"
-                  placeholder="Min"
+                  placeholder="Enter mileage"
                   min="1"
                   // max="999999"
                   maxLength={7}
@@ -1130,6 +1139,7 @@ export default function PersonalPage({userID}: Props) {
               // className={formErrors.special ? style.error : ""}
               >
                 <input
+                  className={style.checkBox}
                   type="checkbox"
                   checked={specialOffer}
                   // value={specialOffer}

@@ -337,8 +337,17 @@ input {
       //border: black 1px solid;
       border-radius: 8px;
       input {
-        margin-left: 20px;
-        margin-right: 20px;
+        // height: 40px;
+        // margin-left: 20px;
+        // margin-right: 20px;
+        // color: black;
+        margin-left: 10px;
+        min-height: 26px;
+        height: 20px;
+        min-width: 50px;
+        max-width: 120px;
+        border-radius: 4px;
+        color: black;
       }
     }
   }
@@ -405,10 +414,24 @@ input {
       font-style: normal;
       font-weight: 400;
       line-height: 20px;
+      input {
+        min-height: 26px;
+        height: 20px;
+        min-width: 50px;
+        max-width: 200px;
+        border-radius: 4px;
+        color: black;
+      }
+      .checkBox {
+        // width: 100%;
+        margin-left: -12px;
+        border: $red500 1px solid !important;
+      }
     }
     tr {
       //border: black 1px solid;
       height: 30px;
+      height: 40px;
       padding-top: 20px;
       .tableTitle {
         font-weight: 600;

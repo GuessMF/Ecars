@@ -2,7 +2,7 @@
 
 .userPage {
   height: fit-content;
-  min-height: 60vh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   // gap: 96px;
@@ -34,7 +34,12 @@
     .sorting {
       margin-top: 40px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      .sorting__nav {
+        display: flex;
+        margin-top: 40px;
+        flex-direction: row;
+      }
       span {
         color: var(--Gray-900, #1a1a1a);
         font-family: Inter;
@@ -117,5 +122,37 @@
   }
   .icon {
     width: 12px;
+  }
+}
+.noCars {
+  // border: black 1px solid;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  .noCars__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    a {
+      color: $primary500;
+      text-decoration: none;
+    }
+    h4 {
+      font-weight: 500;
+    }
+  }
+}
+.specialOffers__corousel {
+  margin-top: 40px;
+  // margin-bottom: 48px;
+  // background-color: orange;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 24px;
+  a {
+    text-decoration: none;
   }
 }

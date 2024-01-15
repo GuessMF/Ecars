@@ -65,11 +65,11 @@ export default function TopBar() {
         <div className={style.logos}>
           <Email color={white} email={"segas95@yandex.ru"} />
         </div>
-        {selectedCurrency?.value === "USD"
+        {/* {selectedCurrency?.value === "USD"
           ? selectedCurrency?.value + `: ${usdValue}`
           : selectedCurrency?.value === "EUR"
           ? selectedCurrency?.value + `: ${eurValue}`
-          : "RUB"}
+          : "RUB"} */}
       </div>
       <div className={style.topBar_right}>
         <svg

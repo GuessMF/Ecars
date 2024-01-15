@@ -2,8 +2,13 @@ import React from "react";
 import {useState, useEffect} from "react";
 import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
-import {useNavigate} from "react-router-dom";
+// import {useNavigate} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Swiper as SwiperCore} from "swiper/types";
+import {useNavigate, useLocation} from "react-router-dom";
+import {Autoplay, Pagination, Navigation} from "swiper/modules";
+import {Virtual} from "swiper/modules";
 import {NavLink} from "react-router-dom";
 import style from "./__userPage.module.scss";
 // import BigCard from "components/smart/BigCard/BigCard";
@@ -79,7 +84,15 @@ interface Car {
   // testImg: string;
 }
 export default function UserPage({userID}: Props) {
+  const location = useLocation();
+  const pathName = location.pathname;
+
   const [cars, setCars] = useState<Car[]>([]);
+
+  const [specialCars, setSpecialCars] = useState<Car[]>([]);
+
+  let numberOfCarts = 4;
+  const swiperRef = React.useRef<SwiperCore>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState<string>("");
@@ -226,6 +239,32 @@ export default function UserPage({userID}: Props) {
     setEdition(value);
   };
 
+  const fetchSpecialCars = async () => {
+    try {
+      const carsRef = collection(db, "cars");
+      let first = query(carsRef);
+      first = query(first, where("special", "==", true));
+      const querySnapshot = await getDocs(first);
+      const cars = querySnapshot.docs.map(
+        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+      );
+
+      setSpecialCars(cars);
+    } catch (error) {
+      console.error("Error fetching first page: ", error);
+    }
+  };
+  useEffect(() => {
+    fetchSpecialCars();
+  }, []);
+  const onClickNewCars = () => {
+    if (pathName === "/catalog") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
     <div className={style.userPage}>
       {popUpDel && (
@@ -242,56 +281,130 @@ export default function UserPage({userID}: Props) {
 
       <div className={style.header}>
         <h1>Personal page</h1>
-        <p>
-          {userName
-            ? userName.charAt(0).toLocaleUpperCase() + userName.slice(1)
-            : "no name"}
-          , welcome to your personal page, here are all the cars that you have
-          for sale
-        </p>
+
         {cars.length > 0 ? (
           <div className={style.sorting}>
-            <span>Sort by:</span>
-
-            <button
-              onClick={() => handleSortBy("dateAdded")}
-              className={sortBy === "dateAdded" ? style.checked : ""}
-            >
-              Date
-              {sortBy === "dateAdded" &&
-                (sortSetting === "asc" ? (
-                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
-                ) : (
-                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
-                ))}
-            </button>
-            <button
-              onClick={() => handleSortBy("price")}
-              className={sortBy === "price" ? style.checked : ""}
-            >
-              Price
-              {sortBy === "price" &&
-                (sortSetting === "asc" ? (
-                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
-                ) : (
-                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
-                ))}
-            </button>
-            <button
-              onClick={() => handleSortBy("brand")}
-              className={sortBy === "brand" ? style.checked : ""}
-            >
-              Brand
-              {sortBy === "brand" &&
-                (sortSetting === "asc" ? (
-                  <img src={ArrowUp} alt="arrowUp" className={style.icon} />
-                ) : (
-                  <img src={ArrowDown} alt="arrowDown" className={style.icon} />
-                ))}
-            </button>
+            <p>
+              {userName
+                ? userName.charAt(0).toLocaleUpperCase() + userName.slice(1)
+                : "no name"}
+              , welcome to your personal page, here are all the cars that you
+              have for sale
+            </p>
+            <div className={style.sorting__nav}>
+              {" "}
+              <span>Sort by:</span>
+              <button
+                onClick={() => handleSortBy("dateAdded")}
+                className={sortBy === "dateAdded" ? style.checked : ""}
+              >
+                Date
+                {sortBy === "dateAdded" &&
+                  (sortSetting === "asc" ? (
+                    <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                  ) : (
+                    <img
+                      src={ArrowDown}
+                      alt="arrowDown"
+                      className={style.icon}
+                    />
+                  ))}
+              </button>
+              <button
+                onClick={() => handleSortBy("price")}
+                className={sortBy === "price" ? style.checked : ""}
+              >
+                Price
+                {sortBy === "price" &&
+                  (sortSetting === "asc" ? (
+                    <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                  ) : (
+                    <img
+                      src={ArrowDown}
+                      alt="arrowDown"
+                      className={style.icon}
+                    />
+                  ))}
+              </button>
+              <button
+                onClick={() => handleSortBy("brand")}
+                className={sortBy === "brand" ? style.checked : ""}
+              >
+                Brand
+                {sortBy === "brand" &&
+                  (sortSetting === "asc" ? (
+                    <img src={ArrowUp} alt="arrowUp" className={style.icon} />
+                  ) : (
+                    <img
+                      src={ArrowDown}
+                      alt="arrowDown"
+                      className={style.icon}
+                    />
+                  ))}
+              </button>
+            </div>
           </div>
         ) : (
-          <h5>No cars yet</h5>
+          <div className={style.noCars}>
+            <div className={style.noCars__header}>
+              <h4>
+                {userName.charAt(0).toLocaleUpperCase() +
+                  userName.slice(1) +
+                  ", "}
+                do you want to <NavLink to={`/sell/${userID}`}>sell</NavLink>{" "}
+                your car?{" "}
+              </h4>
+              <p>or</p>
+              <h4>
+                Or do you want to treat yourself to a{" "}
+                <NavLink to="/catalog?mileage=New" onClick={onClickNewCars}>
+                  new{" "}
+                </NavLink>{" "}
+                car?
+              </h4>
+            </div>
+
+            <div className={style.specialOffers__corousel}>
+              <Swiper
+                // spaceBetween={307}
+                // centeredSlides={true}
+                // pagination={{clickable: true}}
+                navigation={true}
+                autoplay={{delay: 2500, disableOnInteraction: false}}
+                // autoplay={false}
+                spaceBetween={20}
+                modules={[Autoplay, Pagination, Navigation, Virtual]}
+                slidesPerView={numberOfCarts}
+                virtual
+                className="mySwiper"
+                onBeforeInit={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+              >
+                {specialCars.map((car: any, i) => {
+                  return (
+                    <SwiperSlide key={car.price} virtualIndex={i}>
+                      <NavLink
+                        to={`${userID ? `/details/${car.id}` : `/login`}`}
+                      >
+                        <LittleCard
+                          brand={car.brand}
+                          model={car.model}
+                          price={car.price}
+                          fuel={car.fuel}
+                          mileage={car.mileage}
+                          owners={car.owners}
+                          special={true}
+                          previewIMG={car.imageUrls[0]}
+                          location={car.location}
+                        />
+                      </NavLink>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          </div>
         )}
       </div>
       <div className={style.wrapper}>

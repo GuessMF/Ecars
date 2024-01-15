@@ -227,46 +227,50 @@ export default function Liked({userID}: Props) {
           <h5>No cars yet</h5>
         )}
       </div>
-      <div className={style.wrapper}>
-        {likedCars &&
-          cars.map((car: any, index: any) => (
-            <NavLink to={`/details/${car.id}`}>
-              <LikedCard
-                key={index}
-                id={car.id}
-                index={index}
-                brand={car.brand}
-                model={car.model}
-                price={car.price}
-                year={car.year}
-                fuel={car.fuel}
-                owners={car.owners}
-                location={car.location}
-                mileage={car.mileage}
-                description={car.description}
-                previewIMG={car.previewImage[0]}
-              />
-            </NavLink>
-            // />
+      {likedCars && (
+        <div className={style.wrapper}>
+          {likedCars &&
+            cars.map((car: any, index: any) => (
+              <NavLink to={`/details/${car.id}`}>
+                <LikedCard
+                  key={index}
+                  id={car.id}
+                  index={index}
+                  brand={car.brand}
+                  model={car.model}
+                  price={car.price}
+                  year={car.year}
+                  fuel={car.fuel}
+                  owners={car.owners}
+                  location={car.location}
+                  mileage={car.mileage}
+                  description={car.description}
+                  previewIMG={car.previewImage[0]}
+                />
+              </NavLink>
+              // />
+            ))}
+        </div>
+      )}
+      {likedCars.length > 0 && (
+        <div className={style.buttons}>
+          <button onClick={prevPrevPage} disabled={currentPage === 1}>
+            Previous
+          </button>
+          {[...new Array(pages)].map((_, index) => (
+            <span
+              key={index}
+              className={index + 1 == currentPage ? style.currentPage : ""}
+              onClick={() => changePage(index)}
+            >
+              {index + 1}
+            </span>
           ))}
-      </div>
-      <div className={style.buttons}>
-        <button onClick={prevPrevPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        {[...new Array(pages)].map((_, index) => (
-          <span
-            key={index}
-            className={index + 1 == currentPage ? style.currentPage : ""}
-            onClick={() => changePage(index)}
-          >
-            {index + 1}
-          </span>
-        ))}
-        <button onClick={nextNextPage} disabled={currentPage === pages}>
-          Next
-        </button>
-      </div>
+          <button onClick={nextNextPage} disabled={currentPage === pages}>
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

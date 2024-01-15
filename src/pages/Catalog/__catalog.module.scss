@@ -37,11 +37,17 @@
     gap: 24px;
     position: relative;
     // height: 1000px;
+    @media (max-width: 450px) {
+      position: initial;
+    }
     .catalog__left {
       display: flex;
       flex-direction: column;
       gap: 24px;
       min-width: 705px;
+      @media (max-width: 450px) {
+        min-width: 100%;
+      }
     }
   }
 }
@@ -164,5 +170,14 @@
     border: black 1px solid;
     border: 1px solid $outline1;
     border-radius: 8px;
+  }
+}
+.noCars {
+  // border: black 1px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h4 {
+    font-weight: 400;
   }
 }
