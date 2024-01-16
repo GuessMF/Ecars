@@ -12,6 +12,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    img {
+      max-width: 100%;
+    }
+  }
 
   button {
     position: absolute;

@@ -11,6 +11,9 @@
   @media (max-width: 768px) {
     padding: 32px;
   }
+  @media (max-width: 450px) {
+    padding: 16px;
+  }
   .topNavigation {
     display: inline-flex;
     align-items: center;
@@ -48,6 +51,9 @@
     width: fit-content;
     max-width: 100%;
     max-width: 808px;
+    @media (max-width: 768px) {
+      max-width: 100%;
+    }
     .content__pictures {
       display: flex;
       flex-direction: column;

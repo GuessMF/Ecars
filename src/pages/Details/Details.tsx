@@ -66,6 +66,23 @@ export default function Details() {
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Обработка изменений ширины экрана
+      console.log("Ширина экрана изменилась");
+      console.log(window.innerWidth);
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Не забудьте удалить слушатель события при размонтировании компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const swiperRef = useRef<SwiperCore>();
   const navigate = useNavigate();
@@ -421,7 +438,7 @@ export default function Details() {
                     ))}
               </div>
             </div>
-            {window.innerWidth <= 768 && (
+            {screenWidth <= 768 && (
               <DetailsCTA
                 brand={currentCar?.brand}
                 model={currentCar?.model}
@@ -586,7 +603,7 @@ export default function Details() {
             </div>
           </div>
 
-          {window.innerWidth > 768 && (
+          {screenWidth > 768 && (
             <DetailsCTA
               brand={currentCar?.brand}
               model={currentCar?.model}

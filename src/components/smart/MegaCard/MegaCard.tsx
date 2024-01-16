@@ -12,9 +12,11 @@ import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
 import {db, storage} from "../../../firebase";
 import {collection} from "firebase/firestore";
 import CustomSelect from "../CustomSelect/CustomSelect";
+import {ReactComponent as ChangeImage} from "./changeImage.svg";
 
 import carData from "helpers/modelsBrands";
 import Edited from "./Edited";
+import {button} from "components/simple/ContactUsBlock/__contactUsBlock.module.scss";
 // import { updateDoc, doc } from 'firebase/firestore';
 
 interface DateObject {
