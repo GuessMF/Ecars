@@ -941,7 +941,7 @@ export default function PersonalPage({userID}: Props) {
           )}
         </div>
 
-        <table>
+        <table className={style.desktopTable}>
           <tbody>
             <tr>
               <td className={style.tableTitle}>Brand</td>
@@ -1149,7 +1149,221 @@ export default function PersonalPage({userID}: Props) {
             </tr>
           </tbody>
         </table>
-
+        <table className={style.mobileTable}>
+          <tbody>
+            <tr>
+              <td className={style.tableTitle}>Brand</td>
+              <td
+                className={formErrors.brand ? style.error : ""}
+                ref={brandRef}
+              >
+                <CustomSelect
+                  key={`brand-${brand}`}
+                  value={brand}
+                  onChange={handleNewBrandChange}
+                  options={brandOptions}
+                  // options={brandOptions.map((brandName) => capitalizeWords(brandName))}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Model</td>
+              <td
+                className={formErrors.model ? style.error : ""}
+                ref={modelRef}
+              >
+                <CustomSelect
+                  value={model}
+                  onChange={onModelChange}
+                  options={modelsOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Year</td>
+              <td className={formErrors.year ? style.error : ""} ref={yearRef}>
+                <CustomSelect
+                  value={year}
+                  onChange={onYearChange}
+                  options={yearOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Color</td>
+              <td
+                className={formErrors.color ? style.error : ""}
+                ref={colorRef}
+              >
+                <CustomSelect
+                  value={color}
+                  onChange={onColorChange}
+                  options={colorOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Transmission</td>
+              <td
+                className={formErrors.transmission ? style.error : ""}
+                ref={transmissionRef}
+              >
+                <CustomSelect
+                  value={transmission}
+                  onChange={onTransmissionChange}
+                  options={transmissionOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Fuel</td>
+              <td className={formErrors.fuel ? style.error : ""} ref={fuelRef}>
+                <CustomSelect
+                  value={fuel}
+                  onChange={onFuelChange}
+                  options={fuelOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Engine value</td>
+              <td
+                className={formErrors.engineValue ? style.error : ""}
+                ref={engineValueRef}
+              >
+                <CustomSelect
+                  value={engineValue}
+                  onChange={onEngineValueChange}
+                  options={engineValueOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Vehicle Type</td>
+              <td
+                className={formErrors.vehicleType ? style.error : ""}
+                ref={vehicleTypeRef}
+              >
+                <CustomSelect
+                  value={vehicleType}
+                  onChange={onVehicleTypeChange}
+                  options={vehicleOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Interior</td>
+              <td
+                className={formErrors.interior ? style.error : ""}
+                ref={brandRef}
+              >
+                <CustomSelect
+                  value={interior}
+                  onChange={onInteriorChange}
+                  options={interiorOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Wheels</td>
+              <td
+                className={formErrors.wheels ? style.error : ""}
+                ref={wheelsRef}
+              >
+                <CustomSelect
+                  value={wheels}
+                  onChange={onWheelsChange}
+                  options={wheelsOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Seats</td>
+              <td
+                className={formErrors.seats ? style.error : ""}
+                ref={seatsRef}
+              >
+                <CustomSelect
+                  value={seats}
+                  onChange={onSeatsChange}
+                  options={seatsOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Location</td>
+              <td
+                className={formErrors.location ? style.error : ""}
+                ref={locationRef}
+              >
+                <CustomSelect
+                  value={location}
+                  onChange={onLocationChange}
+                  options={locationOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Export</td>
+              <td
+                className={formErrors.exportStatus ? style.error : ""}
+                ref={exportStatusRef}
+              >
+                <CustomSelect
+                  value={exportStatus}
+                  onChange={onExportStatusChange}
+                  options={exportStatusOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Owners</td>
+              <td
+                className={formErrors.owners ? style.error : ""}
+                ref={ownersRef}
+              >
+                <CustomSelect
+                  value={owners}
+                  onChange={onOwnersChange}
+                  options={ownersOptions}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Mileage</td>
+              <td
+                className={formErrors.mileage ? style.error : ""}
+                ref={mileageRef}
+              >
+                <input
+                  type="text"
+                  placeholder="Enter mileage"
+                  min="1"
+                  // max="999999"
+                  maxLength={7}
+                  value={mileage}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    formatMileage(e.target.value);
+                  }}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Special</td>
+              <td
+              // className={formErrors.special ? style.error : ""}
+              >
+                <input
+                  className={style.checkBox}
+                  type="checkbox"
+                  checked={specialOffer}
+                  // value={specialOffer}
+                  onChange={(e) => setSpecialOffer(e.target.checked)}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div
           // className={formErrors.description ? style.error : style.description}
           className={style.description}

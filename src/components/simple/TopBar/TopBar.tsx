@@ -44,9 +44,6 @@ export default function TopBar() {
   const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
   const onClickCurrency = (selectedOption: any) => {
     setSelectedCurrency(selectedOption);
-    //  console.log(selectedOption.value);
-
-    // onCurrencyChange(selectedOption);
     dispatch(setCurrencyTerm(selectedOption.value));
     setMenuIsOpen(false);
   };

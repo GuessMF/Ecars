@@ -26,6 +26,7 @@
   }
   @media (max-width: 450px) {
     padding: 32px 16px;
+    margin-top: 80px;
   }
 
   .header {
@@ -49,6 +50,9 @@
       font-style: normal;
       font-weight: 400;
       line-height: 24px; /* 150% */
+      @media (max-width: 450px) {
+        padding-bottom: 20px;
+      }
     }
   }
 
@@ -121,6 +125,9 @@ input {
     border-radius: 8px;
 
     overflow: hidden;
+    @media (max-width: 450px) {
+      height: 250px;
+    }
 
     label {
       display: flex;
@@ -214,6 +221,9 @@ input {
     overflow: auto;
     border: $gray100 1px solid;
     border-radius: 8px;
+    @media (max-width: 450px) {
+      padding: 10px 0;
+    }
     label {
       width: 100%;
       display: flex;
@@ -241,6 +251,11 @@ input {
       // background-color: $gray100;
       background: none;
       border: $gray300 1px solid;
+      @media (max-width: 450px) {
+        width: 35px;
+        height: 35px;
+        padding: 8px 4px;
+      }
     }
     .preview__photos {
       padding: 0;
@@ -433,9 +448,28 @@ input {
       height: 30px;
       height: 40px;
       padding-top: 20px;
+      @media (max-width: 450px) {
+        // display: flex;
+        // flex-direction: column;
+      }
       .tableTitle {
         font-weight: 600;
       }
+    }
+  }
+  .desktopTable {
+    @media (max-width: 450px) {
+      display: none;
+    }
+  }
+  .mobileTable {
+    display: none;
+    @media (max-width: 450px) {
+      display: block;
+    }
+
+    td {
+      padding-right: 50px;
     }
   }
 

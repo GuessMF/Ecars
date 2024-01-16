@@ -318,8 +318,10 @@ export default function Details() {
   }, [photoURLs]);
 
   const changeLittlePhoto = (index: number) => {
+    const topPage: number = window.innerWidth <= 450 ? 0 : 40;
     window.scrollTo({
-      top: 40,
+      // top: 40,
+      top: topPage,
       behavior: "smooth",
     });
     setSelectedPhoto(index);

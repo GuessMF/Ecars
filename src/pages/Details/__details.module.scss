@@ -422,6 +422,9 @@
       // align-items: center;
       gap: 24px;
       padding-bottom: 20px;
+      @media (max-width: 450px) {
+        // gap: 50px;
+      }
       h5 {
         color: $gray900;
 

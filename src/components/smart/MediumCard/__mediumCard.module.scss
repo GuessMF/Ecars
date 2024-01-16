@@ -16,6 +16,11 @@
   font-size: 14px;
   line-height: 24px;
   // border: black 1px solid;
+  @media (max-width: 450px) {
+    width: 100%;
+    flex-direction: column;
+    height: fit-content;
+  }
   .mediumCard__img {
     // background-color: red;
     width: 50%;
@@ -28,10 +33,18 @@
     // border-radius: 8px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    @media (max-width: 450px) {
+      width: 100%;
+
+      border-top-right-radius: 8px;
+      border-bottom-left-radius: 0;
+    }
     img {
       width: 100%;
       height: auto;
       object-fit: cover;
+      @media (max-width: 450px) {
+      }
     }
   }
 
@@ -48,6 +61,13 @@
     border-left: none;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+    @media (max-width: 450px) {
+      width: 100%;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 8px;
+      border-left: $gray100 1px solid;
+      border-top: none;
+    }
     .brandModel {
       display: flex;
       flex-direction: row;
