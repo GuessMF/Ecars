@@ -1,6 +1,6 @@
 {
   "name": "ecars",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "homepage": "https://ecars-project.ru",
   "private": false,
   "dependencies": {
