@@ -161,6 +161,10 @@ code {
     border-radius: 4px !important;
     // background-color: $darkBG1 !important;
     // color: #ffffff !important;
+    @media (max-width: 450px) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
     &--menu-is-open {
       border: $primary500 1px solid !important;
     }

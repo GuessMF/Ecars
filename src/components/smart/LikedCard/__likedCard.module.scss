@@ -8,6 +8,10 @@
   display: flex;
   flex-direction: column;
   color: $gray500;
+  @media (max-width: 450px) {
+    width: 100%;
+    height: fit-content;
+  }
 
   .top {
     width: 100%;
@@ -31,6 +35,9 @@
     flex-direction: column;
     padding: 16px;
     justify-content: space-between;
+    @media (max-width: 450px) {
+      gap: 8px;
+    }
     .brandModelYear {
       display: flex;
       flex-direction: row;

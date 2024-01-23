@@ -442,7 +442,7 @@ export default function UserPage({userID}: Props) {
             onClickCheck={onClickCheck}
           />
         )}
-        {cars.length > 1 && <h5>Other cars you liked:</h5>}
+        {cars.length > 1 && <h5>Other cars you sell:</h5>}
 
         <div className={style.otherCars}>
           {loaded &&

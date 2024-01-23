@@ -14,6 +14,9 @@
   flex-direction: column;
   gap: 20px;
   padding: 20px;
+  @media (max-width: 450px) {
+    padding: 8px;
+  }
 
   .previewBigImage {
     width: 100%;
@@ -25,6 +28,9 @@
     align-items: center;
     border-radius: 8px;
     position: relative;
+    @media (max-width: 450px) {
+      height: fit-content;
+    }
     span {
       width: 100%;
     }
@@ -81,8 +87,36 @@
       display: flex;
       flex-direction: row;
       gap: 5px;
+      @media (max-width: 450px) {
+        gap: 8px;
+        h3 {
+          font-size: 20px;
+          text-wrap: nowrap;
+        }
+      }
     }
 
+    // table {
+    //   // background-color: red;
+
+    //   td {
+    //     //  border: black 1px solid;
+    //     color: $gray900;
+    //     font-family: Inter;
+    //     font-size: 14px;
+    //     font-style: normal;
+    //     font-weight: 400;
+    //     line-height: 20px;
+    //   }
+    //   tr {
+    //     //border: black 1px solid;
+    //     height: 30px;
+    //     padding-top: 20px;
+    //     .tableTitle {
+    //       font-weight: 600;
+    //     }
+    //   }
+    // }
     table {
       // background-color: red;
 
@@ -94,17 +128,55 @@
         font-style: normal;
         font-weight: 400;
         line-height: 20px;
+        input {
+          min-height: 26px;
+          height: 20px;
+          min-width: 50px;
+          max-width: 200px;
+          border-radius: 4px;
+          color: black;
+          @media (max-width: 450px) {
+            width: 100%;
+          }
+        }
+        .checkBox {
+          // width: 100%;
+          margin-left: -12px;
+          border: $red500 1px solid !important;
+        }
       }
       tr {
         //border: black 1px solid;
         height: 30px;
+        height: 40px;
         padding-top: 20px;
+        @media (max-width: 450px) {
+          // display: flex;
+          // flex-direction: column;
+        }
         .tableTitle {
           font-weight: 600;
         }
       }
     }
+    .desktopTable {
+      @media (max-width: 450px) {
+        display: none;
+      }
+    }
+    .mobileTable {
+      display: none;
+      @media (max-width: 450px) {
+        display: block;
+      }
 
+      td {
+        padding-right: 50px;
+        @media (max-width: 450px) {
+          padding-right: 20px;
+        }
+      }
+    }
     .mainInformation {
       //  border: black 1px solid;
       display: flex;
@@ -205,6 +277,11 @@
       font-style: normal;
       font-weight: 400;
       line-height: 115%; /* 29.9px */
+      @media (max-width: 450px) {
+        font-size: 14px;
+        padding: 6px;
+        border-radius: 4px;
+      }
     }
     // .description {
     //   // font-size: 16px;
@@ -240,11 +317,18 @@
           border: $gray100 1px solid;
           border-radius: 8px;
         }
+        span {
+          overflow-wrap: anywhere;
+        }
       }
     }
     .priceBox {
       display: flex;
       flex-direction: row;
+      @media (max-width: 450px) {
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
     }
 
     .added {
@@ -260,6 +344,10 @@
       display: flex;
       flex-direction: row;
       justify-content: space-around;
+      @media (max-width: 450px) {
+        flex-direction: column;
+        gap: 8px;
+      }
       button {
         display: flex;
         width: 263px;
@@ -275,6 +363,9 @@
         font-style: normal;
         font-weight: 600;
         line-height: 24px; /* 171.429% */
+        @media (max-width: 450px) {
+          width: 100%;
+        }
       }
       .visit {
         background-color: $secondary500;

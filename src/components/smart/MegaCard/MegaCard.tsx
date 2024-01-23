@@ -499,14 +499,13 @@ Props) {
           <h3>{year}</h3>
         </div>
 
-        <table>
+        <table className={style.desktopTable}>
           <tbody>
-            {" "}
             <tr>
               <td className={style.tableTitle}>Brand</td>
               <td
               // className={formErrors.brand ? style.error : ""}
-              //ref={brandRef}
+              // ref={brandRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -524,10 +523,6 @@ Props) {
               // className={formErrors.interior ? style.error : ""}
               // ref={brandRef}
               >
-                {/* <CustomSelect
-                onChange={onInteriorChange}
-                options={interiorOptions}
-              /> */}
                 {edition ? (
                   <CustomSelect
                     value={newInterior}
@@ -542,7 +537,7 @@ Props) {
             <tr>
               <td className={style.tableTitle}>Model</td>
               <td
-              //className={formErrors.model ? style.error : ""}
+              // className={formErrors.model ? style.error : ""}
               // ref={modelRef}
               >
                 {edition ? (
@@ -558,8 +553,8 @@ Props) {
 
               <td className={style.tableTitle}>Wheels</td>
               <td
-              //className={formErrors.wheels ? style.error : ""}
-              //  ref={wheelsRef}
+              // className={formErrors.wheels ? style.error : ""}
+              // ref={wheelsRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -575,8 +570,7 @@ Props) {
             <tr>
               <td className={style.tableTitle}>Year</td>
               <td
-              // className={formErrors.year ? style.error : ""}
-              // ref={yearRef}
+              // className={formErrors.year ? style.error : ""} ref={yearRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -608,7 +602,7 @@ Props) {
               <td className={style.tableTitle}>Color</td>
               <td
               // className={formErrors.color ? style.error : ""}
-              //ref={colorRef}
+              // ref={colorRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -623,7 +617,7 @@ Props) {
 
               <td className={style.tableTitle}>Location</td>
               <td
-              //  className={formErrors.location ? style.error : ""}
+              // className={formErrors.location ? style.error : ""}
               // ref={locationRef}
               >
                 {edition ? (
@@ -641,7 +635,7 @@ Props) {
               <td className={style.tableTitle}>Transmission</td>
               <td
               // className={formErrors.transmission ? style.error : ""}
-              //  ref={transmissionRef}
+              // ref={transmissionRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -670,11 +664,11 @@ Props) {
                 )}
               </td>
             </tr>
+
             <tr>
               <td className={style.tableTitle}>Fuel</td>
               <td
-              // className={formErrors.fuel ? style.error : ""}
-              /// ref={fuelRef}
+              // className={formErrors.fuel ? style.error : ""} ref={fuelRef}
               >
                 {edition ? (
                   <CustomSelect
@@ -686,9 +680,10 @@ Props) {
                   <span>{fuel}</span>
                 )}
               </td>
+
               <td className={style.tableTitle}>Owners</td>
               <td
-              //  className={formErrors.owners ? style.error : ""}
+              // className={formErrors.owners ? style.error : ""}
               // ref={ownersRef}
               >
                 {edition ? (
@@ -702,10 +697,11 @@ Props) {
                 )}
               </td>
             </tr>
+
             <tr>
               <td className={style.tableTitle}>Engine value</td>
               <td
-              //className={formErrors.engineValue ? style.error : ""}
+              // className={formErrors.engineValue ? style.error : ""}
               // ref={engineValueRef}
               >
                 {edition ? (
@@ -721,8 +717,8 @@ Props) {
 
               <td className={style.tableTitle}>Mileage</td>
               <td
-              //  className={formErrors.mileage ? style.error : ""}
-              //ref={mileageRef}
+              // className={formErrors.mileage ? style.error : ""}
+              // ref={mileageRef}
               >
                 {edition ? (
                   <input
@@ -744,7 +740,7 @@ Props) {
             <tr>
               <td className={style.tableTitle}>Vehicle Type</td>
               <td
-              //  className={formErrors.vehicleType ? style.error : ""}
+              // className={formErrors.vehicleType ? style.error : ""}
               // ref={vehicleTypeRef}
               >
                 {edition ? (
@@ -758,6 +754,288 @@ Props) {
                 )}
               </td>
 
+              <td className={style.tableTitle}>Special</td>
+              <td
+              // className={formErrors.special ? style.error : ""}
+              >
+                {edition ? (
+                  <input
+                    type="checkbox"
+                    checked={newSpecial}
+                    // value={newSpecial}
+                    onChange={(e) => setNewSpecial(e.target.checked)}
+                  />
+                ) : (
+                  <span>{special ? "Yes" : "No"}</span>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table className={style.mobileTable}>
+          <tbody>
+            <tr>
+              <td className={style.tableTitle}>Brand</td>
+              <td
+              // className={formErrors.brand ? style.error : ""}
+              // ref={brandRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newBrand}
+                    onChange={handleNewBrandChange}
+                    options={brandOptions}
+                  />
+                ) : (
+                  <span>{formatedBrand}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Model</td>
+              <td
+              // className={formErrors.model ? style.error : ""}
+              // ref={modelRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newModel}
+                    onChange={onModelChange}
+                    options={modelsOptions}
+                  />
+                ) : (
+                  <span>{model.toLocaleUpperCase()}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Year</td>
+              <td
+              //  className={formErrors.year ? style.error : ""}
+              //   ref={yearRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newYear}
+                    onChange={onYearChange}
+                    options={yearOptions}
+                  />
+                ) : (
+                  <span>{year}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Color</td>
+              <td
+              // className={formErrors.color ? style.error : ""}
+              // ref={colorRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newColor}
+                    onChange={onColorChange}
+                    options={colorOptions}
+                  />
+                ) : (
+                  <span>{color}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Transmission</td>
+              <td
+              // className={formErrors.transmission ? style.error : ""}
+              // ref={transmissionRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newTransmission}
+                    onChange={onTransmissionChange}
+                    options={transmissionOptions}
+                  />
+                ) : (
+                  <span>{transmission}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Fuel</td>
+              <td
+              //  className={formErrors.fuel ? style.error : ""}
+              //   ref={fuelRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newFuel}
+                    onChange={onFuelChange}
+                    options={fuelOptions}
+                  />
+                ) : (
+                  <span>{fuel}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Engine value</td>
+              <td
+              // className={formErrors.engineValue ? style.error : ""}
+              // ref={engineValueRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newEngineValue}
+                    onChange={onEngineValueChange}
+                    options={engineValueOptions}
+                  />
+                ) : (
+                  <span>{engineVolume} L</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Vehicle Type</td>
+              <td
+              // className={formErrors.vehicleType ? style.error : ""}
+              // ref={vehicleTypeRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newVehicleType}
+                    onChange={onVehicleTypeChange}
+                    options={vehicleOptions}
+                  />
+                ) : (
+                  <span>{type}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Interior</td>
+              <td
+              // className={formErrors.interior ? style.error : ""}
+              // ref={brandRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newInterior}
+                    onChange={onInteriorChange}
+                    options={interiorOptions}
+                  />
+                ) : (
+                  <span>{interior}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Wheels</td>
+              <td
+              // className={formErrors.wheels ? style.error : ""}
+              // ref={wheelsRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newWheels}
+                    onChange={onWheelsChange}
+                    options={wheelsOptions}
+                  />
+                ) : (
+                  <span>{wheels}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Seats</td>
+              <td
+              // className={formErrors.seats ? style.error : ""}
+              // ref={seatsRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newSeats}
+                    onChange={onSeatsChange}
+                    options={seatsOptions}
+                  />
+                ) : (
+                  <span>{seats}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Location</td>
+              <td
+              // className={formErrors.location ? style.error : ""}
+              // ref={locationRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newLocation}
+                    onChange={onLocationChange}
+                    options={locationOptions}
+                  />
+                ) : (
+                  <span>{location}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Export</td>
+              <td
+              // className={formErrors.exportStatus ? style.error : ""}
+              // ref={exportStatusRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newExportStatus}
+                    onChange={onExportStatusChange}
+                    options={exportStatusOptions}
+                  />
+                ) : (
+                  <span>{exportStatus}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Owners</td>
+              <td
+              // className={formErrors.owners ? style.error : ""}
+              // ref={ownersRef}
+              >
+                {edition ? (
+                  <CustomSelect
+                    value={newOwners}
+                    onChange={onOwnersChange}
+                    options={ownersOptions}
+                  />
+                ) : (
+                  <span>{owners}</span>
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td className={style.tableTitle}>Mileage</td>
+              <td
+              // className={formErrors.mileage ? style.error : ""}
+              // ref={mileageRef}
+              >
+                {edition ? (
+                  <input
+                    type="text"
+                    placeholder="Min"
+                    min="1"
+                    // max="999999"
+                    maxLength={7}
+                    value={newMileage}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      formatMileage(e.target.value);
+                    }}
+                  />
+                ) : (
+                  <span>{formattedMileage} Км</span>
+                )}
+              </td>
+            </tr>
+            <tr>
               <td className={style.tableTitle}>Special</td>
               <td
               // className={formErrors.special ? style.error : ""}
