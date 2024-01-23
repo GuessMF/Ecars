@@ -17,4 +17,11 @@
   img {
     width: 25%;
   }
+  @media (max-width: 450px) {
+    padding: 20px;
+    text-align: center;
+    img {
+      width: 90%;
+    }
+  }
 }

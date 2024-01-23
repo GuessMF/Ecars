@@ -18,7 +18,7 @@
   @media (max-width: 450px) {
     bottom: 100px;
     // height: 200vh;
-    width: 100%;
+    width: 90%;
   }
   .container {
     //position: absolute;
@@ -45,6 +45,7 @@
       align-items: center;
       height: 50px;
       width: 50px;
+      border-radius: 8px;
     }
     .message_box {
       //background-color: red;
@@ -55,11 +56,16 @@
       p {
         font-size: 30px;
         color: aliceblue;
+        @media (max-width: 450px) {
+          text-align: center;
+        }
       }
       .agree__btn {
         margin-top: 30px;
         width: 70%;
         height: 50px;
+        border-radius: 8px;
+        font-size: 16px;
       }
     }
   }

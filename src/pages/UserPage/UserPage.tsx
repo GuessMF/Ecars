@@ -294,7 +294,6 @@ export default function UserPage({userID}: Props) {
               have for sale
             </p>
             <div className={style.sorting__nav}>
-              {" "}
               <span>Sort by:</span>
               <button
                 onClick={() => handleSortBy("dateAdded")}
@@ -350,15 +349,17 @@ export default function UserPage({userID}: Props) {
           <div className={style.noCars}>
             <div className={style.noCars__header}>
               <h4>
-                {userName.charAt(0).toLocaleUpperCase() +
-                  userName.slice(1) +
-                  ", "}
+                {userID &&
+                  (displayName
+                    ? displayName.charAt(0).toLocaleUpperCase() +
+                      displayName.slice(1)
+                    : userMobile) + ", "}
                 do you want to <NavLink to={`/sell/${userID}`}>sell</NavLink>{" "}
                 your car?{" "}
               </h4>
               <p>or</p>
               <h4>
-                Or do you want to treat yourself to a{" "}
+                Do you want to treat yourself to a{" "}
                 <NavLink to="/catalog?mileage=New" onClick={onClickNewCars}>
                   new{" "}
                 </NavLink>{" "}

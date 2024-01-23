@@ -135,13 +135,8 @@ export default function Sidebar({isOpen, setIsOpen}: SidebarProps) {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/" className={styles.navLink} onClick={handleClick}>
-              Blog
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/" className={styles.navLink} onClick={handleClick}>
-              Contact
+            <NavLink to="/FAQ" className={styles.navLink} onClick={handleClick}>
+              FAQ
             </NavLink>
           </li>
         </div>
