@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import style from "./__footer.module.scss";
 import {ReactComponent as Logo} from "../../../assets/icons/footer/Logo.svg";
 // import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
@@ -21,6 +21,13 @@ export default function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
   const pathName = location.pathname;
+
+  const [currentYear, setCurrentYear] = useState<number>(0);
+
+  useEffect(() => {
+    const newYear = new Date().getFullYear();
+    setCurrentYear(newYear);
+  }, []);
 
   const options = [
     {value: "RUB", label: "RUB"},
@@ -88,8 +95,11 @@ export default function Footer() {
               <li>
                 <NavLink to="/aboutUs">About Us</NavLink>
               </li>
-              <li>Blog</li>
-              <li>FAQ</li>
+              {/* <li>Blog</li> */}
+              <li>
+                {" "}
+                <NavLink to="/FAQ">FAQ</NavLink>
+              </li>
             </ul>
           </div>
           <div className={style.footer__third}>
@@ -139,7 +149,7 @@ export default function Footer() {
 
         <div className={style.footer__bottom}>
           <div className={style.footer__left}>
-            <span>eCars © 2023. All rights reserved.</span>
+            <span>eCars © 2023-{currentYear}. All rights reserved.</span>
           </div>
           <div className={style.footer__right}>
             <span>Privacy Policy</span>

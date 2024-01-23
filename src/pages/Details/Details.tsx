@@ -66,7 +66,8 @@ export default function Details() {
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
-  const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  console.log(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
@@ -334,6 +335,7 @@ export default function Details() {
     }
   }, [photoURLs]);
   const location = useLocation();
+  console.log(screenWidth);
 
   return (
     <div className={style.details}>
@@ -605,7 +607,7 @@ export default function Details() {
             </div>
           </div>
 
-          {screenWidth > 768 && (
+          {screenWidth >= 768 && (
             <DetailsCTA
               brand={currentCar?.brand}
               model={currentCar?.model}

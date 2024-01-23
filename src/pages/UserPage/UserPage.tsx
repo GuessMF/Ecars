@@ -86,7 +86,7 @@ interface Car {
 export default function UserPage({userID}: Props) {
   const location = useLocation();
   const pathName = location.pathname;
-
+  const userMobile = useAppSelector((state) => state.user.mobile);
   const [cars, setCars] = useState<Car[]>([]);
 
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
@@ -285,9 +285,11 @@ export default function UserPage({userID}: Props) {
         {cars.length > 0 ? (
           <div className={style.sorting}>
             <p>
-              {userName
-                ? userName.charAt(0).toLocaleUpperCase() + userName.slice(1)
-                : "no name"}
+              {userID &&
+                (displayName
+                  ? displayName.charAt(0).toLocaleUpperCase() +
+                    displayName.slice(1)
+                  : userMobile)}
               , welcome to your personal page, here are all the cars that you
               have for sale
             </p>

@@ -33,6 +33,7 @@ import {setCurrencyTerm} from "store/slices/currencySlice";
 import {setCurrValue} from "./store/slices/currValueSlice";
 import {useAppSelector} from "hooks/redux-hooks";
 import LoginMobile from "pages/LoginMobile/LoginMobile";
+import FAQ from "pages/FAQ/FAQ";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -97,6 +98,7 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/FAQ" element={<FAQ />} />
         <Route path="/details/:id" element={<Details />} />
         <Route
           path="/sell/:userId"

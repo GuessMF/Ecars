@@ -140,12 +140,14 @@ export default function Header() {
               About Us
             </NavLink>
           </li>
-          <li>Blog</li>
           <li>
+            <NavLink to="/FAQ">FAQ</NavLink>
+          </li>
+          {/* <li>
             <NavLink to="/test" className={style.navLink}>
               Test
             </NavLink>
-          </li>
+          </li> */}
         </div>
       </nav>
       <div className={style.header__formGroup}>
@@ -183,10 +185,7 @@ export default function Header() {
 
           {userId && (
             <div className={style.user}>
-              <p>
-                {userId && (displayName ? displayName : userMobile)}
-                {/* {displayName ? displayName : userMobile ? userMobile : "No"} */}
-              </p>
+              <p>{userId && (displayName ? displayName : userMobile)}</p>
 
               <button onClick={handleLogout}>Выйти</button>
             </div>

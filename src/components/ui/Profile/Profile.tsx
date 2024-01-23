@@ -3,7 +3,7 @@ import style from "./__profile.module.scss";
 
 export default function Profile() {
   return (
-    <div>
+    <div className={style.profile}>
       <svg
         width="18"
         height="18"

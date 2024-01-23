@@ -531,36 +531,32 @@ export default function PersonalPage({userID}: Props) {
         setTimeout(() => {
           setSent(false);
           navigate(`/details/${newId}`);
-        }, 2000);
+        }, 1500);
+        console.log(errors);
       } catch (error) {
         console.error("Error adding documents: ", error);
       }
 
-      setSelectedFiles([]);
-      // selectedFiles = [];
-      setPreviewImages([]);
-      setBrand("");
-      // setBrand([]);
-      setModel("");
-      setPrice("");
-      // setYear(0);
-      setYear("");
-      setTransmission("");
-      // setEngineCapacity("");
-      setEngineValue("");
-      // setMileage(0);
-      setMileage("1");
-      setFuel("");
-      setWheels("");
-      setVehicleType("");
-      setSeats("");
-      setInterior("");
-      setColor("");
-      setLocation("");
-      setExportStatus("");
-      setDescription("");
-      setOwners("");
-      setSpecialOffer(false);
+      // setSelectedFiles([]);
+      // setPreviewImages([]);
+      // setBrand("");
+      // setModel("");
+      // setPrice("");
+      // setYear("");
+      // setTransmission("");
+      // setEngineValue("");
+      // setMileage("1");
+      // setFuel("");
+      // setWheels("");
+      // setVehicleType("");
+      // setSeats("");
+      // setInterior("");
+      // setColor("");
+      // setLocation("");
+      // setExportStatus("");
+      // setDescription("");
+      // setOwners("");
+      // setSpecialOffer(false);
     }
   };
 
@@ -805,8 +801,11 @@ export default function PersonalPage({userID}: Props) {
       <div className={style.header}>
         <h1>Sell your car</h1>
         <p>
-          {userName.charAt(0).toLocaleUpperCase() + userName.slice(1)}, here you
-          can fill in the card of the car you are going to sell.
+          {userID &&
+            (displayName
+              ? displayName.charAt(0).toLocaleUpperCase() + displayName.slice(1)
+              : userMobile)}
+          , here you can fill in the card of the car you are going to sell.
         </p>
       </div>
 

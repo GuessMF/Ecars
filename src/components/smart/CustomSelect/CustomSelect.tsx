@@ -17,10 +17,10 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   options,
   onChange,
 }) => {
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
-  console.log(options);
+  // useEffect(() => {
+  //   console.log(value);
+  // }, [value]);
+  // console.log(options);
 
   const transformedOptions: {value: string; label: string}[] = options.map(
     (option) => ({

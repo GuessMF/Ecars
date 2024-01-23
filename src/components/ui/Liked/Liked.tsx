@@ -2,7 +2,7 @@ import React from "react";
 import style from "./__liked.module.scss";
 export default function Liked() {
   return (
-    <div>
+    <div className={style.liked}>
       <svg
         width="18"
         height="16"

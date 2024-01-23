@@ -7,28 +7,36 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px $padding108;
-
   border-bottom: 1px solid $outline2;
-  // border-left: 1px solid $outline2;
-  // border-right: 1px solid $outline2;
   position: fixed;
   top: 30px;
   top: 40px;
-  z-index: 9999;
+  z-index: 80;
   max-width: 1440px;
   width: 100%;
+  @media (max-width: 768px) {
+    z-index: 90;
+  }
   a {
     &:hover {
       text-decoration: none;
     }
   }
-  // @media (max-width: 768px) {
-  //   // width: 100%;
-  // }
+
   .links {
     display: flex;
     flex-direction: row;
     gap: 32px;
+    a {
+      text-decoration: none;
+      color: $gray900;
+      transition: 0.2s color ease-in-out;
+    }
+    @media (hover: hover) {
+      a:hover {
+        color: $primary500;
+      }
+    }
   }
   .menu {
     display: none;
@@ -202,5 +210,13 @@
     color: $white;
     font-family: "Inter";
     font-style: normal;
+    transition: 0.2s background-color ease-in-out;
+  }
+  @media (hover: hover) {
+    button {
+      &:hover {
+        background-color: $red500;
+      }
+    }
   }
 }

@@ -1,0 +1,115 @@
+@import "../../styles/_var";
+
+.FAQ {
+  margin: 100px auto 100px auto;
+  // border: black 1px solid;
+  // height: 100vh;
+  width: 100%;
+  max-width: 808px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  // justify-content: center;
+  align-items: center;
+  h1 {
+    text-align: start;
+    align-self: self-start;
+    font-family: Inter;
+    color: $gray900;
+    font-size: 44px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 115%;
+    // background-color: red;
+    padding-top: 48px;
+  }
+  .questions {
+    // border: black 1px solid;
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+      list-style: none;
+      padding: 19px 16px;
+      background-color: $lightBG;
+      border: $lightBG 1px solid;
+      border-radius: 8px;
+      display: flex;
+      height: fit-content;
+      // flex-direction: row;
+      // align-items: center;
+      // justify-content: space-between;
+      flex-direction: column;
+      // gap: 16px;
+      cursor: pointer;
+      transition: 0.2s background-color ease-in-out;
+      transition: 0.2s border ease-in-out;
+
+      .question {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .answer_opened {
+        // border: black 1px solid;
+        // background-color: rgb(140, 140, 210);
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; /* 150% */
+        // height: auto;
+        transition: max-height 0.2s ease-in-out;
+        // overflow: hidden;
+        max-height: 500px;
+        padding-top: 16px;
+      }
+      .answer_closed {
+        // border: black 1px solid;
+        // background-color: rgb(226, 157, 157);
+        overflow: hidden;
+        // height: 0;
+
+        font-family: Inter;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; /* 150% */
+        transition: all 0.2s ease-in-out;
+        // transition: padding 0.3s ease-in-out;
+        max-height: 0;
+        padding: 0;
+      }
+
+      span {
+        color: $gray900;
+        /* Desktop/H6 */
+        font-family: Inter;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 120%; /* 21.6px */
+      }
+      svg {
+        cursor: pointer;
+      }
+    }
+    @media (hover: hover) {
+      li {
+        &:hover {
+          background-color: $white;
+          border: $outline1 1px solid;
+          svg path {
+            fill: $primary500;
+          }
+        }
+      }
+    }
+  }
+}

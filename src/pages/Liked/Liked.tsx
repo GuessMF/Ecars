@@ -13,7 +13,7 @@ import ArrowUp from "./arrowUp.webp";
 import ArrowDown from "./arrowDown.webp";
 import {likedCard} from "components/smart/LikedCard/__likedCard.module.scss";
 import LikedCard from "components/smart/LikedCard/LikedCard";
-
+import {useAppSelector} from "hooks/redux-hooks";
 interface Props {
   userID: string;
 }
@@ -51,7 +51,7 @@ export default function Liked({userID}: Props) {
   const [userName, setUserName] = useState<string>("");
   const [loading, setLoading] = useState(true);
   // const pages = Math.ceil(totalCars / itemsPerPage);
-
+  const userMobile = useAppSelector((state) => state.user.mobile);
   const itemsPerPage: number = 4;
   const pages = Math.ceil(totalCars / itemsPerPage);
 
@@ -180,8 +180,11 @@ export default function Liked({userID}: Props) {
         <h1>Cars you liked</h1>
 
         <p>
-          {userName.charAt(0).toLocaleUpperCase() + userName.slice(1)}, welcome
-          to your liked page, this shows the cars you've liked.
+          {userID &&
+            (displayName
+              ? displayName.charAt(0).toLocaleUpperCase() + displayName.slice(1)
+              : userMobile)}
+          , welcome to your liked page, this shows the cars you've liked.
         </p>
         {cars.length > 0 ? (
           <div className={style.sorting}>

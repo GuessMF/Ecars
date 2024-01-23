@@ -1,7 +1,15 @@
 @import "./../../../styles/__var.scss";
 
 .search {
-  // background-color: bisque;
-  // border: black 1px solid;
   cursor: pointer;
+  svg path {
+    transition: 0.2s ease-in-out fill;
+  }
+}
+@media (hover: hover) {
+  .search:hover {
+    svg path {
+      fill: $primary500;
+    }
+  }
 }

@@ -18,7 +18,16 @@
   line-height: 24px;
 
   color: $white;
+  transition: 0.2s background-color ease-in-out;
 }
+@media (hover: hover) {
+  .getAquote {
+    &:hover {
+      background-color: $secondary500;
+    }
+  }
+}
+
 .getAquote_big {
   display: flex;
   flex-direction: row;

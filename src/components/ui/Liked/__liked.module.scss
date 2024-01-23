@@ -1,5 +1,16 @@
 @import "./../../../styles/__var.scss";
 
 .liked {
-  border: black 1px solid;
+  // border: black 1px solid;
+  cursor: pointer;
+  svg path {
+    transition: 0.2s ease-in-out fill;
+  }
+}
+@media (hover: hover) {
+  .liked:hover {
+    svg path {
+      fill: $primary500;
+    }
+  }
 }
