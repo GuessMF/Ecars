@@ -77,6 +77,10 @@ export default function Sorted({
     setIsFiltersOpen(true);
   };
   const typeArr: string[] = [];
+
+  const searchTerm = useAppSelector((state) => state.search.searchTerm);
+  console.log(searchTerm);
+
   Object.keys(type).forEach((key) => {
     if (type[key]) {
       typeArr.push(key);
@@ -263,6 +267,13 @@ export default function Sorted({
         {/* {searchValue && (
           <SelectedFilter onClick={onCloseSearchValue} params={searchValue} />
         )} */}
+
+        {searchTerm && (
+          <SelectedFilter
+            onClick={() => onCloseSearchValue()}
+            params={searchTerm}
+          />
+        )}
 
         {brand && (
           <SelectedFilter

@@ -125,4 +125,19 @@
       border-radius: 8px;
     }
   }
+  .emptyPage {
+    // border: black 1px solid;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+      max-width: 300px;
+    }
+    a {
+      color: $primary500;
+      text-decoration: none;
+    }
+  }
 }

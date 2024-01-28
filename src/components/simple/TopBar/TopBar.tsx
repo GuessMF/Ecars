@@ -50,10 +50,6 @@ export default function TopBar() {
   return (
     <div className={style.topBar}>
       <div className={style.topBar_left}>
-        {/* <FaceBookIcon />
-        <TwitterIcon />
-        <YouTubeIcon />
-        <InstagramIcon /> */}
         <div className={style.logos}>
           <SocialIcons color={color} opacity={opacity} />
         </div>
@@ -62,11 +58,6 @@ export default function TopBar() {
         <div className={style.logos}>
           <Email color={white} email={"segas95@yandex.ru"} />
         </div>
-        {/* {selectedCurrency?.value === "USD"
-          ? selectedCurrency?.value + `: ${usdValue}`
-          : selectedCurrency?.value === "EUR"
-          ? selectedCurrency?.value + `: ${eurValue}`
-          : "RUB"} */}
       </div>
       <div className={style.topBar_right}>
         <svg
@@ -145,7 +136,12 @@ export default function TopBar() {
             fillOpacity="0.7"
           />
         </svg>
-        <span className={style.help}>Help</span>
+        <span
+          className={style.help}
+          onClick={() => window.open("https://t.me/+79214003269", "_blank")}
+        >
+          Help
+        </span>
       </div>
     </div>
   );

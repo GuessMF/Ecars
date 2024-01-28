@@ -1,9 +1,32 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+
+import {NavLink} from "react-router-dom";
 import style from "./__aboutUS.module.scss";
 import outMissionImg from "../../assets/images/AboutUs/ourMission.webp";
 import ContactUsBig from "../../components/ui/ContactUsBig/ContactUsBig";
 import GetAquoteBig from "../../components/ui/GetAquoteBig/GetAquoteBig";
+
+import {useAuth} from "hooks/use-auth";
+import {removeUser} from "store/slices/userSlice";
+import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
+import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+
 export default function AboutUs() {
+  const [userId, setUserId] = useState<string>("");
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        if (user.emailVerified) {
+          setUserId(user.uid);
+        } else {
+          if (user.phoneNumber) {
+            setUserId(user.uid);
+          }
+        }
+      }
+    });
+  }, []);
   return (
     <div className={style.aboutUS}>
       <div className={style.aboutUS__first}>
@@ -168,7 +191,16 @@ export default function AboutUs() {
           euismod nisi porta lorem mollis aliquam.
         </span>
       </div>
-      <GetAquoteBig />
+
+      {userId ? (
+        <NavLink to={`/sell/${userId}`}>
+          <GetAquoteBig />
+        </NavLink>
+      ) : (
+        <NavLink to={`/login`}>
+          <GetAquoteBig />
+        </NavLink>
+      )}
     </div>
   );
 }

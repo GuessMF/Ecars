@@ -22,7 +22,11 @@ export default function Email({color, email}: Props) {
           fill={color}
         />
       </svg>
-      <span className={style.email__data} style={{color: color}}>
+      <span
+        className={style.email__data}
+        style={{color: color}}
+        onClick={() => (window.location.href = "mailto:segas95@yandex.ru")}
+      >
         {email}
       </span>
     </div>

@@ -289,7 +289,7 @@ FiltersProps) {
   const newResetYear = () => {
     resetYear();
 
-    onMinYearChange("2000");
+    onMinYearChange("1980");
     onMaxYearChange("2024");
   };
 

@@ -14,6 +14,8 @@ import ArrowDown from "./arrowDown.webp";
 import {likedCard} from "components/smart/LikedCard/__likedCard.module.scss";
 import LikedCard from "components/smart/LikedCard/LikedCard";
 import {useAppSelector} from "hooks/redux-hooks";
+
+import SorryImage from "../../assets/images/sorry.webp";
 interface Props {
   userID: string;
 }
@@ -227,7 +229,14 @@ export default function Liked({userID}: Props) {
             </button>
           </div>
         ) : (
-          <h5>No cars yet</h5>
+          <div className={style.emptyPage}>
+            <h5>
+              You haven't liked any cars yet, go to our{" "}
+              <NavLink to="/catalog">catalog</NavLink> and choose your favorite
+              cars for yourself
+            </h5>
+            <img src={SorryImage} alt="sorry-image" />
+          </div>
         )}
       </div>
       {likedCars && (
@@ -257,9 +266,12 @@ export default function Liked({userID}: Props) {
       )}
       {likedCars.length > 0 && (
         <div className={style.buttons}>
-          <button onClick={prevPrevPage} disabled={currentPage === 1}>
-            Previous
-          </button>
+          {likedCars.length > 4 && (
+            <button onClick={prevPrevPage} disabled={currentPage === 1}>
+              Previous
+            </button>
+          )}
+
           {[...new Array(pages)].map((_, index) => (
             <span
               key={index}
@@ -269,9 +281,11 @@ export default function Liked({userID}: Props) {
               {index + 1}
             </span>
           ))}
-          <button onClick={nextNextPage} disabled={currentPage === pages}>
-            Next
-          </button>
+          {likedCars.length > 4 && (
+            <button onClick={nextNextPage} disabled={currentPage === pages}>
+              Next
+            </button>
+          )}
         </div>
       )}
     </div>

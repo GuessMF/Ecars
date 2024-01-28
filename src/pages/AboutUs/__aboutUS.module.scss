@@ -8,7 +8,10 @@
   padding: 96px 216px;
   margin-top: 20px;
   // position: relative;
-
+  a {
+    text-decoration: none;
+  }
+  cursor: default;
   @media (max-width: 768px) {
     margin-top: 100px;
     padding: 32px;

@@ -9,6 +9,7 @@ import {ReactComponent as MenuLines} from "../../../assets/icons/header/menu-lin
 import Sidebar from "../Sidebar/Sidebar";
 import {useNavigate} from "react-router-dom";
 import {ReactComponent as CloseIcon} from "./closeIcon.svg";
+import {setCurrentCatalogPage} from "store/slices/currentCatalogPageSlice";
 
 import {useAuth} from "hooks/use-auth";
 import {removeUser} from "store/slices/userSlice";
@@ -75,6 +76,7 @@ export default function Header() {
   const onChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     navigate("/catalog");
     setSearchValue(e.target.value);
+    dispatch(setCurrentCatalogPage(1));
     dispatch(setSearchTerm(e.target.value));
   };
 
@@ -87,7 +89,7 @@ export default function Header() {
 
   const onClickCloseSearch = () => {
     setSearchValue("");
-    dispatch(setSearchTerm(""));
+    // dispatch(setSearchTerm(""));
     setOpenInput(false);
   };
 

@@ -21,7 +21,11 @@ export default function Mobile({color, number}: Props) {
           fill={color}
         />
       </svg>
-      <span className={style.mobile__data} style={{color: color}}>
+      <span
+        className={style.mobile__data}
+        style={{color: color}}
+        onClick={() => window.open("https://t.me/+79214003269", "_blank")}
+      >
         {number}
       </span>
     </div>

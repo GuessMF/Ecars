@@ -77,7 +77,7 @@ export default function Catalog() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
-  const yearParam = searchParams.get("year") || "2000";
+  const yearParam = searchParams.get("year") || "1980";
   const modelParam = searchParams.get("model") || "";
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
@@ -271,7 +271,7 @@ export default function Catalog() {
       setMileageFilter(false);
     }
 
-    if (minYearValue > 2000 || maxYearValue < currentYear) {
+    if (minYearValue > 1980 || maxYearValue < currentYear) {
       setYearFilter(true);
     } else {
       setYearFilter(false);
@@ -882,10 +882,6 @@ export default function Catalog() {
       setMinMileageValue("0");
       setMaxMileageValue("999 999");
     }
-    // if (filter === "year") {
-    //   setMinYearValue(2000);
-    //   setMaxYearValue(currentYear);
-    // }
 
     if (filter === "price") {
       setMinPriceValue("0");
