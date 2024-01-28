@@ -383,6 +383,12 @@ FiltersProps) {
     onMaxMileageValue(formattedValue);
   };
 
+  useEffect(() => {
+    isFiltersOpen
+      ? (document.documentElement.style.overflow = "hidden")
+      : (document.documentElement.style.overflow = "auto");
+  }, [isFiltersOpen]);
+
   return (
     <div
       className={`${style.filtersWrapper} ${

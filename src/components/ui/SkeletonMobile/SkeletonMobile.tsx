@@ -1,6 +1,6 @@
 import React from "react";
 import ContentLoader from "react-content-loader";
-const Skeleton = () => (
+const SkeletonMobile = () => (
   <ContentLoader
     speed={1}
     width="100%"
@@ -22,4 +22,4 @@ const Skeleton = () => (
   </ContentLoader>
 );
 
-export default Skeleton;
+export default SkeletonMobile;

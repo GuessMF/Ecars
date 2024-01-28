@@ -7,13 +7,11 @@ import Filters from "../../components/ordinary/Filters/Filters";
 import Sorted from "../../components/ordinary/Sorted/Sorted";
 import BigCard from "../../components/smart/BigCard/BigCard";
 import Skeleton from "../../components/ui/Skeleton/Skeleton";
+import SkeletonMobile from "../../components/ui/SkeletonMobile/SkeletonMobile";
 import Sorry from "../../assets/images/sorry.webp";
 import {setCurrentCatalogPage} from "store/slices/currentCatalogPageSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 import carData from "helpers/modelsBrands";
-// import {Query} from "firebase/firestore";
-// import {getStorage, ref, listAll, deleteObject, list} from "firebase/storage";
-// import ScrollToTop from "utils/scrollToTop";
 
 import "../../firebase";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
@@ -126,6 +124,25 @@ export default function Catalog() {
     AbuDhabi: false,
     Shanghai: false,
   });
+
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  console.log(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Обработка изменений ширины экрана
+      console.log("Ширина экрана изменилась");
+      console.log(window.innerWidth);
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Не забудьте удалить слушатель события при размонтировании компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (mileageParam === "Used") {
@@ -1027,6 +1044,7 @@ export default function Catalog() {
           />
 
           <div className={style.catalogPagination}>
+            {/* <SkeletonMobile key={`skeleton_${"www"}`} /> */}
             {loaded
               ? cars.map((car: any, index: any) => (
                   <BigCard
@@ -1046,9 +1064,13 @@ export default function Catalog() {
                     onClickCheck={() => console.log()}
                   />
                 ))
-              : [...new Array(5)].map((_, i) => (
-                  <Skeleton key={`skeleton_${i}`} />
-                ))}
+              : [...new Array(5)].map((_, i) =>
+                  screenWidth <= 450 ? (
+                    <SkeletonMobile key={`skeleton_${i}`} />
+                  ) : (
+                    <Skeleton key={`skeleton_${i}`} />
+                  )
+                )}
           </div>
           {cars.length > 0 ? (
             <div className={style.buttons}>

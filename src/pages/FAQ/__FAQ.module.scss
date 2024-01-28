@@ -26,6 +26,14 @@
     line-height: 115%;
     // background-color: red;
     padding-top: 48px;
+    @media (max-width: 450px) {
+      /* Mobile/H3 */
+      font-family: Inter;
+      font-size: 34px;
+      font-style: normal;
+      font-weight: 300;
+      line-height: 115%; /* 29.9px */
+    }
   }
   .questions {
     // border: black 1px solid;

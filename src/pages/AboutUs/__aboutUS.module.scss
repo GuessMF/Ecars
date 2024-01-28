@@ -35,6 +35,14 @@
       margin: 0;
       text-align: left;
       width: 100%;
+      @media (max-width: 450px) {
+        /* Mobile/H3 */
+        font-family: Inter;
+        font-size: 34px;
+        font-style: normal;
+        font-weight: 300;
+        line-height: 115%; /* 29.9px */
+      }
     }
     span {
       /* Desktop/Body Medium */
