@@ -23,6 +23,7 @@ import SkeletonLittleImage from "./SkeletonLittleImage";
 import {useAppSelector} from "hooks/redux-hooks";
 import NoCar from "./NoCar";
 import {useLocation} from "react-router-dom";
+import SkeletonBigImageMobile from "./SkeletonBigImageMobile";
 
 interface DateObject {
   year: number;
@@ -67,19 +68,12 @@ export default function Details() {
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  console.log(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
-      // Обработка изменений ширины экрана
-      console.log("Ширина экрана изменилась");
-      console.log(window.innerWidth);
       setScreenWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
-
-    // Не забудьте удалить слушатель события при размонтировании компонента
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -116,8 +110,6 @@ export default function Details() {
             return await getDownloadURL(photo);
           })
         );
-        // setPhotoURLs((prev) => [...prev, ...previewUrl]);
-        // setPhotoURLs((prev) => [...prev, ...urls]);
 
         setPhotoURLs([...previewUrl]);
         setPhotoURLs((prev) => [...prev, ...urls]);
@@ -127,7 +119,7 @@ export default function Details() {
       }
     };
 
-    const currentIndex = id; // Ваш текущий индекс
+    const currentIndex = id;
     loadPhotosFromFirebase(currentIndex);
   }, [id]);
 
@@ -184,7 +176,7 @@ export default function Details() {
   const userId = useSelector(
     (state: RootState) => (state.user as {id: string})?.id
   );
-  const userIdValue = userId; // userId уже содержит id, поэтому дополнительный ? и .id не нужны
+  const userIdValue = userId;
 
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
@@ -281,7 +273,7 @@ export default function Details() {
     searchParams7.append("model", currentCar.model);
   }
   if (currentCar && currentCar.location) {
-    const formattedLocation = currentCar.location?.replace(/\s/g, ""); // Заменяем пробелы на символ "_"
+    const formattedLocation = currentCar.location?.replace(/\s/g, "");
     searchParams2.append("location", formattedLocation);
     searchParams3.append("location", formattedLocation);
     searchParams4.append("location", formattedLocation);
@@ -315,13 +307,12 @@ export default function Details() {
     image.onload = () => {
       setImageLoaded(true);
     };
-    image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
+    image.src = photoURLs?.[selectedPhoto];
   }, [photoURLs]);
 
   const changeLittlePhoto = (index: number) => {
     const topPage: number = window.innerWidth <= 450 ? 0 : 40;
     window.scrollTo({
-      // top: 40,
       top: topPage,
       behavior: "smooth",
     });
@@ -335,7 +326,6 @@ export default function Details() {
     }
   }, [photoURLs]);
   const location = useLocation();
-  console.log(screenWidth);
 
   return (
     <div className={style.details}>
@@ -413,11 +403,12 @@ export default function Details() {
               <div className={style.bigPicture}>
                 {imageLoaded ? (
                   <LazyLoadImage
-                    // className={style.bigCard__img}
-                    effect="blur" // Добавляет эффект размытия
+                    effect="blur"
                     src={photoURLs?.[selectedPhoto]}
                     alt="Car Preview"
                   />
+                ) : screenWidth <= 450 ? (
+                  <SkeletonBigImageMobile />
                 ) : (
                   <SkeletonBigImage />
                 )}
@@ -431,18 +422,18 @@ export default function Details() {
                       <LazyLoadImage
                         key={`load img${index}`}
                         className={style.little_preview}
-                        effect="blur" // Добавляет эффект размытия
+                        effect="blur"
                         src={img}
                         alt="Car little"
                         onClick={() => changeLittlePhoto(index)}
                       />
                     ))
-                  : [...new Array(8)].map((_, i) => (
+                  : [...new Array(screenWidth <= 450 ? 4 : 8)].map((_, i) => (
                       <SkeletonLittleImage key={`skeleton_${i}`} />
                     ))}
               </div>
             </div>
-            {screenWidth <= 768 && (
+            {screenWidth <= 1200 && (
               <DetailsCTA
                 brand={currentCar?.brand}
                 model={currentCar?.model}
@@ -607,7 +598,7 @@ export default function Details() {
             </div>
           </div>
 
-          {screenWidth >= 768 && (
+          {screenWidth >= 1200 && (
             <DetailsCTA
               brand={currentCar?.brand}
               model={currentCar?.model}
@@ -633,8 +624,6 @@ export default function Details() {
       ) : (
         <NoCar founted={auto} loading={loading} />
       )}
-
-      {/*  */}
     </div>
   );
 }

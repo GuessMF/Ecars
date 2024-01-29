@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React from "react";
 import style from "./__sorted.module.scss";
 import SelectedFilter from "../../ui/SelectedFilter/SelectedFilter";
 import ResetAll from "../../ui/ResetAll/ResetAll";
@@ -6,20 +6,7 @@ import Select, {components} from "react-select";
 import {setSearchTerm} from "store/slices/searchSlice";
 import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
 
-// import StylesConfig from "react-select";
-
-// interface SortType {
-//   value: string;
-//   label: string;
-//   sortProperty: string;
-// }
-// interface OptionsSelect {
-//   value: string;
-//   label: string;
-// }
-
 interface FiltersProps {
-  // searchValue: string;
   onChangeSortBy: (obj: any) => void;
   sortOption: string;
   isFiltersOpen: boolean;
@@ -47,7 +34,6 @@ interface FiltersProps {
 }
 
 export default function Sorted({
-  // searchValue,
   onChangeSortBy,
   sortOption,
   setIsFiltersOpen,
@@ -77,9 +63,7 @@ export default function Sorted({
     setIsFiltersOpen(true);
   };
   const typeArr: string[] = [];
-
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
-  console.log(searchTerm);
 
   Object.keys(type).forEach((key) => {
     if (type[key]) {
@@ -161,12 +145,9 @@ export default function Sorted({
   ];
   const [menuIsOpen, setMenuIsOpen] = React.useState(false);
 
-  // console.log(sortOption);
-
   const initialOption = options.find((option) => option.value === sortOption);
 
   const [selectedOption, setSelectedOption] = React.useState(initialOption);
-  // console.log(selectedOption);
 
   const toggleMenu = () => {
     setMenuIsOpen(!menuIsOpen);
@@ -207,21 +188,12 @@ export default function Sorted({
     return capitalizeWords.join(" ");
   };
 
-  // if (brand) {
   formatedBrand = capitalizeWords(brand);
-  // }
-
-  // console.log(minMileage);
-  // console.log(maxMileage);
-  // if (minMileage == maxMileage) {
-  //   console.log("RAVNO");
-  // }
 
   const formatedMileage: string =
     minMileage == maxMileage
       ? `${maxMileage} Km`
       : `${minMileage} Km - ${maxMileage} Km`;
-  // console.log(formatedMileage);
 
   return (
     <div className={style.sorted}>
@@ -238,9 +210,7 @@ export default function Sorted({
             onChange={onClickSortBy}
             options={options}
             menuIsOpen={menuIsOpen}
-            //menuIsOpen={true}
             onMenuOpen={toggleMenu}
-            //  onMenuClose={toggleMenu}
             components={{DropdownIndicator}}
           />
         </div>
@@ -264,10 +234,6 @@ export default function Sorted({
         <span>Filters</span>
       </button>
       <div className={style.sorted__bottom}>
-        {/* {searchValue && (
-          <SelectedFilter onClick={onCloseSearchValue} params={searchValue} />
-        )} */}
-
         {searchTerm && (
           <SelectedFilter
             onClick={() => onCloseSearchValue()}

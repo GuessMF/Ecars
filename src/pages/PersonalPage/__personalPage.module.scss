@@ -1,26 +1,13 @@
 @import "../../styles/_var";
 
 .personalPage {
-  // height: fit-content;
-  // border: black 1px solid;
-  // display: flex;
-  // flex-direction: column;
-  // gap: 96px;
-  // padding: 96px 216px;
-  // margin-top: 20px;
-
   width: 100%;
   height: fit-content;
   min-height: 60vh;
   display: flex;
   flex-direction: column;
-  // gap: 96px;
-  // padding: 96px 108px;
   padding: 96px $padding108;
-
   margin-top: 20px;
-  //border: black 1px solid;
-
   @media (max-width: 768px) {
     padding: 32px;
   }
@@ -44,12 +31,12 @@
 
     p {
       color: var(--Gray-700, #484848);
-      /* Desktop/Body Medium */
+
       font-family: Inter;
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
-      line-height: 24px; /* 150% */
+      line-height: 24px;
       @media (max-width: 450px) {
         padding-bottom: 20px;
       }
@@ -57,9 +44,8 @@
   }
 
   .wrapper {
-    // background-color: rgb(201, 201, 212);
     width: 390px;
-    // height: 500px;
+
     margin: 48px 0;
     @media (max-width: 768px) {
       width: 60%;
@@ -70,13 +56,11 @@
 
     h1 {
       color: $gray900;
-
-      /* Desktop/H3 */
       font-family: Inter Tight;
       font-size: 32px;
       font-style: normal;
       font-weight: 600;
-      line-height: 115%; /* 36.8px */
+      line-height: 115%;
       margin: 0;
     }
   }
@@ -94,12 +78,12 @@ input {
   border-radius: 8px;
   border: 1px solid $outline1;
   color: $gray300;
-  /* Desktop/Body Small */
+
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
   &:focus {
     outline: none;
   }
@@ -108,9 +92,9 @@ input {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  // width: 40%;
+
   position: relative;
-  // border: black 1px solid;
+
   @media (max-width: 450px) {
     width: 100%;
   }
@@ -123,7 +107,6 @@ input {
     position: relative;
     border: $gray100 1px solid;
     border-radius: 8px;
-
     overflow: hidden;
     @media (max-width: 450px) {
       height: 250px;
@@ -134,11 +117,6 @@ input {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      //width: 100%;
-      //  width: auto;
-      // border: none !important;
-      //  border: black 1px solid;
-      // border: black 1px solid;
       border-radius: 8px;
       .carPreview {
         display: flex;
@@ -147,12 +125,11 @@ input {
         align-items: center;
         width: 100%;
         width: auto;
-        // border: black 1px solid;
+
         border: none;
         height: fit-content;
 
         h3 {
-          //  border: black 1px solid;
           font-weight: 300;
           font-size: 26px;
         }
@@ -165,7 +142,6 @@ input {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          // background-color: $gray100;
           background: none;
           border: $gray300 1px solid;
         }
@@ -175,7 +151,6 @@ input {
       }
 
       .preview__photo {
-        // background-color: red;
         height: 100%;
         overflow: hidden;
         display: flex;
@@ -184,9 +159,9 @@ input {
         padding: 0;
         border: none;
         border-radius: 8px;
-        //width: fit-content;
+
         width: 100%;
-        //  border: black 1px solid;
+
         margin: 0 auto;
         img {
           border-radius: 8px;
@@ -204,14 +179,12 @@ input {
       right: 10px;
       width: 40px;
       height: 40px;
-      // background-color: red;
+
       border: $gray500 1px solid;
       background: none;
     }
   }
   .photos {
-    // background-color: aquamarine;
-    // height: 150px;
     height: fit-content;
     display: flex;
     flex-direction: row;
@@ -230,10 +203,8 @@ input {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      // border: black 1px solid;
     }
     h3 {
-      //  border: black 1px solid;
       text-align: center;
       font-weight: 300;
       font-size: 22px;
@@ -248,7 +219,6 @@ input {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      // background-color: $gray100;
       background: none;
       border: $gray300 1px solid;
       @media (max-width: 450px) {
@@ -266,16 +236,9 @@ input {
       display: flex;
       flex-direction: row;
       gap: 20px;
-      //flex-wrap: wrap;
-      // height: 100%;
-      //  background-color: red;
-
       overflow-x: scroll;
-      //  display: flex;
-      //  width: 100%;
-      //  flex-direction: row;
       align-items: center;
-      //  gap: 14px;
+
       cursor: grab;
       &:active {
         cursor: grabbing;
@@ -296,13 +259,9 @@ input {
       }
 
       .previewPhoto {
-        //  width: 400px;
-        //  width: fit-content;
         width: 150px;
         height: 50px;
         min-width: 150px;
-        //  max-height: 150px;
-        //max-height: fit-content;
         height: fit-content;
         overflow: hidden;
         display: flex;
@@ -311,7 +270,6 @@ input {
         padding: 0;
         border: none;
         border-radius: 8px;
-        //  width: fit-content;
         position: relative;
         border: black 1px solid;
 
@@ -328,12 +286,10 @@ input {
           right: 5px;
           width: 20px;
           height: 20px;
-          // background-color: red;
           background: none;
           border: $gray900 1px solid;
           border-radius: 5px;
-          //font-size: 10px;
-          //padding: 12px;
+
           padding: 0;
           &:hover {
             border: $red500 1px solid;
@@ -365,58 +321,10 @@ input {
         color: black;
       }
     }
+    .priceCurrency {
+      display: block;
+    }
   }
-
-  // div {
-  //   border: black 1px solid;
-  //   display: flex;
-  //   flex-direction: row;
-  //   align-items: center;
-  //   height: 60px;
-
-  //   padding: 14px 12px;
-
-  //   gap: 4px;
-  //   align-self: stretch;
-  //   border-radius: 8px;
-  //   border: 1px solid $outline1;
-  //   color: $gray300;
-  //   /* Desktop/Body Small */
-  //   font-family: Inter;
-  //   font-size: 14px;
-  //   font-style: normal;
-  //   font-weight: 400;
-  //   line-height: 20px; /* 142.857% */
-  //   &:focus {
-  //     outline: none;
-  //   }
-
-  //   label {
-  //     width: 100%;
-  //     height: 100%;
-  //     display: flex;
-  //     flex-direction: row;
-  //     justify-content: space-between;
-  //     span {
-  //       width: 50%;
-  //     }
-  //     input {
-  //       width: 50%;
-  //       height: 100%;
-  //     }
-
-  //     select {
-  //       width: 50%;
-  //     }
-  //   }
-  //   .color__label {
-  //     .block__white {
-  //       background-color: red;
-  //       width: 10px;
-  //       height: 10px;
-  //     }
-  //   }
-  // }
 
   table {
     // background-color: red;
@@ -480,7 +388,7 @@ input {
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px; /* 150% */
+    line-height: 24px;
     padding: 12px 24px;
     display: flex;
 
@@ -491,7 +399,6 @@ input {
     border-radius: 8px;
 
     .loader {
-      //  background-color: red;
       width: 100%;
       height: 100%;
       display: flex;
@@ -540,28 +447,10 @@ input {
 .error {
   border: 1px solid red !important;
   border-radius: 8px !important;
-  // flex-direction: column;
-  // height: fit-content;
+  @media (max-width: 450px) {
+  }
 }
-// .errorPreview {
-//   display: flex;
-//   justify-content: center;
-//   flex-direction: column;
-//   height: fit-content;
-//   height: 600px;
-//   position: relative;
-//   border: $gray100 1px solid;
-//   border-radius: 8px;
 
-//   overflow: hidden;
-//   border: red 1px solid;
-// }
-
-// .error__selectedFiles {
-//   border: 1px solid red;
-//   flex-direction: column;
-//   height: fit-content;
-// }
 .popUp__errors {
   position: absolute;
   bottom: 355px;
@@ -569,10 +458,7 @@ input {
   transform: translate(-50%);
   height: 100vh;
   width: 80%;
-  // border: black 1px solid;
   z-index: 9995;
-  background-color: rgba(119, 119, 119, 0.8);
-  // opacity: 0.5;
 }
 .hidden {
   opacity: 0 !important;

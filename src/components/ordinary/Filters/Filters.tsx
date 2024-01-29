@@ -5,9 +5,7 @@ import MoreFilters from "../../ui/MoreFilters/MoreFilters";
 import {useState, useEffect} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
-// import carData from "../../../helpers/modelsBrands";
 import {useAppSelector} from "hooks/redux-hooks";
-// import {cars} from "../../helpers/carList";
 import carData from "../../../helpers/modelsBrands";
 import CustomSelect from "components/smart/CustomSelect/CustomSelect";
 
@@ -113,7 +111,6 @@ interface FiltersProps {
   resetColor: () => void;
   resetSeats: () => void;
   resetTransmission: () => void;
-  // selectedCurrency: string;
   checkBoxes1: CheckBoxes;
   cities: Cities;
   ownersBoxes: Owners;
@@ -126,8 +123,6 @@ interface FiltersProps {
   maxMileageValue: string;
   onMinMileageValue: (value: string) => void;
   onMaxMileageValue: (value: string) => void;
-
-  //mileageSliderChange: (values: [number, number]) => void;
 
   minYearValue: number;
   maxYearValue: number;
@@ -153,7 +148,6 @@ export default function Filters({
   onTransmissionchange,
   brandFilterValue,
   modelFilterValue,
-  // selectedCurrency,
   resetBrand,
   resetModels,
   resetVechicleType,
@@ -186,18 +180,10 @@ export default function Filters({
   maxPriceValue,
   onMinPriceValue,
   onMaxPriceValue,
-}: // mileageSliderChange,
-
-FiltersProps) {
-  // const [value, setValue] = React.useState(0);
+}: FiltersProps) {
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
   );
-  // const handleChange = (newValue: number) => {
-  //   setValue(newValue);
-  // };
-  console.log(minYearValue + "  11");
-  console.log(maxYearValue + "  22");
 
   const [visible, setVisible] = React.useState(false);
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
@@ -206,17 +192,14 @@ FiltersProps) {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
-
-    // Очистка слушателя событий при размонтировании компонента
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   useEffect(() => {
-    if (windowWidth <= 450) {
+    if (windowWidth <= 1200) {
       setVisible(true);
     }
   }, [windowWidth]);
@@ -235,11 +218,6 @@ FiltersProps) {
 
   const [maxYear, setMaxYear] = useState<string>(maxYearValue.toString());
 
-  // useEffect(() => {
-  //   setMinYear(minYearValue.toString());
-  //   setMaxYear(maxYearValue.toString());
-  // }, [minYearValue, maxYearValue]);
-
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 
   const mapOthersOptions = (type: OtherOptions): OptionType => ({
@@ -248,9 +226,6 @@ FiltersProps) {
   });
   const yearOptions: OptionType[] = carData.years.map(mapOthersOptions);
   const [newYearOptions, setNewYearOptions] = useState<OptionType[]>([]);
-  // useEffect(() => {
-  //   setNewYearOptions(yearOptions);
-  // }, []);
 
   const onMinYearChange = (year: string) => {
     setMinYear(year);
@@ -261,29 +236,15 @@ FiltersProps) {
     onMaxYearValue(parseInt(year, 10));
   };
 
-  // useEffect(() => {
-  //   // if (maxYearValue < minYearValue) {
-  //   const updatedYearOptions = carData.years
-  //     .filter((year) => parseInt(year.value, 10) <= parseInt(maxYear, 10))
-  //     .map(mapOthersOptions);
-  //   setNewYearOptions(updatedYearOptions);
-  //   //  }
-  // }, [maxYear]);
-
   useEffect(() => {
-    // if (maxYearValue < minYearValue) {
     const updatedYearOptions = carData.years
       .filter((year) => parseInt(year.value, 10) >= minYearValue)
       .map(mapOthersOptions);
     setNewYearOptions(updatedYearOptions);
-    // console.log(newYearOptions);
-    // console.log(minYearValue);
-    // console.log(parseInt(minYear, 10));
     if (minYearValue > maxYearValue) {
       onMaxYearValue(minYearValue);
       setMaxYear(minYearValue.toString());
     }
-    //  }
   }, [minYear]);
 
   const newResetYear = () => {
@@ -299,19 +260,14 @@ FiltersProps) {
         (model) => model.name.toLowerCase() === searchTerm.toLowerCase()
       );
       if (foundModel) {
-        // setBrandFilter(brand.name);
-        // setModels(foundModel.name);
       }
     });
   }, [searchTerm]);
   useEffect(() => {
-    //  console.log(brandFilterValue);
-
     const fountedBrand = carData.brands.find(
       (item) => item.name === brandFilterValue
     );
     if (fountedBrand) {
-      //  console.log(fountedBrand.models);
       setModels(fountedBrand.models);
     }
   }, [brandFilterValue]);
@@ -321,8 +277,6 @@ FiltersProps) {
     const selectedBrandData = carData.brands.find(
       (item) => item.name === selectedBrand
     );
-    // console.log(selectedBrand);
-    // console.log(selectedBrandData?.models);
 
     setModels(selectedBrandData ? selectedBrandData.models : []);
     onBrandFilterChange(event);
@@ -345,9 +299,6 @@ FiltersProps) {
     }
   }, [modelFilterValue]);
 
-  // let formatedBrand: string;
-  // let formatedModel;
-
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");
     const capitalizeWords = words.map((word) => {
@@ -355,9 +306,6 @@ FiltersProps) {
     });
     return capitalizeWords.join(" ");
   };
-
-  // if (brand) {
-  // formatedBrand = capitalizeWords(brand);
 
   const formatMinPrice = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
@@ -557,16 +505,6 @@ FiltersProps) {
             />
           </div>
           <div className={style.miliage__slider}>
-            {/* <RangeSlider
-              value={[minMileageValue, maxMileageValue]}
-              step={1000}
-              defaultValue={[0, 999999]}
-              max={999999}
-              onChange={(values: [number, number]) => {
-                onMinMileageValue(values[0]);
-                onMaxMileageValue(values[1]);
-              }}
-            /> */}
             <RangeSlider
               value={[
                 parseInt(minMileageValue.replace(/\s/g, ""), 10),
@@ -588,39 +526,16 @@ FiltersProps) {
             <h6>Year</h6>
             <span onClick={() => newResetYear()}>Reset</span>
           </div>
-          {/* <div className={style.filters__min_max}>
-            <input
-              type="text"
-              placeholder="Min"
-              min={0}
-              max={currentYear}
-              value={minYearValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onMinYearValue(parseInt(e.target.value, 10))
-              }
-            />
-            <input
-              type="text"
-              placeholder="Max"
-              min={0}
-              max={currentYear}
-              value={maxYearValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onMaxYearValue(parseInt(e.target.value, 10))
-              }
-            />
-          </div> */}
+
           <div className={style.filters__min_max}>
             <CustomSelect
               key={`minYear-${minYearValue}`}
               value={minYear}
               onChange={onMinYearChange}
-              // options={yearOptions}
               options={yearOptions}
             />
             <CustomSelect
               key={`maxYear-${maxYearValue}`}
-              //value={maxYearValue.toLocaleString()}
               value={maxYear}
               onChange={onMaxYearChange}
               options={newYearOptions}
@@ -753,16 +668,11 @@ FiltersProps) {
             </li>
           </ul>
         </div>
-        <CSSTransition
-          in={visible}
-          timeout={300}
-          classNames={style.alert}
-          unmountOnExit
-        >
+        <CSSTransition in={visible} timeout={300} unmountOnExit>
           <div className={style.more__filters}>
             <h4>SPECIFICATIONS</h4>
 
-            <div className={style.filters__cylinders}>
+            <div>
               <div className={style.filters__label}>
                 <h6>Owners</h6>
                 <span onClick={() => resetOwners()}>Reset</span>
@@ -824,7 +734,7 @@ FiltersProps) {
                 </li>
               </ul>
             </div>
-            <div className={style.filters__color}>
+            <div>
               <div className={style.filters__label}>
                 <h6>Color</h6>
                 <span onClick={() => resetColor()}>Reset</span>
@@ -996,7 +906,7 @@ FiltersProps) {
               </ul>
             </div>
 
-            <div className={style.filters__seats}>
+            <div>
               <div className={style.filters__label}>
                 <h6>Seats</h6>
                 <span onClick={() => resetSeats()}>Reset</span>
@@ -1157,11 +1067,4 @@ FiltersProps) {
       </div>
     </div>
   );
-}
-
-{
-  /* <div className={style.form_checkbox}>
-  <input className={style.checkbox} type="checkbox" id="checkbox1" />
-  <label htmlFor="checkbox1">Shawn Carter</label>
-</div>; */
 }

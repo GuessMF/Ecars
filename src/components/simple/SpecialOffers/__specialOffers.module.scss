@@ -8,9 +8,13 @@
   // border: black 1px solid;
   padding-bottom: 96px;
   padding: 170px $padding108 96px;
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     // padding: 140px 32px 0 32px;
     padding: 40px 32px;
+    margin-top: 100px;
+  }
+  @media (max-width: 768px) {
+    margin-top: 0;
   }
   a {
     &:hover {
@@ -35,7 +39,7 @@
         line-height: 115%;
         color: $gray900;
         margin: 0;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           font-size: 30px;
           font-style: normal;
           font-weight: 600;

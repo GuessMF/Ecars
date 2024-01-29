@@ -245,7 +245,7 @@ export default function Liked({userID}: Props) {
             cars.map((car: any, index: any) => (
               <NavLink to={`/details/${car.id}`}>
                 <LikedCard
-                  key={index}
+                  key={`littleCard_ ` + index}
                   id={car.id}
                   index={index}
                   brand={car.brand}

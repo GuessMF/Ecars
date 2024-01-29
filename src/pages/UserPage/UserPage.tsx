@@ -2,7 +2,6 @@ import React from "react";
 import {useState, useEffect} from "react";
 import {collection} from "firebase/firestore";
 import {db} from "../../firebase";
-// import {useNavigate} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
@@ -11,36 +10,23 @@ import {Autoplay, Pagination, Navigation} from "swiper/modules";
 import {Virtual} from "swiper/modules";
 import {NavLink} from "react-router-dom";
 import style from "./__userPage.module.scss";
-// import BigCard from "components/smart/BigCard/BigCard";
+
 import ArrowUp from "./arrowUp.webp";
 import ArrowDown from "./arrowDown.webp";
 import {useAppSelector} from "hooks/redux-hooks";
 
-import CustomSelect from "components/smart/CustomSelect/CustomSelect";
 import Cookies from "universal-cookie";
 import {
   query,
   orderBy,
-  startAfter,
-  endBefore,
-  startAt,
-  limit,
   getDocs,
-  DocumentSnapshot,
   OrderByDirection,
   where,
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
-import {doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
-import {
-  ref,
-  listAll,
-  getDownloadURL,
-  getStorage,
-  deleteObject,
-  getMetadata,
-} from "firebase/storage";
+import {doc, deleteDoc} from "firebase/firestore";
+import {ref, listAll, getStorage, deleteObject} from "firebase/storage";
 import PopUpDel from "./PopUpDel";
 import MegaCard from "components/smart/MegaCard/MegaCard";
 import LittleCard from "components/smart/LittleCard/LittleCard";
@@ -80,8 +66,6 @@ interface Car {
   dateObj: DateObject;
   dateEdited: DateObject;
   special: boolean;
-
-  // testImg: string;
 }
 export default function UserPage({userID}: Props) {
   const location = useLocation();
@@ -95,30 +79,27 @@ export default function UserPage({userID}: Props) {
   const swiperRef = React.useRef<SwiperCore>();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const [userName, setUserName] = useState<string>("");
-  const {isAuth, email, displayName} = useAuth();
+  const {isAuth, displayName} = useAuth();
   const [popUpDel, setPopUpDel] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [correctPassword, setCorrectPassword] = useState<boolean>(false);
   const [carName, setCarName] = useState<string>("");
   const [carId, setCarId] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("dateAdded");
-
   const [sortSetting, setSortSetting] = useState<string | undefined>("desc");
-
   const [currentCar, setCurrentCar] = useState<number>(0);
-
-  const [deletedItems, setDeletedItems] = useState([]);
   const [edition, setEdition] = useState<boolean>(false);
 
-  const cookies = new Cookies(null, {path: "/"});
+  const navigate = useNavigate();
+
   useEffect(() => {
+    const cookies = new Cookies(null, {path: "/"});
     if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
+
   const storage = getStorage();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (userID) {
@@ -129,7 +110,6 @@ export default function UserPage({userID}: Props) {
   useEffect(() => {
     const fetchData = async () => {
       if (isAuth && displayName) {
-        setUserName(displayName);
         setLoading(false);
       }
     };
@@ -181,8 +161,6 @@ export default function UserPage({userID}: Props) {
         top: 200,
         behavior: "smooth",
       });
-
-      // }, 2000);
     } catch (error) {
       console.error("Ошибка удаления:", error);
     }
@@ -220,9 +198,7 @@ export default function UserPage({userID}: Props) {
       behavior: "smooth",
     });
   };
-  // const handleSortBy = (value: string) => {
-  //   setSortBy(value);
-  // };
+
   const handleSortBy = (value: string) => {
     if (sortBy === value) {
       if (sortSetting === "asc") {
@@ -361,20 +337,16 @@ export default function UserPage({userID}: Props) {
               <h4>
                 Do you want to treat yourself to a{" "}
                 <NavLink to="/catalog?mileage=New" onClick={onClickNewCars}>
-                  new{" "}
-                </NavLink>{" "}
+                  new
+                </NavLink>
                 car?
               </h4>
             </div>
 
             <div className={style.specialOffers__corousel}>
               <Swiper
-                // spaceBetween={307}
-                // centeredSlides={true}
-                // pagination={{clickable: true}}
                 navigation={true}
                 autoplay={{delay: 2500, disableOnInteraction: false}}
-                // autoplay={false}
                 spaceBetween={20}
                 modules={[Autoplay, Pagination, Navigation, Virtual]}
                 slidesPerView={numberOfCarts}
@@ -451,6 +423,7 @@ export default function UserPage({userID}: Props) {
               (car: any, index: number) =>
                 index !== currentCar && (
                   <div
+                    key={`${index}` + "cars"}
                     className={style.littleCard}
                     onClick={() => onClickLittleCard(index)}
                   >

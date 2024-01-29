@@ -5,21 +5,11 @@ import {useLocation} from "react-router-dom";
 import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
-import Skeleton from "components/ui/Skeleton/Skeleton";
+
 import {useAuth} from "hooks/use-auth";
-import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
-import {doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
-import {
-  ref,
-  listAll,
-  getDownloadURL,
-  getStorage,
-  deleteObject,
-  getMetadata,
-} from "firebase/storage";
-import {db} from "../../../firebase";
-import {Swiper as SwiperCore} from "swiper/types";
-import {collection, query, getDocs} from "firebase/firestore";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+
+import {getStorage} from "firebase/storage";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
@@ -55,8 +45,7 @@ export default function BigCard({
   previewIMG,
   onClickDelete,
   onClickCheck,
-}: // onLoad,
-Props) {
+}: Props) {
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
   );
@@ -107,7 +96,7 @@ Props) {
     image.onload = () => {
       setImageLoaded(true);
     };
-    image.src = previewIMG; // Подставьте свой путь к изображению из carData
+    image.src = previewIMG;
   }, [previewIMG]);
 
   const locationn = useLocation();
@@ -140,7 +129,7 @@ Props) {
           <div className={style.bigCard__image}>
             <LazyLoadImage
               className={style.bigCard__img}
-              effect="blur" // Добавляет эффект размытия
+              effect="blur"
               src={previewIMG}
               alt="Car Preview"
             />
@@ -188,7 +177,6 @@ Props) {
       </NavLink>
       {userPage && (
         <button
-          // onClick={() => onClickDelete(id, brand)}
           onClick={() => onClickCheck(brand, id)}
           className={style.delBtn}
         >

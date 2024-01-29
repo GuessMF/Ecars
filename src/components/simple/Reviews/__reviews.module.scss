@@ -19,7 +19,7 @@
     align-items: center;
     padding: 96px 108px;
     gap: 48px;
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
       padding: 40px 32px;
       width: 100%;
     }
@@ -44,7 +44,7 @@
         line-height: 115%;
         color: $gray900;
         margin: 0;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           font-size: 30px;
         }
       }
@@ -91,7 +91,7 @@
       //     border-radius: 8px;
       //   }
       //display: none;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         padding: 0 32px;

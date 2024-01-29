@@ -7,7 +7,7 @@
   align-items: flex-start;
   padding: 96px 108px;
   gap: 10px;
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     padding: 40px 32px;
   }
   a {
@@ -27,7 +27,7 @@
     height: 316px;
     // border: white 1px solid;
     position: relative;
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
       height: fit-content;
     }
     @media (max-width: 450px) {
@@ -55,7 +55,7 @@
       align-items: flex-start;
       padding: 0px;
       gap: 24px;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         flex-direction: row;
       }
       h5 {
@@ -66,7 +66,7 @@
         line-height: 120%;
         color: $white;
         margin: 0;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           font-size: 19px;
         }
       }
@@ -97,7 +97,7 @@
       // width: 600px;
       height: 316px;
       // background-color: brown;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         padding: 0;
         width: 100%;
         gap: 16px;
@@ -120,7 +120,7 @@
 
       // width: 600px;
       height: 316px;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         padding: 0;
         width: 100%;
         gap: 16px;

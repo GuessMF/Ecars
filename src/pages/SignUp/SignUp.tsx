@@ -2,10 +2,7 @@ import React, {useRef, useEffect, useState} from "react";
 import style from "./__signUp.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink, useNavigate} from "react-router-dom";
-import {v4 as uuidv4} from "uuid";
-import {Navigate} from "react-router-dom";
-import {useAuth} from "hooks/use-auth";
-import {useDispatch} from "react-redux";
+
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -14,9 +11,6 @@ import {
   signInWithPopup,
   sendEmailVerification,
 } from "firebase/auth";
-import {setUser} from "store/slices/userSlice";
-import {useAppDispatch} from "../../hooks/redux-hooks";
-import {error} from "console";
 
 interface Errors {
   name?: string;
@@ -49,7 +43,6 @@ export default function SignUp() {
   const passwordRef = useRef<HTMLDivElement>(null);
   const confirmPasswordRef = useRef<HTMLDivElement>(null);
   const checkBoxRef = useRef<HTMLDivElement>(null);
-  // const engineCapacityRef = useRef<HTMLDivElement>(null);
 
   const refs: Refs = {
     name: nameRef,
@@ -59,10 +52,6 @@ export default function SignUp() {
     checkBox: checkBoxRef,
   };
 
-  // const [userId, setUserId] = useState<string>("");
-  // const {isAuth, displayName} = useAuth();
-
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const checkErrors = () => {
@@ -97,14 +86,12 @@ export default function SignUp() {
     checkErrors();
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      //  setPopUpErrors(true);
       console.log(errors);
       handleAgreeClick();
     } else {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, password)
         .then(({user}) => {
-          // Обновление профиля пользователя
           return updateProfile(user, {
             displayName: name,
           });
@@ -112,7 +99,6 @@ export default function SignUp() {
         .then(() => {
           const user = auth.currentUser;
           if (user) {
-            // Отправка письма для подтверждения адреса электронной почты
             return sendEmailVerification(user)
               .then(() => {
                 setEmailSent(true);
@@ -134,10 +120,6 @@ export default function SignUp() {
 
   useEffect(() => {
     if (firstClick) {
-      // console.log(errors);
-
-      // setFormErrors(errors);
-      // setPopUpErrors(true);
       checkErrors();
       setFormErrors(errors);
     }
@@ -146,8 +128,6 @@ export default function SignUp() {
   const hasErrors = Object.keys(formErrors);
   const handleAgreeClick = () => {
     const scrollTopOffset = 100;
-    // setPopUpErrors(false);
-    console.log("popuperrors  false");
     const fieldName = hasErrors[0];
     const fieldRef = refs[fieldName];
 
@@ -161,23 +141,15 @@ export default function SignUp() {
         behavior: "smooth",
       });
     } else {
-      //  setPopUpErrors(true);
       console.log("popuperrors  true");
     }
   };
 
-  //
-  //
-  //
-  //
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      // Вход успешен, получите данные пользователя из result.user
-      const {displayName, email, photoURL, uid} = result.user || {};
-      console.log("Успешный вход:", displayName, email, photoURL);
-
+      const {uid} = result.user || {};
       navigate(`/user-page/${uid}`);
     } catch (error) {
       console.error("Ошибка входа через Google:", error);
@@ -185,14 +157,14 @@ export default function SignUp() {
   };
 
   const removeCharacters = (email: string) => {
-    const atIndex = email.indexOf("@"); // Находим индекс символа @
+    const atIndex = email.indexOf("@");
 
     if (atIndex !== -1) {
-      const domain = email.split("@")[1]; // Разбиваем строку по @ и берем вторую часть
-      return domain; // Возвращаем только часть после символа @
+      const domain = email.split("@")[1];
+      return domain;
     }
 
-    return email; // Если символ @ не найден, возвращаем исходную строку
+    return email;
   };
 
   const formatedMail = removeCharacters(email);

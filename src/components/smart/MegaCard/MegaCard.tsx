@@ -1,23 +1,22 @@
 import React from "react";
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect} from "react";
 import style from "./__megaCard.module.scss";
 import SkeletonSmallImage from "./SkeletonSmallImage";
 import SkeletonMegaImage from "./SkeletonMegaImage";
-import {NavLink} from "react-router-dom";
+
 import {useNavigate} from "react-router-dom";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import {useAppSelector} from "hooks/redux-hooks";
-import {updateDoc, doc, setDoc, getDoc} from "firebase/firestore";
-import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
+import {updateDoc, doc} from "firebase/firestore";
+import {ref, listAll, getDownloadURL} from "firebase/storage";
 import {db, storage} from "../../../firebase";
 import {collection} from "firebase/firestore";
 import CustomSelect from "../CustomSelect/CustomSelect";
-import {ReactComponent as ChangeImage} from "./changeImage.svg";
 
 import carData from "helpers/modelsBrands";
 import Edited from "./Edited";
-import {button} from "components/simple/ContactUsBlock/__contactUsBlock.module.scss";
-// import { updateDoc, doc } from 'firebase/firestore';
+
+import SkeletonMegaImageMobile from "./SkeletonMegaImageMobile";
 
 interface DateObject {
   year: number;
@@ -72,8 +71,6 @@ interface Props {
 
   onClickDelete: (id: string, carName: string) => void;
   onClickCheck: (brand: string, id: string) => void;
-
-  // sortBy: string;
 }
 
 export default function MegaCard({
@@ -103,8 +100,7 @@ export default function MegaCard({
   onClickCheck,
   dateObj,
   dateEdited,
-}: // sortBy,
-Props) {
+}: Props) {
   const formattedMileage: string = mileage
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
@@ -152,7 +148,19 @@ Props) {
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  // let formatedBrand: string;
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   let formatedBrand;
   let formatedModel;
 
@@ -167,10 +175,6 @@ Props) {
   if (brand) {
     formatedBrand = capitalizeWords(brand);
   }
-
-  // useEffect(() => {
-  //   formatedBrand = capitalizeWords(brand);
-  // }, []);
 
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
@@ -206,7 +210,7 @@ Props) {
       }
     };
 
-    const currentIndex = id; // Ваш текущий индекс
+    const currentIndex = id;
     loadPhotosFromFirebase(currentIndex);
   }, [id]);
 
@@ -215,7 +219,7 @@ Props) {
     image.onload = () => {
       setImageLoaded(true);
     };
-    image.src = photoURLs?.[selectedPhoto]; // Подставьте свой путь к изображению из carData
+    image.src = photoURLs?.[selectedPhoto];
   }, [photoURLs]);
 
   const onClickLittleImage = (index: number) => {
@@ -278,7 +282,7 @@ Props) {
             : newCurrency === "EUR"
             ? parseInt(newPricee.replace(/\s/g, ""), 10) / (usdValue / eurValue)
             : parseInt(newPricee.replace(/\s/g, ""), 10),
-        // price: "test",
+
         seats: newSeats,
         special: newSpecial,
         transmission: newTransmission,
@@ -293,7 +297,6 @@ Props) {
   };
 
   const onClickEdit = () => {
-    console.log("edit");
     window.scrollTo({
       top: 200,
       behavior: "smooth",
@@ -468,10 +471,12 @@ Props) {
         {imageLoaded ? (
           <LazyLoadImage
             className={style.bigImg}
-            effect="blur" // Добавляет эффект размытия
+            effect="blur"
             src={photoURLs?.[selectedPhoto]}
             alt="Car Preview"
           />
+        ) : screenWidth <= 450 ? (
+          <SkeletonMegaImageMobile />
         ) : (
           <SkeletonMegaImage />
         )}
@@ -480,14 +485,15 @@ Props) {
         {imageLoaded
           ? photoURLs.map((img, index, id) => (
               <LazyLoadImage
+                key={`${img}` + index}
                 className={style.littleImage}
-                effect="blur" // Добавляет эффект размытия
+                effect="blur"
                 src={img}
                 alt="Car little"
                 onClick={() => onClickLittleImage(index)}
               />
             ))
-          : [...new Array(8)].map((_, i) => (
+          : [...new Array(screenWidth <= 450 ? 2 : 8)].map((_, i) => (
               <SkeletonSmallImage key={`skeleton_${i}`} />
             ))}
       </div>
@@ -503,10 +509,7 @@ Props) {
           <tbody>
             <tr>
               <td className={style.tableTitle}>Brand</td>
-              <td
-              // className={formErrors.brand ? style.error : ""}
-              // ref={brandRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newBrand}
@@ -519,10 +522,7 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Interior</td>
-              <td
-              // className={formErrors.interior ? style.error : ""}
-              // ref={brandRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newInterior}
@@ -536,10 +536,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Model</td>
-              <td
-              // className={formErrors.model ? style.error : ""}
-              // ref={modelRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newModel}
@@ -552,10 +549,7 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Wheels</td>
-              <td
-              // className={formErrors.wheels ? style.error : ""}
-              // ref={wheelsRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newWheels}
@@ -569,9 +563,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Year</td>
-              <td
-              // className={formErrors.year ? style.error : ""} ref={yearRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newYear}
@@ -583,10 +575,7 @@ Props) {
                 )}
               </td>
               <td className={style.tableTitle}>Seats</td>
-              <td
-              // className={formErrors.seats ? style.error : ""}
-              // ref={seatsRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newSeats}
@@ -600,10 +589,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Color</td>
-              <td
-              // className={formErrors.color ? style.error : ""}
-              // ref={colorRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newColor}
@@ -616,10 +602,7 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Location</td>
-              <td
-              // className={formErrors.location ? style.error : ""}
-              // ref={locationRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newLocation}
@@ -633,10 +616,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Transmission</td>
-              <td
-              // className={formErrors.transmission ? style.error : ""}
-              // ref={transmissionRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newTransmission}
@@ -649,10 +629,7 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Export</td>
-              <td
-              // className={formErrors.exportStatus ? style.error : ""}
-              // ref={exportStatusRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newExportStatus}
@@ -667,9 +644,7 @@ Props) {
 
             <tr>
               <td className={style.tableTitle}>Fuel</td>
-              <td
-              // className={formErrors.fuel ? style.error : ""} ref={fuelRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newFuel}
@@ -682,10 +657,7 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Owners</td>
-              <td
-              // className={formErrors.owners ? style.error : ""}
-              // ref={ownersRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newOwners}
@@ -700,10 +672,7 @@ Props) {
 
             <tr>
               <td className={style.tableTitle}>Engine value</td>
-              <td
-              // className={formErrors.engineValue ? style.error : ""}
-              // ref={engineValueRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newEngineValue}
@@ -716,16 +685,12 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Mileage</td>
-              <td
-              // className={formErrors.mileage ? style.error : ""}
-              // ref={mileageRef}
-              >
+              <td>
                 {edition ? (
                   <input
                     type="text"
                     placeholder="Min"
                     min="1"
-                    // max="999999"
                     maxLength={7}
                     value={newMileage}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -739,10 +704,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Vehicle Type</td>
-              <td
-              // className={formErrors.vehicleType ? style.error : ""}
-              // ref={vehicleTypeRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newVehicleType}
@@ -755,14 +717,11 @@ Props) {
               </td>
 
               <td className={style.tableTitle}>Special</td>
-              <td
-              // className={formErrors.special ? style.error : ""}
-              >
+              <td>
                 {edition ? (
                   <input
                     type="checkbox"
                     checked={newSpecial}
-                    // value={newSpecial}
                     onChange={(e) => setNewSpecial(e.target.checked)}
                   />
                 ) : (
@@ -776,10 +735,7 @@ Props) {
           <tbody>
             <tr>
               <td className={style.tableTitle}>Brand</td>
-              <td
-              // className={formErrors.brand ? style.error : ""}
-              // ref={brandRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newBrand}
@@ -793,10 +749,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Model</td>
-              <td
-              // className={formErrors.model ? style.error : ""}
-              // ref={modelRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newModel}
@@ -810,10 +763,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Year</td>
-              <td
-              //  className={formErrors.year ? style.error : ""}
-              //   ref={yearRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newYear}
@@ -827,10 +777,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Color</td>
-              <td
-              // className={formErrors.color ? style.error : ""}
-              // ref={colorRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newColor}
@@ -844,10 +791,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Transmission</td>
-              <td
-              // className={formErrors.transmission ? style.error : ""}
-              // ref={transmissionRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newTransmission}
@@ -861,10 +805,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Fuel</td>
-              <td
-              //  className={formErrors.fuel ? style.error : ""}
-              //   ref={fuelRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newFuel}
@@ -878,10 +819,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Engine value</td>
-              <td
-              // className={formErrors.engineValue ? style.error : ""}
-              // ref={engineValueRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newEngineValue}
@@ -895,10 +833,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Vehicle Type</td>
-              <td
-              // className={formErrors.vehicleType ? style.error : ""}
-              // ref={vehicleTypeRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newVehicleType}
@@ -912,10 +847,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Interior</td>
-              <td
-              // className={formErrors.interior ? style.error : ""}
-              // ref={brandRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newInterior}
@@ -929,10 +861,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Wheels</td>
-              <td
-              // className={formErrors.wheels ? style.error : ""}
-              // ref={wheelsRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newWheels}
@@ -946,10 +875,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Seats</td>
-              <td
-              // className={formErrors.seats ? style.error : ""}
-              // ref={seatsRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newSeats}
@@ -963,10 +889,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Location</td>
-              <td
-              // className={formErrors.location ? style.error : ""}
-              // ref={locationRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newLocation}
@@ -980,10 +903,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Export</td>
-              <td
-              // className={formErrors.exportStatus ? style.error : ""}
-              // ref={exportStatusRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newExportStatus}
@@ -997,10 +917,7 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Owners</td>
-              <td
-              // className={formErrors.owners ? style.error : ""}
-              // ref={ownersRef}
-              >
+              <td>
                 {edition ? (
                   <CustomSelect
                     value={newOwners}
@@ -1014,16 +931,12 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Mileage</td>
-              <td
-              // className={formErrors.mileage ? style.error : ""}
-              // ref={mileageRef}
-              >
+              <td>
                 {edition ? (
                   <input
                     type="text"
                     placeholder="Min"
                     min="1"
-                    // max="999999"
                     maxLength={7}
                     value={newMileage}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1037,14 +950,11 @@ Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Special</td>
-              <td
-              // className={formErrors.special ? style.error : ""}
-              >
+              <td>
                 {edition ? (
                   <input
                     type="checkbox"
                     checked={newSpecial}
-                    // value={newSpecial}
                     onChange={(e) => setNewSpecial(e.target.checked)}
                   />
                 ) : (
@@ -1055,26 +965,13 @@ Props) {
           </tbody>
         </table>
 
-        <div
-          // className={formErrors.description ? style.error : style.description}
-          className={style.description}
-          // ref={descriptionRef}
-        >
+        <div className={style.description}>
           <h4>Description:</h4>
-          <div
-            // className={
-            //   formErrors.description
-            //     ? `${style.descriptionBox} ${style.error}`
-            //     : style.descriptionBox
-            // }
-            //  ref={descriptionRef}
-            className={style.descriptionBox}
-          >
+          <div className={style.descriptionBox}>
             {edition ? (
               <textarea
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
-                //onChange={(e) => setNewDescription(e.target.value)}
               />
             ) : (
               <span>{newDescription}</span>
@@ -1082,10 +979,6 @@ Props) {
           </div>
         </div>
 
-        {/* <div className={style.description}>
-          <h6>Description:</h6>
-          <span> {description}</span>
-        </div> */}
         <div className={style.added}>
           <h6>Added:</h6>
           <span>
@@ -1107,7 +1000,6 @@ Props) {
         {edition ? (
           <div className={style.priceBox}>
             <CustomSelect
-              // value={currencyOptions[0]}
               value={newCurrency}
               onChange={onCurrencyChange}
               options={currencyOptions}
@@ -1117,7 +1009,6 @@ Props) {
               placeholder="Min"
               min="1"
               className={style.price}
-              // max="999999"
               maxLength={newCurrency === "RUB" ? 11 : 10}
               value={newPricee}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

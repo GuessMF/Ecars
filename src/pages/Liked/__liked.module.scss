@@ -81,16 +81,24 @@
     }
   }
   .wrapper {
-    display: flex;
+    // display: flex;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     // flex-direction: row;
     // flex-wrap: wrap;
-    flex-direction: row;
-    flex-wrap: wrap;
+    // flex-direction: row;
+    // flex-wrap: wrap;
     gap: 20px;
-    justify-content: space-between;
-    align-items: center;
+    // justify-content: space-between;
+    // align-items: center;
     // gap: 10px;
     margin-top: 20px;
+
+    @media (max-width: 1000px) {
+      display: flex;
+      flex-direction: column;
+    }
     a {
       text-decoration: none;
     }

@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
 import style from "./__popupdel.module.scss";
+import {ReactComponent as CloseIcon} from "./deleteIcon.svg";
 
 interface Props {
   carName: string;
@@ -20,26 +21,18 @@ export default function PopUpDel({
   deleteCar,
   closePopUp,
 }: Props) {
-  // const [password, setPassword] = useState<string>("");
-  // const handleConfirmDelete = () => {
-  //   // Вызываем функцию обратного вызова с паролем
-  //   onConfirmDelete(password);
-  // };
-  //   <button onClick={() => onConfirmDelete(password)}>Confirm Delete</button>
-  // console.log(correctPassword + " correctPassword");
-  useEffect(() => {
-    //console.log(password);
-  }, [password, correctPassword]);
-
   return (
     <div className={style.popupdel}>
+      <h2>
+        To confirm the deletion, enter the make of the vehicle to be deleted:
+      </h2>
       <h3>{carName}</h3>
       <input type="text" value={password} onChange={onPasswordChange} />
       <button disabled={correctPassword === false} onClick={() => deleteCar()}>
         Confirm Delete
       </button>
       <button className={style.close__btn} onClick={closePopUp}>
-        x
+        <CloseIcon />
       </button>
     </div>
   );

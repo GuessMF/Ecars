@@ -8,11 +8,6 @@ import {NavLink} from "react-router-dom";
 import {useAuth} from "hooks/use-auth";
 import {getAuth} from "firebase/auth";
 import {onAuthStateChanged} from "firebase/auth";
-
-// interface Props {
-//   color: string;
-//   data: string;
-// }
 const black: string = "#1A1A1A";
 const version: string = "little";
 

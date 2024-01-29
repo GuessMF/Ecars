@@ -22,7 +22,7 @@
     align-items: flex-start;
     padding: 96px 108px;
     gap: 48px;
-    @media (max-width: 768px) {
+    @media (max-width: 1200px) {
       padding: 40px 32px;
       width: 100%;
     }
@@ -35,7 +35,7 @@
       line-height: 115%;
       margin: 0;
       color: $gray900;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         font-size: 30px;
         font-style: normal;
         font-weight: 600;
@@ -50,7 +50,7 @@
       padding: 0px;
       gap: 16px;
 
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         width: 100%;
       }
       .browseByBrand__row {
@@ -61,7 +61,7 @@
         align-items: flex-start;
         padding: 0px;
         gap: 24px;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           width: 100%;
           display: grid;
           grid-template-columns: repeat(3, 1fr);

@@ -7,7 +7,7 @@
   padding: 40px 108px;
   gap: 60px;
   background-color: $lightBG;
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     padding: 40px 32px;
   }
   a {
@@ -31,7 +31,7 @@
       justify-content: space-between;
       padding: 0px;
       // gap: 128px;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         flex-wrap: wrap;
       }
       @media (max-width: 450px) {
@@ -73,7 +73,7 @@
         gap: 24px;
         // width: 288px;
         // height: 150px;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           width: 100%;
           margin-bottom: 40px;
         }
@@ -85,7 +85,7 @@
           line-height: 20px;
           color: $gray700;
           width: 288px;
-          @media (max-width: 768px) {
+          @media (max-width: 1200px) {
             width: 100%;
           }
         }
@@ -148,7 +148,7 @@
       padding: 0px;
       gap: 515px;
       // display: none;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         gap: inherit;
         margin-top: 40px;
       }

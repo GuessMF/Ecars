@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import {useLocation} from "react-router-dom";
 import style from "./__catalog.module.scss";
 import Filters from "../../components/ordinary/Filters/Filters";
@@ -12,7 +11,6 @@ import Sorry from "../../assets/images/sorry.webp";
 import {setCurrentCatalogPage} from "store/slices/currentCatalogPageSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
 import carData from "helpers/modelsBrands";
-
 import "../../firebase";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {
@@ -24,13 +22,10 @@ import {
   where,
   QueryDocumentSnapshot,
   DocumentData,
-  QueryConstraint,
 } from "firebase/firestore";
 import {db} from "../../firebase";
-// import {start} from "repl";
-// import firebase from "firebase/app";
+
 import {useAppSelector} from "hooks/redux-hooks";
-import {log} from "console";
 
 interface SortObj {
   value: string;
@@ -70,8 +65,7 @@ export default function Catalog() {
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  //
-  //
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const brandParam = searchParams.get("brand") || "";
@@ -80,10 +74,6 @@ export default function Catalog() {
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
   let requestCounter: number = 0;
-
-  // useEffect(() => {
-  //   console.log(requestCounter + " Request");
-  // }, [requestCounter]);
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
@@ -126,19 +116,11 @@ export default function Catalog() {
   });
 
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
-  console.log(window.innerWidth);
-
   useEffect(() => {
     const handleResize = () => {
-      // Обработка изменений ширины экрана
-      console.log("Ширина экрана изменилась");
-      console.log(window.innerWidth);
       setScreenWidth(window.innerWidth);
     };
-
     window.addEventListener("resize", handleResize);
-
-    // Не забудьте удалить слушатель события при размонтировании компонента
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -227,23 +209,12 @@ export default function Catalog() {
     Manual: false,
   });
 
-  //
   const [totalCars, setTotalCars] = useState<number>(0);
   const [filtredCars, setFiltredCars] = useState<number>(0);
   const [loaded, setLoaded] = useState<boolean>(false);
-  // const [currentPage, setCurrentPage] = useState<number>(1);
 
   const itemsPerPage: number = 5;
   const pages = Math.ceil(totalCars / itemsPerPage);
-
-  // const buttons = [];
-  // for (let i = 0; i < pages; i++) {
-  //   buttons.push(i);
-  // }
-
-  // buttons.forEach((i) => {
-
-  // });
 
   const [cars, setCars] = useState<Car[]>([]);
 
@@ -294,7 +265,6 @@ export default function Catalog() {
       setYearFilter(false);
     }
   }, [
-    // currentPage,
     currentCatalogPage,
     sortType,
     brandFilter,
@@ -379,7 +349,6 @@ export default function Catalog() {
 
       Object.entries(color).forEach(([color, isSelected]) => {
         if (isSelected) {
-          // first = query(first, where("color", "==", color));
           if (arrColor.length > 0) {
             first = query(first, where("color", "in", arrColor));
             requestCounter++;
@@ -467,8 +436,6 @@ export default function Catalog() {
         const mergedCars = Array.from(uniqueCars.values());
 
         const paginatedCars = mergedCars.slice(
-          // currentPage * itemsPerPage - itemsPerPage,
-          // currentPage * itemsPerPage
           currentCatalogPage * itemsPerPage - itemsPerPage,
           currentCatalogPage * itemsPerPage
         );
@@ -485,7 +452,7 @@ export default function Catalog() {
         if (brandFilter) {
           first = query(
             first,
-            // where("brand", "==", brandFilter.toLocaleLowerCase())
+
             where("brand", "==", brandFilter)
           );
         }
@@ -534,23 +501,15 @@ export default function Catalog() {
           ]);
         }
 
-        // const paginatedCars = filtredYearCars.slice(
-        //   currentPage * itemsPerPage - itemsPerPage,
-        //   currentPage * itemsPerPage
-        // );
         const paginatedCars = filtredPriceCars.slice(
-          // currentPage * itemsPerPage - itemsPerPage,
-          // currentPage * itemsPerPage
-
           currentCatalogPage * itemsPerPage - itemsPerPage,
           currentCatalogPage * itemsPerPage
         );
 
-        // setTotalCars(filtredYearCars.length);
         setTotalCars(filtredPriceCars.length);
         setCars(paginatedCars);
         setFiltredCars(filtredPriceCars.length);
-        // setFiltredCars(filtredYearCars.length);
+
         setLoaded(true);
       }
     } catch (error) {
@@ -682,7 +641,6 @@ export default function Catalog() {
     setMinPriceValue("0");
     setMaxPriceValue("99 999 999");
   };
-  // console.log(minYearValue);
 
   const resetCity = () => {
     setCityCheckboxes({
@@ -767,7 +725,7 @@ export default function Catalog() {
   ) => {
     setBrandFilter(event.target.value);
     setItemOffset(0);
-    // setCurrentPage(1);
+
     dispatch(setCurrentCatalogPage(1));
   };
 
@@ -799,7 +757,6 @@ export default function Catalog() {
     setModelFilter(event.target.value);
     setItemOffset(0);
     dispatch(setCurrentCatalogPage(1));
-    // setCurrentPage(1);
   };
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkboxId = event.target.id as keyof CheckboxState;
@@ -884,9 +841,6 @@ export default function Catalog() {
   };
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  // const toggleFilters = () => {
-  //   setIsFiltersOpen(!isFiltersOpen);
-  // };
 
   const closeSelectedFilter = (filter: string) => {
     if (filter === "brand") {
@@ -936,17 +890,13 @@ export default function Catalog() {
   };
 
   const nextNextPage = () => {
-    // setCurrentPage(currentPage + 1);
     dispatch(setCurrentCatalogPage(currentCatalogPage + 1));
   };
   const prevPrevPage = () => {
-    // setCurrentPage(currentPage - 1);
     dispatch(setCurrentCatalogPage(currentCatalogPage - 1));
   };
 
   const changePage = (index: number) => {
-    // setCurrentPage(index + 1);
-
     dispatch(setCurrentCatalogPage(index + 1));
     const catalog = document.getElementById("catalog");
     if (catalog) {
@@ -957,8 +907,6 @@ export default function Catalog() {
       });
     }
   };
-
-  // console.log(cars.length);
 
   return (
     <div className={style.catalog} id="catalog">
@@ -1002,8 +950,6 @@ export default function Catalog() {
           maxMileageValue={maxMileageValue}
           onMinMileageValue={handleMinMileageChange}
           onMaxMileageValue={handleMaxMileageChange}
-          // mileageSliderChange={handleMileageSliderChange}
-          // selectedCurrency={selectedCurrency}
           minYearValue={minYearValue}
           maxYearValue={maxYearValue}
           onMinYearValue={handleMinYearChange}
@@ -1020,7 +966,6 @@ export default function Catalog() {
             sortOption="Expensive"
             isFiltersOpen={isFiltersOpen}
             setIsFiltersOpen={setIsFiltersOpen}
-            // searchValue={searchTerm}
             brand={brandFilter}
             model={modelFilter}
             mileage={mileageFilter}
@@ -1076,7 +1021,6 @@ export default function Catalog() {
             <div className={style.buttons}>
               <button
                 onClick={prevPrevPage}
-                //disabled={currentPage === 1}
                 disabled={currentCatalogPage === 1}
               >
                 Previous
@@ -1084,19 +1028,16 @@ export default function Catalog() {
               {[...new Array(pages)].map((_, index) => (
                 <span
                   key={index}
-                  // className={index + 1 == currentPage ? style.currentPage : ""}
                   className={
                     index + 1 == currentCatalogPage ? style.currentPage : ""
                   }
                   onClick={() => changePage(index)}
-                  //onClick={ScrollToTop}
                 >
                   {index + 1}
                 </span>
               ))}
               <button
                 onClick={nextNextPage}
-                //   disabled={currentPage === pages}
                 disabled={currentCatalogPage === pages}
               >
                 Next

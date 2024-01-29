@@ -20,10 +20,6 @@ import {ReactComponent as ChangeImage} from "./changeImage.svg";
 import {ReactComponent as DeleteIcon} from "./deleteIcon.svg";
 import {useAuth} from "hooks/use-auth";
 
-// interface CarBrand {
-//   name: string;
-//   models: CarModel[];
-// }
 interface Props {
   userID: string;
 }
@@ -31,10 +27,6 @@ interface Props {
 interface CarModel {
   name: string;
 }
-
-// interface CarModel {
-//   name: string;
-// }
 
 interface CarBrand {
   name: string;
@@ -103,14 +95,6 @@ export default function PersonalPage({userID}: Props) {
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
-  // const [menuIsOpen, setMenuIsOpen] = React.useState(false);
-  // const toggleMenu = () => {
-  //   setMenuIsOpen(!menuIsOpen);
-  // };
-  // const user = useAppSelector((state) => state.user);
-
-  // const [userEmail, setUserEmail] = useState<string>("");
-  // const [userMobile, setUserMobile] = useState<string>("");
 
   let multiplier: number =
     selectedCurrency === "RUB"
@@ -118,13 +102,6 @@ export default function PersonalPage({userID}: Props) {
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-
-  // const newPrice = Number(price) * multiplier;
-  // const currentPrice = parseInt(newPrice.toFixed(0));
-
-  // const formattedPrice: string = currentPrice
-  //   .toLocaleString()
-  //   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
   const navigate = useNavigate();
 
@@ -210,8 +187,6 @@ export default function PersonalPage({userID}: Props) {
   };
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-
-  //let selectedFiles: File[] = [];
   const userMobile = useAppSelector((state) => state.user.mobile);
   const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
@@ -226,24 +201,12 @@ export default function PersonalPage({userID}: Props) {
     );
   }, [model]);
 
-  // const toggleMenu = () => {
-  //   setMenuIsOpen(!menuIsOpen);
-  // };
-
-  // const onClickCurrency = (selectedOption: any) => {
-  //   setCurrentCur(selectedOption);
-  //   // onCurrencyChange(selectedOption);
-  //   console.log(selectedOption);
-  //   setMenuIsOpen(false);
-  // };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
     if (files.length > 20) {
       alert("Меньше 20 нужно");
       return;
-      // e.target.files = null;
     } else {
       setLoadingPhoto(true);
       const compressedFiles: File[] = [];
@@ -261,9 +224,7 @@ export default function PersonalPage({userID}: Props) {
             image.onload = async () => {
               const canvas = document.createElement("canvas");
               const ctx = canvas.getContext("2d");
-
               if (!ctx) return;
-
               canvas.width = image.width;
               canvas.height = image.height;
               ctx.drawImage(image, 0, 0);
@@ -284,8 +245,6 @@ export default function PersonalPage({userID}: Props) {
 
               if (compressedFiles.length === files.length) {
                 setSelectedFiles(compressedFiles);
-                //  selectedFiles.push(compressedFile);
-
                 setPreviewImages(images);
                 setLoadingPhoto(false);
               }
@@ -318,9 +277,7 @@ export default function PersonalPage({userID}: Props) {
         image.onload = async () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
-
           if (!ctx) return;
-
           canvas.width = image.width;
           canvas.height = image.height;
           ctx.drawImage(image, 0, 0);
@@ -341,16 +298,12 @@ export default function PersonalPage({userID}: Props) {
             setFirstCarPhoto(images[0]);
             setSelectedPreview(compressedFiles);
             setLoadingPhoto(false);
-            // selectedFiles.push(compressedFile);
-            //  setSelectedFiles(compressedFiles);
-            //   setPreviewImages(images);
           }
         };
       }
     };
 
     reader.readAsDataURL(file);
-    // }
   };
   const generateNewId = (): string => {
     return uuidv4();
@@ -424,34 +377,26 @@ export default function PersonalPage({userID}: Props) {
     }
   };
   useEffect(() => {
-    // console.log("Price:   " + price);
-
     const newPrice =
       currency === "RUB"
         ? Number(price) / usdValue
         : currency === "EUR"
         ? Number(price) / (usdValue / eurValue)
         : Number(price);
-
-    // console.log("New price:  " + newPrice);
-    // console.log(parseInt(price.replace(/\s/g, ""), 10));
   }, [price]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFirstClick(true);
     checkErrors();
 
     if (Object.keys(errors).length > 0) {
-      // console.log(errors);
-
       setFormErrors(errors);
       setPopUpErrors(true);
     } else {
       setLoading(true);
-
       const uploadTasks: Promise<string>[] = [];
       const newId = generateNewId();
-
       const currentDate: Date = new Date();
       const dateObj: DateObject = {
         year: currentDate.getFullYear(),
@@ -471,7 +416,6 @@ export default function PersonalPage({userID}: Props) {
         );
       });
 
-      // Отдельная группа задач для selectedFiles
       const filesUploadTasks = selectedFiles.map((file) => {
         const storageRef = ref(storage, `cars/${newId}/${file.name}`);
         return uploadBytes(storageRef, file).then(() =>
@@ -505,7 +449,6 @@ export default function PersonalPage({userID}: Props) {
               : currency === "EUR"
               ? parseInt(price.replace(/\s/g, ""), 10) / (usdValue / eurValue)
               : parseInt(price.replace(/\s/g, ""), 10),
-          // price: price,
           year: year,
           mileage: parseInt(mileage.replace(/\s/g, ""), 10),
           transmission: transmission,
@@ -532,66 +475,15 @@ export default function PersonalPage({userID}: Props) {
           setSent(false);
           navigate(`/details/${newId}`);
         }, 1500);
-        console.log(errors);
       } catch (error) {
         console.error("Error adding documents: ", error);
       }
-
-      // setSelectedFiles([]);
-      // setPreviewImages([]);
-      // setBrand("");
-      // setModel("");
-      // setPrice("");
-      // setYear("");
-      // setTransmission("");
-      // setEngineValue("");
-      // setMileage("1");
-      // setFuel("");
-      // setWheels("");
-      // setVehicleType("");
-      // setSeats("");
-      // setInterior("");
-      // setColor("");
-      // setLocation("");
-      // setExportStatus("");
-      // setDescription("");
-      // setOwners("");
-      // setSpecialOffer(false);
     }
   };
-
-  // const handleEngineCapacityChange = (
-  //   e: React.ChangeEvent<HTMLInputElement>
-  // ) => {
-  //   let input = e.target.value;
-  //   const regex = /^(\d+(\.\d{0,1})?)?$/;
-  //   if (
-  //     regex.test(input) &&
-  //     parseFloat(input) >= 0.1 &&
-  //     parseFloat(input) <= 9.9
-  //   ) {
-  //     if (input.length === 1) {
-  //       input += ".";
-  //     }
-  //     setEngineCapacity(input);
-  //   } else {
-  //     setEngineCapacity("");
-  //   }
-  // };
-
-  // const handleBrandChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const selectedBrand = e.target.value;
-  //   // setBrand(selectedBrand);
-  //   const selectedBrandData = carData.brands.find(
-  //     (item) => item.name === selectedBrand
-  //   );
-  //   setModels(selectedBrandData ? selectedBrandData.models : []);
-  // };
 
   const hasErrors = Object.keys(formErrors);
 
   const handleAgreeClick = () => {
-    // const scrollTopOffset = 100;
     const scrollTopOffset = 150;
     setPopUpErrors(false);
     const fieldName = hasErrors[0];
@@ -711,9 +603,6 @@ export default function PersonalPage({userID}: Props) {
     });
     return capitalizeWords.join(" ");
   };
-  // useEffect(() => {
-  //   onModelChange("");
-  // }, [brand]);
 
   const onModelChange = (value: string) => {
     setModel(value);
@@ -812,11 +701,7 @@ export default function PersonalPage({userID}: Props) {
       {popUpErrors ? <PopUpError closePopUp={handleAgreeClick} /> : null}
       <PopUpSent sent={sent} />
 
-      <div
-        //  onSubmit={handleSubmit}
-        id="form"
-        className={style.form}
-      >
+      <div id="form" className={style.form}>
         <div
           className={
             formErrors.selectedPreview
@@ -834,11 +719,8 @@ export default function PersonalPage({userID}: Props) {
                     height="80"
                     width="500"
                     color="#4fa94d"
-                    // radius="6"
-                    // wrapperStyle={{}}
                     wrapperClass={style.loader}
                     visible={true}
-                    // ariaLabel="rings-loading"
                   />
                 ) : (
                   <div>
@@ -881,7 +763,6 @@ export default function PersonalPage({userID}: Props) {
               ? `${style.photos} ${style.error}`
               : style.photos
           }
-          // className={formErrors.selectedFiles ? style.error : style.photos}
           ref={selectedFilesRef}
         >
           {selectedFiles.length < 1 && (
@@ -892,11 +773,8 @@ export default function PersonalPage({userID}: Props) {
                   height="80"
                   width="500"
                   color="#4fa94d"
-                  // radius="6"
-                  // wrapperStyle={{}}
                   wrapperClass={style.loader}
                   visible={true}
-                  // ariaLabel="rings-loading"
                 />
               ) : (
                 <button onClick={pickPhotos} className={style.addPhotos}>
@@ -932,7 +810,6 @@ export default function PersonalPage({userID}: Props) {
                     key={`little prev ${index}`}
                     src={preview}
                     alt={`preview-${index}`}
-                    // className={index !== 0 && style.opacity}
                   />
                 </div>
               ))}
@@ -953,7 +830,6 @@ export default function PersonalPage({userID}: Props) {
                   value={brand}
                   onChange={handleNewBrandChange}
                   options={brandOptions}
-                  // options={brandOptions.map((brandName) => capitalizeWords(brandName))}
                 />
               </td>
 
@@ -1111,7 +987,6 @@ export default function PersonalPage({userID}: Props) {
                   type="text"
                   placeholder="Enter mileage"
                   min="1"
-                  // max="999999"
                   maxLength={7}
                   value={mileage}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1134,14 +1009,11 @@ export default function PersonalPage({userID}: Props) {
               </td>
 
               <td className={style.tableTitle}>Special</td>
-              <td
-              // className={formErrors.special ? style.error : ""}
-              >
+              <td>
                 <input
                   className={style.checkBox}
                   type="checkbox"
                   checked={specialOffer}
-                  // value={specialOffer}
                   onChange={(e) => setSpecialOffer(e.target.checked)}
                 />
               </td>
@@ -1161,7 +1033,6 @@ export default function PersonalPage({userID}: Props) {
                   value={brand}
                   onChange={handleNewBrandChange}
                   options={brandOptions}
-                  // options={brandOptions.map((brandName) => capitalizeWords(brandName))}
                 />
               </td>
             </tr>
@@ -1338,7 +1209,6 @@ export default function PersonalPage({userID}: Props) {
                   type="text"
                   placeholder="Enter mileage"
                   min="1"
-                  // max="999999"
                   maxLength={7}
                   value={mileage}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1349,25 +1219,18 @@ export default function PersonalPage({userID}: Props) {
             </tr>
             <tr>
               <td className={style.tableTitle}>Special</td>
-              <td
-              // className={formErrors.special ? style.error : ""}
-              >
+              <td>
                 <input
                   className={style.checkBox}
                   type="checkbox"
                   checked={specialOffer}
-                  // value={specialOffer}
                   onChange={(e) => setSpecialOffer(e.target.checked)}
                 />
               </td>
             </tr>
           </tbody>
         </table>
-        <div
-          // className={formErrors.description ? style.error : style.description}
-          className={style.description}
-          // ref={descriptionRef}
-        >
+        <div className={style.description}>
           <h4>Description:</h4>
           <div
             className={
@@ -1384,11 +1247,7 @@ export default function PersonalPage({userID}: Props) {
           </div>
         </div>
 
-        <div
-          className={style.priceBox}
-          // className={formErrors.price ? style.error : style.price}
-          // ref={priceRef}
-        >
+        <div className={style.priceBox}>
           <h5>Price: </h5>
           <div
             className={formErrors.price ? style.error : style.price}
@@ -1399,7 +1258,6 @@ export default function PersonalPage({userID}: Props) {
               placeholder="Min"
               min="1"
               className={style.price}
-              // max="999999"
               maxLength={currency === "RUB" ? 11 : 10}
               value={price}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1417,7 +1275,6 @@ export default function PersonalPage({userID}: Props) {
             ref={priceCurrencyRef}
           >
             <CustomSelect
-              // value={currencyOptions[0]}
               value={currency}
               onChange={onCurrencyChange}
               options={currencyOptions}
@@ -1425,23 +1282,7 @@ export default function PersonalPage({userID}: Props) {
           </div>
         </div>
 
-        {/* <div
-          className={formErrors.description ? style.error : ""}
-          // ref={specialRef}
-        >
-        <label>
-            Special:
-            <input
-              type="checkbox"
-              checked={specialOffer}
-              // value={specialOffer}
-              onChange={(e) => setSpecialOffer(e.target.checked)}
-            />
-          </label> 
-        </div> */}
-
         <button
-          //  type="submit"
           onClick={handleSubmit}
           className={loading ? style.button__load : ""}
         >
@@ -1450,11 +1291,8 @@ export default function PersonalPage({userID}: Props) {
               height="48"
               width="30"
               color="#4fa94d"
-              // radius="6"
-              // wrapperStyle={{}}
               wrapperClass={style.loader}
               visible={true}
-              // ariaLabel="rings-loading"
             />
           ) : (
             "Добавить машину"

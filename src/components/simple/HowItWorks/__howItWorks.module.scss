@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   padding: 96px 108px;
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     padding: 40px 32px;
     height: fit-content;
   }
@@ -29,7 +29,7 @@
       padding: 0px;
       gap: 24px;
       width: 600px;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         width: 100%;
       }
       h3 {
@@ -43,7 +43,7 @@
         text-align: center;
         color: $gray900;
         margin: 0;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           font-size: 30px;
         }
       }
@@ -70,7 +70,7 @@
       isolation: isolate;
 
       position: relative;
-      @media (max-width: 768px) {
+      @media (max-width: 1200px) {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         width: 100%;
@@ -88,7 +88,7 @@
         background-repeat: repeat-x;
         position: absolute;
         top: 22px;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           display: none;
         }
       }
@@ -100,7 +100,7 @@
         padding: 0px;
         width: 288px;
         height: 174px;
-        @media (max-width: 768px) {
+        @media (max-width: 1200px) {
           width: auto;
         }
         .card__content {
@@ -138,7 +138,7 @@
               line-height: 24px;
               text-align: center;
               color: $gray900;
-              @media (max-width: 768px) {
+              @media (max-width: 1200px) {
                 width: 48px;
                 height: 48px;
               }
@@ -151,7 +151,7 @@
             justify-content: space-between;
             align-items: center;
             height: 94px;
-            @media (max-width: 768px) {
+            @media (max-width: 1200px) {
               height: auto;
               gap: 8px;
             }
@@ -165,7 +165,7 @@
               text-align: center;
               color: $gray900;
               margin: 0;
-              @media (max-width: 768px) {
+              @media (max-width: 1200px) {
                 font-size: 17px;
               }
             }
@@ -182,7 +182,7 @@
               text-align: center;
               color: $gray900;
               margin: 0;
-              @media (max-width: 768px) {
+              @media (max-width: 1200px) {
                 width: auto;
               }
             }

@@ -9,7 +9,7 @@
 
   border-radius: 8px;
   gap: 24px;
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     width: 100%;
   }
   @media (max-width: 450px) {
@@ -24,8 +24,8 @@
     align-items: flex-start;
     border: 1px solid $outline2;
     border-radius: 8px;
-    @media (max-width: 768px) {
-      flex-direction: row;
+    @media (max-width: 1200px) {
+      //  flex-direction: row;
       width: 100%;
     }
     @media (max-width: 450px) {
@@ -39,9 +39,9 @@
       flex-direction: column;
       gap: 16px;
       padding: 16px;
-      @media (max-width: 768px) {
-        width: 50%;
-      }
+      // @media (max-width: 768px) {
+      //   width: 50%;
+      // }
       @media (max-width: 450px) {
         width: 100%;
       }
@@ -117,11 +117,11 @@
       background-color: $lightBG;
       gap: 8px;
       border-top: 1px solid $outline2;
-      @media (max-width: 768px) {
-        width: 50%;
-        height: auto;
-        justify-content: space-between;
-      }
+      // @media (max-width: 768px) {
+      //   width: 50%;
+      //   height: auto;
+      //   justify-content: space-between;
+      // }
       @media (max-width: 450px) {
         width: 100%;
       }
@@ -203,8 +203,8 @@
     align-items: flex-start;
     gap: 24px;
     border-radius: 8px;
-    @media (max-width: 768px) {
-      flex-direction: row;
+    @media (max-width: 1200px) {
+      // flex-direction: row;
       width: 100%;
     }
     @media (max-width: 450px) {
@@ -252,9 +252,9 @@
     .inspection__report {
       // background-color: aliceblue;
       width: 100%;
-      @media (max-width: 768px) {
-        width: 50%;
-      }
+      // @media (max-width: 768px) {
+      //   width: 50%;
+      // }
       @media (max-width: 450px) {
         width: 100%;
       }
@@ -341,9 +341,9 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      @media (max-width: 768px) {
-        width: 50%;
-      }
+      // @media (max-width: 768px) {
+      //   width: 50%;
+      // }
       @media (max-width: 450px) {
         width: 100%;
       }

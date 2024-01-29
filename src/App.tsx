@@ -15,38 +15,21 @@ import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PersonalPage from "./pages/PersonalPage/PersonalPage";
-import TestPage from "./pages/TestPage/TestPage";
 import Liked from "pages/Liked/Liked";
 
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {setUser} from "store/slices/userSlice";
 import {useAppDispatch} from "hooks/redux-hooks";
-//import {useSelector} from "react-redux";
-//import {RootState} from "./store";
-//import {useNavigate} from "react-router-dom";
-//import {useParams} from "react-router-dom";
 import UserPage from "pages/UserPage/UserPage";
-//import {useAuth} from "hooks/use-auth";
 import Cookies from "universal-cookie";
-import {setCurrencyTerm} from "store/slices/currencySlice";
-
 import {setCurrValue} from "./store/slices/currValueSlice";
-import {useAppSelector} from "hooks/redux-hooks";
 import LoginMobile from "pages/LoginMobile/LoginMobile";
 import FAQ from "pages/FAQ/FAQ";
 
 function App() {
   const dispatch = useAppDispatch();
   const [userId, setUserId] = useState<string>("");
-
   const cookies = new Cookies(null, {path: "/"});
-  // const currencyTerm = useAppSelector((state) => state.currency.currencyTerm);
-  // const [selectedCurr, setSelectedCurr] = useState<string>("RUB");
-
-  // const [usdValue, setUsdValue] = useState<number>(0);
-  // const [eurValue, setEurValue] = useState<number>(0);
-
-  // const ususer = useAppSelector((state) => state.user);
 
   useEffect(() => {
     const auth = getAuth();
@@ -115,8 +98,6 @@ function App() {
         <Route path="/login-mobile" element={<LoginMobile />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
-
-        <Route path="/test" element={<TestPage />} />
       </Routes>
       <Footer />
     </div>
