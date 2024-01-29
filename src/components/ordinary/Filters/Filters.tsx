@@ -2,7 +2,7 @@ import React from "react";
 import {CSSTransition} from "react-transition-group";
 import style from "./__filters.module.scss";
 import MoreFilters from "../../ui/MoreFilters/MoreFilters";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import {RangeSlider} from "rsuite";
 import "rsuite/dist/rsuite.css";
 import {useAppSelector} from "hooks/redux-hooks";
@@ -244,7 +244,7 @@ export default function Filters({
       onMaxYearValue(minYearValue);
       setMaxYear(minYearValue.toString());
     }
-  }, [minYear]);
+  }, [minYear, maxYearValue, minMileageValue, onMaxYearValue, minYearValue]);
 
   const newResetYear = () => {
     resetYear();
@@ -281,22 +281,21 @@ export default function Filters({
     onBrandFilterChange(event);
   };
 
-  const currendate = new Date();
-  const currentYear = currendate.getFullYear();
-
   const onResetBrand = () => {
     resetBrand();
     onResetModels();
   };
-  const onResetModels = () => {
+
+  const onResetModels = useCallback(() => {
     resetModels();
     setModels([]);
-  };
+  }, [resetModels]);
+
   useEffect(() => {
     if (!modelFilterValue) {
       onResetModels();
     }
-  }, [modelFilterValue]);
+  }, [modelFilterValue, onResetModels]);
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");

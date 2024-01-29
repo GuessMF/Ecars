@@ -11,7 +11,7 @@ import {
 import {db} from "../../../firebase";
 
 import MeduimCard from "components/smart/MediumCard/MeduimCard";
-import {current} from "@reduxjs/toolkit";
+
 import {NavLink} from "react-router-dom";
 
 import {useAppSelector} from "hooks/redux-hooks";
@@ -52,44 +52,6 @@ export default function SimilarCars({
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
 
-  // const fetchSimilarCars = async (
-  //   brand: string | undefined,
-  //   model: string | undefined
-  // ) => {
-  //   try {
-  //     const carsRef = collection(db, "cars");
-  //     let queryRef = query(carsRef);
-  //     queryRef = query(queryRef, where("brand", "==", brand));
-  //     const querySnapshot = await getDocs(queryRef);
-  //     const cars = querySnapshot.docs.map(
-  //       (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-  //     );
-
-  //     if (similarCars.length <= 2) {
-  //       setSimilarCars(cars);
-  //     } else {
-  //       queryRef = query(
-  //         carsRef,
-  //         where("brand", "==", brand),
-  //         where("model", "==", model)
-  //       );
-  //       const modelSnapshot = await getDocs(queryRef);
-  //       const carsByModel = modelSnapshot.docs.map(
-  //         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-  //       );
-
-  //       if (carsByModel.length <= 2) {
-  //         setSimilarCars(carsByModel);
-  //       }
-  //     }
-  //     // first = query(first, where("model", "==", similarModel));
-  //   } catch (error) {
-  //     console.error("Error fetching first page: ", error);
-  //   }
-  // };
-
-  const [previousSimilarCars, setPreviousSimilarCars] = useState<Car[]>([]);
-
   const fetchSimilarCars = async (
     brand: string | undefined,
     model: string | undefined,
@@ -104,13 +66,10 @@ export default function SimilarCars({
         (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
       );
 
-      // Исключаем машину по ID
-
       cars = cars.filter((car) => car.id !== excludedCarId);
 
       if (cars.length <= 2) {
         setSimilarCars(cars);
-        setPreviousSimilarCars([]); // Сбрасываем предыдущие результаты
       } else {
         queryRef = query(
           carsRef,
@@ -127,7 +86,7 @@ export default function SimilarCars({
         const randNum1 = Math.floor(Math.random() * cars.length);
         const randNum2 = Math.floor(Math.random() * cars.length);
 
-        if (carsByModel.length == 1) {
+        if (carsByModel.length === 1) {
           const firstCarId = carsByModel[0].id;
           for (let i = 0; carsByModel.length < 2; i++) {
             const secondCarId = cars[i].id;
@@ -136,19 +95,14 @@ export default function SimilarCars({
             }
           }
           setSimilarCars(carsByModel);
-          setPreviousSimilarCars([]); // Сбрасываем предыдущие результаты
-        } else if (carsByModel.length == 0) {
+        } else if (carsByModel.length === 0) {
           carsByModel.push(cars[randNum1]);
           carsByModel.push(cars[randNum2]);
           setSimilarCars(carsByModel);
-          setPreviousSimilarCars([]); // Сбрасываем предыдущие результаты
         } else if (carsByModel.length <= 2) {
           setSimilarCars(carsByModel);
-          setPreviousSimilarCars(cars); // Сохраняем предыдущие результаты
         } else {
-          // Если есть больше 2 результатов по модели, сохраняем их
           setSimilarCars(carsByModel);
-          setPreviousSimilarCars([]); // Сбрасываем предыдущие результаты
         }
       }
     } catch (error) {

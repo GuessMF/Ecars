@@ -18,7 +18,7 @@ import ErrorLoginMobile from "./ErrorLoginMobile";
 export default function LoginMobile() {
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -31,14 +31,14 @@ export default function LoginMobile() {
         }
       }
     });
-  }, []);
+  }, [navigate]);
 
   const [phoneNumber, setPhoneNumber] = useState<string>("+7");
   const [verificationCode, setVerificationCode] = useState("");
   const [codeSended, setCodeSended] = useState<boolean>(false);
   const [clicked, setClicked] = useState<boolean>(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+
   const auth = getAuth();
 
   const handleSendCode = async () => {

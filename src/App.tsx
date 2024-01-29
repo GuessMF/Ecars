@@ -1,8 +1,6 @@
 import {useState, useEffect} from "react";
 import {Routes, Route} from "react-router-dom";
-
 import ScrollToTop from "./utils/scrollToTop";
-
 import style from "./styles/__app.module.scss";
 import TopBar from "./components/simple/TopBar/TopBar";
 import Header from "./components/ordinary/Header/Header";
@@ -27,11 +25,11 @@ import LoginMobile from "pages/LoginMobile/LoginMobile";
 import FAQ from "pages/FAQ/FAQ";
 
 function App() {
-  const dispatch = useAppDispatch();
   const [userId, setUserId] = useState<string>("");
-  const cookies = new Cookies(null, {path: "/"});
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
+    const cookies = new Cookies(null, {path: "/"});
+
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       user && setUserId(user?.uid);
@@ -70,7 +68,7 @@ function App() {
     };
 
     fetchExchangeRates();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={style.app}>

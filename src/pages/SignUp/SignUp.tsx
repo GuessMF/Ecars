@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, useMemo, useCallback} from "react";
 import style from "./__signUp.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink, useNavigate} from "react-router-dom";
@@ -36,7 +36,15 @@ export default function SignUp() {
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<Errors>({});
   const auth = getAuth();
-  const errors: Errors = {};
+  // const errors: Errors = {};
+  const errors: Errors = useMemo(
+    () => {
+      return {};
+    },
+    [
+      /* зависимости, при изменении которых нужно пересоздавать объект errors */
+    ]
+  );
 
   const nameRef = useRef<HTMLDivElement>(null);
   const emailRef = useRef<HTMLDivElement>(null);
@@ -54,7 +62,7 @@ export default function SignUp() {
 
   const navigate = useNavigate();
 
-  const checkErrors = () => {
+  const checkErrors = useCallback(() => {
     if (!name) {
       errors.name = "Поле имя обязательно для заполнения";
     }
@@ -76,7 +84,7 @@ export default function SignUp() {
     if (!checkBox) {
       errors.checkBox = "Необходимо согласиться";
     }
-  };
+  }, [name, email, password, confirmPassword, checkBox, errors]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,7 +131,16 @@ export default function SignUp() {
       checkErrors();
       setFormErrors(errors);
     }
-  }, [name, email, password, confirmPassword, checkBox]);
+  }, [
+    name,
+    email,
+    password,
+    confirmPassword,
+    checkBox,
+    checkErrors,
+    errors,
+    firstClick,
+  ]);
 
   const hasErrors = Object.keys(formErrors);
   const handleAgreeClick = () => {

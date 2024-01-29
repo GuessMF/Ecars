@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, useCallback, useMemo} from "react";
 import style from "../PersonalPage/__personalPage.module.scss";
 import {v4 as uuidv4} from "uuid";
 import {getStorage, ref, uploadBytes, getDownloadURL} from "firebase/storage";
@@ -115,7 +115,15 @@ export default function PersonalPage({userID}: Props) {
 
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
 
-  const errors: Errors = {};
+  // const errors: Errors = {};
+  const errors: Errors = useMemo(
+    () => {
+      return {};
+    },
+    [
+      /* зависимости, при изменении которых нужно пересоздавать объект errors */
+    ]
+  );
 
   const previewPicker = useRef<HTMLInputElement>(null);
   const photosPicker = useRef<HTMLInputElement>(null);
@@ -166,18 +174,19 @@ export default function PersonalPage({userID}: Props) {
   const storage = getStorage();
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const userMobile = useAppSelector((state) => state.user.mobile);
-  const cookies = new Cookies(null, {path: "/"});
+
   useEffect(() => {
+    const cookies = new Cookies(null, {path: "/"});
     if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     setBrandAndModel(
       `${brand.toLocaleLowerCase()} ${model.toLocaleLowerCase()}`
     );
-  }, [model]);
+  }, [model, brand]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -287,7 +296,75 @@ export default function PersonalPage({userID}: Props) {
     return uuidv4();
   };
 
-  const checkErrors = () => {
+  // const checkErrors = () => {
+  //   if (selectedPreview.length < 1) {
+  //     errors.selectedPreview = "Должно быть добавлено хотя бы 1 фото";
+  //   }
+
+  //   if (selectedFiles.length < 1) {
+  //     errors.selectedFiles = "Должно быть добавлено хотя бы 1 фото";
+  //   }
+
+  //   if (!brand) {
+  //     errors.brand = "Поле Марка обязательно для заполнения";
+  //   }
+
+  //   if (!model) {
+  //     errors.model = "Поле Модель должна быть заполнена";
+  //   }
+  //   if (!vehicleType) {
+  //     errors.vehicleType = "Поле Тип кузова должна быть заполнена";
+  //   }
+
+  //   if (!fuel) {
+  //     errors.fuel = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!engineValue) {
+  //     errors.engineValue = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!color) {
+  //     errors.color = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!interior) {
+  //     errors.interior = "Поле модель должна быть заполнена";
+  //   }
+
+  //   if (!transmission) {
+  //     errors.transmission = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!wheels) {
+  //     errors.wheels = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!seats) {
+  //     errors.seats = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!location) {
+  //     errors.location = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!owners) {
+  //     errors.owners = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!exportStatus) {
+  //     errors.exportStatus = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!year) {
+  //     errors.year = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!mileage) {
+  //     errors.mileage = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!price) {
+  //     errors.price = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!description) {
+  //     errors.description = "Поле модель должна быть заполнена";
+  //   }
+  //   if (!currency) {
+  //     errors.priceCurrency = "выберите валюту";
+  //   }
+  // };
+
+  const checkErrors = useCallback(() => {
     if (selectedPreview.length < 1) {
       errors.selectedPreview = "Должно быть добавлено хотя бы 1 фото";
     }
@@ -353,15 +430,29 @@ export default function PersonalPage({userID}: Props) {
     if (!currency) {
       errors.priceCurrency = "выберите валюту";
     }
-  };
-  useEffect(() => {
-    const newPrice =
-      currency === "RUB"
-        ? Number(price) / usdValue
-        : currency === "EUR"
-        ? Number(price) / (usdValue / eurValue)
-        : Number(price);
-  }, [price]);
+  }, [
+    selectedPreview,
+    selectedFiles,
+    brand,
+    model,
+    vehicleType,
+    fuel,
+    engineValue,
+    color,
+    interior,
+    transmission,
+    wheels,
+    seats,
+    location,
+    owners,
+    exportStatus,
+    year,
+    mileage,
+    price,
+    description,
+    currency,
+    errors,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -652,6 +743,9 @@ export default function PersonalPage({userID}: Props) {
     description,
     price,
     currency,
+    checkErrors,
+    errors,
+    firstClick,
   ]);
 
   return (

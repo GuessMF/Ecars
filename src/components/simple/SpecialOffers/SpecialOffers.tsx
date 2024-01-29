@@ -24,7 +24,7 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
-import {useAuth} from "hooks/use-auth";
+
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 interface Car {

@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect} from "react";
 import Details from "../../ui/Details/Details";
 import style from "./__likedCard.module.scss";
 import {useAppSelector} from "hooks/redux-hooks";

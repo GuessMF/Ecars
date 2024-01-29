@@ -4,7 +4,6 @@ import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-import {getStorage} from "firebase/storage";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
@@ -80,8 +79,6 @@ export default function BigCard({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  const owner = Number(owners);
-
   useEffect(() => {
     const image = new Image();
     image.src = previewIMG;
@@ -95,7 +92,7 @@ export default function BigCard({
     if (userPageIndex !== -1) {
       setUserPage(true);
     }
-  }, []);
+  }, [userPageIndex]);
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");

@@ -1,10 +1,7 @@
-import React from "react";
 import {useState, useEffect} from "react";
 import style from "./__middleCTA.module.scss";
 import GetAquote from "../../ui/GetAquote/GetAquote";
 import {NavLink} from "react-router-dom";
-
-import {useAuth} from "hooks/use-auth";
 import {getAuth} from "firebase/auth";
 import {onAuthStateChanged} from "firebase/auth";
 
@@ -12,7 +9,6 @@ const version: string = "big";
 
 export default function MiddleCTA() {
   const [userId, setUserId] = useState<string>("");
-  // const {isAuth, email, displayName} = useAuth();
 
   useEffect(() => {
     const auth = getAuth();

@@ -1,6 +1,5 @@
-import React from "react";
 import style from "./__mediumCard.module.scss";
-import ddd from "./1200x900n.webp";
+
 type Props = {
   image: string;
   brand: string;

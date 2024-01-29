@@ -5,7 +5,7 @@ import GetAquote from "../../ui/GetAquote/GetAquote";
 import Mobile from "../../ui/Mobile/Mobile";
 import style from "./__hero.module.scss";
 import {NavLink} from "react-router-dom";
-import {useAuth} from "hooks/use-auth";
+
 import {getAuth} from "firebase/auth";
 import {onAuthStateChanged} from "firebase/auth";
 const black: string = "#1A1A1A";
@@ -13,7 +13,6 @@ const version: string = "little";
 
 export default function Hero() {
   const [userId, setUserId] = useState<string>("");
-  const {isAuth, email, displayName} = useAuth();
 
   useEffect(() => {
     const auth = getAuth();

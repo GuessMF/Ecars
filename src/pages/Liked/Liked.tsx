@@ -51,59 +51,28 @@ export default function Liked({userID}: Props) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const navigate = useNavigate();
 
-  const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
+    const cookies = new Cookies(null, {path: "/"});
     if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, []);
-
-  const fetchLiked = async () => {
-    const likedRef = collection(db, "likedCars");
-    const likedDocRef = doc(likedRef, userID);
-    try {
-      const likedDocSnap = await getDoc(likedDocRef);
-      if (likedDocSnap.exists()) {
-        const likedData = likedDocSnap.data();
-        const currentLikedCars = likedData?.likedCars || [];
-        setLikedCars(currentLikedCars);
-      }
-    } catch (error) {
-      console.error("Ошибка при скачивании документа: ", error);
-    }
-  };
-
-  const fetchLikedCarsData = async (likedCars: string[]) => {
-    try {
-      const otherCarsRef = collection(db, "cars");
-
-      let first = query(otherCarsRef);
-      first = query(first, orderBy(sortBy, sortSetting as OrderByDirection));
-      const querySnapshot = await getDocs(first);
-      const carsData: Car[] = querySnapshot.docs
-        .map((doc) => {
-          const carData = doc.data() as Car;
-
-          if (likedCars.includes(carData.id)) {
-            return carData;
-          }
-          return null;
-        })
-        .filter((car) => car !== null) as Car[];
-
-      setTotalCars(carsData.length);
-      const paginatedCars = carsData.slice(
-        currentPage * itemsPerPage - itemsPerPage,
-        currentPage * itemsPerPage
-      );
-
-      setCars(paginatedCars);
-    } catch (error) {
-      console.error("Error fetching liked cars data: ", error);
-    }
-  };
+  }, [navigate]);
 
   useEffect(() => {
+    const fetchLiked = async () => {
+      const likedRef = collection(db, "likedCars");
+      const likedDocRef = doc(likedRef, userID);
+      try {
+        const likedDocSnap = await getDoc(likedDocRef);
+        if (likedDocSnap.exists()) {
+          const likedData = likedDocSnap.data();
+          const currentLikedCars = likedData?.likedCars || [];
+          setLikedCars(currentLikedCars);
+        }
+      } catch (error) {
+        console.error("Ошибка при скачивании документа: ", error);
+      }
+    };
     const fetchData = async () => {
       if (userID) {
         await fetchLiked();
@@ -125,6 +94,35 @@ export default function Liked({userID}: Props) {
   }, [isAuth, displayName, loading]);
 
   useEffect(() => {
+    const fetchLikedCarsData = async (likedCars: string[]) => {
+      try {
+        const otherCarsRef = collection(db, "cars");
+
+        let first = query(otherCarsRef);
+        first = query(first, orderBy(sortBy, sortSetting as OrderByDirection));
+        const querySnapshot = await getDocs(first);
+        const carsData: Car[] = querySnapshot.docs
+          .map((doc) => {
+            const carData = doc.data() as Car;
+
+            if (likedCars.includes(carData.id)) {
+              return carData;
+            }
+            return null;
+          })
+          .filter((car) => car !== null) as Car[];
+
+        setTotalCars(carsData.length);
+        const paginatedCars = carsData.slice(
+          currentPage * itemsPerPage - itemsPerPage,
+          currentPage * itemsPerPage
+        );
+
+        setCars(paginatedCars);
+      } catch (error) {
+        console.error("Error fetching liked cars data: ", error);
+      }
+    };
     const fetchData = async () => {
       if (!loadingLiked) {
         fetchLikedCarsData(likedCars);
@@ -224,7 +222,7 @@ export default function Liked({userID}: Props) {
               <NavLink to="/catalog">catalog</NavLink> and choose your favorite
               cars for yourself
             </h5>
-            <img src={SorryImage} alt="sorry-image" />
+            <img src={SorryImage} alt="sorry" />
           </div>
         )}
       </div>
@@ -264,7 +262,7 @@ export default function Liked({userID}: Props) {
           {[...new Array(pages)].map((_, index) => (
             <span
               key={index}
-              className={index + 1 == currentPage ? style.currentPage : ""}
+              className={index + 1 === currentPage ? style.currentPage : ""}
               onClick={() => changePage(index)}
             >
               {index + 1}

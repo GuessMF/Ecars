@@ -218,7 +218,7 @@ export default function MegaCard({
       setImageLoaded(true);
     };
     image.src = photoURLs?.[selectedPhoto];
-  }, [photoURLs]);
+  }, [photoURLs, selectedPhoto]);
 
   const onClickLittleImage = (index: number) => {
     window.scrollTo({
@@ -395,7 +395,7 @@ export default function MegaCard({
     }
 
     setNewModel(model);
-  }, [edition]);
+  }, [edition, brand, model]);
 
   const onModelChange = (value: string) => {
     setNewModel(value);

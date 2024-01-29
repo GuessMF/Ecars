@@ -29,7 +29,7 @@ export default function Sidebar({isOpen, setIsOpen}: SidebarProps) {
   }, [isOpen]);
 
   const [userId, setUserId] = useState<string>("");
-  const {isAuth, email, displayName} = useAuth();
+  const {displayName} = useAuth();
   const userMobile = useAppSelector((state) => state.user.mobile);
 
   const dispatch = useAppDispatch();

@@ -16,7 +16,6 @@ import {removeUser} from "store/slices/userSlice";
 import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
 import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 
-import Cookies from "universal-cookie";
 import {setSearchTerm} from "store/slices/searchSlice";
 
 const version: string = "little";

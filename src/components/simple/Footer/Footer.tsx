@@ -1,18 +1,12 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import style from "./__footer.module.scss";
 import {ReactComponent as Logo} from "../../../assets/icons/footer/Logo.svg";
-// import {ReactComponent as FaceBookIcon} from "../../../assets/icons/social/facebook.svg";
-// import {ReactComponent as TwitterIcon} from "../../../assets/icons/social/twitter.svg";
-// import {ReactComponent as YouTubeIcon} from "../../../assets/icons/social/youtube.svg";
-// import {ReactComponent as InstagramIcon} from "../../../assets/icons/social/instagram.svg";
 import {useNavigate, useLocation} from "react-router-dom";
 import Mobile from "../../ui/Mobile/Mobile";
 import Email from "../../ui/Email/Email";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
 import {NavLink} from "react-router-dom";
-import Select from "react-select";
 
-const white: string = "#FFFFFFB2";
 const black: string = "#1A1A1A";
 const color: string = "#767676";
 const opacity: string = "0.7";
@@ -29,14 +23,8 @@ export default function Footer() {
     setCurrentYear(newYear);
   }, []);
 
-  const options = [
-    {value: "RUB", label: "RUB"},
-    {value: "USD", label: "USD"},
-    {value: "EUR", label: "EUR"},
-  ];
-
   const scrollToAnchor = (anchorID: string) => {
-    if (pathName == "/") {
+    if (pathName === "/") {
       const anchorElement = document.getElementById(anchorID);
       if (anchorElement) {
         anchorElement.scrollIntoView({behavior: "smooth", block: "start"});

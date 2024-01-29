@@ -102,12 +102,6 @@ export default function UserPage({userID}: Props) {
   const storage = getStorage();
 
   useEffect(() => {
-    if (userID) {
-      fetchSalingCars();
-    }
-  }, [userID, sortBy, sortSetting]);
-
-  useEffect(() => {
     const fetchData = async () => {
       if (isAuth && displayName) {
         setLoading(false);
@@ -117,22 +111,29 @@ export default function UserPage({userID}: Props) {
     fetchData();
   }, [isAuth, displayName, loading, currentCar]);
 
-  const fetchSalingCars = async () => {
-    try {
-      const carsRef = collection(db, "cars");
-      let first = query(carsRef);
-      first = query(first, where("userId", "==", userID));
-      first = query(first, orderBy(sortBy, sortSetting as OrderByDirection));
-      const querySnapshot = await getDocs(first);
-      const cars = querySnapshot.docs.map(
-        (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
-      );
-      setCars(cars);
-      setLoaded(true);
-    } catch (error) {
-      console.error("Error fetching first page: ", error);
+  useEffect(() => {
+    const fetchSalingCars = async () => {
+      try {
+        const carsRef = collection(db, "cars");
+        let first = query(carsRef);
+        first = query(first, where("userId", "==", userID));
+        first = query(first, orderBy(sortBy, sortSetting as OrderByDirection));
+        const querySnapshot = await getDocs(first);
+        const cars = querySnapshot.docs.map(
+          (doc: QueryDocumentSnapshot<DocumentData>) => doc.data() as Car
+        );
+        setCars(cars);
+        setLoaded(true);
+      } catch (error) {
+        console.error("Error fetching first page: ", error);
+      }
+    };
+
+    if (userID) {
+      fetchSalingCars();
     }
-  };
+  }, [userID, sortBy, sortSetting]);
+
   const onDelClick = async () => {
     try {
       const carsRef = collection(db, "cars");
@@ -187,7 +188,7 @@ export default function UserPage({userID}: Props) {
         setCorrectPassword(false);
       }
     }
-  }, [password]);
+  }, [password, carName]);
 
   const onClickLittleCard = (index: number) => {
     setCurrentCar(index);
@@ -423,7 +424,7 @@ export default function UserPage({userID}: Props) {
               (car: any, index: number) =>
                 index !== currentCar && (
                   <div
-                    key={`${index}` + "cars"}
+                    key={`${index}cars`}
                     className={style.littleCard}
                     onClick={() => onClickLittleCard(index)}
                   >

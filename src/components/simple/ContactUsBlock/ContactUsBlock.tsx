@@ -1,7 +1,5 @@
-import React from "react";
 import style from "./__contactUsBlock.module.scss";
 import ContactUs from "../../ui/ContactUs/ContactUs";
-import ContactUsBig from "../../ui/ContactUsBig/ContactUsBig";
 
 export default function ContactUsBlock() {
   return (
@@ -14,7 +12,6 @@ export default function ContactUsBlock() {
         </p>
       </div>
       <div className={style.button}>
-        {" "}
         <ContactUs version={"dark"} />
       </div>
     </div>

@@ -90,7 +90,7 @@ export default function Login() {
         }
       }
     });
-  }, []);
+  }, [isAuth]);
 
   const removeCharacters = (email: string) => {
     const atIndex = email.indexOf("@");

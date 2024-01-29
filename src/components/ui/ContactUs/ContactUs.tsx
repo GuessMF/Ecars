@@ -8,7 +8,7 @@ export default function ContactUs({version}: Props) {
   return (
     <button
       className={
-        version == "light" ? style.contactUsLight : style.contactUsDark
+        version === "light" ? style.contactUsLight : style.contactUsDark
       }
       onClick={() => window.open("https://t.me/+79214003269", "_blank")}
     >

@@ -173,12 +173,11 @@ export default function Sorted({
   };
 
   const formatedYear: string =
-    minYear == maxYear
+    minYear === maxYear
       ? `${minYear.toString()}`
       : `${minYear.toString()} - ${maxYear.toString()}`;
 
   let formatedBrand: string;
-  let formatedModel;
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");
@@ -191,7 +190,7 @@ export default function Sorted({
   formatedBrand = capitalizeWords(brand);
 
   const formatedMileage: string =
-    minMileage == maxMileage
+    minMileage === maxMileage
       ? `${maxMileage} Km`
       : `${minMileage} Km - ${maxMileage} Km`;
 

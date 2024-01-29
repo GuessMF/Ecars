@@ -20,7 +20,7 @@ import SkeletonBigImage from "./SkeletonBigImage";
 import SkeletonLittleImage from "./SkeletonLittleImage";
 import {useAppSelector} from "hooks/redux-hooks";
 import NoCar from "./NoCar";
-import {useLocation} from "react-router-dom";
+
 import SkeletonBigImageMobile from "./SkeletonBigImageMobile";
 
 interface DateObject {
@@ -124,28 +124,27 @@ export default function Details() {
   const [liked, setLiked] = useState<boolean>(false);
 
   useEffect(() => {
+    const fetchFirstPage = async () => {
+      try {
+        const carsRef = collection(db, "cars");
+        let first = query(carsRef);
+        const querySnapshot = await getDocs(first);
+        const cars = querySnapshot.docs.map((doc) => doc.data() as Car);
+        const foundCar = cars.find((car) => car.id === id);
+        if (foundCar !== undefined) {
+          setAuto(true);
+
+          setCurrentCar(foundCar);
+          setLoading(false);
+        } else {
+          setAuto(false);
+        }
+      } catch (error) {
+        console.error("Error fetching first page: ", error);
+      }
+    };
     fetchFirstPage();
   }, [id]);
-
-  const fetchFirstPage = async () => {
-    try {
-      const carsRef = collection(db, "cars");
-      let first = query(carsRef);
-      const querySnapshot = await getDocs(first);
-      const cars = querySnapshot.docs.map((doc) => doc.data() as Car);
-      const foundCar = cars.find((car) => car.id === id);
-      if (foundCar !== undefined) {
-        setAuto(true);
-
-        setCurrentCar(foundCar);
-        setLoading(false);
-      } else {
-        setAuto(false);
-      }
-    } catch (error) {
-      console.error("Error fetching first page: ", error);
-    }
-  };
 
   let mileage: string | undefined = currentCar?.mileage
     .toLocaleString()
@@ -175,12 +174,12 @@ export default function Details() {
   );
   const userIdValue = userId;
 
-  const cookies = new Cookies(null, {path: "/"});
   useEffect(() => {
+    const cookies = new Cookies(null, {path: "/"});
     if (!cookies.get("auth")) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
   const addLiked = async () => {
     const likedRef = collection(db, "likedCars");
@@ -218,33 +217,32 @@ export default function Details() {
     }
   };
 
-  const fetchLiked = async () => {
-    const likedRef = collection(db, "likedCars");
-    const likedDocRef = doc(likedRef, userIdValue);
-    try {
-      const likedDocSnap = await getDoc(likedDocRef);
-      if (likedDocSnap.exists()) {
-        const likedData = likedDocSnap.data();
-        const currentLikedCars = likedData?.likedCars || [];
-
-        const hasMatch = currentLikedCars.some((el: string) => el === id);
-        setLiked(hasMatch);
-      }
-    } catch (error) {
-      console.error("Ошибка при скачивании документа: ", error);
-    }
-  };
-
   const handleLike = () => {
     setLiked(!liked);
     addLiked();
   };
 
   useEffect(() => {
+    const fetchLiked = async () => {
+      const likedRef = collection(db, "likedCars");
+      const likedDocRef = doc(likedRef, userIdValue);
+      try {
+        const likedDocSnap = await getDoc(likedDocRef);
+        if (likedDocSnap.exists()) {
+          const likedData = likedDocSnap.data();
+          const currentLikedCars = likedData?.likedCars || [];
+
+          const hasMatch = currentLikedCars.some((el: string) => el === id);
+          setLiked(hasMatch);
+        }
+      } catch (error) {
+        console.error("Ошибка при скачивании документа: ", error);
+      }
+    };
     if (userIdValue) {
       fetchLiked();
     }
-  }, [userIdValue]);
+  }, [userIdValue, id]);
 
   const searchParams1 = new URLSearchParams();
   const searchParams2 = new URLSearchParams();
@@ -305,7 +303,7 @@ export default function Details() {
       setImageLoaded(true);
     };
     image.src = photoURLs?.[selectedPhoto];
-  }, [photoURLs]);
+  }, [photoURLs, selectedPhoto]);
 
   const changeLittlePhoto = (index: number) => {
     const topPage: number = window.innerWidth <= 450 ? 0 : 40;
@@ -322,7 +320,6 @@ export default function Details() {
       setAuto(true);
     }
   }, [photoURLs]);
-  const location = useLocation();
 
   return (
     <div className={style.details}>

@@ -3,10 +3,10 @@ import style from "./__browseByBrand.module.scss";
 import ShowAllBrands from "../../ui/ShowAllBrands/ShowAllBrands";
 import BrandCard from "../../smart/BrandCard/BrandCard";
 import {CSSTransition} from "react-transition-group";
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import {BrowserRouter as Route, Router, Link} from "react-router-dom";
+// import { BrowserRouter as Link } from "react-router-dom";
 
 import brands from "../../../helpers/brandsList";
-import {log} from "console";
 
 export default function BrowseByBrand() {
   const [visible, setVisible] = React.useState(false);
@@ -41,7 +41,7 @@ export default function BrowseByBrand() {
           <CSSTransition
             in={visible}
             timeout={300}
-            classNames={style.alert}
+            // classNames={style.alert}
             unmountOnExit
           >
             <div className={style.allBrands}>

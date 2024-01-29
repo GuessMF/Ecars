@@ -1,7 +1,4 @@
-import React from "react";
 import style from "./__brandCard.module.scss";
-import ford from "../../../assets/icons/brands/fordIcon.webp";
-import {NavLink} from "react-router-dom";
 
 interface Props {
   brand: string;

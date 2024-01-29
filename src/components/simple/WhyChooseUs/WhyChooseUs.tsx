@@ -1,6 +1,4 @@
-import React from "react";
 import style from "./__whyChooseUs.module.scss";
-import img from "../../../assets/images/manAndWoman.webp";
 
 export default function WhyChooseUs() {
   return (

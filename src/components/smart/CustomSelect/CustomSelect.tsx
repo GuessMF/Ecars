@@ -32,7 +32,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     if (initialOption) {
       setSelectedCurrency(initialOption);
     }
-  }, []);
+  }, [initialOption]);
 
   const [selectedCurrency, setSelectedCurrency] = React.useState(initialOption);
   const onClickCurrency = (selectedOption: any) => {
