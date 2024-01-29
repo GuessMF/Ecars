@@ -69,8 +69,8 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy:major": "yarn version --minor && gh-pages -d build",
-    "deploy:minor": "yarn version --major && gh-pages -d build",
+    "deploy:major": "yarn version --major && gh-pages -d build",
+    "deploy:minor": "yarn version --minor && gh-pages -d build",
     "deploy": "yarn version --patch && gh-pages -d build",
     "start": "react-scripts start",
     "add-domain": "echo 'ecars-project.ru' > build/ CNAME",
