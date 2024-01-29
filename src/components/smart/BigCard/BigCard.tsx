@@ -1,14 +1,9 @@
-import React from "react";
-
 import {useState, useEffect} from "react";
 import {useLocation} from "react-router-dom";
 import style from "./__bigCard.module.scss";
 import Details from "../../ui/Details/Details";
 import {NavLink} from "react-router-dom";
-
-import {useAuth} from "hooks/use-auth";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
-
 import {getStorage} from "firebase/storage";
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -60,10 +55,8 @@ export default function BigCard({
       ? usdValue / eurValue
       : 1;
 
-  const {isAuth, email, displayName} = useAuth();
   const [userId, setUserId] = useState<string>("");
 
-  const [submitedEmail, setSubmitedEmail] = useState<boolean>(false);
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -89,20 +82,15 @@ export default function BigCard({
 
   const owner = Number(owners);
 
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   useEffect(() => {
     const image = new Image();
-    image.onload = () => {
-      setImageLoaded(true);
-    };
     image.src = previewIMG;
   }, [previewIMG]);
 
   const locationn = useLocation();
   const pathname = locationn.pathname;
   const userPageIndex = pathname.indexOf("/user-page/");
-  const storage = getStorage();
+
   useEffect(() => {
     if (userPageIndex !== -1) {
       setUserPage(true);

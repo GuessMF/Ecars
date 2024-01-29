@@ -1,17 +1,14 @@
-import React from "react";
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect} from "react";
 import style from "./__liked.module.scss";
 import {OrderByDirection, collection, getDocs} from "firebase/firestore";
 
 import {db} from "../../firebase";
 import {doc, getDoc, query, orderBy} from "firebase/firestore";
-import BigCard from "components/smart/BigCard/BigCard";
 import {useNavigate, NavLink} from "react-router-dom";
 import Cookies from "universal-cookie";
 import {useAuth} from "hooks/use-auth";
 import ArrowUp from "./arrowUp.webp";
 import ArrowDown from "./arrowDown.webp";
-import {likedCard} from "components/smart/LikedCard/__likedCard.module.scss";
 import LikedCard from "components/smart/LikedCard/LikedCard";
 import {useAppSelector} from "hooks/redux-hooks";
 
@@ -19,10 +16,7 @@ import SorryImage from "../../assets/images/sorry.webp";
 interface Props {
   userID: string;
 }
-// interface LikedCar {
-//   carId: string;
-//   carIndex: string;
-// }
+
 interface Car {
   id: string;
   userId: string;
@@ -38,21 +32,18 @@ interface Car {
   description: string;
   mileage: number;
   imageUrl: string;
-  //  testImg: string;
 }
 
 export default function Liked({userID}: Props) {
-  const [loaded, setLoaded] = useState<boolean>(false);
   const [likedCars, setLikedCars] = useState<string[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
   const [totalCars, setTotalCars] = useState<number>(0);
   const [loadingLiked, setLoadingLiked] = useState(true);
   const [sortBy, setSortBy] = useState<string>("brand");
-  const {isAuth, email, displayName} = useAuth();
+  const {isAuth, displayName} = useAuth();
   const [sortSetting, setSortSetting] = useState<string | undefined>("asc");
-  const [userName, setUserName] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  // const pages = Math.ceil(totalCars / itemsPerPage);
+
   const userMobile = useAppSelector((state) => state.user.mobile);
   const itemsPerPage: number = 4;
   const pages = Math.ceil(totalCars / itemsPerPage);
@@ -76,7 +67,6 @@ export default function Liked({userID}: Props) {
         const likedData = likedDocSnap.data();
         const currentLikedCars = likedData?.likedCars || [];
         setLikedCars(currentLikedCars);
-        //  const hasMatch = currentLikedCars.some((el: string) => el === userID);
       }
     } catch (error) {
       console.error("Ошибка при скачивании документа: ", error);
@@ -127,7 +117,6 @@ export default function Liked({userID}: Props) {
   useEffect(() => {
     const fetchData = async () => {
       if (isAuth && displayName) {
-        setUserName(displayName);
         setLoading(false);
       }
     };

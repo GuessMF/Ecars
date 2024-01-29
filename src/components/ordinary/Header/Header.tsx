@@ -19,19 +19,15 @@ import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 import Cookies from "universal-cookie";
 import {setSearchTerm} from "store/slices/searchSlice";
 
-//import { useAppDispatch } from "hooks/redux-hooks";
-
 const version: string = "little";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
 
-  const cookies = new Cookies(null, {path: "/"});
-  const {isAuth, email, displayName} = useAuth();
+  const {displayName} = useAuth();
 
   const searchTerm = useAppSelector((state) => state.search.searchTerm);
 

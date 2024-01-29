@@ -1,15 +1,10 @@
-import React from "react";
-import {useState, useRef} from "react";
 import style from "./__detailsCTA.module.scss";
 import {ReactComponent as CheckMarkDetails} from "../../../assets/icons/checkMarkDetails.svg";
-import {ReactComponent as DownloadIcon} from "../../../assets/icons/downloadIcon.svg";
 import {ReactComponent as LikeIcon} from "../../../assets/icons/likeIcon.svg";
 import {ReactComponent as ShareIcon} from "../../../assets/icons/shareIcon.svg";
-import {useNavigate, useLocation} from "react-router-dom";
 import {NavLink} from "react-router-dom";
 import Email from "../../../components/ui/Email/Email";
 import Mobile from "../../../components/ui/Mobile/Mobile";
-import {Navigate} from "react-router-dom";
 
 interface DateObject {
   year: number;
@@ -61,17 +56,12 @@ export default function DetailsCTA({
   sellerMobile,
 }: Props) {
   const black: string = "#1A1A1A";
-  // console.log(dateObj.year);
-
-  // const [likeded, setLikeded] = useState<boolean>(liked);
-  // const navigate = useNavigate();
   let multiplier: number =
     selectedCurrency === "RUB"
       ? usdValue
       : selectedCurrency === "EUR"
       ? usdValue / eurValue
       : 1;
-  // console.log(multiplier);
 
   const newPrice = Number(price) * multiplier;
   const currentPrice = parseInt(newPrice.toFixed(0));
@@ -80,9 +70,6 @@ export default function DetailsCTA({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  // const formattedMileage: string = mileage
-  //   .toLocaleString()
-  //   .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
   const monthNames: {[key: number]: string} = {
     1: "January",
     2: "February",
@@ -97,14 +84,7 @@ export default function DetailsCTA({
     11: "November",
     12: "December",
   };
-  // console.log(monthNames[dateObj.month]);
-  // console.log(dateObj.month);
 
-  // const likeCar = () => {
-  //   // setLikeded(!liked);
-  //   addLiked();
-  // };
-  // console.log(liked);
   let formatedBrand;
   let formatedModel;
 
@@ -129,9 +109,6 @@ export default function DetailsCTA({
       behavior: "smooth",
     });
   };
-  // const onClickLearnMore = () => {
-  //   navigate("/aboutUs");
-  // };
 
   return (
     <div

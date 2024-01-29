@@ -75,7 +75,7 @@ export default function LittleCard({
   return (
     <div className={style.littleCard}>
       <div className={style.littleCard__previewImg}>
-        <img src={previewIMG} width={200} />
+        <img src={previewIMG} width={200} alt="preview" />
         {special && <span>SALE -{randomNum}%</span>}
       </div>
       <div className={style.littleCard__content}>
@@ -104,22 +104,22 @@ export default function LittleCard({
         <div className={style.littleCard__bottom}>
           <div className={style.littleCard__prices}>
             <span className={style.littleCard__newPrice}>
-              {selectedCurrency == "RUB"
+              {selectedCurrency === "RUB"
                 ? "₽"
-                : selectedCurrency == "USD"
+                : selectedCurrency === "USD"
                 ? "$"
-                : selectedCurrency == "EUR"
+                : selectedCurrency === "EUR"
                 ? "€"
                 : ""}{" "}
               {formattedPrice}
             </span>
             {special && (
               <span className={style.littleCard__oldPrice}>
-                {selectedCurrency == "RUB"
+                {selectedCurrency === "RUB"
                   ? "₽"
-                  : selectedCurrency == "USD"
+                  : selectedCurrency === "USD"
                   ? "$"
-                  : selectedCurrency == "EUR"
+                  : selectedCurrency === "EUR"
                   ? "€"
                   : ""}{" "}
                 {formattedOldPrice}

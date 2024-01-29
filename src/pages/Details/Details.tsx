@@ -1,5 +1,4 @@
-import React from "react";
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect} from "react";
 import style from "./__details.module.scss";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {ReactComponent as RightArrow} from "../../assets/icons/specialOffers/rightArrow.svg";
@@ -8,11 +7,10 @@ import ContactUsBlock from "../../components/simple/ContactUsBlock/ContactUsBloc
 import DetailsCTA from "../../components/simple/DetailsCTA/DetailsCTA";
 import {useSelector} from "react-redux";
 import {RootState} from "store";
-import Skeleton from "../../components/ui/Skeleton/Skeleton";
+
 import {doc, setDoc, getDoc} from "firebase/firestore";
-import {ref, listAll, getDownloadURL, getStorage} from "firebase/storage";
+import {ref, listAll, getDownloadURL} from "firebase/storage";
 import {db, storage} from "../../firebase";
-import {Swiper as SwiperCore} from "swiper/types";
 import {collection, query, getDocs} from "firebase/firestore";
 import FullWidthImg from "./FullWidthImg";
 import SimilarCars from "components/simple/SimilarCars/SimilarCars";
@@ -79,9 +77,8 @@ export default function Details() {
     };
   }, []);
 
-  const swiperRef = useRef<SwiperCore>();
   const navigate = useNavigate();
-  const black: string = "#1A1A1A";
+
   const [auto, setAuto] = useState<boolean>(false);
   const [photoURLs, setPhotoURLs] = useState<string[]>([]);
   const {id} = useParams<{id?: string}>();

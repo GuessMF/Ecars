@@ -36,10 +36,6 @@ interface OtherOptions {
   value: string;
 }
 
-interface CarData {
-  brands: CarBrand[];
-}
-
 interface Errors {
   brand?: string;
   model?: string;
@@ -80,28 +76,10 @@ interface Refs {
   [key: string]: React.RefObject<HTMLDivElement>;
 }
 export default function PersonalPage({userID}: Props) {
-  const selectedCurrency = useAppSelector(
-    (state) => state.currency.currencyTerm
-  );
-  const {isAuth, email, displayName} = useAuth();
-
-  const [userName, setUserName] = useState<string>("");
-
-  useEffect(() => {
-    if (displayName) {
-      setUserName(displayName);
-    }
-  }, [displayName]);
+  const {email, displayName} = useAuth();
 
   const usdValue = useAppSelector((state) => state.currValue.usdValue);
   const eurValue = useAppSelector((state) => state.currValue.eurValue);
-
-  let multiplier: number =
-    selectedCurrency === "RUB"
-      ? usdValue
-      : selectedCurrency === "EUR"
-      ? usdValue / eurValue
-      : 1;
 
   const navigate = useNavigate();
 
@@ -395,7 +373,6 @@ export default function PersonalPage({userID}: Props) {
       setPopUpErrors(true);
     } else {
       setLoading(true);
-      const uploadTasks: Promise<string>[] = [];
       const newId = generateNewId();
       const currentDate: Date = new Date();
       const dateObj: DateObject = {
@@ -594,14 +571,6 @@ export default function PersonalPage({userID}: Props) {
     const cleanedValue = value.replace(/\D/g, "");
     const formattedValue = Number(cleanedValue).toLocaleString();
     setPrice(formattedValue);
-  };
-
-  const capitalizeWords = (brand: string) => {
-    const words = brand.toLowerCase().split(" ");
-    const capitalizeWords = words.map((word) => {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    });
-    return capitalizeWords.join(" ");
   };
 
   const onModelChange = (value: string) => {

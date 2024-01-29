@@ -1,10 +1,8 @@
-import React, {useRef, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import style from "./__login.module.scss";
 import {ReactComponent as GoogleIcon} from "../../assets/icons/google_icon.svg";
 import {NavLink} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-//import { useHistory } from 'react-router-dom';
 
 import {
   getAuth,
@@ -22,11 +20,11 @@ import ErrorLogin from "./ErrorLogin";
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  //const {push} = useHistory();
+
   const [email, setEmail] = useState<string>("");
   const [userId, setUserId] = useState<string>("");
   const [password, setPassword] = useState("");
-  const {isAuth, displayName} = useAuth();
+  const {isAuth} = useAuth();
   const [noSubmitedUser, setNoSubmitedUser] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -36,7 +34,7 @@ export default function Login() {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      // Вход успешен, получите данные пользователя из result.user
+
       const {displayName, email, photoURL, uid} = result.user || {};
       console.log("Успешный вход:", displayName, email, photoURL);
 
@@ -69,12 +67,7 @@ export default function Login() {
 
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-        console.log(errorMessage);
         setError(errorCode);
-
-        // alert("Auth failed");
       });
   };
   useEffect(() => {
@@ -90,9 +83,7 @@ export default function Login() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         user.email && setEmail(user.email);
-
         setNoSubmitedUser(true);
-
         if (user.emailVerified) {
           setUserId(user.uid);
         } else {
@@ -102,14 +93,14 @@ export default function Login() {
   }, []);
 
   const removeCharacters = (email: string) => {
-    const atIndex = email.indexOf("@"); // Находим индекс символа @
+    const atIndex = email.indexOf("@");
 
     if (atIndex !== -1) {
-      const domain = email.split("@")[1]; // Разбиваем строку по @ и берем вторую часть
-      return domain; // Возвращаем только часть после символа @
+      const domain = email.split("@")[1];
+      return domain;
     }
 
-    return email; // Если символ @ не найден, возвращаем исходную строку
+    return email;
   };
 
   const formatedMail = removeCharacters(email);

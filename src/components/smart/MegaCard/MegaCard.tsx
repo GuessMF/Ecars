@@ -105,7 +105,6 @@ export default function MegaCard({
     .toLocaleString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
-  const [brandAndModel, setBrandAndModel] = useState<string>("");
   const [newBrand, setNewBrand] = useState<string>(brand);
   const [newModel, setNewModel] = useState(model);
   const [modelsOptions, setModelsOptions] = useState<OptionType[]>([]);
@@ -162,7 +161,6 @@ export default function MegaCard({
   }, []);
 
   let formatedBrand;
-  let formatedModel;
 
   const capitalizeWords = (brand: string) => {
     const words = brand.toLowerCase().split(" ");

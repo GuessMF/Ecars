@@ -1,21 +1,15 @@
 import React, {useState, useEffect} from "react";
 import LittleCard from "../../smart/LittleCard/LittleCard";
-import style, {specialOffers} from "./__specialOffers.module.scss";
+import style from "./__specialOffers.module.scss";
 import {ReactComponent as LeftArrow} from "../../../assets/icons/specialOffers/leftArrow.svg";
 import {ReactComponent as RightArrow} from "../../../assets/icons/specialOffers/rightArrow.svg";
 import {Swiper, SwiperSlide} from "swiper/react";
-// import {Swiper as SwiperCore} from "swiper/types";
 import {NavLink} from "react-router-dom";
 import AllCars from "../../ui/AllCars/AllCars";
-import {cars} from "../../../helpers/carList";
-
-// import {Swiper, SwiperSlide} from "swiper/react";
 import {Swiper as SwiperCore} from "swiper/types";
 import {Autoplay, Pagination, Navigation} from "swiper/modules";
 import {Virtual} from "swiper/modules";
-
 import "swiper/css/virtual";
-
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -30,9 +24,8 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase/firestore";
-// import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
 import {useAuth} from "hooks/use-auth";
-import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 interface Car {
   id: string;
@@ -53,7 +46,6 @@ interface Car {
 }
 
 export default function SpecialOffers() {
-  const {isAuth, email, displayName} = useAuth();
   const [userId, setUserId] = useState<string>("");
   useEffect(() => {
     const auth = getAuth();
@@ -72,15 +64,8 @@ export default function SpecialOffers() {
   }, []);
   const swiperRef = React.useRef<SwiperCore>();
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-
-  // const selectedCurrency = useAppSelector((state) => state.currency);
-  // const usdValue = useAppSelector((state) => state.currValue.usdValue);
-  // const eurValue = useAppSelector((state) => state.currValue.eurValue);
-
-  // useEffect(() => {}, [isAuth]);
   const [specialCars, setSpecialCars] = useState<Car[]>([]);
 
-  const screenWidth = windowWidth;
   let numberOfCarts = 4;
   if (windowWidth <= 768) {
     numberOfCarts = 2;
@@ -125,9 +110,6 @@ export default function SpecialOffers() {
         <div className={style.specialOffers__header}>
           <h2>Special offers</h2>
           <div className={style.specialOffers__navigation}>
-            {/* <LeftArrow />
-            <RightArrow /> */}
-
             <button
               className={style.nav__button}
               onClick={() => swiperRef.current?.slidePrev()}
@@ -147,12 +129,8 @@ export default function SpecialOffers() {
         </div>
         <div className={style.specialOffers__corousel}>
           <Swiper
-            // spaceBetween={307}
-            // centeredSlides={true}
-            // pagination={{clickable: true}}
             navigation={true}
             autoplay={{delay: 2500, disableOnInteraction: false}}
-            // autoplay={false}
             spaceBetween={20}
             modules={[Autoplay, Pagination, Navigation, Virtual]}
             slidesPerView={numberOfCarts}
@@ -185,8 +163,6 @@ export default function SpecialOffers() {
         </div>
       </div>
       <div className={style.specialOffers__navigation_mobile}>
-        {/* <LeftArrow />
-      <RightArrow /> */}
         <div className={style.navigation_mobile_btns}>
           <button
             className={style.nav__button}

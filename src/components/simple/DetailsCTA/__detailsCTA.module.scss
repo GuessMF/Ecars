@@ -65,7 +65,7 @@
             //  border: black 1px solid;
             display: flex;
             flex-direction: column;
-            justify-content: end;
+            justify-content: flex-end;
           }
         }
       }
@@ -117,11 +117,7 @@
       background-color: $lightBG;
       gap: 8px;
       border-top: 1px solid $outline2;
-      // @media (max-width: 768px) {
-      //   width: 50%;
-      //   height: auto;
-      //   justify-content: space-between;
-      // }
+
       @media (max-width: 450px) {
         width: 100%;
       }
@@ -245,7 +241,7 @@
           height: fit-content;
           display: flex;
           flex-direction: column;
-          justify-content: end;
+          justify-content: flex-end;
         }
       }
     }
@@ -288,7 +284,7 @@
           // border: black 1px solid;
           display: flex;
           flex-direction: column;
-          justify-content: end;
+          justify-content: flex-end;
           width: fit-content;
         }
         span {
@@ -376,7 +372,7 @@
   }
 }
 .mobile {
-  // background-color: green;
+  display: block;
 }
 .liked {
   stroke: red;

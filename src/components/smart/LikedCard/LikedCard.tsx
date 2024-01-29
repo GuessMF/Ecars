@@ -1,24 +1,7 @@
-import React from "react";
-
 import {useState, useEffect} from "react";
-import {useLocation} from "react-router-dom";
-
 import Details from "../../ui/Details/Details";
-import {NavLink} from "react-router-dom";
-import Skeleton from "components/ui/Skeleton/Skeleton";
-import {useAuth} from "hooks/use-auth";
-import {doc, setDoc, getDoc, deleteDoc} from "firebase/firestore";
-import {
-  ref,
-  listAll,
-  getDownloadURL,
-  getStorage,
-  deleteObject,
-  getMetadata,
-} from "firebase/storage";
 import style from "./__likedCard.module.scss";
 import {useAppSelector} from "hooks/redux-hooks";
-
 import {LazyLoadImage} from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 
@@ -51,7 +34,6 @@ export default function LikedCard({
   description,
   previewIMG,
 }: Props) {
-  const [imageLoaded, setImageLoaded] = useState(false);
   const selectedCurrency = useAppSelector(
     (state) => state.currency.currencyTerm
   );
@@ -68,9 +50,6 @@ export default function LikedCard({
 
   useEffect(() => {
     const image = new Image();
-    image.onload = () => {
-      setImageLoaded(true);
-    };
     image.src = previewIMG; // Подставьте свой путь к изображению из carData
   }, [previewIMG]);
 
@@ -99,7 +78,7 @@ export default function LikedCard({
       <div className={style.top}>
         <LazyLoadImage
           className={style.image}
-          effect="blur" // Добавляет эффект размытия
+          effect="blur"
           src={previewIMG}
           alt="Car Preview"
         />

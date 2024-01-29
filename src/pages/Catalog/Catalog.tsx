@@ -73,12 +73,10 @@ export default function Catalog() {
   const modelParam = searchParams.get("model") || "";
   const locationParam = searchParams.get("location") || "";
   const mileageParam = searchParams.get("mileage" || "");
-  let requestCounter: number = 0;
 
   const currendate = new Date();
   const currentYear = currendate.getFullYear();
 
-  const ownersParam = searchParams.get("owners") || "";
   const [brandFilter, setBrandFilter] = useState<string>(
     brandParam.toLocaleLowerCase()
   );
@@ -103,8 +101,8 @@ export default function Catalog() {
 
   const [minPriceValue, setMinPriceValue] = useState<string>("0");
   const [maxPriceValue, setMaxPriceValue] = useState<string>("99 999 999");
-  const [priceFilter, setPriceFilter] = useState<boolean>(false);
 
+  const priceFilter: boolean = false;
   const [cityCheckboxes, setCityCheckboxes] = useState<CityCheckboxes>({
     SaintPetersburg: false,
     Moscow: false,
@@ -152,10 +150,10 @@ export default function Catalog() {
     }
   };
   const newMileageParam = () => {
-    if (mileageParam == "New") {
+    if (mileageParam === "New") {
       setMinMileageValue("1");
       setMaxMileageValue("99");
-    } else if (mileageParam == "Used") {
+    } else if (mileageParam === "Used") {
       setMinMileageValue("100");
     }
   };
@@ -324,7 +322,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrCarTypes.length > 0) {
             first = query(first, where("vehicleType", "in", arrCarTypes));
-            requestCounter++;
           }
         }
       });
@@ -333,7 +330,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrCities.length > 0) {
             first = query(first, where("location", "in", arrCities));
-            requestCounter++;
           }
         }
       });
@@ -342,7 +338,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrOwners.length > 0) {
             first = query(first, where("owners", "in", arrOwners));
-            requestCounter++;
           }
         }
       });
@@ -351,7 +346,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrColor.length > 0) {
             first = query(first, where("color", "in", arrColor));
-            requestCounter++;
           }
         }
       });
@@ -360,7 +354,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrSeats.length > 0) {
             first = query(first, where("seats", "in", arrSeats));
-            requestCounter++;
           }
         }
       });
@@ -369,7 +362,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrFuel.length > 0) {
             first = query(first, where("fuel", "in", arrFuel));
-            requestCounter++;
           }
         }
       });
@@ -378,7 +370,6 @@ export default function Catalog() {
         if (isSelected) {
           if (arrTransmission.length > 0) {
             first = query(first, where("transmission", "in", arrTransmission));
-            requestCounter++;
           }
         }
       });

@@ -1,7 +1,6 @@
-import React from "react";
 import style from "./__FAQ.module.scss";
 
-import {useState, useEffect, useRef} from "react";
+import {useState} from "react";
 import ContactUsBlock from "../../components/simple/ContactUsBlock/ContactUsBlock";
 import {ReactComponent as DownArrow} from "./downArrow.svg";
 import {ReactComponent as UpArrow} from "./upArrow.svg";

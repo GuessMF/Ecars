@@ -25,7 +25,7 @@
     overflow-x: hidden;
   }
   @media (max-width: 768px) {
-    justify-content: end;
+    justify-content: flex-end;
   }
 
   .filters__closeBtn {

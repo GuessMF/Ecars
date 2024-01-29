@@ -1,9 +1,7 @@
-import React, {useRef} from "react";
+import React from "react";
 import Email from "../../ui/Email/Email";
 import Mobile from "../../ui/Mobile/Mobile";
-
 import Select from "react-select";
-import {useAppSelector} from "hooks/redux-hooks";
 import {useAppDispatch} from "hooks/redux-hooks";
 import style from "./__topBar.module.scss";
 import SocialIcons from "../../ui/SocialIcons/SocialIcons";
@@ -14,26 +12,12 @@ const white: string = "#FFFFFFB2";
 const color: string = "rgba(255, 255, 255, 0.7)";
 const opacity: string = "1";
 
-// interface TopBarProps {
-//   eurValue: number;
-//   usdValue: number;
-//   selectedCurrency: string;
-//   onCurrencyChange: (obj: any) => void;
-// }
-
 export default function TopBar() {
-  // const handleCurrencyChange = (currencyCode: string) => {
-  //   onCurrencyChange(currencyCode);
-  // };
-  const usdValue = useAppSelector((state) => state.currValue.usdValue);
-  const eurValue = useAppSelector((state) => state.currValue.eurValue);
   const dispatch = useAppDispatch();
   const [menuIsOpen, setMenuIsOpen] = React.useState(false);
   const toggleMenu = () => {
     setMenuIsOpen(!menuIsOpen);
   };
-
-  // const selectRef = useRef(null);
 
   const options = [
     {value: "RUB", label: "RUB"},
@@ -117,7 +101,6 @@ export default function TopBar() {
               onChange={onClickCurrency}
               options={options}
               menuIsOpen={menuIsOpen}
-              //menuIsOpen={true}
               onMenuOpen={toggleMenu}
             />
           </span>

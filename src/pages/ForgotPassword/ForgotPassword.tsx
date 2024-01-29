@@ -1,9 +1,8 @@
-import React, {ReactEventHandler, useState} from "react";
+import React, {useState} from "react";
 import style from "./__forgotPassword.module.scss";
 import {NavLink} from "react-router-dom";
 import {ReactComponent as LeftArrow} from "../../assets/icons/arrow-left-line.svg";
 import {getAuth, sendPasswordResetEmail} from "firebase/auth";
-import {Rings} from "react-loader-spinner";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -63,16 +62,6 @@ export default function ForgotPassword() {
 
             <button className={style.resetBtn} onClick={handleResetPassword}>
               Reset Password
-              {/* <Rings
-              height="10"
-              width="30"
-              color="#4fa94d"
-              // radius="6"
-              // wrapperStyle={{}}
-              wrapperClass={style.loader}
-              visible={true}
-              // ariaLabel="rings-loading"
-            /> */}
             </button>
 
             <NavLink to="/login" className={style.navLink}>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 
 import {NavLink} from "react-router-dom";
 import style from "./__aboutUS.module.scss";
@@ -6,10 +6,7 @@ import outMissionImg from "../../assets/images/AboutUs/ourMission.webp";
 import ContactUsBig from "../../components/ui/ContactUsBig/ContactUsBig";
 import GetAquoteBig from "../../components/ui/GetAquoteBig/GetAquoteBig";
 
-import {useAuth} from "hooks/use-auth";
-import {removeUser} from "store/slices/userSlice";
-import {useAppDispatch, useAppSelector} from "hooks/redux-hooks";
-import {getAuth, signOut, onAuthStateChanged} from "firebase/auth";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 export default function AboutUs() {
   const [userId, setUserId] = useState<string>("");

@@ -6,7 +6,8 @@ interface AuthUser extends User {
 }
 
 export const useAuth = () => {
-  const [auth, setAuth] = useState(getAuth());
+  // const [auth, setAuth] = useState(getAuth());
+  const auth = getAuth();
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
@@ -20,6 +21,6 @@ export const useAuth = () => {
   return {
     isAuth: !!user,
     email: user?.email || "",
-    displayName: user?.displayName || null, // Уточнение здесь
+    displayName: user?.displayName || null,
   };
 };

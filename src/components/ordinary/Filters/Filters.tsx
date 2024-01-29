@@ -211,8 +211,7 @@ export default function Filters({
   const closeFilters = () => {
     setIsFiltersOpen(false);
   };
-  const [brand, setBrand] = useState<string>("");
-  const [model, setModel] = useState<string>("");
+
   const [models, setModels] = useState<CarModel[]>([]);
   const [minYear, setMinYear] = useState<string>(minYearValue.toString());
 
