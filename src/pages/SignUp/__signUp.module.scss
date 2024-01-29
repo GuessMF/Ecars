@@ -1,14 +1,5 @@
 @import "../../styles/_var";
 
-// .signUp {
-//   min-height: 50vh;
-
-//   width: 100%;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-// }
-
 .signUp {
   min-height: 50vh;
   width: 100%;
@@ -35,35 +26,31 @@
     h1 {
       color: $gray900;
 
-      /* Desktop/H3 */
       font-family: Inter Tight;
       font-size: 32px;
       font-style: normal;
       font-weight: 600;
-      line-height: 115%; /* 36.8px */
+      line-height: 115%;
       margin: 0;
     }
   }
   .form {
     width: 100%;
-    // height: 100%;
-    // border: black 1px solid;
+
     margin-top: 32px;
     display: flex;
     flex-direction: column;
     gap: 24px;
 
     .name {
-      //   border: black 1px solid;
       display: flex;
       flex-direction: column;
       color: var(--gray-900, #1a1a1a);
-      /* Desktop/Body Small */
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      line-height: 20px;
       gap: 8px;
       input {
         display: flex;
@@ -74,28 +61,27 @@
         border-radius: 8px;
         border: 1px solid $outline1;
         color: $gray300;
-        /* Desktop/Body Small */
+
         font-family: Inter;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
-        line-height: 20px; /* 142.857% */
+        line-height: 20px;
         &:focus {
           outline: none;
         }
       }
     }
     .email {
-      //   border: black 1px solid;
       display: flex;
       flex-direction: column;
       color: var(--gray-900, #1a1a1a);
-      /* Desktop/Body Small */
+
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      line-height: 20px;
       gap: 8px;
       input {
         display: flex;
@@ -106,12 +92,11 @@
         border-radius: 8px;
         border: 1px solid $outline1;
         color: $gray300;
-        /* Desktop/Body Small */
         font-family: Inter;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
-        line-height: 20px; /* 142.857% */
+        line-height: 20px;
         &:focus {
           outline: none;
         }
@@ -120,7 +105,6 @@
     .password {
       display: flex;
       flex-direction: column;
-      //   border: black 1px solid;
       gap: 8px;
       input {
         display: flex;
@@ -131,12 +115,12 @@
         border-radius: 8px;
         border: 1px solid $outline1;
         color: $gray300;
-        /* Desktop/Body Small */
+
         font-family: Inter;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
-        line-height: 20px; /* 142.857% */
+        line-height: 20px;
         &:focus {
           outline: none;
         }
@@ -149,35 +133,33 @@
       }
       span {
         color: $gray900;
-        /* Desktop/Body Small */
         font-family: Inter;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
-        line-height: 20px; /* 142.857% */
+        line-height: 20px;
       }
       .limit {
         color: $gray500;
-        /* Desktop/Body xSmall */
+
         font-family: Inter;
         font-size: 12px;
         font-style: normal;
         font-weight: 400;
-        line-height: 16px; /* 133.333% */
+        line-height: 16px;
       }
     }
     .termsPolicy {
       display: flex;
       flex-direction: row;
-      justify-content: start;
-      // align-items: start;
+      justify-content: flex-start;
+
       color: $gray900;
-      /* Desktop/Body Small */
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      line-height: 20px;
 
       input {
         margin-right: 5px;
@@ -194,7 +176,7 @@
       font-size: 16px;
       font-style: normal;
       font-weight: 600;
-      line-height: 24px; /* 150% */
+      line-height: 24px;
       padding: 12px 24px;
       display: flex;
 
@@ -208,15 +190,15 @@
       color: var(--gray-900, #1a1a1a);
       text-align: center;
       align-self: stretch;
-      /* Desktop/Body Small */
+
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      line-height: 20px;
       span {
         color: var(--primary-500, #3c7d46);
-        /* Desktop/Label 2 */
+
         font-family: Inter;
         font-size: 14px;
         font-style: normal;
@@ -232,12 +214,12 @@
       justify-content: center;
       align-items: center;
       color: var(--gray-500, #767676);
-      /* Desktop/Body Small */
+
       font-family: Inter;
       font-size: 14px;
       font-style: normal;
       font-weight: 400;
-      line-height: 20px; /* 142.857% */
+      line-height: 20px;
       hr {
         border: $outline2 1px solid;
         width: 45%;
@@ -257,7 +239,7 @@
       font-size: 14px;
       font-style: normal;
       font-weight: 600;
-      line-height: 24px; /* 171.429% */
+      line-height: 24px;
     }
   }
   .navLink {

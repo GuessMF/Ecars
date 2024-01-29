@@ -17,19 +17,9 @@ module.exports = {
           },
         ],
       },
-      // Добавьте свои правила обработки здесь, если они есть
     ],
   },
-  // resolve: {
 
-  //   fallback: {
-  //     stream: require.resolve("stream-browserify"),
-  //     child_process: require.resolve("child_process"),
-  //     fs: require.resolve("graceful-fs"),
-  //     os: require.resolve("os-browserify/browser"),
-  //     path: require.resolve("path-browserify"),
-  //   },
-  // },
   resolve: {
     fallback: {
       fs: false,
@@ -45,4 +35,8 @@ module.exports = {
       "crypto-browserify": require.resolve("crypto-browserify"), //if you want to use this module also don't forget npm i crypto-browserify
     },
   },
+  stats: {
+    warningsFilter: /bogus-combinators/,
+  },
+  ignoreWarnings: [/Failed to parse source map/],
 };
